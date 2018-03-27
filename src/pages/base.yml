@@ -1,0 +1,21 @@
+---
+title: '' # Title of the page, will be used to create URL if not slug is supplied
+slug: '' # optional, used for URL creation URL
+meta: # Meta data objects
+  - http-equiv: "x-ua-compatible"
+    content: "ie=edge"
+  - charset: utf-8
+  - viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no'
+  - generator: "Reacty v0.1.0"
+description: '' # meta ddescription of page, content will be used if left blank
+content:
+  header: ''
+  main: ''
+  footer: ''
+tags: []
+scripts: []
+links:
+  - 'https://fonts.googleapis.com/css?family=Montserrat:200,300,400,700,900'
+  - href: 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' 
+    integrity: "sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossorigin: "anonymous"

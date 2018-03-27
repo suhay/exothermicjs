@@ -1,0 +1,12 @@
+---
+title: Page Title
+description: 'My example page.'
+content:
+  header:
+    nav:
+    ? ['Home','About']: ['/', '/about']
+  main: ''
+  footer: ''
+tags: []
+scripts: []
+links:
