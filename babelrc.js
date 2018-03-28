@@ -7,4 +7,12 @@ module.exports = (server) => ({
 
     'react',
   ],
+  env: {
+    development: {
+      plugins: [
+        "babel-plugin-transform-react-jsx-self",
+        "babel-plugin-transform-react-jsx-source",
+      ]
+    },
+  }
 });

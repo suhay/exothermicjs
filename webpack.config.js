@@ -30,7 +30,7 @@ const clientConfig = {
       },
       { 
         test: /\.svg/, 
-        use: 'svg-loader' 
+        use: 'svg-inline-loader' 
       },
     ],
   },
@@ -76,7 +76,7 @@ const serverConfig = {
       },
       { 
         test: /\.svg/, 
-        use: 'svg-loader' 
+        use: 'svg-inline-loader' 
       },
     ],
   },

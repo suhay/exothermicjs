@@ -10,12 +10,15 @@
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",
+    "babel-plugin-transform-react-jsx-self": "^6.22.0",
+    "babel-plugin-transform-react-jsx-source": "^6.22.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "concurrently": "^3.5.1",
     "cross-env": "^5.1.4",
     "css-loader": "^0.28.11",
     "nodemon": "^1.17.2",
+    "svg-inline-loader": "^0.8.0",
     "svg-loader": "0.0.2",
     "webpack": "^2.0",
     "webpack-node-externals": "^1.6.0"
@@ -28,7 +31,7 @@
     "eject": "react-scripts eject",
     "watch": "webpack --watch",
     "serve": "nodemon -w dist/server.js dist/server.js",
-    "watch-and-serve": "concurrently --kill-others \"npm run watch\" \"npm run serve\""
+    "ws": "concurrently --kill-others \"npm run watch\" \"npm run serve\""
   },
   "description": "",
   "main": "./src/index.js",

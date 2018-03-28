@@ -11,16 +11,12 @@ class App extends Component {
       reults: {}
     }
   }
-
-  componentDidMount() {
-
-  }
   
   render() {
     return (
       <div className="App">
         <div className="App-header">
-          <img src={logo.href} className="App-logo" alt="logo" />
+          <img src={logo} className="App-logo" alt="logo" />
           <h2>Welcome to React</h2>
         </div>
         <p className="App-intro">
