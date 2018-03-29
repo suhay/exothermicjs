@@ -1,10 +1,9 @@
-%TAG ! tag:clarkevans.com,2002:
 ---
 title: Matt Suhay | Full Stack Developer and Maker
 description: 'A full stack developer specializing in web technologies.'
 content:
   header: # Gradient background
-    nav:
+    nav: 
       ? ['What I do',"What I've done","What I'm doing"]: ['#what-i-do', '#what-ive-done', '#what-im-doing']
     code_sction: ''
   main:
@@ -25,15 +24,12 @@ content:
         class: col more-back-end
         content: |
           ## Even more Back-end-y
-    "What I've done":
-      - !get
-        path: pages/portfolio.yml
-    "What I'm doing":
-      - !get
-        path: pages/projects.yml
+     "What I've done":
+      - get: pages/portfolio.yml
+     "What I'm doing":
+      - get: pages/projects.yml
   footer:
-    - !get
-    path: pages/about.yml
+    - get: pages/about.yml
 tags: []
 scripts: []
 links: []
