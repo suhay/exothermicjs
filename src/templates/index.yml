@@ -7,7 +7,7 @@ page:
     items:
     - "Home": '/'
     - "All kinds of links": 'https://example.com'
-    - "Here's a link nobody will click on": '#what-ive-done'
+    - "Here's a link nobody will click on": '#on-page-link'
   main:
   - !section
     id: first

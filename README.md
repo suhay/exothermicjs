@@ -1,15 +1,17 @@
 # ReactY - Yaml based templating for ReactJS
-Creating resposnive, accessible, and clean HTML without needing to rebuild the app or filling up a render().
 
-## Navigation
+Create dynamic page content using YAML and Markdown
 
-### Horizontal Navigation Bar
+## Usage Examples
+
+### Navigation Bar
 
 ```yaml
 - !navbar
-  nav:
-  - Relative Link: '/relative/link'
-  - External Link: 'https://example.com'
+    items:
+    - "Home": '/'
+    - "All kinds of links": 'https://example.com'
+    - "Here's a link nobody will click on": '#on-page-link'
 ```
 
 **Renders as**
@@ -17,145 +19,67 @@ Creating resposnive, accessible, and clean HTML without needing to rebuild the a
 ```html
 <nav aria-label="Top navigation">
   <ul role="menubar">
-    <li role="none"><a href="/relative/link" role="menuitem">Relative Link</a></li>
-    <li role="none"><a href="https://example.com" role="menuitem">External Link</a></li>
+    <li role="none"><a href="/" role="menuitem">Home</a></li>
+    <li role="none"><a href="https://example.com" role="menuitem">All kinds of links</a></li>
+    <li role="none"><a href="#on-page-link" role="menuitem">Here's a link nobody will click on</a></li>
   <ul>
 </nav>
 ```
 
-### Vertial Tree Navigation
+### Section
 
 ```yaml
+- !section
+    id: first
+    title: '# First!'
+    class: row
+    items:
+    - !col
+      id: maybe-col
+      content: |
+        ## Here is a column
+    - !col
+      id: maybe-col-also
+      content: |
+        ## Here is another column
 
+        And some content to go with it. You can add images and tables in here, too.
 ```
 
 **Renders as**
 
 ```html
-
+<section class=”row”>
+  <h1>First!</h1>
+  <div>
+  </div>
+    <h2>Here is a column</h2>
+  <div>
+    <h2>Here is another column</h2>
+    <p>And some content to go with it. You can even add images and tables in here, too.</p>
+  </div>
+</section>
 ```
 
-## Banner
-
-```yaml
-banner_space: https://example.com/images/logo.svg
-```
-
-**Renders as**
-
-```html
-<section class="position banner" role="banner"> </section>
-```
-```css
-.position.banner { background-image: url(http://example.com/images/logo.svg); background-size: cover; }
-```
-
-## Section
-
-```yaml
-Title of Section:
--
-  class: col info-left
-  content: |
-    ## Markdown is used for markup
-    And everything works
-    
-    1. Including this
-    2. And this
-      * And this
--
-  class: col info-right
-  content: |
-    ## More data
-    Can go over here
-```
-
-**Renders as**
-
-```html
-<article class="row">
-  <h1 id="title-of-section">Title of Section</h1>
-  <section class="col info-left">
-    <h2>Markdown is used for markup</h2>
-    <p>And everything works</p>
-    <ol>
-      <li>Including this</li>
-      <li>
-        And this
-        <ul>
-          <li>And this</li>
-        </ul>
-      </li>
-    </ol>
-  </section>
-  <section class="col info-right">
-    <h2>More data</h2>
-    <p>Can go over here</p>
-  </section>
-</article>
-```
-
-## Nested rows
-
-```yaml
-Title of Section:
--
-  - class: col 
-    content: My column content
-  - class: col
-    content: More content
--
-  - class: col 
-    content: My column content
-  - class: col
-    content: More content
-```
-
-**Renders as**
-
-```html
-<article class="row">
-  <h1 id="title-of-section">Title of Section</h1>
-  <section class="row">
-    <div class="col">
-      <p>My column content</p>
-    </div>
-    <div class="col">
-      <p>More content</p>
-    </div>
-  </section>
-  <section class="row">
-    ...
-  </section>
-</article>
-```
-
-## Template Referencing
+### Template Referencing
 
 ```yaml
 top_template:
-  - !get
-    path: /path/template_name.yml
+  - !get 'another-template.yml'
 ```
 
-## Article
+Loads the content of the referenced Yaml file. Good for content reuse, keeping file sizes smaller, and keeping similar collections of information together.
 
-```yaml
-How to make money from home:
-  date: 2018-01-01
-  author: Some guy
-  content: |
-    Article body
-```
+### Modules
 
-## Modules
-Modules are predesigned sets of code much like an [Ansible Module](http://docs.ansible.com/ansible/latest/modules_by_category.html) that are output via tags.
+Custom defined types that you use with a Yaml tag.
 
-Examples:
+Example:
 
 ```yaml
   top_slideshow:
     - !slideshow
+      items:
       - https://example.com/img1.png
       - https://example.com/img2.png
       - https://example.com/img3.png
