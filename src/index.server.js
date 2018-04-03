@@ -1,31 +1,40 @@
 import path from 'path';
 import express from 'express';
+import fs from 'fs';
+import yaml from 'js-yaml';
+
 import React from 'react';
 import ReactServer from 'react-dom/server';
+
+// Components
 import Head from './components/Head';
 import Base from './components/Base';
 import Page from './components/Page';
-import fs from 'fs';
-import yaml from 'js-yaml';
+
+// Modules to load
+import { NavbarYamlType } from './modules/navbar/Navbar';
+import { LAYOUT_SCHEMA } from './modules/layout/Section';
+import { GetYamlType } from './modules/util/Get';
 
 const app = express();
 
 const build = function(url) {
-  let result = '';
+  var result = '';
+  const REACTY_SCHEMA = yaml.Schema.create([LAYOUT_SCHEMA], [NavbarYamlType, GetYamlType]);
   try {
     const base = yaml.safeLoad(fs.readFileSync(path.resolve(__dirname, '../src/pages/base.yml'), 'utf8'));
     if (url === "/") {
-      const page = yaml.safeLoad(fs.readFileSync(path.resolve(__dirname, '../src/pages/index.yml'), 'utf8'));
+      const page = yaml.safeLoad(fs.readFileSync(path.resolve(__dirname, '../src/pages/index.yml'), 'utf8'), { schema: REACTY_SCHEMA });
       result = {...base,...page};
     } else {
       // Find page name
-      const page = yaml.safeLoad(fs.readFileSync(path.resolve(__dirname, '../src/pages/'+path+'.yml'), 'utf8'));
+      const page = yaml.safeLoad(fs.readFileSync(path.resolve(__dirname, '../src/pages/'+path+'.yml'), 'utf8'), { schema: REACTY_SCHEMA });
       result = {...base, ...page};
     }
   } catch (e) {
-    // 404 page
+    // TODO : 404 page
     result = base;
-    console.error(e);
+    result.data.description = "404";
   } finally {
     const markup = ReactServer.renderToString(<Page data={result} />);
     const head = ReactServer.renderToString(<Head data={result} />);
@@ -41,7 +50,6 @@ app.get('/', (req, res) => {
 });
 
 app.get('/:page', (req, res) => {
-  console.log(req);
   res.send(build(req.params.page));
 });
 

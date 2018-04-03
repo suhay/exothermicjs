@@ -3,6 +3,9 @@ import Base from '../components/Base';
 
 class Link extends Component {
   render() {
+    if (!this.props.links) {
+      return null;
+    }
     let linkTags = [];
     this.props.links.forEach((tag, index) => {
       if (typeof tag === "string") {

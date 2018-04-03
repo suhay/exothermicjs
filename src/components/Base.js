@@ -4,7 +4,9 @@ import '../styles/Base.css';
 class Base extends Component {
   render() {
     return (
-      <p>content</p>
+      <React.Fragment>
+        {this.props.children}
+      </React.Fragment>
     );
   }
   

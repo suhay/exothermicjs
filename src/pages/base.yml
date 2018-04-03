@@ -6,15 +6,15 @@ slug: '' # optional, used for URL creation URL
 # and the value will be used as the value for 'content='.
 # Multiple key value pairs will follow the key=value pattern
 meta:
-  - http-equiv: 'X-UA-Compatible'
+  - httpEquiv: 'X-UA-Compatible'
     content: 'IE=edge'
-  - charset: 'UTF-8'
+  - charSet: 'UTF-8'
   - viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no'
   
 # meta description of page, content will be used if left blank
 description: 'This is a base ReactY page'
 
-content:
+page:
   header: ''
   main: ''
   footer: ''

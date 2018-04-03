@@ -3,6 +3,9 @@ import Base from '../components/Base';
 
 class Script extends Component {
   render() {
+    if (!this.props.scripts) {
+      return null;
+    }
     let scriptTags = [],
         scriptBody = [];
     this.props.scripts.forEach((tag, index) => {
@@ -32,5 +35,3 @@ class Script extends Component {
 }
 
 export default Script;
-
-// <link rel="stylesheet" type="text/css" href="https://cdn.sstatic.net/Sites/stackoverflow/primary.css?v=46ace4ab14a1">

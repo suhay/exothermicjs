@@ -1,35 +1,54 @@
 ---
 title: Matt Suhay | Full Stack Developer and Maker
 description: 'A full stack developer specializing in web technologies.'
-content:
+page:
   header: # Gradient background
-    nav: 
-      ? ['What I do',"What I've done","What I'm doing"]: ['#what-i-do', '#what-ive-done', '#what-im-doing']
-    code_sction: ''
+  - !navbar
+    items:
+    - "What I do": '#what-i-do'
+    - "What I've done": '#what-ive-done'
+    - "What I'm doing": '#what-im-doing'
   main:
-     "What I do":
-      - 
-        class: col front-end
-        content: |
-          ## Front-end
-      -
-        class: col magic
-      -
-        class: col back-end
-        content: |
-          ## Back-end
-      -
-        class: col more-magic
-      -
-        class: col more-back-end
-        content: |
-          ## Even more Back-end-y
-     "What I've done":
-      - get: pages/portfolio.yml
-     "What I'm doing":
-      - get: pages/projects.yml
+  - !section
+    id: what-i-do
+    title: '# What I do'
+    class: row
+    items:
+    - !col
+      id: front-end
+      content: |
+        ## Front-end
+    - !col
+      id: magic
+      class: magic
+    - !col
+      id: back-end
+      content: |
+        ## Back-end
+    - !col
+      id: more-magic
+      class: more-magic
+    - !col
+      id: more-back-end
+      content: |
+        ## Even more Back-end-y
+  - !section
+    id: what-ive-done
+    title: "# What I've done"
+    items:
+    - !get 'pages/portfolio.yml'
+  - !section
+    id: what-im-doing
+    title: "# What I'm doing"
+    items:
+    - !get 'pages/projects.yml'
   footer:
-    - get: pages/about.yml
+  - !section
+    id: where-i-am
+    class: row
+    title: '# Where you can find me'
+    items:
+    - !get 'pages/about.yml'
 tags: []
 scripts: []
 links: []

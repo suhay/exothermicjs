@@ -1,30 +1,13 @@
-# ReactY | Yaml based templating for ReactJS
-## Creating resposnive, accessible, and clean HTML without all the render() vomit.
+# ReactY - Yaml based templating for ReactJS
+Creating resposnive, accessible, and clean HTML without needing to rebuild the app or filling up a render().
 
-### Navigation
+## Navigation
 
-#### Horizontal Navigation Bar
-
-```yaml
-nav:
-  ? [Relative Link, External Link]: ['/relative/link', 'https://example.com']
-```
-
-**Renders as**
-
-```html
-<nav aria-label="Top navigation">
-  <ul role="menubar">
-    <li role="none"><a href="/relative/link" role="menuitem">Relative Link</a>
-    <li role="none"><a href="https://example.com" role="menuitem">External Link</a>
-  <ul>
-</nav>
-```
-
-#### Vertial Tree Navigation
+### Horizontal Navigation Bar
 
 ```yaml
-nav:
+- !navbar
+  nav:
   - Relative Link: '/relative/link'
   - External Link: 'https://example.com'
 ```
@@ -32,15 +15,27 @@ nav:
 **Renders as**
 
 ```html
-<nav aria-label="Contextual navigation">
-  <ul role="tree">
-    <li role="none"><a href="/relative/link" role="treeitem" aria-setsize="2" aria-posinset="1">Relative Link</a>
-    <li role="none"><a href="https://example.com" role="treeitem" aria-setsize="2" aria-posinset="2">External Link</a>
+<nav aria-label="Top navigation">
+  <ul role="menubar">
+    <li role="none"><a href="/relative/link" role="menuitem">Relative Link</a></li>
+    <li role="none"><a href="https://example.com" role="menuitem">External Link</a></li>
   <ul>
 </nav>
 ```
 
-### Banner
+### Vertial Tree Navigation
+
+```yaml
+
+```
+
+**Renders as**
+
+```html
+
+```
+
+## Banner
 
 ```yaml
 banner_space: https://example.com/images/logo.svg
@@ -55,7 +50,7 @@ banner_space: https://example.com/images/logo.svg
 .position.banner { background-image: url(http://example.com/images/logo.svg); background-size: cover; }
 ```
 
-### Section
+## Section
 
 ```yaml
 Title of Section:
@@ -100,7 +95,7 @@ Title of Section:
 </article>
 ```
 
-### Nested rows
+## Nested rows
 
 ```yaml
 Title of Section:
@@ -135,7 +130,7 @@ Title of Section:
 </article>
 ```
 
-### Template Referencing
+## Template Referencing
 
 ```yaml
 top_template:
@@ -143,7 +138,7 @@ top_template:
     path: /path/template_name.yml
 ```
 
-### Article
+## Article
 
 ```yaml
 How to make money from home:

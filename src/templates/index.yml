@@ -1,12 +1,34 @@
 ---
-title: Page Title
-description: 'My example page.'
-content:
+title: My Example Page
+description: 'This is an example page'
+page:
   header:
-    nav:
-    ? ['Home','About']: ['/', '/about']
-  main: ''
-  footer: ''
+  - !navbar
+    items:
+    - "Home": '/'
+    - "All kinds of links": 'https://example.com'
+    - "Here's a link nobody will click on": '#what-ive-done'
+  main:
+  - !section
+    id: first
+    title: '# First!'
+    class: row
+    items:
+    - !col
+      id: maybe-col
+      content: |
+        ## Here is a column
+    - !col
+      id: maybe-col-also
+      content: |
+        ## Here is another column
+  footer:
+  - !section
+    id: get-this
+    class: row
+    title: '## You can get other templates and page content, too!'
+    items:
+    - !get 'about.yml'
 tags: []
 scripts: []
-links:
+links: []

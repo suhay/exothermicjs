@@ -1,13 +1,19 @@
 ---
-- # <section class="row">
-  name: 'CommonSpot Migration'
-    class: col
+items:
+- !article
+  id: commonspot_migrate
+  title: '## CommonSpot Migration'
+  class: row
+  items:
+  - !col
+    id: write-up
     content: |
-      
-  image: '![alt text](https://www.matthewsuhay.com/images/icon48.png "")'
-    class: col
+      Stuff
+  - !col
+    id: image
+    content: '![alt text](https://www.matthewsuhay.com/images/icon48.png "")'
   tags:
-    - drupal
-    - php
-    - oracle
-    - json
+  - drupal
+  - php
+  - oracle
+  - json
