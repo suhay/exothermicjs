@@ -16,7 +16,7 @@ const serverConfig = {
     __dirname: true
   },
 
-  entry: PRODUCTION ? path.resolve('./lib/reacty.js') : path.resolve('./lib/reacty.test.js'),
+  entry: PRODUCTION ? path.resolve('./lib/reacty.js') : path.resolve('./demo/dist/reacty.test.js'),
   output: {
     path: PRODUCTION ? path.resolve('./demo/dist/js') : path.resolve('./dist'),
     filename: 'server.js',

@@ -1,7 +1,7 @@
 {
   "name": "react-yaml-templator",
   "version": "0.1.0",
-  "private": true,
+  "author": "Matt Suhay <matthew.suhay@gmail.com>",
   "dependencies": {
     "express": "^4.16.3",
     "js-yaml": "^3.11.0",
@@ -41,9 +41,8 @@
     "type": "git",
     "url": "git+https://github.com/suhay/reacty.git"
   },
-  "author": "Matt Suhay",
   "license": "MIT",
-  "main": "index.js",
+  "main": "lib/reacty.js",
   "bugs": {
     "url": "https://github.com/suhay/reacty/issues"
   },

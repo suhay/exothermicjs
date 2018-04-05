@@ -1,12 +1,14 @@
+.gitignore
+babelrc.js
+webpack.config.js
 .babelrc
 .editorconfig
 .eslintignore
 .eslintrc
-.gitignore
 .travis.yml
 demo
+dist
 npm-debug.log
-src
 test
 test/**/*
-webpack.config.js
+node_modules
