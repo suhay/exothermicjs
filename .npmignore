@@ -1,0 +1,12 @@
+.babelrc
+.editorconfig
+.eslintignore
+.eslintrc
+.gitignore
+.travis.yml
+demo
+npm-debug.log
+src
+test
+test/**/*
+webpack.config.js

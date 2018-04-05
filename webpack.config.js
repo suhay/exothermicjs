@@ -5,44 +5,6 @@ const nodeExternals = require('webpack-node-externals');
 const PRODUCTION = process.env.NODE_ENV === 'production';
 const MinifierPlugin = webpack.optimize.UglifyJsPlugin;
 
-const clientConfig = {
-  entry: path.resolve('./src/index.browser.js'),
-  
-  output: {
-    path: path.resolve('./dist'),
-    filename: 'bundle.js',
-  },
-
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        include: path.resolve('./src'),
-        loader: 'babel-loader',
-        query: createBabelConfig({ server: false }),
-      },
-      { 
-        test: /\.css$/,
-        use: [
-          { loader: "style-loader" },
-          { loader: "css-loader" }
-        ]
-      },
-      { 
-        test: /\.svg/, 
-        use: 'svg-inline-loader' 
-      },
-    ],
-  },
-  
-  plugins: [
-    PRODUCTION && new MinifierPlugin(),
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-    })
-  ].filter(e => e),
-};
-
 const serverConfig = {
   target: 'node',
   
@@ -54,9 +16,9 @@ const serverConfig = {
     __dirname: true
   },
 
-  entry: path.resolve('./src/index.server.js'),
+  entry: PRODUCTION ? path.resolve('./lib/reacty.js') : path.resolve('./lib/reacty.test.js'),
   output: {
-    path: path.resolve('./dist'),
+    path: PRODUCTION ? path.resolve('./demo/dist/js') : path.resolve('./dist'),
     filename: 'server.js',
   },
 
@@ -64,7 +26,7 @@ const serverConfig = {
     rules: [
       {
         test: /\.js$/,
-        include: path.resolve('./src'),
+        include: path.resolve('./lib'),
         loader: 'babel-loader',
         query: createBabelConfig({ server: true }),
       },
@@ -89,5 +51,4 @@ const serverConfig = {
   ].filter(e => e),
 };
 
-// Notice that both configurations are exported
-module.exports = [clientConfig, serverConfig];
+module.exports = [serverConfig];

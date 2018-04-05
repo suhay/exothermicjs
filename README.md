@@ -1,4 +1,4 @@
-# ReactY - Yaml based templating for ReactJS
+# ReactY Templator - Yaml based templating for ReactJS
 
 Create dynamic page content using YAML and Markdown
 

@@ -1,11 +1,10 @@
 {
-  "name": "reacty",
+  "name": "react-yaml-templator",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "express": "^4.16.3",
     "js-yaml": "^3.11.0",
-    "markdown": "^0.5.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-markdown": "^3.3.0"
@@ -37,14 +36,14 @@
     "serve": "nodemon -w dist/server.js dist/server.js",
     "ws": "concurrently --kill-others \"npm run watch\" \"npm run serve\""
   },
-  "description": "",
-  "main": "./src/index.js",
+  "description": "ReactY Templator | Yaml based templating for ReactJS",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/suhay/reacty.git"
   },
   "author": "Matt Suhay",
   "license": "MIT",
+  "main": "index.js",
   "bugs": {
     "url": "https://github.com/suhay/reacty/issues"
   },

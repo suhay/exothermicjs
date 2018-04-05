@@ -12,7 +12,14 @@ module.exports = (server) => ({
       plugins: [
         "babel-plugin-transform-react-jsx-self",
         "babel-plugin-transform-react-jsx-source",
-        "transform-object-rest-spread",
+        "transform-object-rest-spread"
+      ]
+    },
+    production: {
+      plugins: [
+        "babel-plugin-transform-react-jsx-self",
+        "babel-plugin-transform-react-jsx-source",
+        "transform-object-rest-spread"
       ]
     },
   }
