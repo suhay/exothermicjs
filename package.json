@@ -42,7 +42,7 @@
     "url": "git+https://github.com/suhay/reacty.git"
   },
   "license": "MIT",
-  "module": "dist/reacty.min.js",
+  "module": "index.js",
   "bugs": {
     "url": "https://github.com/suhay/reacty/issues"
   },
