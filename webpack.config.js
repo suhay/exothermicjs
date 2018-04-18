@@ -5,7 +5,7 @@ const nodeExternals = require('webpack-node-externals');
 const PRODUCTION = process.env.NODE_ENV === 'production';
 const MinifierPlugin = webpack.optimize.UglifyJsPlugin;
 
-const serverConfig = {
+module.exports = {
   target: 'node',
   
   externals: [ nodeExternals({
@@ -16,12 +16,16 @@ const serverConfig = {
     __dirname: true
   },
 
-  entry: PRODUCTION ? path.resolve('./lib/reacty.js') : path.resolve('./demo/dist/reacty.test.js'),
+  entry: path.resolve('./index.js'),
+  
   output: {
-    path: PRODUCTION ? path.resolve('./demo/dist/js') : path.resolve('./dist'),
-    filename: 'server.js',
+    path: path.resolve('./dist'),
+    filename: PRODUCTION ? 'reacty.min.js' : 'reacty.js',
+    library: 'reacty',
+    libraryTarget: 'umd',
+    umdNamedDefine: true,
   },
-
+  
   module: {
     rules: [
       {
@@ -29,16 +33,6 @@ const serverConfig = {
         include: path.resolve('./lib'),
         loader: 'babel-loader',
         query: createBabelConfig({ server: true }),
-      },
-      { 
-        test: /\.css$/,
-        use: [
-          { loader: "css-loader" }
-        ]
-      },
-      { 
-        test: /\.svg/, 
-        use: 'svg-inline-loader' 
       },
     ],
   },
@@ -50,5 +44,3 @@ const serverConfig = {
     })
   ].filter(e => e),
 };
-
-module.exports = [serverConfig];

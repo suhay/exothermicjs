@@ -14,33 +14,35 @@ Folder structure
 
 ```
 .
-├── css/
-├── js/
-├── pages/
-│   ├── index.yml
-│   ├── base.yml
-│   └── about.yml
-├── index.js
-└── index.html
+├── public/
+│   ├── css/
+│   ├── js/
+│   ├── pages/
+│   │   ├── index.yml
+│   │   ├── base.yml
+│   │   └── about.yml
+│   └── index.html
+└── index.js
 ```
 
 index.js
 
 ```js
-import path from 'path';
-import express from 'express';
+var Reacty = require("react-yaml-templator");
+var path = require('path');
+var express = require('express');
 
-import { build } from 'reacty';
+var app = express();
+var pages =  path.resolve(__dirname, './dist/pages');
 
-const app = express();
-const pages = path.resolve(__dirname, './pages');
+app.use('./static', express.static(path.resolve(__dirname, './dist')));
 
 app.get('/', (req, res) => {
-  res.send(build('/', pages));
-});
-
-app.get('/:page', (req, res) => {
-  res.send(build(req.params.page, pages));
+  res.send(Reacty.build('index', pages));
+}).get('/:page', (req, res) => {
+  res.send(Reacty.build(req.params.page, pages));
+}).listen(3001, () => {
+  console.log('React app listening on port 3001!')
 });
 ```
 
@@ -54,7 +56,6 @@ index.html
   </head>
   <body>
     $body-placeholder
-    <script src="/static/bundle.js"></script>
   </body>
 </html>
 ```
@@ -150,7 +151,7 @@ Loads the content of the referenced Yaml file. Good for content reuse, keeping f
 
 ### Modules
 
-Custom defined types that you use with a Yaml tag.
+Custom defined types that you inject with Yaml tags.
 
 Example (not included in default modules):
 

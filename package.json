@@ -23,17 +23,17 @@
     "nodemon": "^1.17.2",
     "svg-inline-loader": "^0.8.0",
     "svg-loader": "0.0.2",
-    "webpack": "^2.0",
+    "webpack": "^3.5.6",
     "webpack-node-externals": "^1.6.0"
   },
   "scripts": {
-    "start": "node ./dist/server.js",
+    "start": "node ./dist/reacty.js",
     "build": "webpack",
     "build:prod": "cross-env NODE_ENV=production webpack",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "watch": "webpack --watch",
-    "serve": "nodemon -w dist/server.js dist/server.js",
+    "serve": "nodemon --watch dist --watch demo --watch lib demo/index.js",
     "ws": "concurrently --kill-others \"npm run watch\" \"npm run serve\""
   },
   "description": "ReactY Templator | Yaml based templating for ReactJS",
@@ -42,7 +42,7 @@
     "url": "git+https://github.com/suhay/reacty.git"
   },
   "license": "MIT",
-  "main": "lib/reacty.js",
+  "module": "dist/reacty.js",
   "bugs": {
     "url": "https://github.com/suhay/reacty/issues"
   },
