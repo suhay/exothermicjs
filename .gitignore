@@ -3,10 +3,6 @@
 # dependencies
 /node_modules
 
-# production
-/build
-/dist
-
 # misc
 .DS_Store
 .env
@@ -14,5 +10,5 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-src/pages/*.yml
+# test site
 demo/dist/pages/*.yml
