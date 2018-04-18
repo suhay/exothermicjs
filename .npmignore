@@ -7,7 +7,6 @@ webpack.config.js
 .eslintrc
 .travis.yml
 demo
-dist
 npm-debug.log
 test
 test/**/*
