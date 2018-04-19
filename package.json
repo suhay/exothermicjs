@@ -1,6 +1,6 @@
 {
   "name": "react-yaml-templator",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "author": "Matt Suhay <matthew.suhay@gmail.com>",
   "dependencies": {
     "express": "^4.16.3",
