@@ -33,14 +33,15 @@ var path = require('path');
 var express = require('express');
 
 var app = express();
-var pages =  path.resolve(__dirname, './dist/pages');
+var pages =  path.resolve(__dirname, './public/pages');
 
-app.use('./static', express.static(path.resolve(__dirname, './dist')));
-
-app.get('/', (req, res) => {
-  res.send(Reacty.build('index', pages));
-}).get('/:page', (req, res) => {
-  res.send(Reacty.build(req.params.page, pages));
+app.get('*', (req, res) => {
+  if (req.url.indexOf('.') === -1) {
+    res.send(Reacty.build(req.url, pages));
+  } else {
+    var path = req.params[0] ? req.params[0] : 'index.html';
+    res.sendFile(path, {root: './public'});
+  }
 }).listen(3001, () => {
   console.log('React app listening on port 3001!')
 });

@@ -1,13 +1,13 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("react"), require("js-yaml"), require("react-markdown"), require("path"), require("fs"), require("react-dom/server"));
+		module.exports = factory(require("react"), require("js-yaml"), require("react-markdown"), require("path"), require("fs"), require("react-dom/server"), require("react-router"), require("react-router-dom"));
 	else if(typeof define === 'function' && define.amd)
-		define("reacty", ["react", "js-yaml", "react-markdown", "path", "fs", "react-dom/server"], factory);
+		define("reacty", ["react", "js-yaml", "react-markdown", "path", "fs", "react-dom/server", "react-router", "react-router-dom"], factory);
 	else if(typeof exports === 'object')
-		exports["reacty"] = factory(require("react"), require("js-yaml"), require("react-markdown"), require("path"), require("fs"), require("react-dom/server"));
+		exports["reacty"] = factory(require("react"), require("js-yaml"), require("react-markdown"), require("path"), require("fs"), require("react-dom/server"), require("react-router"), require("react-router-dom"));
 	else
-		root["reacty"] = factory(root["react"], root["js-yaml"], root["react-markdown"], root["path"], root["fs"], root["react-dom/server"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_0__, __WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_4__, __WEBPACK_EXTERNAL_MODULE_5__, __WEBPACK_EXTERNAL_MODULE_7__) {
+		root["reacty"] = factory(root["react"], root["js-yaml"], root["react-markdown"], root["path"], root["fs"], root["react-dom/server"], root["react-router"], root["react-router-dom"]);
+})(this, function(__WEBPACK_EXTERNAL_MODULE_0__, __WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_4__, __WEBPACK_EXTERNAL_MODULE_5__, __WEBPACK_EXTERNAL_MODULE_7__, __WEBPACK_EXTERNAL_MODULE_8__, __WEBPACK_EXTERNAL_MODULE_12__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -92,11 +92,11 @@ module.exports = require("react");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_js_yaml__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_js_yaml___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_js_yaml__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_Modules_navbar_Navbar__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_Modules_layout_Section__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_Modules_article_Article__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_Modules_util_Get__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_Components_Page__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_Modules_navbar_Navbar__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_Modules_layout_Section__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_Modules_article_Article__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_Modules_util_Get__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_Components_Page__ = __webpack_require__(17);
 var _jsxFileName = '/home/cabox/workspace/reacty/lib/components/Base.js';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -174,7 +174,7 @@ function val(item) {
   return item[Object.keys(item)[i]];
 }
 
-var version = "v0.2.1";
+var version = "v0.2.5";
 
 var REACTY_SCHEMA = __WEBPACK_IMPORTED_MODULE_1_js_yaml___default.a.Schema.create([__WEBPACK_IMPORTED_MODULE_3_Modules_layout_Section__["a" /* LAYOUT_SCHEMA */]], [__WEBPACK_IMPORTED_MODULE_2_Modules_navbar_Navbar__["a" /* NavbarYamlType */], __WEBPACK_IMPORTED_MODULE_4_Modules_article_Article__["a" /* ArticleYamlType */], __WEBPACK_IMPORTED_MODULE_5_Modules_util_Get__["a" /* GetYamlType */]]);
 
@@ -219,11 +219,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_react_dom_server__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_react_dom_server___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_react_dom_server__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_Components_Head__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_Components_Base__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_react_router__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_react_router___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_react_router__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_Components_Head__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_Components_Base__ = __webpack_require__(1);
 var _jsxFileName = '/home/cabox/workspace/reacty/lib/reacty.js';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 
 
 
@@ -246,7 +249,7 @@ function build(route, pages) {
   var result = '';
   var base = __WEBPACK_IMPORTED_MODULE_2_js_yaml___default.a.safeLoad(__WEBPACK_IMPORTED_MODULE_1_fs___default.a.readFileSync(__WEBPACK_IMPORTED_MODULE_0_path___default.a.resolve(__dirname, pages + '/base.yml'), 'utf8'));
   try {
-    var page = __WEBPACK_IMPORTED_MODULE_2_js_yaml___default.a.safeLoad(__WEBPACK_IMPORTED_MODULE_1_fs___default.a.readFileSync(__WEBPACK_IMPORTED_MODULE_0_path___default.a.resolve(__dirname, pages + '/' + route + '.yml'), 'utf8'), { schema: __WEBPACK_IMPORTED_MODULE_6_Components_Base__["a" /* REACTY_SCHEMA */] });
+    var page = __WEBPACK_IMPORTED_MODULE_2_js_yaml___default.a.safeLoad(__WEBPACK_IMPORTED_MODULE_1_fs___default.a.readFileSync(__WEBPACK_IMPORTED_MODULE_0_path___default.a.resolve(__dirname, pages + '/' + (route === '/' ? 'index' : route) + '.yml'), 'utf8'), { schema: __WEBPACK_IMPORTED_MODULE_7_Components_Base__["a" /* REACTY_SCHEMA */] });
     result = _extends({}, base, page);
   } catch (e) {
     console.error(e);
@@ -254,14 +257,28 @@ function build(route, pages) {
     result.data.description = "404";
     result.data.title = "Page not found!";
   } finally {
-    //     var markup = ReactServer.renderToString(React.createElement(Base, { data: result, pages: pages, route: route }));
-    var markup = __WEBPACK_IMPORTED_MODULE_4_react_dom_server___default.a.renderToString(__WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_6_Components_Base__["b" /* default */], { data: result, pages: pages, route: route, __self: this,
+    var context = {};
+    var markup = __WEBPACK_IMPORTED_MODULE_4_react_dom_server___default.a.renderToString(__WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(
+      __WEBPACK_IMPORTED_MODULE_5_react_router__["StaticRouter"],
+      { location: route, context: context, __self: this,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 35
+        }
+      },
+      __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_7_Components_Base__["b" /* default */], { data: result, pages: pages, route: route, __self: this,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 36
+        }
+      })
+    ));
+    var head = __WEBPACK_IMPORTED_MODULE_4_react_dom_server___default.a.renderToString(__WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_6_Components_Head__["a" /* default */], { data: result, __self: this,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 33
+        lineNumber: 40
       }
     }));
-    var head = __WEBPACK_IMPORTED_MODULE_4_react_dom_server___default.a.renderToString(__WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5_Components_Head__["a" /* default */], { data: result }));
     var html = __WEBPACK_IMPORTED_MODULE_1_fs___default.a.readFileSync(__WEBPACK_IMPORTED_MODULE_0_path___default.a.resolve(__dirname, pages + '/../index.html')).toString();
     return html.replace('<meta name="generator" content="reacty">', head).replace('$body-placeholder', markup);
   }
@@ -276,14 +293,20 @@ module.exports = require("react-dom/server");
 
 /***/ }),
 /* 8 */
+/***/ (function(module, exports) {
+
+module.exports = require("react-router");
+
+/***/ }),
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_Modules_Meta__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_Modules_Link__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_Modules_Script__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_Modules_Meta__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_Modules_Link__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_Modules_Script__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Base__ = __webpack_require__(1);
 var _jsxFileName = '/home/cabox/workspace/reacty/lib/components/Head.js';
 
@@ -374,7 +397,7 @@ var Head = function (_Component) {
 /* harmony default export */ __webpack_exports__["a"] = (Head);
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -446,7 +469,7 @@ var Meta = function (_Component) {
 /* harmony default export */ __webpack_exports__["a"] = (Meta);
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -457,7 +480,9 @@ var Meta = function (_Component) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_js_yaml__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_js_yaml___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_js_yaml__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_Components_Base__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_router_dom__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_router_dom___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_react_router_dom__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_Components_Base__ = __webpack_require__(1);
 var _jsxFileName = '/home/cabox/workspace/reacty/lib/modules/navbar/Navbar.js';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -543,14 +568,14 @@ var Navitem = function (_Component2) {
           }
         },
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'a',
-          { href: Object(__WEBPACK_IMPORTED_MODULE_2_Components_Base__["d" /* val */])(this.props.item), role: 'menuitem', 'aria-setsize': this.props.size, 'aria-posinset': this.props.id + 1, __self: this,
+          __WEBPACK_IMPORTED_MODULE_2_react_router_dom__["NavLink"],
+          { to: Object(__WEBPACK_IMPORTED_MODULE_3_Components_Base__["d" /* val */])(this.props.item), 'aria-setsize': this.props.size, 'aria-posinset': this.props.id + 1, role: 'menuitem', activeClassName: 'active', __self: this,
             __source: {
               fileName: _jsxFileName,
               lineNumber: 27
             }
           },
-          Object(__WEBPACK_IMPORTED_MODULE_2_Components_Base__["c" /* key */])(this.props.item)
+          Object(__WEBPACK_IMPORTED_MODULE_3_Components_Base__["c" /* key */])(this.props.item)
         )
       );
     }
@@ -576,7 +601,13 @@ var NavbarYamlType = new __WEBPACK_IMPORTED_MODULE_1_js_yaml___default.a.Type('!
 
 
 /***/ }),
-/* 11 */
+/* 12 */
+/***/ (function(module, exports) {
+
+module.exports = require("react-router-dom");
+
+/***/ }),
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -585,7 +616,7 @@ var NavbarYamlType = new __WEBPACK_IMPORTED_MODULE_1_js_yaml___default.a.Type('!
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LAYOUT_SCHEMA; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Col__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Col__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_markdown__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_markdown___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_react_markdown__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_js_yaml__ = __webpack_require__(2);
@@ -665,7 +696,7 @@ var LAYOUT_SCHEMA = __WEBPACK_IMPORTED_MODULE_3_js_yaml___default.a.Schema.creat
 
 
 /***/ }),
-/* 12 */
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -747,7 +778,7 @@ var ColYamlType = new __WEBPACK_IMPORTED_MODULE_2_js_yaml___default.a.Type('!col
 
 
 /***/ }),
-/* 13 */
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -853,7 +884,7 @@ var ArticleYamlType = new __WEBPACK_IMPORTED_MODULE_2_js_yaml___default.a.Type('
 
 
 /***/ }),
-/* 14 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -958,7 +989,7 @@ var GetYamlType = new __WEBPACK_IMPORTED_MODULE_2_js_yaml___default.a.Type('!get
 
 
 /***/ }),
-/* 15 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1088,7 +1119,7 @@ var Page = function (_Component) {
 /* harmony default export */ __webpack_exports__["a"] = (Page);
 
 /***/ }),
-/* 16 */
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1164,7 +1195,7 @@ var Link = function (_Component) {
 /* harmony default export */ __webpack_exports__["a"] = (Link);
 
 /***/ }),
-/* 17 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
