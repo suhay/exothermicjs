@@ -16,7 +16,7 @@ module.exports = {
     __dirname: true
   },
 
-  entry: path.resolve('./index.js'),
+  entry: path.resolve('./lib/reacty.js'),
   
   output: {
     path: path.resolve('./dist'),
@@ -35,6 +35,14 @@ module.exports = {
         query: createBabelConfig({ server: true }),
       },
     ],
+  },
+  
+  resolve: {
+    alias: {
+      Components: path.resolve(__dirname, './lib/components/'),
+      Modules: path.resolve(__dirname, './lib/modules/'),
+      Root: path.resolve(__dirname, '.')
+    },
   },
   
   plugins: [
