@@ -15,13 +15,14 @@ Folder structure
 ```
 .
 ├── public/
-│   ├── css/
-│   ├── js/
 │   ├── pages/
 │   │   ├── index.yml
 │   │   ├── base.yml
 │   │   └── about.yml
-│   └── index.html
+│   └── static/
+│        ├── css/
+│        ├── js/
+│        └── index.html
 └── index.js
 ```
 
@@ -40,7 +41,7 @@ app.get('*', (req, res) => {
     res.send(Reacty.build(req.url, pages));
   } else {
     var path = req.params[0] ? req.params[0] : 'index.html';
-    res.sendFile(path, {root: './public'});
+    res.sendFile(path, {root: './public/static'});
   }
 }).listen(3001, () => {
   console.log('React app listening on port 3001!')

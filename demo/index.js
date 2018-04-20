@@ -10,7 +10,7 @@ app.get('*', (req, res) => {
     res.send(Reacty.build(req.url, pages));
   } else {
     var path = req.params[0] ? req.params[0] : 'index.html';
-    res.sendFile(path, {root: './dist'});
+    res.sendFile(path, {root: './dist/static'});
   }
 }).listen(3001, () => {
   console.log('React app listening on port 3001!')

@@ -279,7 +279,7 @@ function build(route, pages) {
         lineNumber: 40
       }
     }));
-    var html = __WEBPACK_IMPORTED_MODULE_1_fs___default.a.readFileSync(__WEBPACK_IMPORTED_MODULE_0_path___default.a.resolve(__dirname, pages + '/../index.html')).toString();
+    var html = __WEBPACK_IMPORTED_MODULE_1_fs___default.a.readFileSync(__WEBPACK_IMPORTED_MODULE_0_path___default.a.resolve(__dirname, pages + '/../static/index.html')).toString();
     return html.replace('<meta name="generator" content="reacty">', head).replace('$body-placeholder', markup);
   }
 }
