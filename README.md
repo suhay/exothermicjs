@@ -1,5 +1,8 @@
 # ReactY Templator - Yaml based templating for ReactJS
 
+[![Build Status](https://travis-ci.org/suhay/reacty.svg?branch=master)](https://travis-ci.org/suhay/reacty)
+[![NPM version](https://img.shields.io/npm/v/react-yaml-templator.svg)](https://www.npmjs.org/package/react-yaml-templator)
+
 Create dynamic page content using YAML and Markdown
 
 ## Installation
