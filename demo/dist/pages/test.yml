@@ -1,0 +1,12 @@
+---
+title: Test page
+page:
+  header: # Gradient background
+  - !get 'demo/dist/pages/nav.yml'
+  main:
+  - !section
+    id: what-i-do
+    title: '# Test page'
+    class: row
+    content: 'weeeee'
+  

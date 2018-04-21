@@ -1,0 +1,42 @@
+---
+title: Test homepage
+description: 'And the description.'
+page:
+  header:
+  - !get 'demo/dist/pages/nav.yml'
+  main:
+  - !section
+    id: who
+    title: '# Who'
+    class: row
+    items:
+    - !col
+      id: one
+      content: |
+        ## Not sure
+    - !col
+      id: two
+      content: |
+        ## But
+    - !col
+      id: three
+      content: |
+        ## Yeah, still not sure
+  - !section
+    id: what-ive-done
+    title: "# What"
+    items:
+    - !get 'demo/dist/pages/portfolio.yml'
+  - !section
+    id: what-im-doing
+    title: "# More What"
+    items:
+    - !get 'demo/dist/pages/projects.yml'
+  footer:
+  - !section
+    id: where
+    class: row
+    title: '# Where'
+    items:
+    - !get 'demo/dist/pages/about.yml'
+tags: []

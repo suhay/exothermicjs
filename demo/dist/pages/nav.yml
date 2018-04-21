@@ -1,0 +1,6 @@
+---
+items:
+- !navbar
+  items:
+  - "Nav test": '/test'
+  - "Nave test 2 - 404": '/test/more'

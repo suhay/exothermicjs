@@ -1,0 +1,16 @@
+---
+items:
+- !article
+  id: objects
+  title: '## Some objects'
+  class: row
+  items:
+  - !col
+    id: write-up
+    content: |
+      Stuff
+  - !col
+    id: image
+    content: '![alt text](https://giphy.com/embed/o0vwzuFwCGAFO "")'
+  tags:
+  - php
