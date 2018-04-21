@@ -36,7 +36,7 @@ page:
   - !section
     id: where
     class: row
-    title: '# Where'
+    title: '# Where - End of file!!'
     items:
     - !get 'demo/dist/pages/about.yml'
 tags: []
