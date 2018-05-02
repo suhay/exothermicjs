@@ -23,11 +23,8 @@
     "babel-preset-react": "^6.24.1",
     "concurrently": "^3.5.1",
     "cross-env": "^5.1.4",
-    "css-loader": "^0.28.11",
     "jest": "^22.4.3",
     "nodemon": "^1.17.2",
-    "svg-inline-loader": "^0.8.0",
-    "svg-loader": "0.0.2",
     "webpack": "^3.5.6",
     "webpack-node-externals": "^1.6.0"
   },

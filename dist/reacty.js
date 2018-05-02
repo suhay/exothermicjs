@@ -174,7 +174,7 @@ function val(item) {
   return item[Object.keys(item)[i]];
 }
 
-var version = "v0.2.6";
+var version = "v0.2.10";
 
 var REACTY_SCHEMA = __WEBPACK_IMPORTED_MODULE_1_js_yaml___default.a.Schema.create([__WEBPACK_IMPORTED_MODULE_3_Modules_layout_Section__["a" /* LAYOUT_SCHEMA */]], [__WEBPACK_IMPORTED_MODULE_2_Modules_navbar_Navbar__["a" /* NavbarYamlType */], __WEBPACK_IMPORTED_MODULE_4_Modules_article_Article__["a" /* ArticleYamlType */], __WEBPACK_IMPORTED_MODULE_5_Modules_util_Get__["a" /* GetYamlType */]]);
 
@@ -735,19 +735,22 @@ var Col = function (_Component) {
   _createClass(Col, [{
     key: 'render',
     value: function render() {
-      var classes = 'col ' + (this.props.data.hasOwnProperty('class') ? this.props.data.class : '');
+      var classes = 'col';
+      if (this.props.data.hasOwnProperty('class')) {
+        classes = this.props.data.class.startsWith('col') ? this.props.data.class : 'col ' + this.props.data.class;
+      }
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'div',
         { className: classes, __self: this,
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 10
+            lineNumber: 13
           }
         },
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1_react_markdown___default.a, { source: this.props.data.content, renderers: { root: __WEBPACK_IMPORTED_MODULE_0_react___default.a.Fragment }, __self: this,
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 11
+            lineNumber: 14
           }
         }),
         this.props.data.items
@@ -768,7 +771,7 @@ var ColYamlType = new __WEBPACK_IMPORTED_MODULE_2_js_yaml___default.a.Type('!col
     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(Col, { data: data, key: data.id, __self: this,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 25
+        lineNumber: 28
       }
     });
   },
