@@ -1,13 +1,13 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("react"), require("js-yaml"), require("react-markdown"), require("path"), require("fs"), require("react-dom/server"), require("react-router"), require("react-router-dom"));
+		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
-		define("reacty", ["react", "js-yaml", "react-markdown", "path", "fs", "react-dom/server", "react-router", "react-router-dom"], factory);
+		define("reacty", [], factory);
 	else if(typeof exports === 'object')
-		exports["reacty"] = factory(require("react"), require("js-yaml"), require("react-markdown"), require("path"), require("fs"), require("react-dom/server"), require("react-router"), require("react-router-dom"));
+		exports["reacty"] = factory();
 	else
-		root["reacty"] = factory(root["react"], root["js-yaml"], root["react-markdown"], root["path"], root["fs"], root["react-dom/server"], root["react-router"], root["react-router-dom"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_0__, __WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_4__, __WEBPACK_EXTERNAL_MODULE_5__, __WEBPACK_EXTERNAL_MODULE_7__, __WEBPACK_EXTERNAL_MODULE_8__, __WEBPACK_EXTERNAL_MODULE_12__) {
+		root["reacty"] = factory();
+})(typeof self !== 'undefined' ? self : this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -1023,55 +1023,58 @@ var Page = function (_Component) {
     value: function render() {
       var _this2 = this;
 
-      if (this.props.hasOwnProperty('data') && this.props.data.hasOwnProperty('page')) {
-        var page = Object.keys(this.props.data.page).map(function (obj, i) {
+      var data = this.props.data;
+
+      if (data && data.page) {
+        var page = Object.keys(data.page).map(function (obj, i) {
+          var classes = data.page[obj].hasOwnProperty('class') ? data.page[obj].class : '';
           switch (obj) {
             case 'header':
               return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'header',
-                { key: i.toString(), __self: _this2,
+                { className: classes, key: i.toString(), __self: _this2,
                   __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 11
+                    lineNumber: 13
                   }
                 },
-                _this2.props.data.page[obj]
+                data.page[obj].items
               );
               break;
             case 'main':
               return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'main',
-                { key: i.toString(), __self: _this2,
+                { className: classes, key: i.toString(), __self: _this2,
                   __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 18
+                    lineNumber: 20
                   }
                 },
-                _this2.props.data.page[obj]
+                data.page[obj].items
               );
               break;
             case 'footer':
               return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'footer',
-                { key: i.toString(), __self: _this2,
+                { className: classes, key: i.toString(), __self: _this2,
                   __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 25
+                    lineNumber: 27
                   }
                 },
-                _this2.props.data.page[obj]
+                data.page[obj].items
               );
               break;
             default:
               return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
-                { id: obj, __self: _this2,
+                { className: classes, id: obj, __self: _this2,
                   __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 32
+                    lineNumber: 34
                   }
                 },
-                _this2.props.data.page[obj]
+                data.page[obj].items
               );
           }
         });
@@ -1082,7 +1085,7 @@ var Page = function (_Component) {
             __self: this,
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 41
+              lineNumber: 43
             }
           },
           page
@@ -1094,7 +1097,7 @@ var Page = function (_Component) {
             __self: this,
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 47
+              lineNumber: 49
             }
           },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -1103,7 +1106,7 @@ var Page = function (_Component) {
               __self: this,
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 48
+                lineNumber: 50
               }
             },
             'Page not found!'
