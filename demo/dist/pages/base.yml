@@ -31,8 +31,12 @@ tags: []
 #    - defer
 
 scripts: []
-headScripts: []
-
+#<script defer src="https://use.fontawesome.com/releases/v5.0.11/js/fontawesome.js" integrity="sha384-KPnpIFJjPHLMZMALe0U04jClDmqlLhkBM6ZEkFvs9AiWRYwaDXPhn2D5lr8sypQ+" crossorigin="anonymous"></script>
+headScripts:
+  - src: "https://use.fontawesome.com/releases/v5.0.11/js/regular.js"
+    integrity: "sha384-2QoApbhY+hgclcsY4wzuUdSbQKSltCquJjUHPHplBQU1eOwSgajdR289I4O7m+Vs"
+    crossOrigin: "anonymous"
+    defer: defer
 links:
   # Single string will load the value as href
   - 'https://fonts.googleapis.com/css?family=Montserrat:200,300,400,700,900'

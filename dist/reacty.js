@@ -747,7 +747,7 @@ var Col = function (_Component) {
             lineNumber: 13
           }
         },
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1_react_markdown___default.a, { source: this.props.data.content, renderers: { root: __WEBPACK_IMPORTED_MODULE_0_react___default.a.Fragment }, __self: this,
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1_react_markdown___default.a, { source: this.props.data.content, escapeHtml: false, renderers: { root: __WEBPACK_IMPORTED_MODULE_0_react___default.a.Fragment }, __self: this,
           __source: {
             fileName: _jsxFileName,
             lineNumber: 14
@@ -1248,6 +1248,7 @@ var Script = function (_Component) {
           scriptBody.push('');
         } else {
           var numTags = Object.keys(tag).length;
+          console.log(numTags);
           if (numTags > 1) {
             // Not just a key and value
             var script = {};
@@ -1270,7 +1271,7 @@ var Script = function (_Component) {
             __self: _this2,
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 32
+              lineNumber: 33
             }
           }),
           scriptBody[i]
