@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Meta from 'Modules/Meta';
 import Link from 'Modules/Link';
 import Script from 'Modules/Script';
-import Base, {version} from './Base';
+import {version} from 'Root/reacty.config';
 
 class Head extends Component {
   render() {

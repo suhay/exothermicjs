@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { val, key } from 'Components/Base';
+import { val, key } from './util';
 
 class Link extends Component {
   render() {

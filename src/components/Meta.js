@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { key, val } from 'Components/Base';
+import { key, val } from './util';
 
 class Meta extends Component {
   render() {

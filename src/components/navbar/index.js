@@ -1,9 +1,9 @@
 /*eslint-disable no-console*/
 import React, { Component } from 'react';
 import yaml from 'js-yaml';
-import { NavLink } from 'react-router-dom'
 
-import { key, val } from 'Components/Base';
+import Link from './link'
+import { key, val } from '../util';
 
 class Navbar extends Component {
   render() {
@@ -11,7 +11,7 @@ class Navbar extends Component {
       <Navitem item={item} key={i.toString()} id={i} size={this.props.items.length} />
     ));
     return (
-      <nav aria-label="Top level site">
+      <nav aria-label="main nav">
         <ul role="menubar">
           {nav}
         </ul>
@@ -24,7 +24,7 @@ class Navitem extends Component {
   render() {
     return (
       <li role="none">
-        <NavLink to={val(this.props.item)} aria-setsize={this.props.size} aria-posinset={this.props.id + 1} role="menuitem" activeClassName='active'>{key(this.props.item)}</NavLink>
+        <Link to={val(this.props.item)} aria-setsize={this.props.size} aria-posinset={this.props.id + 1} role="menuitem">{key(this.props.item)}</Link>
       </li>
     );
   }

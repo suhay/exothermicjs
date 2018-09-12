@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { key, val } from 'Components/Base';
+import { key, val } from './util';
 
 class Script extends Component {
   render() {
@@ -14,7 +14,6 @@ class Script extends Component {
         scriptBody.push('');
       } else {
         let numTags = Object.keys(tag).length;
-        console.log(numTags);
         if (numTags > 1) { // Not just a key and value
           let script = {};
           for (let i = 0; i < numTags; i++) {
