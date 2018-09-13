@@ -1,10 +1,10 @@
-var Exothermic = require("../dist/exothermic");
-var path = require('path');
+var Exothermic = require("../dist/exothermic")
+var path = require('path')
 
-var pages =  path.resolve(__dirname, '../demo/dist/pages');
+var pages =  path.resolve(__dirname, '../demo/dist/pages')
 
 test('demo site renders', () => {
-  expect(Exothermic.build('/', pages)).toContain('Where - End of file!!');
+  expect(Exothermic.build('/', pages, true)).toContain('Where - End of file!!')
 });
 
 // Getter

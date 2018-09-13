@@ -17,10 +17,10 @@ export default class Base extends Component {
   }
   
   render() {
-    const { children } = this.props;
+    const { children, force } = this.props;
     return (
       <Fragment>
-        {this.state.loading 
+        {!force && this.state.loading 
           ? <FoldingCube />
           : <Page data={this.props.data}>
               {children}

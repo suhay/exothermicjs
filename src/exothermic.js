@@ -18,7 +18,7 @@ import Page from 'Components/Page'
  * @param {string} route - The page route
  * @param {string} pages - Path to page template folder relative to index.html
  */
-export function build(route, pages) {
+export function build(route, pages, force = false) {
 	const base = yaml.safeLoad(fs.readFileSync(path.resolve(__dirname, pages + '/base.yml'), 'utf8'))
 	try {
 		const page = yaml.safeLoad(fs.readFileSync(path.resolve(__dirname, pages + '/' + (route === '/' ? 'index' : route) + '.yml'), 'utf8'), {
@@ -30,7 +30,7 @@ export function build(route, pages) {
 		pageState.setState({ pagesPath: pages })
 		const markup = ReactServer.renderToString(
 			<StaticRouter location={route} context={context}>
-				<Base data={result} pages={pages} route={route} />
+				<Base data={result} pages={pages} route={route} force={force} />
 			</StaticRouter>
 		)
     
