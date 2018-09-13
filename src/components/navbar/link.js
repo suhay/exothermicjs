@@ -4,7 +4,7 @@ import fetch from 'isomorphic-fetch'
 import yaml from 'js-yaml'
 
 import pageState from '../../state/page'
-import { REACTY_SCHEMA } from 'Root/reacty.config'
+import { EXO_SCHEMA } from 'Root/exothermic.config'
 
 export default class Link extends Component {
   constructor(props) {
@@ -17,7 +17,7 @@ export default class Link extends Component {
       .then(response => response.text())
       .then(data => pageState.setState({ 
         data: yaml.safeLoad(data, {
-          schema: REACTY_SCHEMA
+          schema: EXO_SCHEMA
         }),
         route: this.props.to
       }))

@@ -1,7 +1,7 @@
 'use strict';
 
 if (process.env.NODE_ENV === 'production') {
-  module.exports = require('./dist/browser.reacty.min.js');
+  module.exports = require('./dist/browser.exothermic.min.js');
 } else {
-  module.exports = require('./dist/browser.reacty.js');
+  module.exports = require('./dist/browser.exothermic.js');
 }

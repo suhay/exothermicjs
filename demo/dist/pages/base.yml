@@ -1,5 +1,5 @@
 ---
-title: 'New ReactY Page' # Title of the page, will be used to create URL if not slug is supplied
+title: 'New ExothermicJS Page' # Title of the page, will be used to create URL if not slug is supplied
 slug: '' # optional, used for URL creation URL
 
 # Meta data objects. A single key value pair will set the key as the value for 'name='
@@ -12,7 +12,7 @@ meta:
   - viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no'
   
 # meta description of page, content will be used if left blank
-description: 'This is a base ReactY page'
+description: 'This is a base ExothermicJS page'
 
 page:
   header: ''

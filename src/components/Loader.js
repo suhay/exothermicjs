@@ -6,7 +6,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { Subscribe } from 'statable'
 
 import Page from './Page'
-import { REACTY_SCHEMA } from 'Root/reacty.config'
+import { EXO_SCHEMA } from 'Root/exothermic.config'
 import pageState from '../state/page'
 
 export default class Loader extends Component {
@@ -25,10 +25,11 @@ export default class Loader extends Component {
       .then(response => response.text())
       .then(data => this.setState({ 
         data: yaml.safeLoad(data, {
-          schema: REACTY_SCHEMA
+          schema: EXO_SCHEMA
         }),
         loading: false 
       }))
+      .catch(error => { throw error})
   }
   
   render() {
@@ -37,10 +38,10 @@ export default class Loader extends Component {
         {state => (
           <Fragment>
             {this.state.loading 
-              ? (<FoldingCube />) 
-              : (<BrowserRouter>
+              ? <FoldingCube />
+              : <BrowserRouter>
                    <Page data={state.data || this.state.data} />
-                </BrowserRouter>)
+                </BrowserRouter>
              }
            </Fragment>
          )}

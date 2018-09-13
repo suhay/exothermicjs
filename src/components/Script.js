@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { key, val } from './util';
 
-class Script extends Component {
+class Script extends PureComponent {
   render() {
     if (!this.props.scripts) {
       return null;

@@ -3,7 +3,18 @@ node_js:
   - "stable"
 cache:
   directories:
-  - node_modules
+    - node_modules
 script:
   - npm install
   - npm test
+notifications:
+  email:
+    on_success: never
+    on_failure: always
+deploy:
+  provider: npm
+  email: matthew.suhay@gmail.com
+  api_key: $NPM_TOKEN
+  on:
+    tags: true
+  skip_cleanup: true

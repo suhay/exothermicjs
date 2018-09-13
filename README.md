@@ -1,4 +1,4 @@
-# ReactY Templator - Yaml based templating for ReactJS
+# ExothermicJS - Yaml based templating for ReactJS
 
 [![Build Status](https://travis-ci.org/suhay/reacty.svg?branch=master)](https://travis-ci.org/suhay/reacty)
 [![NPM version](https://img.shields.io/npm/v/react-yaml-templator.svg)](https://www.npmjs.org/package/react-yaml-templator)
@@ -8,7 +8,7 @@ Create dynamic page content using YAML and Markdown
 ## Installation
 
 ```
-npm install --save react-yaml-templator
+npm install --save exothermicjs
 ```
 
 ## Basic usage
@@ -32,7 +32,7 @@ Folder structure
 index.js
 
 ```js
-var Reacty = require("react-yaml-templator");
+var Exothermic = require("exothermicjs");
 var path = require('path');
 var express = require('express');
 
@@ -41,7 +41,7 @@ var pages =  path.resolve(__dirname, './public/pages');
 
 app.get('*', (req, res) => {
   if (req.url.indexOf('.') === -1) {
-    res.send(Reacty.build(req.url, pages));
+    res.send(Exothermic.build(req.url, pages));
   } else {
     var path = req.params[0] ? req.params[0] : 'index.html';
     res.sendFile(path, {root: './public/static'});
@@ -57,7 +57,7 @@ index.html
 <!doctype html>
 <html lang="en">
   <head>
-    <meta name="generator" content="reacty">
+    <meta name="generator" content="exothermic">
   </head>
   <body>
     $body-placeholder

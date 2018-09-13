@@ -7,14 +7,14 @@ import path from 'path'
 import { FoldingCube } from 'better-react-spinkit'
 
 import pageState from '../../state/page'
-import { REACTY_SCHEMA } from 'Root/reacty.config.js'
+import { EXO_SCHEMA } from 'Root/exothermic.config.js'
 
 class Get extends Component {
   constructor(props) {
 		super(props)
 		this.state = { 
-			data: fs && typeof fs === 'function' ? yaml.safeLoad(fs.readFileSync(path.resolve(__dirname, pageState.state.pagesPath + '/' + this.props.data), 'utf8'), { schema: REACTY_SCHEMA }) : null,
-			loading: fs && typeof fs === 'function' ? false : true
+			data: fs && typeof fs.readFileSync === 'function' ? yaml.safeLoad(fs.readFileSync(path.resolve(__dirname, pageState.state.pagesPath + '/' + this.props.data), 'utf8'), { schema: EXO_SCHEMA }) : null,
+			loading: fs && typeof fs.readFileSync === 'function' ? false : true
 		}
 	}
 	
@@ -23,7 +23,7 @@ class Get extends Component {
 			.then(response => response.text())
 			.then(data => this.setState({ 
 				data: yaml.safeLoad(data, {
-					schema: REACTY_SCHEMA
+					schema: EXO_SCHEMA
 				}),
 				loading: false 
 			}))

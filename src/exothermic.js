@@ -6,7 +6,7 @@ import React from 'react'
 import ReactServer from 'react-dom/server'
 import { StaticRouter } from 'react-router'
 
-import { REACTY_SCHEMA } from '../reacty.config.js'
+import { EXO_SCHEMA } from '../exothermic.config.js'
 import pageState from './state/page'
 import Head from 'Components/Head'
 import Base from 'Components/Base'
@@ -22,16 +22,18 @@ export function build(route, pages) {
 	const base = yaml.safeLoad(fs.readFileSync(path.resolve(__dirname, pages + '/base.yml'), 'utf8'))
 	try {
 		const page = yaml.safeLoad(fs.readFileSync(path.resolve(__dirname, pages + '/' + (route === '/' ? 'index' : route) + '.yml'), 'utf8'), {
-			schema: REACTY_SCHEMA
+			schema: EXO_SCHEMA
 		})
 		const result = { ...base,	...page }
     const context = {}
+    
 		pageState.setState({ pagesPath: pages })
 		const markup = ReactServer.renderToString(
 			<StaticRouter location={route} context={context}>
 				<Base data={result} pages={pages} route={route} />
 			</StaticRouter>
 		)
+    
 		const head = ReactServer.renderToString(
 			<Head data={result} />
 		)

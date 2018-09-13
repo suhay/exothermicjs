@@ -15,12 +15,12 @@ module.exports = (env, options) => {
       whitelist: options.mode === 'production' ? ['react', 'react-dom/server'] : []
     })],
     entry: {
-      reacty: path.resolve('./src/reacty.js'),
+      exothermic: path.resolve('./src/exothermic.js'),
     },
     output: {
       path: path.resolve('./dist'),
       filename: options.mode === 'production' ? '[name].min.js' : '[name].js',
-      library: 'reacty',
+      library: 'exothermic',
       libraryTarget: 'umd',
       umdNamedDefine: true,
     },
@@ -56,7 +56,7 @@ module.exports = (env, options) => {
         },
       }),
       options.mode !== 'production' && new NodemonPlugin({
-        watch: path.resolve('./dist/reacty.js'),
+        watch: path.resolve('./dist/exothermic.js'),
         verbose: true,
         script: './demo/index.js'
       }),
@@ -74,7 +74,7 @@ module.exports = (env, options) => {
       tls: 'empty'
     },
     entry: {
-      'browser.reacty': path.resolve('./src/browser.js'),
+      'browser.exothermic': path.resolve('./src/browser.js'),
     },
     output: {
       path: path.resolve('./dist'),
@@ -107,7 +107,7 @@ module.exports = (env, options) => {
     },
     plugins: [
       options.mode !== 'production' && new CopyWebpackPlugin([{
-        from: 'dist/browser.reacty.js',
+        from: 'dist/browser.exothermic.js',
         to: '../demo/dist/static/browser.js',
         fotce: true
       }, ]),
