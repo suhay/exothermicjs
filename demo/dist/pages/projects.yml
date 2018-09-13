@@ -1,8 +1,8 @@
 ---
 items:
 - !article
-  id: reacty
-  title: '## ReactY'
+  id: exo
+  title: '## ExothermicJS'
   class: project
   content: 'Words'
   tags:

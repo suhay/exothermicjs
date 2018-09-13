@@ -11,3 +11,5 @@ npm-debug.log
 test
 test/**/*
 node_modules
+src
+coverage

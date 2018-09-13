@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import { val, key } from 'Components/Base';
+import React, { PureComponent } from 'react';
+import { val, key } from './util';
 
-class Link extends Component {
+class Link extends PureComponent {
   render() {
     if (!this.props.links) {
       return null;

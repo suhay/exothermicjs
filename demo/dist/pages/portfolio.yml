@@ -9,8 +9,5 @@ items:
     id: write-up
     content: |
       Stuff
-  - !col
-    id: image
-    content: '![alt text](https://giphy.com/embed/o0vwzuFwCGAFO "")'
   tags:
   - php

@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import { key, val } from 'Components/Base';
+import React, { PureComponent } from 'react';
+import { key, val } from './util';
 
-class Meta extends Component {
+export default class Meta extends PureComponent {
   render() {
     if (!this.props.tags) {
       return null;
@@ -25,5 +25,3 @@ class Meta extends Component {
     ));
   }
 }
-
-export default Meta;

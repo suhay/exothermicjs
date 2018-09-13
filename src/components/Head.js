@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Meta from 'Modules/Meta';
 import Link from 'Modules/Link';
 import Script from 'Modules/Script';
-import Base, {version} from './Base';
+import {version} from 'Root/exothermic.config';
 
 class Head extends Component {
   render() {
@@ -10,7 +10,7 @@ class Head extends Component {
     return (
       <React.Fragment>
         <Meta tags={this.props.data.meta} />
-        <meta name="generator" content={"ReactY Templator " + version} />
+        <meta name="generator" content={"ExothermicJS " + version} />
         <title>{this.props.data.title}</title>
         <Meta tags={description} />
         <Link links={this.props.data.links} />

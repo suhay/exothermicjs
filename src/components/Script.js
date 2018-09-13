@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import { key, val } from 'Components/Base';
+import React, { PureComponent } from 'react';
+import { key, val } from './util';
 
-class Script extends Component {
+class Script extends PureComponent {
   render() {
     if (!this.props.scripts) {
       return null;
@@ -14,7 +14,6 @@ class Script extends Component {
         scriptBody.push('');
       } else {
         let numTags = Object.keys(tag).length;
-        console.log(numTags);
         if (numTags > 1) { // Not just a key and value
           let script = {};
           for (let i = 0; i < numTags; i++) {

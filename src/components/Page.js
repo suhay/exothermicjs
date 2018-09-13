@@ -1,7 +1,6 @@
-import React, { Component } from 'react';
-import Base from './Base'; 
+import React, { Component, Fragment } from 'react'
 
-class Page extends Component {
+export default class Page extends Component {
   render() {
     const { data } = this.props;
     if (data && data.page) {
@@ -31,18 +30,17 @@ class Page extends Component {
             break;          
           default:
             return (
-              <div className={classes} id={obj}>
+              <div className={classes} id={obj} key={i.toString()}>
                 {data.page[obj].items}
               </div>
             );
           }
         }
       );
-
       return (
-        <React.Fragment>
+        <Fragment>
           {page}
-        </React.Fragment>
+        </Fragment>
       );
     } else {
       return (
@@ -53,5 +51,3 @@ class Page extends Component {
     }
   }
 }
-
-export default Page;

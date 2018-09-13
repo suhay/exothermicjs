@@ -5,7 +5,7 @@ page:
   header:
     class: container
     items:
-    - !get 'demo/dist/pages/nav.yml'
+    - !get 'nav.yml'
   main:
     class: container
     items:
@@ -23,12 +23,12 @@ page:
       id: what-ive-done
       title: "# What"
       items:
-      - !get 'demo/dist/pages/portfolio.yml'
+      - !get 'portfolio.yml'
     - !section
       id: what-im-doing
       title: "# More What"
       items:
-      - !get 'demo/dist/pages/projects.yml'
+      - !get 'projects.yml'
   footer:
     class: container
     items:
@@ -37,5 +37,5 @@ page:
       class: row
       title: '# Where - End of file!!'
       items:
-      - !get 'demo/dist/pages/about.yml'
+      - !get 'about.yml'
 tags: []
