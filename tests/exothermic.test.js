@@ -1,4 +1,4 @@
-var Exothermic = require("../dist/exothermic")
+var Exothermic = require("../dist/exothermic.min")
 var path = require('path')
 
 var pages =  path.resolve(__dirname, '../demo/dist/pages')
