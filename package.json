@@ -1,8 +1,8 @@
 {
   "name": "exothermicjs",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "author": "Matt Suhay <matthew.suhay@gmail.com>",
-  "dependencies": {    
+  "dependencies": {
     "babel-runtime": "^6.26.0",
     "better-react-spinkit": "^2.0.4",
     "exothermicjs": "^0.9.0",
