@@ -1,9 +1,9 @@
 # ExothermicJS - Yaml based templating for ReactJS
 
 [![Build Status](https://travis-ci.org/suhay/exothermicjs.svg?branch=master)](https://travis-ci.org/suhay/exothermicjs)
-[![NPM version](https://img.shields.io/npm/v/react-yaml-templator.svg)](https://www.npmjs.org/package/react-yaml-templator)
+[![NPM version](https://img.shields.io/npm/v/exothermicjs.svg)](https://www.npmjs.org/package/exothermicjs)
 
-Create dynamic page content using YAML and Markdown
+Create dynamic page content using YAML and Markdown without lengthy build times.
 
 ## Installation
 
@@ -32,23 +32,36 @@ Folder structure
 index.js
 
 ```js
-var Exothermic = require("exothermicjs");
-var path = require('path');
-var express = require('express');
+var Exothermic = require("exothermicjs")
+var path = require('path')
+var express = require('express')
 
-var app = express();
-var pages =  path.resolve(__dirname, './public/pages');
+var app = express()
+var pages =  path.resolve(__dirname, './public/pages')
 
-app.get('*', (req, res) => {
-  if (req.url.indexOf('.') === -1) {
-    res.send(Exothermic.build(req.url, pages));
-  } else {
-    var path = req.params[0] ? req.params[0] : 'index.html';
-    res.sendFile(path, {root: './public/static'});
+app.get('/load/:load', (req, res) => {
+  res.send(Exothermic.bedew(req.params.load, pages))
+  res.end()
+})
+	
+app.get('*', (req, res, next) => {
+  try {
+    if (req.url.indexOf('.') === -1) {
+      res.send(Exothermic.build(req.url, pages))
+    } 
+    else {
+      var path = req.params[0] ? req.params[0] : res.status(404).end()
+      res.sendFile(path , { root : __dirname})
+    }
   }
-}).listen(3001, () => {
+  catch (err) {
+    next(err)
+  }
+})
+	
+app.listen(3001, () => {
   console.log('React app listening on port 3001!')
-});
+})
 ```
 
 index.html
@@ -56,13 +69,13 @@ index.html
 ```html
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta name="generator" content="exothermic">
-  </head>
+  <head>{{ head }}</head>
   <body>
-    $body-placeholder
+    <div id="__exothermic">{{ body }}</div>
+    <script src="https://unpkg.com/exothermicjs/dist/browser.exothermic.min.js"></script>
   </body>
 </html>
+
 ```
 
 ## Template Examples
@@ -72,9 +85,9 @@ index.html
 ```yaml
 - !navbar
   items:
-  - "Home": '/'
-  - "All kinds of links": 'https://example.com'
-  - "Here's a link": '#on-page-link'
+  - 'Home': '/'
+  - "Nav test": '/test'
+  - "Nave test 2 - 404": '/test/more'
 ```
 
 **Renders as**
