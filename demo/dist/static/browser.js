@@ -94,7 +94,7 @@
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"version\", function() { return version; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"EXO_SCHEMA\", function() { return EXO_SCHEMA; });\n/* harmony import */ var js_yaml__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! js-yaml */ \"./node_modules/js-yaml/index.js\");\n/* harmony import */ var js_yaml__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(js_yaml__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var Modules_navbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! Modules/navbar */ \"./src/components/navbar/index.js\");\n/* harmony import */ var Modules_layout_Section__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! Modules/layout/Section */ \"./src/components/layout/Section.js\");\n/* harmony import */ var Modules_article__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! Modules/article */ \"./src/components/article/index.js\");\n/* harmony import */ var Modules_util_Get__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! Modules/util/Get */ \"./src/components/util/Get.js\");\n\n\n\n\n\nvar version = \"v0.9.0\";\nvar EXO_SCHEMA = js_yaml__WEBPACK_IMPORTED_MODULE_0___default.a.Schema.create([Modules_layout_Section__WEBPACK_IMPORTED_MODULE_2__[\"LAYOUT_SCHEMA\"]], [Modules_navbar__WEBPACK_IMPORTED_MODULE_1__[\"NavbarYamlType\"], Modules_article__WEBPACK_IMPORTED_MODULE_3__[\"ArticleYamlType\"], Modules_util_Get__WEBPACK_IMPORTED_MODULE_4__[\"GetYamlType\"]]);\n\n//# sourceURL=webpack:///./exothermic.config.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"version\", function() { return version; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"EXO_SCHEMA\", function() { return EXO_SCHEMA; });\n/* harmony import */ var js_yaml__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! js-yaml */ \"./node_modules/js-yaml/index.js\");\n/* harmony import */ var js_yaml__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(js_yaml__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var Modules_navbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! Modules/navbar */ \"./src/components/navbar/index.js\");\n/* harmony import */ var Modules_layout_Section__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! Modules/layout/Section */ \"./src/components/layout/Section.js\");\n/* harmony import */ var Modules_article__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! Modules/article */ \"./src/components/article/index.js\");\n/* harmony import */ var Modules_util_Get__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! Modules/util/Get */ \"./src/components/util/Get.js\");\n\n\n\n\n\nvar version = __webpack_require__(/*! ./package.json */ \"./package.json\").version;\nvar EXO_SCHEMA = js_yaml__WEBPACK_IMPORTED_MODULE_0___default.a.Schema.create([Modules_layout_Section__WEBPACK_IMPORTED_MODULE_2__[\"LAYOUT_SCHEMA\"]], [Modules_navbar__WEBPACK_IMPORTED_MODULE_1__[\"NavbarYamlType\"], Modules_article__WEBPACK_IMPORTED_MODULE_3__[\"ArticleYamlType\"], Modules_util_Get__WEBPACK_IMPORTED_MODULE_4__[\"GetYamlType\"]]);\n\n//# sourceURL=webpack:///./exothermic.config.js?");
 
 /***/ }),
 
@@ -4239,6 +4239,17 @@ eval("module.exports = extend\n\nvar hasOwnProperty = Object.prototype.hasOwnPro
 
 /***/ }),
 
+/***/ "./package.json":
+/*!**********************!*\
+  !*** ./package.json ***!
+  \**********************/
+/*! exports provided: name, version, author, dependencies, jest, devDependencies, scripts, description, repository, license, module, bugs, homepage, default */
+/***/ (function(module) {
+
+eval("module.exports = {\"name\":\"exothermicjs\",\"version\":\"0.9.0\",\"author\":\"Matt Suhay <matthew.suhay@gmail.com>\",\"dependencies\":{\"babel-runtime\":\"^6.26.0\",\"better-react-spinkit\":\"^2.0.4\",\"exothermicjs\":\"^0.9.0\",\"express\":\"^4.16.3\",\"isomorphic-fetch\":\"^2.2.1\",\"js-yaml\":\"^3.12.0\",\"lodash\":\"^4.17.11\",\"react\":\"^16.5.1\",\"react-dom\":\"^16.5.1\",\"react-markdown\":\"^3.6.0\",\"react-router\":\"^4.3.1\",\"react-router-dom\":\"^4.3.1\",\"statable\":\"^0.3.2\"},\"jest\":{\"testRegex\":\"/.*(__tests__\\\\/.*)|(.*(test|spec))\\\\.jsx?$\",\"testPathIgnorePatterns\":[\"node_modules\",\".cache\",\"__snapshots__\",\"public\",\"dist\"],\"testEnvironment\":\"node\",\"coverageDirectory\":\"./demo/dist/static/coverage\",\"setupTestFrameworkScriptFile\":\"<rootDir>/setupTests.js\"},\"devDependencies\":{\"@babel/core\":\"^7.0.1\",\"@babel/plugin-proposal-object-rest-spread\":\"^7.0.0\",\"@babel/plugin-transform-react-jsx\":\"^7.0.0\",\"@babel/plugin-transform-react-jsx-self\":\"^7.0.0\",\"@babel/plugin-transform-react-jsx-source\":\"^7.0.0\",\"@babel/preset-env\":\"^7.0.0\",\"ajv\":\"^6.5.3\",\"babel-loader\":\"^8.0.2\",\"chokidar\":\"^2.0.4\",\"copy-webpack-plugin\":\"^4.5.2\",\"enzyme\":\"^3.6.0\",\"enzyme-adapter-react-16\":\"^1.5.0\",\"jest\":\"^23.6.0\",\"nodemon-webpack-plugin\":\"^4.0.3\",\"webpack\":\"^4.18.0\",\"webpack-cli\":\"^3.1.0\",\"webpack-node-externals\":\"^1.6.0\"},\"scripts\":{\"start\":\"node ./dist/exothermic.js\",\"build\":\"webpack --mode development\",\"build:prod\":\"webpack --mode production\",\"build:all\":\"npm run build && npm run build:prod\",\"test\":\"jest\",\"test:coverage\":\"jest --coverage\",\"eject\":\"react-scripts eject\",\"dev\":\"webpack --watch --mode development\"},\"description\":\"ExothermicJS | Yaml based templating for ReactJS\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/suhay/exothermicjs.git\"},\"license\":\"MIT\",\"module\":\"index.js\",\"bugs\":{\"url\":\"https://github.com/suhay/exothermicjs/issues\"},\"homepage\":\"https://github.com/suhay/exothermicjs#readme\"};\n\n//# sourceURL=webpack:///./package.json?");
+
+/***/ }),
+
 /***/ "./src/browser.js":
 /*!************************!*\
   !*** ./src/browser.js ***!
@@ -4351,11 +4362,11 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* WEBPACK VAR INJECTION */(f
 /*!**************************************!*\
   !*** ./src/components/util/index.js ***!
   \**************************************/
-/*! exports provided: key, val */
+/*! exports provided: key, val, isBrowser */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"key\", function() { return key; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"val\", function() { return val; });\nvar key = function key(item) {\n  var i = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;\n  return Object.keys(item)[i];\n};\nvar val = function val(item) {\n  var i = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;\n  return item[Object.keys(item)[i]];\n};\n\n//# sourceURL=webpack:///./src/components/util/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"key\", function() { return key; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"val\", function() { return val; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"isBrowser\", function() { return isBrowser; });\nvar key = function key(item) {\n  var i = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;\n  return Object.keys(item)[i];\n};\nvar val = function val(item) {\n  var i = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;\n  return item[Object.keys(item)[i]];\n};\nvar isBrowser = function isBrowser() {\n  return typeof window !== 'undefined' && window.document !== undefined;\n};\n\n//# sourceURL=webpack:///./src/components/util/index.js?");
 
 /***/ }),
 

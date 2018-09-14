@@ -11,6 +11,7 @@ import pageState from './state/page'
 import Head from 'Components/Head'
 import Base from 'Components/Base'
 import Page from 'Components/Page'
+import { isBrowser } from 'Components/util'
 
 /**
  * Build page with templates.
@@ -18,7 +19,7 @@ import Page from 'Components/Page'
  * @param {string} route - The page route
  * @param {string} pages - Path to page template folder relative to index.html
  */
-export function build(route, pages, force = false) {
+export function build(route, pages) {
 	const base = yaml.safeLoad(fs.readFileSync(path.resolve(__dirname, pages + '/base.yml'), 'utf8'))
 	try {
 		const page = yaml.safeLoad(fs.readFileSync(path.resolve(__dirname, pages + '/' + (route === '/' ? 'index' : route) + '.yml'), 'utf8'), {
@@ -30,7 +31,7 @@ export function build(route, pages, force = false) {
 		pageState.setState({ pagesPath: pages })
 		const markup = ReactServer.renderToString(
 			<StaticRouter location={route} context={context}>
-				<Base data={result} pages={pages} route={route} force={force} />
+				<Base data={result} pages={pages} route={route} force={!isBrowser()} />
 			</StaticRouter>
 		)
     
