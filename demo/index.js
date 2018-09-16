@@ -3,7 +3,7 @@ var path = require('path');
 var express = require('express');
 
 var app = express();
-var pages =  path.resolve(__dirname, './dist/pages')
+var pages =  path.resolve(__dirname, './public/pages')
 
 app.get('/load/:load', (req, res) => {
 	res.send(Exothermic.bedew(req.params.load, pages))

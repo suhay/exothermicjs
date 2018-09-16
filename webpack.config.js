@@ -108,7 +108,7 @@ module.exports = (env, options) => {
     plugins: [
       options.mode !== 'production' && new CopyWebpackPlugin([{
         from: 'dist/browser.exothermic.js',
-        to: '../demo/dist/static/browser.js',
+        to: '../demo/public/static/browser.js',
         fotce: true
       }, ]),
       options.mode === 'production' && new webpack.DefinePlugin({

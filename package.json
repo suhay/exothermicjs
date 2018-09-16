@@ -1,11 +1,10 @@
 {
   "name": "exothermicjs",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "author": "Matt Suhay <matthew.suhay@gmail.com>",
   "dependencies": {
     "babel-runtime": "^6.26.0",
     "better-react-spinkit": "^2.0.4",
-    "exothermicjs": "^0.9.0",
     "express": "^4.16.3",
     "isomorphic-fetch": "^2.2.1",
     "js-yaml": "^3.12.0",
@@ -15,7 +14,9 @@
     "react-markdown": "^3.6.0",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
-    "statable": "^0.3.2"
+    "react-router-hash-link": "^1.2.0",
+    "statable": "^0.3.2",
+    "url-parse": "^1.4.3"
   },
   "jest": {
     "testRegex": "/.*(__tests__\\/.*)|(.*(test|spec))\\.jsx?$",
@@ -27,8 +28,7 @@
       "dist"
     ],
     "testEnvironment": "node",
-    "coverageDirectory": "./demo/dist/static/coverage",
-    "setupTestFrameworkScriptFile": "<rootDir>/setupTests.js"
+    "coverageDirectory": "./demo/dist/static/coverage"
   },
   "devDependencies": {
     "@babel/core": "^7.0.1",
@@ -39,7 +39,6 @@
     "@babel/preset-env": "^7.0.0",
     "ajv": "^6.5.3",
     "babel-loader": "^8.0.2",
-    "chokidar": "^2.0.4",
     "copy-webpack-plugin": "^4.5.2",
     "enzyme": "^3.6.0",
     "enzyme-adapter-react-16": "^1.5.0",

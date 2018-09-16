@@ -1,7 +1,0 @@
----
-items:
-- !navbar
-  items:
-  - 'Home': '/'
-  - "Nav test": '/test'
-  - "Nave test 2 - 404": '/test/more'
