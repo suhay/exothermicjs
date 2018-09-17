@@ -1,0 +1,41 @@
+---
+title: Test homepage
+description: 'And the description.'
+page:
+  header:
+    class: container
+    items:
+    - !get 'nav.yml'
+  main:
+    class: container
+    items:
+    - !section
+      id: who
+      title: '# Who'
+      class: row
+      items:
+      - !col
+        id: one
+        content: |
+          ## Not sure
+          <span>Here's a span</span>
+    - !section
+      id: what-ive-done
+      title: "# What"
+      items:
+      - !get 'portfolio.yml'
+    - !section
+      id: what-im-doing
+      title: "# More What"
+      items:
+      - !get 'projects.yml'
+  footer:
+    class: container
+    items:
+    - !section
+      id: where
+      class: row
+      title: '# Where - End of file!!'
+      items:
+      - !get 'about.yml'
+tags: []
