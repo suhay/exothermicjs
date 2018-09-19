@@ -1,11 +1,11 @@
 {
   "name": "exothermicjs",
-  "version": "1.0",
+  "version": "1.0.1",
   "author": "Matt Suhay <matthew.suhay@gmail.com>",
   "keywords": [
     "react",
     "yaml",
-    "front end",
+    "front end"
   ],
   "dependencies": {
     "express": "^4.16.3",
