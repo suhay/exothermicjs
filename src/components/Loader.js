@@ -1,10 +1,10 @@
 import React, { Component, Fragment } from 'react'
 import fetch from 'isomorphic-fetch'
-import { FoldingCube } from 'better-react-spinkit'
 import yaml from 'js-yaml'
 import { BrowserRouter } from 'react-router-dom'
 import { Subscribe } from 'statable'
 
+import Spinner from './util/Spinner'
 import Page from './Page'
 import { EXO_SCHEMA } from 'Root/exothermic.config'
 import pageState from '../state/page'
@@ -38,7 +38,7 @@ export default class Loader extends Component {
         {state => (
           <Fragment>
             {this.state.loading 
-              ? <FoldingCube />
+              ? <Spinner name='folding-cube' />
               : <BrowserRouter>
                    <Page data={state.data || this.state.data} />
                 </BrowserRouter>

@@ -9,10 +9,10 @@ app.get('/load/:load', (req, res) => {
 	res.send(Exothermic.bedew(req.params.load, pages))
 	res.end()
 })
-	
+
 app.get('*', (req, res, next) => {
   try {
-    if (req.url.indexOf('.') === -1) {
+    if (req.url.indexOf('.') === -1 && req.url.indexOf('/coverage') === -1) {
       res.send(Exothermic.build(req.url, pages));
     } 
     else {

@@ -40,6 +40,9 @@ module.exports = (env, options) => {
             ]
           }
         }
+      }, {
+        test: /\.css$/,
+        use: [ 'css-loader' ]
       }]
     },
     resolve: {
@@ -52,7 +55,7 @@ module.exports = (env, options) => {
     plugins: [
       options.mode === 'production' && new webpack.DefinePlugin({
         'process.env': {
-          NODE_ENV: JSON.stringify('production'),
+          NODE_ENV: JSON.stringify('production')
         },
       }),
       options.mode !== 'production' && new NodemonPlugin({
@@ -96,6 +99,9 @@ module.exports = (env, options) => {
             ]
           }
         }
+      }, {
+        test: /\.css$/,
+        use: [ 'style-loader', 'css-loader' ]
       }]
     },
     resolve: {

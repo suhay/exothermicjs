@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import yaml from 'js-yaml'
-import { FoldingCube } from 'better-react-spinkit'
 
+import Spinner from './util/Spinner'
 import Page from 'Components/Page'
 
 export default class Base extends Component {
@@ -21,7 +21,7 @@ export default class Base extends Component {
     return (
       <Fragment>
         {!force && this.state.loading 
-          ? <FoldingCube />
+          ? <Spinner name='folding-cube' />
           : <Page data={this.props.data}>
               {children}
             </Page>}

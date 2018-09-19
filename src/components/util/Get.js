@@ -4,8 +4,8 @@ import yaml from 'js-yaml'
 import fetch from 'isomorphic-fetch'
 import fs from 'fs'
 import path from 'path'
-import { FoldingCube } from 'better-react-spinkit'
 
+import Spinner from './Spinner'
 import pageState from '../../state/page'
 import { EXO_SCHEMA } from 'Root/exothermic.config.js'
 
@@ -40,7 +40,7 @@ class Get extends Component {
 					(<Fragment>
 						<ReactMarkdown source={this.state.data.content} renderers={{root:Fragment}} />
 					</Fragment>) : ``}
-				{this.state.loading && <FoldingCube />}
+				{this.state.loading && <Spinner name='folding-cube' />}
 			</Fragment>
 		)
   }
