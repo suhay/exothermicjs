@@ -49,7 +49,8 @@ module.exports = (env, options) => {
       alias: {
         Components: path.resolve(__dirname, './src/components/'),
         Modules: path.resolve(__dirname, './src/components/'),
-        Root: path.resolve(__dirname, '.')
+        Root: path.resolve(__dirname, '.'),
+        'js-yaml': path.resolve(__dirname, './src/components/util/js-yaml.js'),
       }
     },
     plugins: [
@@ -108,7 +109,8 @@ module.exports = (env, options) => {
       alias: {
         Components: path.resolve(__dirname, './src/components/'),
         Modules: path.resolve(__dirname, './src/components/'),
-        Root: path.resolve(__dirname, '.')
+        Root: path.resolve(__dirname, '.'),
+        'js-yaml': path.resolve(__dirname, './src/components/util/js-yaml.js'),
       },
     },
     plugins: [
