@@ -1,21 +1,27 @@
 {
   "name": "exothermicjs",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "author": "Matt Suhay <matthew.suhay@gmail.com>",
   "keywords": [
     "react",
     "yaml",
     "front end"
   ],
+  "bin": {
+    "exothermic-server": "./bin/exothermic-server"
+  },
   "dependencies": {
+    "dotenv": "^6.0.0",
     "express": "^4.16.3",
     "isomorphic-fetch": "^2.2.1",
+    "morgan": "^1.9.1",
     "react": "^16.5.1",
     "react-dom": "^16.5.1",
     "react-markdown": "^3.6.0",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "react-router-hash-link": "^1.2.0",
+    "serve-favicon": "^2.5.0",
     "statable": "^0.3.2",
     "url-parse": "^1.4.3"
   },
@@ -62,7 +68,7 @@
     "webpack-node-externals": "^1.6.0"
   },
   "scripts": {
-    "start": "node ./dist/exothermic.js",
+    "start": "node ./bin/exothermic-server",
     "build": "webpack --mode development",
     "build:prod": "webpack --mode production",
     "build:all": "npm run build && npm run build:prod",
@@ -70,7 +76,7 @@
     "stat": "webpack --mode production --profile --json > stats.json",
     "test:coverage": "jest --coverage",
     "eject": "react-scripts eject",
-    "dev": "webpack --watch --mode development"
+    "dev": "webpack --env.NODE_ENV=development --watch --mode development"
   },
   "description": "ExothermicJS | Yaml based templating for ReactJS",
   "repository": {

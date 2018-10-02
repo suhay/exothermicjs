@@ -10,14 +10,14 @@ import React from 'react'
 var Exothermic = require("../src/exothermic")
 var path = require('path')
 
-var pages = path.resolve(__dirname, '../demo/public/pages')
+var options = { _pages: __dirname + '/../demo/public/pages/' }
 
 test('demo site renders', () => {
-  expect(Exothermic.build('/', pages)).toContain('Where - End of file!!')
-});
+  expect(Exothermic.build(options._pages + 'index.exo', options)).toContain('Where - End of file!!')
+})
 
 test('bedew returns content', () => {
-  expect(Exothermic.bedew('/', pages)).toContain('Where - End of file!!')
+  expect(Exothermic.hydrate(options._pages + 'index.exo', options)).toContain('Where - End of file!!')
 })
 
 test('<Spinner>', () => {

@@ -5,4 +5,4 @@ items:
   - 'Home': '/'
   - "Nav test": '/test'
   - "Nav test 2 - 404": '/test/more'
-  - "Fragment test": '#exo'
+  - "Fragment test": '/#exo'

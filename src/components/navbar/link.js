@@ -18,7 +18,7 @@ export default class Link extends Component {
   }
   
   handleNav() {
-    if (this.state.to.pathname == '') return
+    if (this.state.to.pathname === '') { return }
     fetch(`/load${this.state.to.pathname == '/' ? '/index' : this.state.to.pathname}`)
       .then(response => response.text())
       .then(data => pageState.setState({ 

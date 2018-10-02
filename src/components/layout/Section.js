@@ -9,8 +9,9 @@ class Section extends Component {
     const classes = this.props.data.hasOwnProperty('class') ? this.props.data.class : '';
     return (
       <section className={classes} id={this.props.data.id}>
-        <ReactMarkdown source={this.props.data.title} renderers={{root:React.Fragment}} />
-        {this.props.data.items}
+        {this.props.data.title && <ReactMarkdown source={this.props.data.title} renderers={{root:React.Fragment}} />}
+        {this.props.data.content && <ReactMarkdown source={this.props.data.content} renderers={{root:React.Fragment}} />}
+        {this.props.data.items ? this.props.data.items : ` `}
       </section>
     );
   }
