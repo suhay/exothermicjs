@@ -13,40 +13,56 @@ import Base from 'Components/Base'
 import Page from 'Components/Page'
 import { isBrowser } from 'Components/util'
 
-/**
- * Build page with templates.
- *
- * @param {string} route - The page route
- * @param {string} pages - Path to page template folder relative to index.html
- */
-export function build(route, pages) {
-	const base = yaml.safeLoad(fs.readFileSync(path.resolve(__dirname, pages + '/base.yml'), 'utf8'))
+export function build(route, options) {
+  const { _pages, message, error } = options
+	const base = yaml.safeLoad(fs.readFileSync(path.resolve(__dirname, _pages + '/base.exo'), 'utf8'))
 	try {
-		const page = yaml.safeLoad(fs.readFileSync(path.resolve(__dirname, pages + '/' + (route === '/' ? 'index' : route) + '.yml'), 'utf8'), {
+		const page = yaml.safeLoad(fs.readFileSync(route, 'utf8'), {
 			schema: EXO_SCHEMA
 		})
 		const result = { ...base,	...page }
     const context = {}
     
-		pageState.setState({ pagesPath: pages })
-		const markup = ReactServer.renderToString(
+		pageState.setState({ pagesPath: _pages })
+		let markup = ReactServer.renderToString(
 			<StaticRouter location={route} context={context}>
-				<Base data={result} pages={pages} route={route} force={!isBrowser()} />
+				<Base data={result} pages={_pages} route={route} force={!isBrowser()} />
 			</StaticRouter>
 		)
     
-		const head = ReactServer.renderToString(
+    if (message && error) {
+      markup = markup.replace('{{message}}', message)
+      markup = markup.replace('{{error}}', error)
+    }
+
+    const head = ReactServer.renderToString(
 			<Head data={result} />
 		)
-		const html = fs.readFileSync(path.resolve(__dirname, pages + '/../static/index.html')).toString();
-		return html.replace('{{ head }}', head).replace('{{ body }}', markup)
+    
+    const browserScript = process.env.SSR_ONLY === 'true'
+      ? ``
+      : process.env.NODE_ENV && process.env.NODE_ENV == 'development'
+        ? "/browser.js"
+        : "https://unpkg.com/exothermicjs/dist/browser.exothermic.min.js"
+
+    return `
+      <!doctype html>
+      <html lang="en">
+        <head>${head}</head>
+        <body>
+          <div id="__exothermic">${markup}</div>
+          ${browserScript == `` ? `` : `<script src="${browserScript}"></script>`}
+        </body>
+      </html>
+    `
 	} 
 	catch (e) {
     throw new Error(e)
 	} 
 }
 
-export function bedew(route, pages) {
-	const page = fs.readFileSync(path.resolve(__dirname, pages + '/' + (route === '/' ? 'index' : route) + '.yml'), 'utf8')
+export function hydrate(route, options) {
+  const { _pages, message, error } = options
+	const page = fs.readFileSync(route, 'utf8')
 	return page
 }

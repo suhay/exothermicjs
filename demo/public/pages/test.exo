@@ -4,7 +4,7 @@ page:
   header:
     class: container
     items:
-    - !get 'nav.yml'
+    - !get 'fragments/nav'
   main:
     class: container
     items:

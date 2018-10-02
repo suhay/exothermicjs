@@ -13,13 +13,13 @@ class Get extends Component {
   constructor(props) {
 		super(props)
 		this.state = { 
-			data: fs && typeof fs.readFileSync === 'function' ? yaml.safeLoad(fs.readFileSync(path.resolve(__dirname, pageState.state.pagesPath + '/' + this.props.data), 'utf8'), { schema: EXO_SCHEMA }) : null,
+			data: fs && typeof fs.readFileSync === 'function' ? yaml.safeLoad(fs.readFileSync(path.resolve(__dirname, `${pageState.state.pagesPath}/${this.props.data}.exo`), 'utf8'), { schema: EXO_SCHEMA }) : null,
 			loading: fs && typeof fs.readFileSync === 'function' ? false : true
 		}
 	}
 	
 	componentDidMount() {
-		fetch(`/load/${this.props.data.replace('.yml', '')}`)
+		fetch(`/load/${this.props.data}`)
 			.then(response => response.text())
 			.then(data => this.setState({ 
 				data: yaml.safeLoad(data, {

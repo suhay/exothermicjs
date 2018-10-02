@@ -2,4 +2,4 @@
 content: |
   [example] | [npm]
   [example]: http://example.com
-  [npm]: https://www.npmjs.com/package/react-yaml-templator
+  [npm]: https://www.npmjs.com/package/exothermicjs

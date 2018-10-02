@@ -7,13 +7,6 @@ const NodemonPlugin = require('nodemon-webpack-plugin')
 module.exports = (env, options) => {
   return [{
     // Server
-    target: 'node',
-    node: {
-      __dirname: true
-    },
-    externals: [nodeExternals({
-      whitelist: options.mode === 'production' ? ['react', 'react-dom/server'] : []
-    })],
     entry: {
       exothermic: path.resolve('./src/exothermic.js'),
     },
@@ -23,7 +16,15 @@ module.exports = (env, options) => {
       library: 'exothermic',
       libraryTarget: 'umd',
       umdNamedDefine: true,
+      publicPath: '/',
     },
+    target: 'node',
+    node: {
+      __dirname: true
+    },
+    externals: [nodeExternals({
+      whitelist: ['react', 'react-dom/server']
+    })],
     module: {
       rules: [{
         test: /\.js$/,
@@ -54,15 +55,16 @@ module.exports = (env, options) => {
       }
     },
     plugins: [
-      options.mode === 'production' && new webpack.DefinePlugin({
-        'process.env': {
-          NODE_ENV: JSON.stringify('production')
-        },
+       new webpack.DefinePlugin({
+        'process.env.NODE_ENV': JSON.stringify(options.mode),
       }),
       options.mode !== 'production' && new NodemonPlugin({
-        watch: path.resolve('./dist/exothermic.js'),
+        watch: [
+          path.resolve('./dist/exothermic.js'),
+          path.resolve('./server.js'),
+        ],
         verbose: true,
-        script: './demo/index.js'
+        script: './bin/exothermic-server'
       }),
     ].filter(e => e),
   },
@@ -119,13 +121,10 @@ module.exports = (env, options) => {
         to: '../demo/public/static/browser.js',
         fotce: true
       }, ]),
-      options.mode === 'production' && new webpack.DefinePlugin({
-        'process.env': {
-          NODE_ENV: JSON.stringify('production'),
-          WEBPACK_ENV: JSON.stringify('browser'),
-          APP_ENV: (process.env.APP_ENV && JSON.stringify(process.env.APP_ENV)) || undefined,
-        },
+      new webpack.DefinePlugin({
+        'process.env.WEBPACK_ENV': JSON.stringify('browser'),
+        'process.env.APP_ENV': (process.env.APP_ENV && JSON.stringify(process.env.APP_ENV)) || undefined,
       }),
     ].filter(e => e),
-  }]
-}
+  }
+]}
