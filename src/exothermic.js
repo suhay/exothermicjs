@@ -57,6 +57,7 @@ export function build(route, options) {
     `
 	} 
 	catch (e) {
+    console.error(e)
     throw new Error(e)
 	} 
 }
