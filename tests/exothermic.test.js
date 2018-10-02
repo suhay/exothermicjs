@@ -1,5 +1,3 @@
-require('dotenv').load()
-
 import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
@@ -12,7 +10,7 @@ import React from 'react'
 var Exothermic = require("../src/exothermic")
 var path = require('path')
 
-var options = { _pages: __dirname + '/..' + process.env.PUBLIC + '/pages/' }
+var options = { _pages: __dirname + '/../demo/public/pages/' }
 
 test('demo site renders', () => {
   expect(Exothermic.build(options._pages + 'index.exo', options)).toContain('Where - End of file!!')
