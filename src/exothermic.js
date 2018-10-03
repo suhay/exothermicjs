@@ -1,6 +1,6 @@
 import path from 'path'
 import fs from 'fs'
-import yaml from 'js-yaml'
+import yaml from 'Components/util/js-yaml'
 
 import React from 'react'
 import ReactServer from 'react-dom/server'
@@ -15,18 +15,29 @@ import { isBrowser } from 'Components/util'
 
 export function build(route, options) {
   const { _pages, message, error } = options
-	const base = yaml.safeLoad(fs.readFileSync(path.resolve(__dirname, _pages + '/base.exo'), 'utf8'))
-	try {
+  const baseTemplate = fs.stat(path.resolve(__dirname, _pages[0] + '/base.exo'), function(error, stat) {
+    if (error) {
+      return fs.readFileSync(path.resolve(__dirname, _pages[1] + '/base.exo'), 'utf8')
+    }
+    if(stat.isFile()) {
+      return fs.readFileSync(path.resolve(__dirname, _pages[0] + '/base.exo'), 'utf8')
+    }
+    return fs.readFileSync(path.resolve(__dirname, _pages[1] + '/base.exo'), 'utf8')
+  })
+  
+	const base = yaml.safeLoad(baseTemplate)
+	
+  try {
 		const page = yaml.safeLoad(fs.readFileSync(route, 'utf8'), {
 			schema: EXO_SCHEMA
 		})
 		const result = { ...base,	...page }
     const context = {}
     
-		pageState.setState({ pagesPath: _pages })
+		pageState.setState({ pagesPath: _pages[0] })
 		let markup = ReactServer.renderToString(
 			<StaticRouter location={route} context={context}>
-				<Base data={result} pages={_pages} route={route} force={!isBrowser()} />
+				<Base data={result} pages={_pages[0]} route={route} force={!isBrowser()} />
 			</StaticRouter>
 		)
     
@@ -63,7 +74,6 @@ export function build(route, options) {
 }
 
 export function hydrate(route, options) {
-  const { _pages, message, error } = options
 	const page = fs.readFileSync(route, 'utf8')
 	return page
 }

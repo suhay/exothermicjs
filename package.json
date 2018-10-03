@@ -1,6 +1,6 @@
 {
   "name": "exothermicjs",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "author": "Matt Suhay <matthew.suhay@gmail.com>",
   "keywords": [
     "react",
@@ -11,6 +11,7 @@
     "exothermic-server": "./bin/exothermic-server"
   },
   "dependencies": {
+    "babel-runtime": "^6.26.0",
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
     "helmet": "^3.13.0",
@@ -73,6 +74,9 @@
     "build": "webpack --mode development",
     "build:prod": "webpack --mode production",
     "build:all": "npm run build && npm run build:prod",
+    "build:deploy": "npm run build:deploy:dev && npm run build:deploy:prod",
+    "build:deploy:dev": "webpack --mode development --deploy",
+    "build:deploy:prod": "webpack --mode production --deploy",
     "test": "jest",
     "stat": "webpack --mode production --profile --json > stats.json",
     "test:coverage": "jest --coverage",

@@ -1,5 +1,3 @@
-var Exothermic = require("..");
-
 var express = require('express')
 var router = express.Router()
 

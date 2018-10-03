@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import fetch from 'isomorphic-fetch'
-import yaml from 'js-yaml'
+import yaml from 'Components/util/js-yaml'
 import { BrowserRouter } from 'react-router-dom'
 import { Subscribe } from 'statable'
 

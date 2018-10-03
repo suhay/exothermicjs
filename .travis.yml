@@ -6,7 +6,7 @@ cache:
     - node_modules
 script:
   - npm install
-  - npm run build:prod
+  - npm run build:deploy
   - npm test
 notifications:
   email:

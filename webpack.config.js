@@ -51,14 +51,13 @@ module.exports = (env, options) => {
         Components: path.resolve(__dirname, './src/components/'),
         Modules: path.resolve(__dirname, './src/components/'),
         Root: path.resolve(__dirname, '.'),
-        'js-yaml': path.resolve(__dirname, './src/components/util/js-yaml.js'),
       }
     },
     plugins: [
        new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(options.mode),
       }),
-      options.mode !== 'production' && new NodemonPlugin({
+      !options.deploy && options.mode !== 'production' && new NodemonPlugin({
         watch: [
           path.resolve('./dist/exothermic.js'),
           path.resolve('./server.js'),
@@ -112,11 +111,10 @@ module.exports = (env, options) => {
         Components: path.resolve(__dirname, './src/components/'),
         Modules: path.resolve(__dirname, './src/components/'),
         Root: path.resolve(__dirname, '.'),
-        'js-yaml': path.resolve(__dirname, './src/components/util/js-yaml.js'),
       },
     },
     plugins: [
-      options.mode !== 'production' && new CopyWebpackPlugin([{
+      !options.deploy && options.mode !== 'production' && new CopyWebpackPlugin([{
         from: 'dist/browser.exothermic.js',
         to: '../demo/public/static/browser.js',
         fotce: true

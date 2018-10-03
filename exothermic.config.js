@@ -1,4 +1,4 @@
-import yaml from 'js-yaml'
+import yaml from 'Components/util/js-yaml'
 
 import { NavbarYamlType } from 'Modules/navbar'
 import { LAYOUT_SCHEMA } from 'Modules/layout/Section'

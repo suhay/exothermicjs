@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import ReactMarkdown from 'react-markdown';
-import yaml from 'js-yaml';
+import yaml from 'Components/util/js-yaml';
 
 class Col extends Component {
   render() {

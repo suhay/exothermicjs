@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import ReactMarkdown from 'react-markdown'
-import yaml from 'js-yaml'
+import yaml from 'Components/util/js-yaml'
 import fetch from 'isomorphic-fetch'
 import fs from 'fs'
 import path from 'path'

@@ -1,6 +1,6 @@
 /*eslint-disable no-console*/
 import React, { Component } from 'react';
-import yaml from 'js-yaml';
+import yaml from 'Components/util/js-yaml';
 
 import Link from './link'
 import { key, val } from '../util';
