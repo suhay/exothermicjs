@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Col, ColYamlType } from './Col';
 
 import ReactMarkdown from 'react-markdown';
-import yaml from 'js-yaml';
+import yaml from 'Components/util/js-yaml';
 
 class Section extends Component {
   render() {

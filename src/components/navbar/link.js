@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react'
 import { NavLink } from 'react-router-dom'
 import { NavHashLink } from 'react-router-hash-link'
 import fetch from 'isomorphic-fetch'
-import yaml from 'js-yaml'
+import yaml from 'Components/util/js-yaml'
 import URL from 'url-parse'
 
 import pageState from '../../state/page'

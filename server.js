@@ -6,6 +6,7 @@ const express = require('express')
 const path = require('path') 
 const favicon = require('serve-favicon') 
 const logger = require('morgan') 
+const helmet = require('helmet')
 
 var indexRouter = require('./routes/index') 
 
@@ -19,10 +20,11 @@ app.engine('exo', function (filePath, options, callback) {
   return callback(null, page)
 })
 
-app.set('views', __dirname + (process.env.PUBLIC + '/pages/' || '/public/pages/'))
+app.set('views', [__dirname + ('/../../' + process.env.PUBLIC + '/pages/' || '/../../' + '/public/pages/'), __dirname + '/templates'])
 app.set('view engine', 'exo')
 
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico'))) 
+//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
+app.use(helmet())
 app.use(logger('dev')) 
 app.use(express.static(path.join(__dirname, (process.env.PUBLIC + '/static' || '/public/static') ))) 
 

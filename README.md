@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/suhay/exothermicjs.svg?branch=master)](https://travis-ci.org/suhay/exothermicjs)
 [![NPM version](https://img.shields.io/npm/v/exothermicjs.svg)](https://www.npmjs.org/package/exothermicjs)
+[![Dependencies](https://david-dm.org/suhay/exothermicjs.svg)]
 
 Create dynamic page content using YAML and Markdown without lengthy build times.
 
@@ -18,64 +19,35 @@ Folder structure
 ```
 .
 ├── public/
-│   ├── pages/
-│   │   ├── index.yml
-│   │   ├── base.yml
-│   │   └── about.yml
-│   └── static/
-│        ├── css/
-│        ├── js/
-│        └── index.html
-└── index.js
+    ├── pages/
+    │   ├── fragments/
+    │   │   └── about.exo
+    │   ├── index.exo
+    │   └── page2.exo
+    └── static/
+         ├── css/
+         └── js/
 ```
 
-index.js
+Place all page templates within the ```public/pages``` directory. the ```fragments``` directory is meant to hold template files that are to be included within a page (not full pages, but fragments of one).
+The package comes with a pre built ```base.exo``` and ```error.exo``` templates. Either of these can be overwritten by adding like named files to your ```pages``` directory, but they are required
+for the app to work so that's why we included them by default.
 
-```js
-var Exothermic = require("exothermicjs")
-var path = require('path')
-var express = require('express')
+Exothermic comes pre-packaged with its own Express server. To start the server, simply run:
 
-var app = express()
-var pages =  path.resolve(__dirname, './public/pages')
-
-app.get('/load/:load', (req, res) => {
-  res.send(Exothermic.bedew(req.params.load, pages))
-  res.end()
-})
-	
-app.get('*', (req, res, next) => {
-  try {
-    if (req.url.indexOf('.') === -1) {
-      res.send(Exothermic.build(req.url, pages))
-    } 
-    else {
-      var path = req.params[0] ? req.params[0] : res.status(404).end()
-      res.sendFile(path , { root : __dirname})
-    }
-  }
-  catch (err) {
-    next(err)
-  }
-})
-	
-app.listen(3001, () => {
-  console.log('React app listening on port 3001!')
-})
+```
+npx exothermic-server
 ```
 
-index.html
+## .env file
 
-```html
-<!doctype html>
-<html lang="en">
-  <head>{{ head }}</head>
-  <body>
-    <div id="__exothermic">{{ body }}</div>
-    <script src="https://unpkg.com/exothermicjs/dist/browser.exothermic.min.js"></script>
-  </body>
-</html>
+It is recommended that you include a ```.env``` file within the root of your project. Here is an example of a few configurable keys:
 
+```
+PORT=3001
+PUBLIC=/public
+NODE_ENV=production
+SSR_ONLY=false
 ```
 
 ## Template Examples
@@ -171,7 +143,7 @@ Loads the content of the referenced Yaml file. Good for content reuse, keeping f
 
 Custom defined types that you inject with Yaml tags.
 
-Example (not included in default modules):
+Example (not included in default module):
 
 ```yaml
 top_slideshow:
