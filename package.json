@@ -74,6 +74,7 @@
     "build": "webpack --mode development",
     "build:prod": "webpack --mode production",
     "build:all": "npm run build && npm run build:prod",
+    "build:deploy": "npm run webpack --mode development --depoly && webpack --mode production --deploy",
     "test": "jest",
     "stat": "webpack --mode production --profile --json > stats.json",
     "test:coverage": "jest --coverage",

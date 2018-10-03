@@ -57,7 +57,7 @@ module.exports = (env, options) => {
        new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(options.mode),
       }),
-      options.mode !== 'production' && new NodemonPlugin({
+      !options.deploy && options.mode !== 'production' && new NodemonPlugin({
         watch: [
           path.resolve('./dist/exothermic.js'),
           path.resolve('./server.js'),
@@ -114,7 +114,7 @@ module.exports = (env, options) => {
       },
     },
     plugins: [
-      options.mode !== 'production' && new CopyWebpackPlugin([{
+      !options.deploy && options.mode !== 'production' && new CopyWebpackPlugin([{
         from: 'dist/browser.exothermic.js',
         to: '../demo/public/static/browser.js',
         fotce: true
