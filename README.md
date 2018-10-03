@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/suhay/exothermicjs.svg?branch=master)](https://travis-ci.org/suhay/exothermicjs)
 [![NPM version](https://img.shields.io/npm/v/exothermicjs.svg)](https://www.npmjs.org/package/exothermicjs)
-[![Dependencies](https://david-dm.org/suhay/exothermicjs.svg)]
+![Dependencies](https://david-dm.org/suhay/exothermicjs.svg)
 
 Create dynamic page content using YAML and Markdown without lengthy build times.
 
@@ -45,7 +45,7 @@ It is recommended that you include a ```.env``` file within the root of your pro
 
 ```
 PORT=3001
-PUBLIC=/public
+PUBLIC=./public
 NODE_ENV=production
 SSR_ONLY=false
 ```
