@@ -20,13 +20,13 @@ app.engine('exo', function (filePath, options, callback) {
   return callback(null, page)
 })
 
-app.set('views', [__dirname + ('/../../' + process.env.PUBLIC + '/pages/' || '/../../' + '/public/pages/'), __dirname + '/templates'])
+app.set('views', [process.env.PUBLIC + '/pages/' || './public/pages/', __dirname + '/templates'])
 app.set('view engine', 'exo')
 
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 app.use(helmet())
 app.use(logger('dev')) 
-app.use(express.static(path.join(__dirname, (process.env.PUBLIC + '/static' || '/public/static') ))) 
+app.use(express.static(process.env.PUBLIC + '/static' || './public/static')) 
 
 app.get('/load/*', (req, res) => {
 	res.render(req.params[0], { _api: true })
