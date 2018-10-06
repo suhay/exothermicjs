@@ -15,16 +15,16 @@ import { isBrowser } from 'Components/util'
 
 export function build(route, options) {
   const { _pages, message, error } = options
-  const baseTemplate = fs.stat(path.resolve(__dirname, _pages[0] + '/base.exo'), function(error, stat) {
-    if (error) {
-      return fs.readFileSync(path.resolve(__dirname, _pages[1] + '/base.exo'), 'utf8')
-    }
-    if(stat.isFile()) {
-      return fs.readFileSync(path.resolve(__dirname, _pages[0] + '/base.exo'), 'utf8')
-    }
-    return fs.readFileSync(path.resolve(__dirname, _pages[1] + '/base.exo'), 'utf8')
-  })
+  let baseTemplate
   
+  if (fs.existsSync(path.resolve(_pages[0] + '/base.exo'))) {
+    baseTemplate = fs.readFileSync(path.resolve(_pages[0] + '/base.exo'), 'utf8')
+  }
+  
+  else {
+    baseTemplate = fs.readFileSync(path.resolve(_pages[1] + '/base.exo'), 'utf8')
+  }
+
 	const base = yaml.safeLoad(baseTemplate)
 	
   try {
