@@ -1,0 +1,15 @@
+{
+  "lerna": "3.4.1",
+  "packages": ["packages/*"],
+  "version": "independent",
+  "npmClient": "npm",
+  "useWorkspaces": true,
+  "loglevel": "success",
+  "command": {
+    "publish": {
+      "allowBranch": "master",
+      "conventionalCommits": true,
+      "ignoreChanges": ["CHANGELOG.md"]
+    }
+  }
+}
