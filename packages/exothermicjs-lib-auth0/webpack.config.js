@@ -1,6 +1,7 @@
 const path = require('path')
 const webpack = require('webpack')
 const pkg = require(path.join(process.cwd(), 'package.json'));
+const nodeExternals = require('webpack-node-externals')
 
 module.exports = (env, options) => {
   return {
@@ -13,6 +14,7 @@ module.exports = (env, options) => {
       umdNamedDefine: true,
     },
     target: 'node',
+    externals: [nodeExternals()],
     node: {
       __dirname: true
     },
@@ -40,6 +42,7 @@ module.exports = (env, options) => {
     resolve: {
       alias: {
         Root: path.resolve(__dirname, '.'),
+        'hiredis': path.join(__dirname, 'aliases/hiredis.js'),
       }
     },
     plugins: [

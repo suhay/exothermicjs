@@ -1,30 +1,15 @@
-var express = require('express')
-const passport = require('passport')
-var router = express.Router()
+var express = require('express');
+var router = express.Router();
+var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn();
 
 router.get('/', (req, res, next) => {
   res.render('index', {})
 })
 
-router.get('/login', passport.authenticate('auth0', {
-  scope: 'openid email profile'}),
-  function(req, res) {
-    res.redirect("/admin/dashboard");
-});
-
 router.get('/logout', function(req, res) {
   req.logout();
   res.redirect('/');
 });
-
-router.get('/callback',
-  passport.authenticate('auth0', {
-    failureRedirect: '/failure'
-  }),
-  function(req, res) {
-    res.redirect(req.session.returnTo || '/admin/dashboard');
-  }
-);
 
 router.get('/failure', function(req, res) {
   var error = req.flash("error");

@@ -59,11 +59,12 @@
     "webpack-node-externals": "^1.6.0"
   },
   "scripts": {
+    "up": "yarn install",
     "start": "node ./bin/exothermic-server",
     "build": "webpack --mode development",
     "build:prod": "webpack --mode production",
-    "build:all": "npm run build && npm run build:prod",
-    "build:deploy": "npm run build:deploy:dev && npm run build:deploy:prod",
+    "build:all": "yarn build && yarn build:prod",
+    "build:deploy": "yarn build:deploy:dev && yarn build:deploy:prod",
     "build:deploy:dev": "webpack --mode development --deploy",
     "build:deploy:prod": "webpack --mode production --deploy",
     "test": "jest",

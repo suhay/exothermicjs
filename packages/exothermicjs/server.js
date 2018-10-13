@@ -2,7 +2,7 @@ require('dotenv').load()
 
 const Exothermic = require(".") 
 const createError = require('http-errors') 
-const express = require('express') 
+const express = require('express')
 const path = require('path') 
 const favicon = require('serve-favicon') 
 const logger = require('morgan') 
@@ -25,18 +25,18 @@ app.engine('exo', function (filePath, options, callback) {
 app.set('views', [process.env.PUBLIC + '/pages/' || './public/pages/', __dirname + '/templates'])
 app.set('view engine', 'exo')
 
-// app.use(favicon(process.env.PUBLIC + '/static' || './public/static', 'favicon.png'))
+// app.use(favicon(process.env.PUBLIC + '/static' || './public/static', 'favicon.ico'))
 app.use(helmet())
 app.use(logger('dev'))
-app.use(authenticator())
+app.use(authenticator)
 app.use(express.static(process.env.PUBLIC + '/static' || './public/static')) 
 
 app.get('/load/*', (req, res) => {
 	res.render(req.params[0], { _api: true })
 })
 
-app.use('/', indexRouter)
 app.use('/admin', adminRouter)
+app.use('/', indexRouter)
 
 app.use(function(req, res, next) {
   const err = new Error('Not Found')
