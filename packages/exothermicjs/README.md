@@ -9,7 +9,7 @@ Create dynamic page content using YAML and Markdown without lengthy build times.
 ## Installation
 
 ```
-npm install --save exothermicjs
+yarn add exothermicjs
 ```
 
 ## Basic usage
