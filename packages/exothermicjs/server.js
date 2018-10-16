@@ -1,11 +1,11 @@
 require('dotenv').load()
 
-const Exothermic = require(".") 
-const createError = require('http-errors') 
+const Exothermic = require(".")
+const createError = require('http-errors')
 const express = require('express')
-const path = require('path') 
-const favicon = require('serve-favicon') 
-const logger = require('morgan') 
+const path = require('path')
+const favicon = require('serve-favicon')
+const logger = require('morgan')
 const helmet = require('helmet')
 const authenticator = require('exothermicjs-lib-auth0')
 
@@ -30,10 +30,6 @@ app.use(helmet())
 app.use(logger('dev'))
 app.use(authenticator)
 app.use(express.static(process.env.PUBLIC + '/static' || './public/static')) 
-
-app.get('/load/*', (req, res) => {
-	res.render(req.params[0], { _api: true })
-})
 
 app.use('/admin', adminRouter)
 app.use('/', indexRouter)

@@ -1,2 +1,14 @@
 ---
 title: Dashboard
+description: ''
+page:
+  main:
+    class: container
+    items:
+    - !section
+      id: who
+      title: '# Dashboard'
+      class: row
+      content: |
+        {{user}}
+tags: []

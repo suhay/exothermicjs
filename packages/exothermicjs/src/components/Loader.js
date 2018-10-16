@@ -21,7 +21,7 @@ export default class Loader extends Component {
   
   componentDidMount() {
     pageState.setState({ route: this.props.path })
-    fetch(`/load/${this.props.path}`.replace('//', '/'))
+    fetch(`/load/${this.props.path}`.replace('//', '/'), { credentials: `same-origin` })
       .then(response => response.text())
       .then(data => this.setState({ 
         data: yaml.safeLoad(data, {

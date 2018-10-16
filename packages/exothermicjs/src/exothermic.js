@@ -14,13 +14,12 @@ import Page from 'Components/Page'
 import { isBrowser } from 'Components/util'
 
 export function build(route, options) {
-  const { _pages, message, error } = options
+  const { _pages } = options
   let baseTemplate
   
   if (fs.existsSync(path.resolve(_pages[0] + '/base.exo'))) {
     baseTemplate = fs.readFileSync(path.resolve(_pages[0] + '/base.exo'), 'utf8')
   }
-  
   else {
     baseTemplate = fs.readFileSync(path.resolve(_pages[1] + '/base.exo'), 'utf8')
   }
@@ -41,9 +40,10 @@ export function build(route, options) {
 			</StaticRouter>
 		)
     
-    if (message && error) {
-      markup = markup.replace('{{message}}', message)
-      markup = markup.replace('{{error}}', error)
+    for (var key in options) {
+      if (options.hasOwnProperty(key) && key.substring(0,1) !== '_') {
+        markup = markup.replace(`{{${key}}}`, options[key])
+      }
     }
 
     const head = ReactServer.renderToString(
@@ -74,6 +74,11 @@ export function build(route, options) {
 }
 
 export function hydrate(route, options) {
-	const page = fs.readFileSync(route, 'utf8')
-	return page
+	let markup = fs.readFileSync(route, 'utf8')
+  for (var key in options) {
+    if (options.hasOwnProperty(key) && key.substring(0,1) !== '_') {
+      markup = markup.replace(`{{${key}}}`, options[key])
+    }
+  }
+	return markup
 }

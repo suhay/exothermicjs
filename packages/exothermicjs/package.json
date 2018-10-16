@@ -71,7 +71,7 @@
     "stat": "webpack --mode production --profile --json > stats.json",
     "test:coverage": "jest --coverage",
     "eject": "react-scripts eject",
-    "develop": "webpack --env.NODE_ENV=development --watch --mode development"
+    "dev": "webpack --env.NODE_ENV=development --watch --mode development"
   },
   "description": "ExothermicJS | Yaml based templating for ReactJS",
   "repository": {
