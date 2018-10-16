@@ -43,7 +43,7 @@ router.use(session({
   store: new RedisStore({client: client}),
   secret: process.env.SESSION_SECRET || 'shhhhhhhhh',
   resave: true,
-  saveUninitialized: true
+  saveUninitialized: true,
 }))
 
 router.use(passport.initialize())
@@ -58,6 +58,7 @@ router.use(function(req, res, next) {
   }
   next();
 })
+
 router.use(function(req, res, next) {
   res.locals.loggedIn = false;
   if (req.session.passport && typeof req.session.passport.user !== 'undefined') {
@@ -66,11 +67,11 @@ router.use(function(req, res, next) {
   next();
 })
 
-router.get('/login', passport.authenticate('auth0', {
-  scope: 'openid email profile'}),
+router.get('/login', passport.authenticate('auth0', { scope: 'openid email profile'}),
   function(req, res) {
     res.redirect("/admin/dashboard");
-});
+  }
+);
 
 router.get('/callback',
   passport.authenticate('auth0', {

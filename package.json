@@ -1,9 +1,9 @@
 {
   "scripts": {
     "build": "npx lerna run build",
-    "build:all": "npx lerna run build:all",
+    "build:all": "npx lerna run build:all --parallel",
     "bootstrap": "yarn install && npx lerna bootstrap && npx lerna run up",
-    "dev": "npx lerna run develop"
+    "dev": "npx lerna run dev --parallel"
   },
   "devDependencies": {
     "@babel/core": "^7.0.1",

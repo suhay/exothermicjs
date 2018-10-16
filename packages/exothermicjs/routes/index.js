@@ -1,6 +1,12 @@
-var express = require('express');
-var router = express.Router();
-var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn();
+const express = require('express');
+const router = express.Router();
+const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn();
+
+router.get('/load/*', (req, res) => {
+  let options = req.session.options || {}
+  options._api = true
+	res.render(req.params[0], options)
+})
 
 router.get('/', (req, res, next) => {
   res.render('index', {})
@@ -12,13 +18,11 @@ router.get('/logout', function(req, res) {
 });
 
 router.get('/failure', function(req, res) {
-  var error = req.flash("error");
-  var error_description = req.flash("error_description");
+  const error = req.flash("error");
+  const error_description = req.flash("error_description");
   req.logout();
-  res.render('failure', {
-    error: error[0],
-    error_description: error_description[0],
-  });
+  req.session.options = { error: error[0], error_description: error_description[0] }
+  res.render('failure', req.session.options);
 });
 
 router.get('/*', (req, res, next) => {
