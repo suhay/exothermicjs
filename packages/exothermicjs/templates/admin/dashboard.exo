@@ -10,5 +10,10 @@ page:
       title: '# Dashboard'
       class: row
       content: |
-        {{user}}
+        Hello {{user}}!
+        
+        <form action="/admin/dashboard" method="POST">
+          <input type="text" id="path" name="path"/>
+          <input type="submit" id="submit" name="submit"/>
+        </form>
 tags: []

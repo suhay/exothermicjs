@@ -11,6 +11,7 @@ const authenticator = require('exothermicjs-lib-auth0')
 
 const indexRouter = require('./routes/index')
 const adminRouter = require('./routes/admin')
+const apiRouter = require('./routes/api')
 
 const app = express()
 
@@ -18,7 +19,11 @@ app.engine('exo', function (filePath, options, callback) {
   options = options || {}
   options._pages = options._pages || app.get('views')
   options._api = options._api || false
-  const page = options._api ? Exothermic.hydrate(filePath, options) : Exothermic.build(filePath, options)
+  const page = options._get 
+    ? Exothermic.get(filePath, options) 
+    : options._api 
+      ? Exothermic.hydrate(filePath, options) 
+      : Exothermic.render(filePath, options)
   return callback(null, page)
 })
 
@@ -32,6 +37,7 @@ app.use(authenticator)
 app.use(express.static(process.env.PUBLIC + '/static' || './public/static')) 
 
 app.use('/admin', adminRouter)
+app.use('/api', apiRouter)
 app.use('/', indexRouter)
 
 app.use(function(req, res, next) {

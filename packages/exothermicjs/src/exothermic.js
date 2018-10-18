@@ -13,24 +13,43 @@ import Base from 'Components/Base'
 import Page from 'Components/Page'
 import { isBrowser } from 'Components/util'
 
-export function build(route, options) {
+export function render(route, options) {
+  const { markup, result } = get(route, options)
+  const head = ReactServer.renderToString(
+    <Head data={result} />
+  )
+  const browserScript = process.env.SSR_ONLY === 'true'
+    ? ``
+    : process.env.NODE_ENV && process.env.NODE_ENV == 'development'
+      ? "/browser.js"
+      : "https://unpkg.com/exothermicjs/dist/browser.exothermic.min.js"
+
+  return `
+    <!doctype html>
+    <html lang="en">
+      <head>${head}</head>
+      <body>
+        <div id="__exothermic">${markup}</div>
+        ${browserScript == `` ? `` : `<script src="${browserScript}"></script>`}
+      </body>
+    </html>
+  `
+}
+
+export function get(route, options) {
   const { _pages } = options
-  let baseTemplate
-  
-  if (fs.existsSync(path.resolve(_pages[0] + '/base.exo'))) {
-    baseTemplate = fs.readFileSync(path.resolve(_pages[0] + '/base.exo'), 'utf8')
-  }
-  else {
-    baseTemplate = fs.readFileSync(path.resolve(_pages[1] + '/base.exo'), 'utf8')
-  }
+  const baseTemplate = fs.existsSync(path.resolve(_pages[0] + '/base.exo'))
+    ? fs.readFileSync(path.resolve(_pages[0] + '/base.exo'), 'utf8')
+    : fs.readFileSync(path.resolve(_pages[1] + '/base.exo'), 'utf8')
 
 	const base = yaml.safeLoad(baseTemplate)
-	
+  
   try {
 		const page = yaml.safeLoad(fs.readFileSync(route, 'utf8'), {
 			schema: EXO_SCHEMA
 		})
 		const result = { ...base,	...page }
+    // options.attr = 'all' // This will add all data attributes to the markup before being sent back
     const context = {}
     
 		pageState.setState({ pagesPath: _pages[0] })
@@ -45,32 +64,13 @@ export function build(route, options) {
         markup = markup.replace(`{{${key}}}`, options[key])
       }
     }
-
-    const head = ReactServer.renderToString(
-			<Head data={result} />
-		)
-    
-    const browserScript = process.env.SSR_ONLY === 'true'
-      ? ``
-      : process.env.NODE_ENV && process.env.NODE_ENV == 'development'
-        ? "/browser.js"
-        : "https://unpkg.com/exothermicjs/dist/browser.exothermic.min.js"
-
-    return `
-      <!doctype html>
-      <html lang="en">
-        <head>${head}</head>
-        <body>
-          <div id="__exothermic">${markup}</div>
-          ${browserScript == `` ? `` : `<script src="${browserScript}"></script>`}
-        </body>
-      </html>
-    `
-	} 
+  
+    return { markup, result }
+  } 
 	catch (e) {
     console.error(e)
     throw new Error(e)
-	} 
+	}
 }
 
 export function hydrate(route, options) {
