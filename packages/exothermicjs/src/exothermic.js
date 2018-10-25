@@ -18,7 +18,7 @@ export function render(route, options) {
   const head = ReactServer.renderToString(
     <Head data={result} />
   )
-  const browserScript = process.env.SSR_ONLY === 'true'
+  const browserScript = process.env.SSR_ONLY === 'true' || options._ssr_only
     ? ``
     : process.env.NODE_ENV && process.env.NODE_ENV == 'development'
       ? "/browser.js"

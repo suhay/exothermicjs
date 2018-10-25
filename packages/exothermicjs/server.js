@@ -18,10 +18,10 @@ const app = express()
 app.engine('exo', function (filePath, options, callback) {
   options = options || {}
   options._pages = options._pages || app.get('views')
-  options._api = options._api || false
-  const page = options._get 
-    ? Exothermic.get(filePath, options) 
-    : options._api 
+  options._hydrate = options._hydrate || false
+  const page = options._get
+    ? Exothermic.get(filePath, options)
+    : options._hydrate
       ? Exothermic.hydrate(filePath, options) 
       : Exothermic.render(filePath, options)
   return callback(null, page)

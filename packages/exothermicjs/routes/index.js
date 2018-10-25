@@ -4,7 +4,7 @@ const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn();
 
 router.get('/load/*', (req, res) => {
   let options = req.session.options || {}
-  options._api = true
+  options._hydrate = true
 	res.render(req.params[0], options)
 })
 

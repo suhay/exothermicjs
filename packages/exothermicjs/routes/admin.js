@@ -4,12 +4,6 @@ const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn()
 const router = express.Router()
 const app = require('../server')
 
-router.post('/dashboard', ensureLoggedIn, function (req, res, next) {
-  res.render(req.body.path, { _get: true }, (err, html) => {
-    console.log(html)
-  })
-})
-
 router.get('/dashboard', ensureLoggedIn, function(req, res, next) {
   req.session.options = { user: req.user.displayName, userProfile: JSON.stringify(req.user, null, '  ') }
   res.render('admin/dashboard', req.session.options)
