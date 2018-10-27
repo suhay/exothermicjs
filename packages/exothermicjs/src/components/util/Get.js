@@ -46,7 +46,7 @@ class Get extends Component {
   }
 }
 
-var GetYamlType = new yaml.Type('!get', {
+const GetYamlType = new yaml.Type('!get', {
 	kind: 'scalar',
 	resolve: function (data) {
 		return data !== null;

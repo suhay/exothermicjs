@@ -6,10 +6,16 @@ import yaml from 'js-yaml';
 
 class Section extends Component {
   render() {
+    const {
+      data: {
+        id,
+        title,
+      }
+    } = this.props
     const classes = this.props.data.hasOwnProperty('class') ? this.props.data.class : '';
     return (
-      <section className={classes} id={this.props.data.id}>
-        {this.props.data.title && <ReactMarkdown source={this.props.data.title} renderers={{root:React.Fragment}} />}
+      <section className={classes} id={id}>
+        {title && <ReactMarkdown source={title} renderers={{root:React.Fragment}} />}
         {this.props.data.content && <ReactMarkdown source={this.props.data.content} escapeHtml={false} renderers={{root:React.Fragment}} />}
         {this.props.data.items ? this.props.data.items : ` `}
       </section>
@@ -17,7 +23,7 @@ class Section extends Component {
   }
 }
 
-var SectionYamlType = new yaml.Type('!section', {
+const SectionYamlType = new yaml.Type('!section', {
   kind: 'mapping',
   resolve: function (data) {
     return data !== null && data.items !== null && data.id !== null && data.title !== null ;

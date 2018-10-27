@@ -55,7 +55,7 @@ export function get(route, options) {
 		pageState.setState({ pagesPath: _pages[0] })
 		let markup = ReactServer.renderToString(
 			<StaticRouter location={route} context={context}>
-				<Base data={result} pages={_pages[0]} route={route} force={!isBrowser()} />
+				<Base data={result} force={!isBrowser()} />
 			</StaticRouter>
 		)
     
