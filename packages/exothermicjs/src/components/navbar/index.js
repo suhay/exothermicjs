@@ -30,7 +30,7 @@ class Navitem extends Component {
   }
 }
 
-var NavbarYamlType = new yaml.Type('!navbar', {
+const NavbarYamlType = new yaml.Type('!navbar', {
   kind: 'mapping',
   construct: function (data) {
     data = data || {}; // in case of empty node

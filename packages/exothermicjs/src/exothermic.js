@@ -14,7 +14,29 @@ import Page from 'Components/Page'
 import { isBrowser } from 'Components/util'
 
 export function render(route, options) {
-  const { markup, result } = get(route, options)
+  const { _pages } = options
+  const templates = get(route, options)
+    
+  const base = yaml.safeLoad(templates[0])
+  const page = yaml.safeLoad(templates[1], {
+    schema: EXO_SCHEMA
+  })
+  const result = { ...base,	...page }
+  const context = {}
+
+  pageState.setState({ pagesPath: _pages[0] })
+  let markup = ReactServer.renderToString(
+    <StaticRouter location={route} context={context}>
+      <Base data={result} force={!isBrowser()} />
+    </StaticRouter>
+  )
+
+  for (var key in options) {
+    if (options.hasOwnProperty(key) && key.substring(0,1) !== '_') {
+      markup = markup.replace(`{{${key}}}`, options[key])
+    }
+  }
+
   const head = ReactServer.renderToString(
     <Head data={result} />
   )
@@ -37,35 +59,14 @@ export function render(route, options) {
 }
 
 export function get(route, options) {
-  const { _pages } = options
-  const baseTemplate = fs.existsSync(path.resolve(_pages[0] + '/base.exo'))
-    ? fs.readFileSync(path.resolve(_pages[0] + '/base.exo'), 'utf8')
-    : fs.readFileSync(path.resolve(_pages[1] + '/base.exo'), 'utf8')
-
-	const base = yaml.safeLoad(baseTemplate)
-  
   try {
-		const page = yaml.safeLoad(fs.readFileSync(route, 'utf8'), {
-			schema: EXO_SCHEMA
-		})
-		const result = { ...base,	...page }
-    // options.attr = 'all' // This will add all data attributes to the markup before being sent back
-    const context = {}
-    
-		pageState.setState({ pagesPath: _pages[0] })
-		let markup = ReactServer.renderToString(
-			<StaticRouter location={route} context={context}>
-				<Base data={result} force={!isBrowser()} />
-			</StaticRouter>
-		)
-    
-    for (var key in options) {
-      if (options.hasOwnProperty(key) && key.substring(0,1) !== '_') {
-        markup = markup.replace(`{{${key}}}`, options[key])
-      }
-    }
-  
-    return { markup, result }
+    const { _pages } = options
+    const baseTemplate = fs.existsSync(path.resolve(_pages[0] + '/base.exo'))
+      ? fs.readFileSync(path.resolve(_pages[0] + '/base.exo'), 'utf8')
+      : fs.readFileSync(path.resolve(_pages[1] + '/base.exo'), 'utf8')
+    const pageTemplate = fs.readFileSync(route, 'utf8')
+
+    return [ baseTemplate, pageTemplate ]
   } 
 	catch (e) {
     console.error(e)
