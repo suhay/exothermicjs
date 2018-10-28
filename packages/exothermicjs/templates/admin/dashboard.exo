@@ -10,5 +10,12 @@ page:
       title: '# Dashboard'
       class: row
       content: |
-        {{user}}
+        Hello {{user}}!
+      items:
+      - !form
+        action: /api
+        id: dashboardForm
+        method: GET
+        items:
+        - { type: text, id: path, name: path }
 tags: []

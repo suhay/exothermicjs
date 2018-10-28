@@ -24,7 +24,7 @@ class Article extends Component {
   }
 }
 
-var ArticleYamlType = new yaml.Type('!article', {
+const ArticleYamlType = new yaml.Type('!article', {
   kind: 'mapping',
   resolve: function (data) {
     return data !== null && data.id !== null && data.title !== null;

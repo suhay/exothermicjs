@@ -18,7 +18,7 @@ class Col extends Component {
   }
 }
 
-var ColYamlType = new yaml.Type('!col', {
+const ColYamlType = new yaml.Type('!col', {
   kind: 'mapping',
   resolve: function (data) {
     return data !== null && data.id !== null;
