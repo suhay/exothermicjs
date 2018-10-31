@@ -13,7 +13,7 @@ var path = require('path')
 var options = { _pages: [__dirname + '/../demo/public/pages/', __dirname + '/../templates/'] }
 
 test('demo site renders', () => {
-  expect(Exothermic.build(options._pages[0] + 'index.exo', options)).toContain('Where - End of file!!')
+  expect(Exothermic.render(options._pages[0] + 'index.exo', options)).toContain('Where - End of file!!')
 })
 
 test('bedew returns content', () => {

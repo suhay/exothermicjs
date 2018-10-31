@@ -1,0 +1,22 @@
+{
+  "name": "exothermicjs-dashboard-endo",
+  "version": "1.0.0",
+  "description": "The Endothermicjs dashboard",
+  "author": "matthew.suhay <matthew.suhay@gmail.com>",
+  "homepage": "",
+  "license": "MIT",
+  "main": "lib/endothermicjs-dashboard-endo.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "dependencies": {
+    "react-beautiful-dnd": "^9.0.2"
+  }
+}

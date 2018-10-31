@@ -1,9 +1,18 @@
 {
   "scripts": {
-    "build": "npx lerna run build",
-    "build:all": "npx lerna run build:all --parallel",
-    "bootstrap": "yarn install && npx lerna bootstrap && npx lerna run up",
-    "dev": "npx lerna run dev --parallel"
+    "bootstrap": "yarn && lerna bootstrap",
+    "start": "run-s bootstrap dev",
+    "watch": "lerna run watch --parallel",
+    "dev": "lerna run dev --parallel",
+    "build": "yarn clean && lerna run build",
+    "build:all": "yarn clean && lerna run build:all",
+    "build-preview": "yarn build && lerna run build-preview",
+    "clean": "rimraf packages/*/dist dev-test/*.js",
+    "reset": "yarn clean && lerna clean --yes",
+    "test": "run-s jest",
+    "jest": "jest --no-cache",
+    "dryrun": "lerna publish --skip-npm --skip-git",
+    "publish": "run-s bootstrap dryrun build && git checkout . && lerna publish"
   },
   "devDependencies": {
     "@babel/core": "^7.0.1",
@@ -20,10 +29,12 @@
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.5.0",
     "jest": "^23.6.0",
-    "lerna": "^3.4.1",
+    "lerna": "^3.4.3",
+    "rimraf": "^2.6.2",
     "webpack": "^4.18.0",
     "webpack-cli": "^3.1.0",
-    "webpack-node-externals": "^1.6.0"
+    "webpack-node-externals": "^1.6.0",
+    "yarn-run-all": "^3.1.1"
   },
   "browserslist": [
     "last 2 Chrome versions",

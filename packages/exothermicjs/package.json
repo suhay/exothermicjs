@@ -30,27 +30,8 @@
     "statable": "^0.3.2",
     "url-parse": "^1.4.3"
   },
-  "jest": {
-    "testRegex": "/.*(__tests__\\/.*)|(.*(test|spec))\\.jsx?$",
-    "testPathIgnorePatterns": [
-      "node_modules",
-      ".cache",
-      "__snapshots__",
-      "public",
-      "dist"
-    ],
-    "testEnvironment": "node",
-    "moduleNameMapper": {
-      "Components(.*)$": "<rootDir>/src/components/$1",
-      "Modules(.*)$": "<rootDir>/src/components/$1",
-      "Root(.*)$": "<rootDir>/$1",
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
-      "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
-    },
-    "coverageDirectory": "./demo/coverage"
-  },
   "devDependencies": {
-    "copy-webpack-plugin": "^4.5.2",
+    "babel-plugin-module-resolver": "^3.1.1",
     "css-loader": "^1.0.0",
     "nodemon-webpack-plugin": "^4.0.3",
     "style-loader": "^0.23.0",
@@ -59,7 +40,6 @@
     "webpack-node-externals": "^1.6.0"
   },
   "scripts": {
-    "up": "yarn install",
     "start": "node ./bin/exothermic-server",
     "build": "webpack --mode development",
     "build:prod": "webpack --mode production",
@@ -67,7 +47,7 @@
     "build:deploy": "yarn build:deploy:dev && yarn build:deploy:prod",
     "build:deploy:dev": "webpack --mode development --deploy",
     "build:deploy:prod": "webpack --mode production --deploy",
-    "test": "jest",
+    "test": "jest --no-cache",
     "stat": "webpack --mode production --profile --json > stats.json",
     "test:coverage": "jest --coverage",
     "eject": "react-scripts eject",
