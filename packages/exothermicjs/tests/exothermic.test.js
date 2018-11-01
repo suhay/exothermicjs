@@ -10,13 +10,13 @@ import React from 'react'
 var Exothermic = require("../src/exothermic")
 var path = require('path')
 
-var options = { _pages: [__dirname + '/../demo/public/pages/', __dirname + '/../templates/'] }
+var options = { _pages: [__dirname + '/../demo/public/pages/', __dirname + '/../templates/'], _test: true }
 
 test('demo site renders', () => {
   expect(Exothermic.render(options._pages[0] + 'index.exo', options)).toContain('Where - End of file!!')
 })
 
-test('bedew returns content', () => {
+test('hydrate returns content', () => {
   expect(Exothermic.hydrate(options._pages[0] + 'index.exo', options)).toContain('Where - End of file!!')
 })
 

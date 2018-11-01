@@ -27,7 +27,7 @@ export function render(route, options) {
   pageState.setState({ pagesPath: _pages[0] })
   let markup = ReactServer.renderToString(
     <StaticRouter location={route} context={context}>
-      <Base data={result} force={!isBrowser()} />
+      <Base data={result} browser={options._test ? false : isBrowser()} />
     </StaticRouter>
   )
 

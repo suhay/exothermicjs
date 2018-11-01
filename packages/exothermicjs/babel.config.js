@@ -8,8 +8,9 @@ module.exports = {
     [
       'module-resolver',
       {
-        Root: path.join(__dirname, '.'),
+        root: path.join(__dirname, 'src'),
         alias: {
+          Root: path.join(__dirname, '.'),
           Components: path.resolve(__dirname, 'src/components/'),
           Modules: path.resolve(__dirname, 'src/components/'),
         },
