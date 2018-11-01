@@ -1,6 +1,14 @@
 {
   "name": "exothermicjs",
   "version": "1.2.2",
+  "description": "ExothermicJS | Yaml based templating for ReactJS",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/suhay/exothermicjs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/suhay/exothermicjs/issues"
+  },
   "author": "Matt Suhay <matthew.suhay@gmail.com>",
   "keywords": [
     "react",
@@ -10,6 +18,10 @@
   "bin": {
     "exothermic-server": "./bin/exothermic-server"
   },
+  "main": "dist/exothermicjs.min.js",
+  "module": "index.js",
+  "homepage": "https://github.com/suhay/exothermicjs#readme",
+  "license": "MIT",
   "dependencies": {
     "babel-runtime": "^6.26.0",
     "connect-ensure-login": "^0.1.1",
@@ -44,24 +56,11 @@
     "build": "webpack --mode development",
     "build:prod": "webpack --mode production",
     "build:all": "yarn build && yarn build:prod",
-    "build:deploy": "yarn build:deploy:dev && yarn build:deploy:prod",
-    "build:deploy:dev": "webpack --mode development --deploy",
-    "build:deploy:prod": "webpack --mode production --deploy",
     "test": "jest --no-cache",
     "stat": "webpack --mode production --profile --json > stats.json",
     "test:coverage": "jest --coverage",
     "eject": "react-scripts eject",
     "dev": "webpack --env.NODE_ENV=development --watch --mode development"
-  },
-  "description": "ExothermicJS | Yaml based templating for ReactJS",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/suhay/exothermicjs.git"
-  },
-  "license": "MIT",
-  "module": "index.js",
-  "bugs": {
-    "url": "https://github.com/suhay/exothermicjs/issues"
   },
   "babel": {
     "env": {
@@ -72,6 +71,5 @@
         ]
       }
     }
-  },
-  "homepage": "https://github.com/suhay/exothermicjs#readme"
+  }
 }

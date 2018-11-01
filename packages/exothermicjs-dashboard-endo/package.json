@@ -1,20 +1,34 @@
 {
   "name": "exothermicjs-dashboard-endo",
   "version": "1.0.0",
-  "description": "The Endothermicjs dashboard",
-  "author": "matthew.suhay <matthew.suhay@gmail.com>",
-  "homepage": "",
+  "description": "The Endothermic Dashboard",
+  "repository": "https://github.com/suhay/exothermicjs/tree/master/packages/endothermicjs-dashboard-endo",
+  "bugs": {
+    "url": "https://github.com/suhay/exothermicjs/issues"
+  },
+  "author": "Matt Suhay <matthew.suhay@gmail.com>",
+  "keywords": [
+    "react",
+    "yaml",
+    "back end",
+    "exothermicjs"
+  ],
+  "main": "dist/endothermicjs-dashboard-endo.min.js",
+  "module": "index.js",
   "license": "MIT",
-  "main": "lib/endothermicjs-dashboard-endo.js",
+  "homepage": "https://github.com/suhay/exothermicjs#readme",
   "directories": {
-    "lib": "lib",
+    "src": "src",
     "test": "__tests__"
   },
   "files": [
     "lib"
   ],
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "watch": "webpack --env.NODE_ENV=production --watch --mode production",
+    "build": "webpack --mode production",
+    "build:prod": "webpack --mode production",
+    "build:all": "yarn build"
   },
   "dependencies": {
     "react-beautiful-dnd": "^9.0.2"
