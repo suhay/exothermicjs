@@ -3,7 +3,7 @@ const router = express.Router();
 const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn();
 
 router.get('/load/*', (req, res) => {
-  let options = req.session.options || {}
+  let options = req.session && req.session.options || {}
   options._hydrate = true
 	res.render(req.params[0], options)
 })

@@ -1,5 +1,5 @@
 const dotenv = require('dotenv')
-dotenv.load();
+dotenv.config();
 
 const express = require('express') 
 const passport = require('passport');
@@ -7,12 +7,10 @@ const Auth0Strategy = require('passport-auth0');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
-const redis = require("redis"),
-      client = redis.createClient()
-const RedisStore = require('connect-redis')(session)
-const flash = require('connect-flash');
+const MemoryStore = require('memorystore')(session)
+const flash = require('connect-flash')
 
-const router = express.Router();
+const router = express.Router()
 
 const strategy = new Auth0Strategy(
   {
@@ -38,14 +36,14 @@ passport.deserializeUser(function(user, done) {
 
 router.use(bodyParser.json())
 router.use(bodyParser.urlencoded({ extended: false }))
-router.use(cookieParser())
 router.use(session({
-  store: new RedisStore({client: client}),
+  store: new MemoryStore({
+    checkPeriod: 86400000 // prune expired entries every 24h
+  }),
   secret: process.env.SESSION_SECRET || 'shhhhhhhhh',
   resave: true,
   saveUninitialized: true,
 }))
-
 router.use(passport.initialize())
 router.use(passport.session())
 router.use(flash())
@@ -61,7 +59,7 @@ router.use(function(req, res, next) {
 
 router.use(function(req, res, next) {
   res.locals.loggedIn = false;
-  if (req.session.passport && typeof req.session.passport.user !== 'undefined') {
+  if (req.session && req.session.passport && typeof req.session.passport.user !== 'undefined') {
     res.locals.loggedIn = true;
   }
   next();
