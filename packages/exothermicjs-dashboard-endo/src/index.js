@@ -1,7 +1,19 @@
-'use strict';
+import React from 'react'
+import ReactServer from 'react-dom/server'
 
-module.exports = exothermicjsDashboardEndo;
+import Dashboard from './dashboard'
+import OffCanvas from './off-canvas'
 
-function exothermicjsDashboardEndo() {
-    // TODO
+export function dashboard(site) {
+  return ReactServer.renderToString(
+    <Dashboard {...site} />
+  )
+}
+
+export function offCanvas(page) {
+  return ReactServer.renderToString(
+    <OffCanvas>
+      {page}
+    </OffCanvas>
+  )
 }

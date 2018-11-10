@@ -6,7 +6,7 @@ import React from 'react'
 import ReactServer from 'react-dom/server'
 import { StaticRouter } from 'react-router'
 
-import { EXO_SCHEMA } from '../exothermic.config.js'
+import { Schema } from '../exothermic.config.js'
 import pageState from './state/page'
 import Head from 'Components/Head'
 import Base from 'Components/Base'
@@ -19,7 +19,7 @@ export function render(route, options) {
     
   const base = yaml.safeLoad(templates[0])
   const page = yaml.safeLoad(templates[1], {
-    schema: EXO_SCHEMA
+    schema: Schema
   })
   const result = { ...base,	...page }
   const context = {}

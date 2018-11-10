@@ -1,7 +1,21 @@
+require('dotenv').config()
+
 const express = require('express')
 const url = require('url')
 const router = express.Router()
 const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn()
+const fs = require(`fs`)
+const path = require(`path`)
+
+router.get('/site', ensureLoggedIn, (req, res, next) => {
+  if (!fs.existsSync(path.join(process.env.PUBLIC, `site.json`))) {
+    fs.writeFile(path.join(process.env.PUBLIC, `site.json`), '{}', (err) => {
+      if (err) throw err;
+      console.log("The file was succesfully saved!");
+    }); 
+  }
+  res.sendFile('site.json', { root: path.resolve(process.env.PUBLIC) })
+})
 
 router.get('/*', ensureLoggedIn, (req, res, next) => {
   const url_parts = url.parse(req.url, true)

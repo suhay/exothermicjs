@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn();
 
 router.get('/load/*', (req, res) => {
   let options = req.session && req.session.options || {}
@@ -12,12 +11,12 @@ router.get('/', (req, res, next) => {
   res.render('index', {})
 })
 
-router.get('/logout', function(req, res) {
+router.get('/logout', (req, res) => {
   req.logout();
   res.redirect('/');
 });
 
-router.get('/failure', function(req, res) {
+router.get('/failure', (req, res) => {
   const error = req.flash("error");
   const error_description = req.flash("error_description");
   req.logout();

@@ -1,4 +1,4 @@
-require('dotenv').load()
+require('dotenv').config()
 
 const Exothermic = require(".")
 const createError = require('http-errors')

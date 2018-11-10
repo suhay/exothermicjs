@@ -1,11 +1,14 @@
-import yaml from 'js-yaml'
+"use strict";
 
-import { NavbarYamlType } from 'Modules/navbar'
-import { LAYOUT_SCHEMA } from 'Modules/layout/Section'
-import { ArticleYamlType } from 'Modules/article'
-import { GetYamlType } from 'Modules/util/Get'
-import { FormYamlType } from 'Modules/form'
+var exports = module.exports = {};
 
-export const version = require('./package.json').version
+var yaml = require('js-yaml');
+var NavbarYamlType = require('./src/components/navbar').NavbarYamlType;
+var LAYOUT_SCHEMA = require('./src/components/layout/Section').LAYOUT_SCHEMA;
+var ArticleYamlType = require('./src/components/article').ArticleYamlType;
+var GetYamlType = require('./src/components/util/Get').GetYamlType;
+var FormYamlType = require('./src/components/form').FormYamlType;
 
-export const EXO_SCHEMA = yaml.Schema.create([LAYOUT_SCHEMA], [NavbarYamlType, ArticleYamlType, GetYamlType, FormYamlType])
+exports.Version = require('./package.json').version;
+exports.Schema = yaml.Schema.create([LAYOUT_SCHEMA], [NavbarYamlType, ArticleYamlType, GetYamlType, FormYamlType]);
+

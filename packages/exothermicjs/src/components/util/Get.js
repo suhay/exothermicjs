@@ -7,13 +7,13 @@ import path from 'path'
 
 import Spinner from './Spinner'
 import pageState from '../../state/page'
-import { EXO_SCHEMA } from 'Root/exothermic.config.js'
+import { Schema } from '../../../exothermic.config'
 
 class Get extends Component {
   constructor(props) {
 		super(props)
 		this.state = { 
-			data: fs && typeof fs.readFileSync === 'function' ? yaml.safeLoad(fs.readFileSync(`${pageState.state.pagesPath}/${this.props.data}.exo`, 'utf8'), { schema: EXO_SCHEMA }) : null,
+			data: fs && typeof fs.readFileSync === 'function' ? yaml.safeLoad(fs.readFileSync(`${pageState.state.pagesPath}/${this.props.data}.exo`, 'utf8'), { schema: Schema }) : null,
 			loading: fs && typeof fs.readFileSync === 'function' ? false : true
 		}
 	}
@@ -23,7 +23,7 @@ class Get extends Component {
 			.then(response => response.text())
 			.then(data => this.setState({ 
 				data: yaml.safeLoad(data, {
-					schema: EXO_SCHEMA
+					schema: Schema
 				}),
 				loading: false 
 			}))
