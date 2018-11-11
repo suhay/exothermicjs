@@ -17,12 +17,9 @@
   "module": "index.js",
   "license": "MIT",
   "homepage": "https://github.com/suhay/exothermicjs#readme",
-  "directories": {
-    "src": "src",
-    "test": "__tests__"
-  },
   "files": [
-    "lib"
+    "src/",
+    "dist/"
   ],
   "scripts": {
     "watch": "webpack --env.NODE_ENV=production --watch --mode production",

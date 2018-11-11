@@ -16,6 +16,7 @@
   "main": "dist/exothermicjs-lib-auth0.min.js",
   "module": "index.js",
   "license": "MIT",
+  "homepage": "https://github.com/suhay/exothermicjs#readme",
   "files": [
     "src/",
     "dist/"
