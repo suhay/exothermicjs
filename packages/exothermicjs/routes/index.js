@@ -1,5 +1,5 @@
-const express = require('express');
-const router = express.Router();
+const express = require('express')
+const router = express.Router()
 
 router.get('/load/*', (req, res) => {
   let options = req.session && req.session.options || {}
@@ -8,24 +8,24 @@ router.get('/load/*', (req, res) => {
 })
 
 router.get('/', (req, res, next) => {
-  res.render('index', {})
+  res.render('index', { _dashboard: req.user ? true : false })
 })
 
 router.get('/logout', (req, res) => {
-  req.logout();
-  res.redirect('/');
-});
-
-router.get('/failure', (req, res) => {
-  const error = req.flash("error");
-  const error_description = req.flash("error_description");
-  req.logout();
-  req.session.options = { error: error[0], error_description: error_description[0] }
-  res.render('failure', req.session.options);
-});
-
-router.get('/*', (req, res, next) => {
-  res.render(req.url.replace(/^\//, ''), {})
+  req.logout()
+  res.redirect('/')
 })
 
-module.exports = router;
+router.get('/failure', (req, res) => {
+  const error = req.flash("error")
+  const error_description = req.flash("error_description")
+  req.logout()
+  req.session.options = { error: error[0], error_description: error_description[0] }
+  res.render('failure', req.session.options)
+})
+
+router.get('/*', (req, res, next) => {
+  res.render(req.url.replace(/^\//, ''), { _dashboard: req.user ? true : false })
+})
+
+module.exports = router

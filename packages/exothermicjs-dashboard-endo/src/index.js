@@ -2,7 +2,7 @@ import React from 'react'
 import ReactServer from 'react-dom/server'
 
 import Dashboard from './dashboard'
-import OffCanvas from './off-canvas'
+import CanvasBoard from './off-canvas'
 
 export function dashboard(site) {
   return ReactServer.renderToString(
@@ -10,10 +10,12 @@ export function dashboard(site) {
   )
 }
 
-export function offCanvas(page) {
-  return ReactServer.renderToString(
-    <OffCanvas>
-      {page}
-    </OffCanvas>
-  )
+export default class OffCanvas extends React.Component {
+  render(){
+    return (
+      <CanvasBoard>
+        {this.props.children}
+      </CanvasBoard>
+    )
+  }
 }

@@ -5,6 +5,7 @@ import yaml from 'js-yaml'
 import React from 'react'
 import ReactServer from 'react-dom/server'
 import { StaticRouter } from 'react-router'
+import OffCanvas from 'exothermicjs-dashboard-endo'
 
 import { Schema } from '../exothermic.config.js'
 import pageState from './state/page'
@@ -25,10 +26,17 @@ export function render(route, options) {
   const context = {}
 
   pageState.setState({ pagesPath: _pages[0] })
+  
   let markup = ReactServer.renderToString(
-    <StaticRouter location={route} context={context}>
-      <Base data={result} browser={options._test ? false : isBrowser()} />
-    </StaticRouter>
+    options._dashboard
+    ? <StaticRouter location={route} context={context}>
+        <OffCanvas>
+          <Base data={result} browser={options._test ? false : isBrowser()} />
+        </OffCanvas>
+      </StaticRouter>
+    : <StaticRouter location={route} context={context}>
+        <Base data={result} browser={options._test ? false : isBrowser()} />
+      </StaticRouter>
   )
 
   for (var key in options) {
@@ -40,7 +48,7 @@ export function render(route, options) {
   const head = ReactServer.renderToString(
     <Head data={result} />
   )
-  const browserScript = process.env.SSR_ONLY === 'true' || options._ssr_only
+  const browserScript = process.env.SSR_ONLY === 'true' || options._ssr_only || options._dashboard
     ? ``
     : process.env.NODE_ENV && process.env.NODE_ENV == 'development'
       ? "/browser.js"

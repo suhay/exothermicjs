@@ -19,7 +19,7 @@ router.get('/site', ensureLoggedIn, (req, res, next) => {
 
 router.get('/*', ensureLoggedIn, (req, res, next) => {
   const url_parts = url.parse(req.url, true)
-  res.render(url_parts.query.path.replace(/^\//, '').replace('?', ''), { _get: true})
+  res.render(url_parts.query.path.replace(/^\//, '').replace('?', ''), { _get: true })
 })
 
 // router.post()

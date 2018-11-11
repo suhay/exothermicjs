@@ -3,8 +3,8 @@ const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn()
 const router = express.Router()
 const { dashboard } = require('exothermicjs-dashboard-endo')
 
-router.get('/dashboard', (req, res, next) => {
-//   req.session.options = { user: req.user.displayName, userProfile: JSON.stringify(req.user, null, '  ') }
+router.get('/dashboard', ensureLoggedIn, (req, res, next) => {
+  req.session.options = { user: req.user.displayName, userProfile: JSON.stringify(req.user, null, '  ') }
   if (dashboard) {
     const site = require('../' + process.env.PUBLIC + '/site.json')
     res.send(dashboard(site))
