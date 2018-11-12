@@ -1,6 +1,8 @@
 import React from 'react'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 
+import { makeDroppable } from './components/Droppable'
+
 export default class OffCanvas extends React.Component {
   constructor(props) {
     super(props)
@@ -16,15 +18,10 @@ export default class OffCanvas extends React.Component {
 
   getItemStyle(isDragging, draggableStyle) {
     return {
-      // some basic styles to make the items look a bit nicer
       userSelect: 'none',
       padding: this.state.grid * 2,
       margin: `0 0 ${this.state.grid}px 0`,
-
-      // change background colour if dragging
       background: isDragging ? 'lightgreen' : 'grey',
-
-      // styles we need to apply on draggables
       ...draggableStyle,
     }
   }
@@ -50,7 +47,7 @@ export default class OffCanvas extends React.Component {
     if (!result.destination) {
       return
     }
-    const items = reorder(
+    const items = this.reorder(
       this.state.items,
       result.source.index,
       result.destination.index
@@ -62,7 +59,7 @@ export default class OffCanvas extends React.Component {
 
   render() {
     const { children } = this.props
-    
+    console.log(children)
     return (
       <DragDropContext onDragEnd={this.onDragEnd}>
         <h1>Endothermic Dashboard Off-Canvas!!!</h1>

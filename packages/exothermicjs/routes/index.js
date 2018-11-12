@@ -8,7 +8,7 @@ router.get('/load/*', (req, res) => {
 })
 
 router.get('/', (req, res, next) => {
-  res.render('index', { _dashboard: req.user ? true : false })
+  res.render('index', { _dashboard:  true  })
 })
 
 router.get('/logout', (req, res) => {

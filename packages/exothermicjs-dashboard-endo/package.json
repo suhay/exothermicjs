@@ -14,12 +14,12 @@
     "exothermicjs"
   ],
   "main": "dist/endothermicjs-dashboard-endo.min.js",
-  "module": "index.js",
+  "module": "src/index.js",
   "license": "MIT",
   "homepage": "https://github.com/suhay/exothermicjs#readme",
   "files": [
-    "src/",
-    "dist/"
+    "dist/",
+    "src/"
   ],
   "scripts": {
     "watch": "webpack --env.NODE_ENV=production --watch --mode production",
