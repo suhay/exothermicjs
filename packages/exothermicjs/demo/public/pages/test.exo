@@ -1,11 +1,11 @@
 ---
 title: Test page
 page:
-  header:
+  - !header
     class: container
     items:
     - !get 'fragments/nav'
-  main:
+  - !main
     class: container
     items:
     - !section

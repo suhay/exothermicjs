@@ -6,7 +6,7 @@ import yaml from 'js-yaml'
 import URL from 'url-parse'
 
 import pageState from '../../state/page'
-import { Schema } from 'Root/exothermic.config'
+import { Schema } from '../../../exothermic.config'
 
 export default class Link extends Component {
   constructor(props) {

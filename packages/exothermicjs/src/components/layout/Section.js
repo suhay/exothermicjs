@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { Col, ColYamlType } from './Col';
-
 import ReactMarkdown from 'react-markdown';
 import yaml from 'js-yaml';
 
@@ -10,14 +8,15 @@ class Section extends Component {
       data: {
         id,
         title,
-      }
+      }, 
+      data
     } = this.props
-    const classes = this.props.data.hasOwnProperty('class') ? this.props.data.class : '';
+    const classes = data.hasOwnProperty('class') ? data.class : '';
     return (
       <section className={classes} id={id}>
         {title && <ReactMarkdown source={title} renderers={{root:React.Fragment}} />}
-        {this.props.data.content && <ReactMarkdown source={this.props.data.content} escapeHtml={false} renderers={{root:React.Fragment}} />}
-        {this.props.data.items ? this.props.data.items : ` `}
+        {data.content && <ReactMarkdown source={data.content} escapeHtml={false} renderers={{root:React.Fragment}} />}
+        {data.items ? data.items : ` `}
       </section>
     );
   }
@@ -35,11 +34,6 @@ const SectionYamlType = new yaml.Type('!section', {
   instanceOf: Section
 });
 
-const LAYOUT_SCHEMA = yaml.Schema.create([ 
-  SectionYamlType, 
-  ColYamlType
-]);
-
 export {
-   Section, SectionYamlType, Col, ColYamlType, LAYOUT_SCHEMA
+   Section, SectionYamlType
 }

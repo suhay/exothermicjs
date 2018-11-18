@@ -23,15 +23,17 @@
   ],
   "scripts": {
     "watch": "webpack --env.NODE_ENV=production --watch --mode production",
-    "build": "webpack --mode production",
+    "build": "webpack --mode development",
     "build:prod": "webpack --mode production",
-    "build:all": "yarn build"
+    "build:all": "yarn build && yarn build:prod"
   },
   "dependencies": {
     "@material-ui/core": "^3.4.0",
     "dotenv": "^6.1.0",
-    "react-beautiful-dnd": "^9.0.2",
+    "lodash": "^4.17.11",
     "react": "^16.6.1",
+    "react-dnd": "^6.0.0",
+    "react-dnd-html5-backend": "^6.0.0",
     "react-dom": "^16.6.1"
   }
 }

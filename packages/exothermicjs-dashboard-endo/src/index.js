@@ -1,8 +1,8 @@
 import React from 'react'
 import ReactServer from 'react-dom/server'
 
-import Dashboard from './dashboard'
-import CanvasBoard from './off-canvas'
+import Dashboard from './components/dashboard'
+import CanvasBoard from './components/off-canvas'
 
 export function dashboard(site) {
   return ReactServer.renderToString(
@@ -19,3 +19,5 @@ export default class OffCanvas extends React.Component {
     )
   }
 }
+
+export { DashboardSchema } from './components/off-canvas'

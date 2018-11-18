@@ -1,11 +1,11 @@
 ---
 description: 'And the description.'
 page:
-  header:
+  - !header
     class: container
     items:
     - !get 'fragments/nav'
-  main:
+  - !main
     class: container
     items:
     - !section
@@ -28,7 +28,7 @@ page:
       title: "# More What"
       items:
       - !get 'fragments/projects'
-  footer:
+  - !footer
     class: container
     items:
     - !section

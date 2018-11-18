@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
-
 import ReactMarkdown from 'react-markdown';
 import yaml from 'js-yaml';
 
 class Col extends Component {
   render() {
-    let classes = 'col';
-    if (this.props.data.hasOwnProperty('class')) {
-      classes = this.props.data.class.startsWith('col') ? this.props.data.class : 'col ' + this.props.data.class;
-    }
+    const { data } = this.props
+    const classes = data.hasOwnProperty('class') 
+      ? data.class.startsWith('col') 
+        ? data.class 
+        : 'col ' + data.class 
+      : `col`
     return (
       <div className={classes}>
-        <ReactMarkdown source={this.props.data.content} escapeHtml={false} renderers={{root:React.Fragment}} />
-        {this.props.data.items}
+        {data.content && <ReactMarkdown source={data.content} escapeHtml={false} renderers={{root:React.Fragment}} />}
+        {data.items}
       </div>
     );
   }

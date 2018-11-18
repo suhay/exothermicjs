@@ -7,14 +7,16 @@ module.exports = (env, options) => {
   return {
     entry: './src/index.js',
     output: {
-      path: process.cwd(),
-      filename: pkg.main,
+      path: options.mode === 'production' ? process.cwd() : path.resolve('../exothermicjs/demo/public/static'),
+      filename: options.mode === 'production' ? pkg.main : pkg.main.replace('dist/', ''),
       library: pkg.name,
       libraryTarget: 'umd',
       umdNamedDefine: true,
     },
     target: 'node',
-    externals: [nodeExternals()],
+    externals: [nodeExternals({
+      whitelist: ['react', 'react-dom/server']
+    })],
     node: {
       __dirname: true
     },
@@ -49,6 +51,7 @@ module.exports = (env, options) => {
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(options.mode),
       }),
+      new webpack.IgnorePlugin(/^esprima$/, /js-yaml/),
     ].filter(e => e),
   }
 }

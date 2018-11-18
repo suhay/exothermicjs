@@ -5,7 +5,7 @@ import yaml from 'js-yaml';
 import Link from './link'
 import { key, val } from '../util';
 
-class Navbar extends Component {
+export class Navbar extends Component {
   render() {
     const nav = this.props.items.map((item, i) => (
       <Navitem item={item} key={i.toString()} id={i} size={this.props.items.length} />
@@ -20,7 +20,7 @@ class Navbar extends Component {
   }
 }
 
-class Navitem extends Component {
+export class Navitem extends Component {
   render() {
     return (
       <li role="none">
@@ -30,7 +30,7 @@ class Navitem extends Component {
   }
 }
 
-const NavbarYamlType = new yaml.Type('!navbar', {
+export const NavbarYamlType = new yaml.Type('!navbar', {
   kind: 'mapping',
   construct: function (data) {
     data = data || {}; // in case of empty node
@@ -38,7 +38,3 @@ const NavbarYamlType = new yaml.Type('!navbar', {
   },
   instanceOf: Navbar
 });
-
-export {
-   Navbar, Navitem, NavbarYamlType
-}
