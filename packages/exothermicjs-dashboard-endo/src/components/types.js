@@ -1,7 +1,8 @@
-import React, { PureComponent } from 'react'
+import React from 'react'
+import { Container, Draggable } from 'exothermicjs-lib-dnd'
 import yaml from 'js-yaml'
 
-import { 
+import {
   Main,
   Section,
   Footer
@@ -14,8 +15,13 @@ export const MainYamlType = new yaml.Type('!main', {
   },
   construct: function (data) {
     data = data || {}; // in case of empty node
+    const classes = {
+      class: data.class
+    }
     return (
-      <Main key={data.id || "main"} data={data} />
+      <Main data={classes} key={data.id || "main"}>
+        <Container items={data.items} />
+      </Main>
     )
   },
   instanceOf: Main
@@ -44,7 +50,9 @@ export const SectionYamlType = new yaml.Type('!section', {
   construct: function (data) {
     data = data || {}; // in case of empty node
     return (
-      <Section key={data.id} data={data} />
+      <Draggable key={data.id}>
+        <Section data={data} />
+      </Draggable>
     )
   },
   instanceOf: Section

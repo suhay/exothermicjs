@@ -4,9 +4,10 @@ import yaml from 'js-yaml'
 
 export class Main extends PureComponent {
   render() {
-    const { data } = this.props
+    const { data, children } = this.props
     return (
       <main className={data.class ? data.class : ``}>
+        {children}
         {data.content && <ReactMarkdown source={data.content} escapeHtml={false} renderers={{root:React.Fragment}} />}
         {data.items}
       </main>

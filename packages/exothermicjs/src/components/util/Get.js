@@ -4,6 +4,7 @@ import yaml from 'js-yaml'
 import fetch from 'isomorphic-fetch'
 import fs from 'fs'
 import path from 'path'
+import { DashboardSchema } from 'exothermicjs-dashboard-endo'
 
 import Spinner from './Spinner'
 import pageState from '../../state/page'
@@ -23,7 +24,7 @@ class Get extends Component {
 			.then(response => response.text())
 			.then(data => this.setState({ 
 				data: yaml.safeLoad(data, {
-					schema: Schema
+					schema: window.DASHBOARD ? DashboardSchema : Schema
 				}),
 				loading: false 
 			}))

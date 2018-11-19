@@ -1,7 +1,5 @@
 import React, { Fragment } from 'react'
 import yaml from 'js-yaml'
-import { DragDropContext } from 'react-dnd'
-import HTML5Backend from 'react-dnd-html5-backend'
 
 import { 
   MainYamlType,
@@ -10,15 +8,7 @@ import {
 } from './types'
 import { Types } from '../../../exothermicjs/exothermic.config'
 
-class OffCanvas extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      items: [],
-      grid: 8,
-    };
-  }
-  
+export default class OffCanvas extends React.Component {
   render() {
     const { children } = this.props
     return (
@@ -37,5 +27,4 @@ const buildDashboardSchema = () => {
   return yaml.Schema.create(Object.values(dashboardSchema))
 }
 
-export default DragDropContext(HTML5Backend)(OffCanvas)
 export const DashboardSchema = buildDashboardSchema()

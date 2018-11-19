@@ -3,7 +3,7 @@ const webpack = require('webpack')
 const pkg = require(path.join(process.cwd(), 'package.json'));
 const nodeExternals = require('webpack-node-externals')
 
-module.exports = (env, options) => {
+module.exports = (env, options, target = 'node') => {
   return {
     entry: './src/index.js',
     output: {
@@ -13,12 +13,13 @@ module.exports = (env, options) => {
       libraryTarget: 'umd',
       umdNamedDefine: true,
     },
-    target: 'node',
-    externals: [nodeExternals({
+    target: target,
+    externals: target !== 'node' ? [] : [nodeExternals({
       whitelist: ['react', 'react-dom/server']
     })],
     node: {
-      __dirname: true
+      __dirname: true,
+      fs: target !== 'node' ? 'empty' : true,
     },
     module: {
       rules: [{

@@ -16,7 +16,7 @@ class Section extends Component {
       <section className={classes} id={id}>
         {title && <ReactMarkdown source={title} renderers={{root:React.Fragment}} />}
         {data.content && <ReactMarkdown source={data.content} escapeHtml={false} renderers={{root:React.Fragment}} />}
-        {data.items ? data.items : ` `}
+        {data.items}
       </section>
     );
   }

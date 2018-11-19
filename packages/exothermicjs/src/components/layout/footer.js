@@ -8,7 +8,7 @@ export class Footer extends PureComponent {
     return (
       <footer className={data.class ? data.class : ``}>
         {data.content && <ReactMarkdown source={data.content} escapeHtml={false} renderers={{root:React.Fragment}} />}
-        {data.items && data.items}
+        {data.items}
       </footer>
     );
   }

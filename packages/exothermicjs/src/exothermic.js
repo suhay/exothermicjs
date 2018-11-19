@@ -46,12 +46,16 @@ export function render(route, options) {
   const head = ReactServer.renderToString(
     <Head data={result} />
   )
-  const browserScript = process.env.SSR_ONLY === 'true' || options._ssr_only || options._dashboard
+  const browserScript = process.env.SSR_ONLY === 'true' || options._ssr_only 
     ? ``
     : process.env.NODE_ENV && process.env.NODE_ENV == 'development'
       ? "/browser.js"
       : "https://unpkg.com/exothermicjs/dist/browser.exothermic.min.js"
-  
+  const dashboardScript = options._dashboard
+    ? process.env.NODE_ENV && process.env.NODE_ENV == 'development'
+      ? "/endothermicjs-lib-dnd.min.js"
+      : "https://unpkg.com/exothermicjs/dist/browser.exothermic.min.js"
+    : ``
   
   return `
     <!doctype html>
@@ -60,6 +64,7 @@ export function render(route, options) {
       <body>
         <div id="__exothermic">${markup}</div>
         ${browserScript == `` ? `` : `<script src="${browserScript}"></script>`}
+        ${dashboardScript == `` ? `` : `<script src="${dashboardScript}"></script><script>window.DASHBOARD = 'endothermic'</script>`}
       </body>
     </html>
   `

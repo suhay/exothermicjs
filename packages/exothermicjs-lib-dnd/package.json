@@ -1,0 +1,42 @@
+{
+  "name": "exothermicjs-lib-dnd",
+  "version": "1.0.0",
+  "description": "Drag and Drop Library",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/suhay/exothermicjs.git"
+  },
+  "author": "Matt Suhay <matthew.suhay@gmail.com>",
+  "homepage": "https://github.com/suhay/exothermicjs#readme",
+  "license": "MIT",
+  "module": "src/index.js",
+  "main": "dist/endothermicjs-lib-dnd.min.js",
+  "files": [
+    "dist/",
+    "src/"
+  ],
+  "scripts": {
+    "watch": "webpack --env.NODE_ENV=production --watch --mode production",
+    "dev": "yarn build",
+    "build": "webpack --mode development",
+    "build:prod": "webpack --mode production",
+    "build:all": "yarn build && yarn build:prod"
+  },
+  "bugs": {
+    "url": "https://github.com/suhay/exothermicjs/issues"
+  },
+  "dependencies": {
+    "react": "^16.6.3",
+    "react-smooth-dnd": "^0.5.3"
+  },
+  "babel": {
+    "env": {
+      "test": {
+        "presets": [
+          "@babel/react",
+          "@babel/preset-env"
+        ]
+      }
+    }
+  }
+}

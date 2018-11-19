@@ -3,6 +3,7 @@ import fetch from 'isomorphic-fetch'
 import yaml from 'js-yaml'
 import { BrowserRouter } from 'react-router-dom'
 import { Subscribe } from 'statable'
+import OffCanvas, { DashboardSchema } from 'exothermicjs-dashboard-endo'
 
 import Spinner from './util/Spinner'
 import Page from './Page'
@@ -25,7 +26,7 @@ export default class Loader extends Component {
       .then(response => response.text())
       .then(data => this.setState({ 
         data: yaml.safeLoad(data, {
-          schema: Schema
+          schema: window.DASHBOARD ? DashboardSchema : Schema
         }),
         loading: false 
       }))
@@ -39,9 +40,15 @@ export default class Loader extends Component {
           <Fragment>
             {this.state.loading 
               ? <Spinner name='folding-cube' />
-              : <BrowserRouter>
+              : window && window.DASHBOARD
+                ? <BrowserRouter>
+                    <OffCanvas>
+                      <Page data={state.data || this.state.data} />
+                    </OffCanvas>
+                  </BrowserRouter>
+                : <BrowserRouter>
                    <Page data={state.data || this.state.data} />
-                </BrowserRouter>
+                  </BrowserRouter>
              }
            </Fragment>
          )}
