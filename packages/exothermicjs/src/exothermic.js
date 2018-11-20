@@ -64,7 +64,10 @@ export function render(route, options) {
       <body>
         <div id="__exothermic">${markup}</div>
         ${browserScript == `` ? `` : `<script src="${browserScript}"></script>`}
-        ${dashboardScript == `` ? `` : `<script src="${dashboardScript}"></script><script>window.DASHBOARD = 'endothermic'</script>`}
+        ${dashboardScript == `` 
+          ? `` 
+          : `<script src="${dashboardScript}"></script>
+             <script>window.DASHBOARD = 'endothermic'</script>`}
       </body>
     </html>
   `

@@ -9,13 +9,25 @@ import {
 import { Types } from '../../../exothermicjs/exothermic.config'
 
 export default class OffCanvas extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      children: this.props.children
+    }
+  }
+  
+  handleSave() {
+  }
+  
   render() {
     const { children } = this.props
+    console.log(children)
     return (
       <Fragment>
         <h1>Endothermic Dashboard Off-Canvas!!!</h1>
         {children}
         <button>Add</button>
+        <button onClick={this.handleSave}>Save</button>
       </Fragment>
     )
   }
