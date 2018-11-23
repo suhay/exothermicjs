@@ -24,7 +24,11 @@ export const MainYamlType = new yaml.Type('!main', {
       </Main>
     )
   },
-  instanceOf: Main
+  instanceOf: Main,
+  represent: function (data) {
+    const rtn = { _tag: '!main', ...data }
+    return rtn
+  }
 })
 
 export const FooterYamlType = new yaml.Type('!footer', {
@@ -38,7 +42,11 @@ export const FooterYamlType = new yaml.Type('!footer', {
       <Footer key={data.id || "footer"} data={data} />
     )
   },
-  instanceOf: Footer
+  instanceOf: Footer,
+  represent: function (data) {
+    const rtn = { _tag: '!footer', ...data }
+    return rtn
+  }
 });
 
 
@@ -55,5 +63,9 @@ export const SectionYamlType = new yaml.Type('!section', {
       </Draggable>
     )
   },
-  instanceOf: Section
+  instanceOf: Section,
+  represent: function (data) {
+    const rtn = { _tag: '!section', ...data }
+    return rtn
+  }
 });

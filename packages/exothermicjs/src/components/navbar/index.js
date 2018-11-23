@@ -36,5 +36,9 @@ export const NavbarYamlType = new yaml.Type('!navbar', {
     data = data || {}; // in case of empty node
     return <Navbar items={data.items} key="nav" />;
   },
-  instanceOf: Navbar
+  instanceOf: Navbar,
+  represent: function (data) {
+    const rtn = { _tag: '!navbar', ...data }
+    return rtn
+  }
 });

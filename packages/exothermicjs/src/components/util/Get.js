@@ -10,7 +10,7 @@ import Spinner from './Spinner'
 import pageState from '../../state/page'
 import { Schema } from '../../../exothermic.config'
 
-class Get extends Component {
+export class Get extends Component {
   constructor(props) {
 		super(props)
 		this.state = { 
@@ -47,7 +47,7 @@ class Get extends Component {
   }
 }
 
-const GetYamlType = new yaml.Type('!get', {
+export const GetYamlType = new yaml.Type('!get', {
 	kind: 'scalar',
 	resolve: function (data) {
 		return data !== null;
@@ -56,9 +56,9 @@ const GetYamlType = new yaml.Type('!get', {
     data = data || {}; // in case of empty node
     return <Get data={data} key='get' />;
   },
-  instanceOf: Get
+  instanceOf: Get,
+  represent: function (data) {
+    const rtn = { _tag: `!get ${data}` }
+    return rtn
+  }
 });
-
-export {
-   Get, GetYamlType
-}

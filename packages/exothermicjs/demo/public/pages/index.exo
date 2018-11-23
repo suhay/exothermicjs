@@ -4,7 +4,7 @@ page:
   - !header
     class: container
     items:
-    - !get 'fragments/nav'
+    - !get fragments/nav
   - !main
     class: container
     items:
@@ -22,12 +22,12 @@ page:
       id: what-ive-done
       title: "# What"
       items:
-      - !get 'fragments/portfolio'
+      - !get fragments/portfolio
     - !section
       id: what-im-doing
       title: "# More What"
       items:
-      - !get 'fragments/projects'
+      - !get fragments/projects
   - !footer
     class: container
     items:
@@ -36,5 +36,5 @@ page:
       class: row
       title: '# Where - End of file!!'
       items:
-      - !get 'fragments/about'
+      - !get fragments/about
 tags: []

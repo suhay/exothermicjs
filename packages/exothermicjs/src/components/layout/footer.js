@@ -23,5 +23,9 @@ export const FooterYamlType = new yaml.Type('!footer', {
     data = data || {}; // in case of empty node
     return <Footer data={data} key="footer" />;
   },
-  instanceOf: Footer
+  instanceOf: Footer,
+  represent: function (data) {
+    const rtn = { _tag: '!footer', ...data }
+    return rtn
+  }
 });

@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import ReactMarkdown from 'react-markdown';
 import yaml from 'js-yaml';
 
-class Header extends PureComponent {
+export class Header extends PureComponent {
   render() {
     const { data } = this.props
     return (
@@ -14,7 +14,7 @@ class Header extends PureComponent {
   }
 }
 
-const HeaderYamlType = new yaml.Type('!header', {
+export const HeaderYamlType = new yaml.Type('!header', {
   kind: 'mapping',
   resolve: function (data) {
     return data !== null
@@ -23,9 +23,9 @@ const HeaderYamlType = new yaml.Type('!header', {
     data = data || {}; // in case of empty node
     return <Header data={data} key="header" />;
   },
-  instanceOf: Header
-});
-
-export {
-   Header, HeaderYamlType
-}
+  instanceOf: Header,
+  represent: function (data) {
+    const rtn = { _tag: '!header', ...data }
+    return rtn
+  }
+})

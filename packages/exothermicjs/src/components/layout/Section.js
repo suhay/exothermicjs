@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactMarkdown from 'react-markdown';
 import yaml from 'js-yaml';
 
-class Section extends Component {
+export class Section extends Component {
   render() {
     const {
       data: {
@@ -22,7 +22,7 @@ class Section extends Component {
   }
 }
 
-const SectionYamlType = new yaml.Type('!section', {
+export const SectionYamlType = new yaml.Type('!section', {
   kind: 'mapping',
   resolve: function (data) {
     return data !== null && data.items !== null && data.id !== null && data.title !== null ;
@@ -31,9 +31,9 @@ const SectionYamlType = new yaml.Type('!section', {
     data = data || {}; // in case of empty node
     return <Section data={data} key={data.id} />;
   },
-  instanceOf: Section
+  instanceOf: Section,
+  represent: function (data) {
+    const rtn = { _tag: '!section', ...data }
+    return rtn
+  }
 });
-
-export {
-   Section, SectionYamlType
-}

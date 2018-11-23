@@ -42,7 +42,7 @@ export default class Loader extends Component {
               ? <Spinner name='folding-cube' />
               : window && window.DASHBOARD
                 ? <BrowserRouter>
-                    <OffCanvas>
+                    <OffCanvas dump={this.props.dump}>
                       <Page data={state.data || this.state.data} />
                     </OffCanvas>
                   </BrowserRouter>

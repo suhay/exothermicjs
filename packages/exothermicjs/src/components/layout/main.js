@@ -24,5 +24,9 @@ export const MainYamlType = new yaml.Type('!main', {
     data = data || {}; // in case of empty node
     return <Main data={data} key={data.id} />;
   },
-  instanceOf: Main
+  instanceOf: Main,
+  represent: function (data) {
+    const rtn = { _tag: '!main', ...data }
+    return rtn
+  }
 })
