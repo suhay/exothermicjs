@@ -2,6 +2,7 @@ import React from 'react'
 import { hydrate } from "react-dom"
 import yaml from 'js-yaml'
 
+import dragState from './state/draggables'
 import Loader from './components/Loader'
 
 const dumpTag = (tag) => {
@@ -13,7 +14,7 @@ const dumpTag = (tag) => {
     represent = {...represent, ...dumpTag(tag.props.children)}
   }
   else if (tag.props.items) {
-    represent.items = tag.props.items.map(part => dumpTag(part))
+    represent.items = tag.props.id && dragState.state.draggables[tag.props.id] ? dragState.state.draggables[tag.props.id].map(part => dumpTag(part)) : tag.props.items.map(part => dumpTag(part))
   }
   return represent
 }

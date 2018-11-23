@@ -20,7 +20,7 @@ export const MainYamlType = new yaml.Type('!main', {
     }
     return (
       <Main data={classes} key={data.id || "main"}>
-        <Container items={data.items} />
+        <Container items={data.items} id={data.id || "main"} />
       </Main>
     )
   },
