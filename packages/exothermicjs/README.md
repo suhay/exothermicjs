@@ -9,7 +9,7 @@ Create dynamic page content using YAML and Markdown without lengthy build times.
 ## Installation
 
 ```
-npm install --save exothermicjs
+yarn add exothermicjs
 ```
 
 ## Basic usage
@@ -134,7 +134,7 @@ SSR_ONLY=false
 
 ```yaml
 top_template:
-- !get 'fragments/another-template.exo'
+- !get 'another-template.yml'
 ```
 
 Loads the content of the referenced Yaml file. Good for content reuse, keeping file sizes smaller, and keeping similar collections of information together.

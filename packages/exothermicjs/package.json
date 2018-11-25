@@ -1,0 +1,76 @@
+{
+  "name": "exothermicjs",
+  "version": "1.2.2",
+  "description": "ExothermicJS | Yaml based template engine for Node.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/suhay/exothermicjs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/suhay/exothermicjs/issues"
+  },
+  "author": "Matt Suhay <matthew.suhay@gmail.com>",
+  "keywords": [
+    "nodejs",
+    "template engine",
+    "yaml",
+    "front end"
+  ],
+  "bin": {
+    "exothermic-server": "./bin/exothermic-server"
+  },
+  "main": "dist/exothermicjs.min.js",
+  "module": "index.js",
+  "homepage": "https://github.com/suhay/exothermicjs#readme",
+  "license": "MIT",
+  "dependencies": {
+    "babel-runtime": "^6.26.0",
+    "connect-ensure-login": "^0.1.1",
+    "dotenv": "^6.0.0",
+    "express": "^4.16.3",
+    "helmet": "^3.15.0",
+    "isomorphic-fetch": "^2.2.1",
+    "js-yaml": "^3.12.0",
+    "morgan": "^1.9.1",
+    "passport": "^0.4.0",
+    "query-string": "^6.2.0",
+    "react": "^16.6.1",
+    "react-dom": "^16.6.1",
+    "react-markdown": "^4.0.3",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1",
+    "react-router-hash-link": "^1.2.0",
+    "statable": "^0.3.2",
+    "url-parse": "^1.4.3"
+  },
+  "devDependencies": {
+    "babel-plugin-module-resolver": "^3.1.1",
+    "css-loader": "^1.0.0",
+    "nodemon-webpack-plugin": "^4.0.3",
+    "style-loader": "^0.23.0",
+    "webpack": "^4.18.0",
+    "webpack-cli": "^3.1.0",
+    "webpack-node-externals": "^1.6.0"
+  },
+  "scripts": {
+    "start": "node ./bin/exothermic-server",
+    "build": "webpack --mode development",
+    "build:prod": "webpack --mode production",
+    "build:all": "yarn build && yarn build:prod",
+    "test": "jest --no-cache",
+    "stat": "webpack --mode production --profile --json > stats.json",
+    "test:coverage": "jest --coverage",
+    "eject": "react-scripts eject",
+    "dev": "webpack --env.NODE_ENV=development --watch --mode development"
+  },
+  "babel": {
+    "env": {
+      "test": {
+        "presets": [
+          "@babel/react",
+          "@babel/preset-env"
+        ]
+      }
+    }
+  }
+}

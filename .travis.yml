@@ -1,21 +1,28 @@
 language: node_js
+
 node_js:
-  - "stable"
-cache:
-  directories:
-    - node_modules
+  - "10.11.0"
+  
+cache: yarn
+
+install:
+  - yarn global add lerna jest
+  - lerna bootstrap
+
 script:
-  - npm install
-  - npm run build:deploy
-  - npm test
-notifications:
-  email:
-    on_success: never
-    on_failure: always
+  - yarn test
+  - yarn build:all
+    
 deploy:
   provider: npm
   email: matthew.suhay@gmail.com
+  script: yarn publish
   api_key: $NPM_TOKEN
   on:
     tags: true
   skip_cleanup: true
+  
+notifications:
+  email:
+    on_success: never
+    on_failure: always

@@ -1,0 +1,10 @@
+---
+page:
+  - !header
+    items:
+    - !section
+      id: message
+      content: |
+        {{error}}
+        
+        {{error_description}}
