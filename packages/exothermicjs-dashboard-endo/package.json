@@ -1,0 +1,38 @@
+{
+  "name": "exothermicjs-dashboard-endo",
+  "version": "1.0.0",
+  "description": "The Endothermic Dashboard",
+  "repository": "https://github.com/suhay/exothermicjs/tree/master/packages/endothermicjs-dashboard-endo",
+  "bugs": {
+    "url": "https://github.com/suhay/exothermicjs/issues"
+  },
+  "author": "Matt Suhay <matthew.suhay@gmail.com>",
+  "keywords": [
+    "react",
+    "yaml",
+    "back end",
+    "exothermicjs"
+  ],
+  "main": "dist/endothermicjs-dashboard-endo.min.js",
+  "module": "src/index.js",
+  "license": "MIT",
+  "homepage": "https://github.com/suhay/exothermicjs#readme",
+  "files": [
+    "dist/",
+    "src/"
+  ],
+  "scripts": {
+    "watch": "webpack --env.NODE_ENV=production --watch --mode production",
+    "dev": "yarn build",
+    "build": "webpack --mode production",
+    "build:prod": "webpack --mode production",
+    "build:all": "yarn build && yarn build:prod"
+  },
+  "dependencies": {
+    "@material-ui/core": "^3.4.0",
+    "dotenv": "^6.1.0",
+    "isomorphic-fetch": "^2.2.1",
+    "react": "^16.6.1",
+    "react-dom": "^16.6.1"
+  }
+}

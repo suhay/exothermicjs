@@ -1,15 +1,20 @@
 const express = require('express')
-const passport = require('passport')
 const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn()
 const router = express.Router()
-const app = require('../server')
+const { dashboard } = require('exothermicjs-dashboard-endo')
 
-router.get('/dashboard', ensureLoggedIn, function(req, res, next) {
+router.get('/dashboard', ensureLoggedIn, (req, res, next) => {
   req.session.options = { user: req.user.displayName, userProfile: JSON.stringify(req.user, null, '  ') }
-  res.render('admin/dashboard', req.session.options)
+  if (dashboard) {
+    const site = require('../' + process.env.PUBLIC + '/site.json')
+    res.send(dashboard(site))
+  }
+  else {
+    res.render('admin/dashboard', req.session.options)
+  }
 })
 
-router.get('/', ensureLoggedIn, function(req, res, next) {
+router.get('/', ensureLoggedIn, (req, res, next) => {
   res.redirect('/admin/dashboard')
 })
 

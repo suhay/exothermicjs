@@ -2,7 +2,7 @@
 title: Login
 description: ''
 page:
-  main:
+  - !main
     class: container
     items:
     - !section

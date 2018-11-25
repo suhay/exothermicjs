@@ -3,34 +3,40 @@
   "version": "1.0.0",
   "description": "Auth0 authentication point for ExothermicJS",
   "repository": "https://github.com/suhay/exothermicjs/tree/master/packages/exothermicjs-lib-auth0",
-  "bugs": "https://github.com/suhay/exothermicjs/issues",
+  "bugs": {
+    "url": "https://github.com/suhay/exothermicjs/issues"
+  },
+  "author": "Matt Suhay <matthew.suhay@gmail.com>",
+  "keywords": [
+    "react",
+    "yaml",
+    "authentication",
+    "exothermicjs"
+  ],
   "main": "dist/exothermicjs-lib-auth0.min.js",
+  "module": "src/index.js",
   "license": "MIT",
+  "homepage": "https://github.com/suhay/exothermicjs#readme",
   "files": [
-    "src/",
-    "dist/"
+    "dist/",
+    "src/"
   ],
   "scripts": {
-    "up": "yarn install",
     "watch": "webpack --env.NODE_ENV=production --watch --mode production",
+    "dev": "yarn build",
     "build": "webpack --mode production",
     "build:prod": "webpack --mode production",
-    "build:all": "yarn build",
-    "build:deploy": "yarn build:deploy:prod",
-    "build:deploy:dev": "webpack --mode production --deploy",
-    "build:deploy:prod": "webpack --mode production --deploy"
+    "build:all": "yarn build"
   },
-  "keywords": [],
-  "author": "Matt Suhay <matthew.suhay@gmail.com>",
   "dependencies": {
     "body-parser": "^1.18.3",
-    "express": "^4.16.3",
     "connect-ensure-login": "^0.1.1",
     "connect-flash": "^0.1.1",
-    "connect-redis": "^3.4.0",
     "cookie-parser": "^1.4.3",
     "dotenv": "^6.0.0",
+    "express": "^4.16.3",
     "express-session": "^1.15.6",
+    "memorystore": "^1.6.0",
     "passport": "^0.4.0",
     "passport-auth0": "^1.0.0"
   },

@@ -17,10 +17,10 @@ export default class Base extends Component {
   }
   
   render() {
-    const { children, force, data } = this.props;
+    const { children, browser, data } = this.props;
     return (
       <Fragment>
-        {!force && this.state.loading 
+        {browser && this.state.loading 
           ? <Spinner name='folding-cube' />
           : <Page data={data}>
               {children}

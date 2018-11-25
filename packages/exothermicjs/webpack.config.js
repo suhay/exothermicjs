@@ -1,7 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
 const nodeExternals = require('webpack-node-externals')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
 const NodemonPlugin = require('nodemon-webpack-plugin')
 
 module.exports = (env, options) => {
@@ -54,12 +53,13 @@ module.exports = (env, options) => {
       }
     },
     plugins: [
-       new webpack.DefinePlugin({
+      new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(options.mode),
       }),
       !options.deploy && options.mode !== 'production' && new NodemonPlugin({
         watch: [
           path.resolve('./dist/exothermic.js'),
+          path.resolve('./routes'),
           path.resolve('./server.js'),
         ],
         verbose: true,
@@ -82,8 +82,8 @@ module.exports = (env, options) => {
       'browser.exothermic': path.resolve('./src/browser.js'),
     },
     output: {
-      path: path.resolve('./dist'),
-      filename: options.mode === 'production' ? '[name].min.js' : '[name].js',
+      path: options.mode === 'production' ? path.resolve('./dist') : path.resolve('./demo/public/static'),
+      filename: options.mode === 'production' ? '[name].min.js' : 'browser.js',
     },
     module: {
       rules: [{
@@ -114,11 +114,6 @@ module.exports = (env, options) => {
       },
     },
     plugins: [
-      !options.deploy && options.mode !== 'production' && new CopyWebpackPlugin([{
-        from: 'dist/browser.exothermic.js',
-        to: '../demo/public/static/browser.js',
-        fotce: true
-      }, ]),
       new webpack.DefinePlugin({
         'process.env.WEBPACK_ENV': JSON.stringify('browser'),
         'process.env.APP_ENV': (process.env.APP_ENV && JSON.stringify(process.env.APP_ENV)) || undefined,

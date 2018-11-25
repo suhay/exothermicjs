@@ -4,16 +4,17 @@ import yaml from 'js-yaml'
 import fetch from 'isomorphic-fetch'
 import fs from 'fs'
 import path from 'path'
+import { DashboardSchema } from 'exothermicjs-dashboard-endo'
 
 import Spinner from './Spinner'
 import pageState from '../../state/page'
-import { EXO_SCHEMA } from 'Root/exothermic.config.js'
+import { Schema } from '../../../exothermic.config'
 
-class Get extends Component {
+export class Get extends Component {
   constructor(props) {
 		super(props)
 		this.state = { 
-			data: fs && typeof fs.readFileSync === 'function' ? yaml.safeLoad(fs.readFileSync(`${pageState.state.pagesPath}/${this.props.data}.exo`, 'utf8'), { schema: EXO_SCHEMA }) : null,
+			data: fs && typeof fs.readFileSync === 'function' ? yaml.safeLoad(fs.readFileSync(`${pageState.state.pagesPath}/${this.props.data}.exo`, 'utf8'), { schema: Schema }) : null,
 			loading: fs && typeof fs.readFileSync === 'function' ? false : true
 		}
 	}
@@ -23,7 +24,7 @@ class Get extends Component {
 			.then(response => response.text())
 			.then(data => this.setState({ 
 				data: yaml.safeLoad(data, {
-					schema: EXO_SCHEMA
+					schema: window.DASHBOARD ? DashboardSchema : Schema
 				}),
 				loading: false 
 			}))
@@ -46,7 +47,7 @@ class Get extends Component {
   }
 }
 
-const GetYamlType = new yaml.Type('!get', {
+export const GetYamlType = new yaml.Type('!get', {
 	kind: 'scalar',
 	resolve: function (data) {
 		return data !== null;
@@ -55,9 +56,9 @@ const GetYamlType = new yaml.Type('!get', {
     data = data || {}; // in case of empty node
     return <Get data={data} key='get' />;
   },
-  instanceOf: Get
+  instanceOf: Get,
+  represent: function (data) {
+    const rtn = { _tag: `!get ${data}` }
+    return rtn
+  }
 });
-
-export {
-   Get, GetYamlType
-}

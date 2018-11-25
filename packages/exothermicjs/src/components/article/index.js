@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import ReactMarkdown from 'react-markdown';
 import yaml from 'js-yaml';
 
-class Article extends Component {
+export class Article extends Component {
   render() {
     const classes = this.props.data.hasOwnProperty('class') ? this.props.data.class : '';
     if (this.props.data.hasOwnProperty('items')) {
@@ -24,7 +24,7 @@ class Article extends Component {
   }
 }
 
-const ArticleYamlType = new yaml.Type('!article', {
+export const ArticleYamlType = new yaml.Type('!article', {
   kind: 'mapping',
   resolve: function (data) {
     return data !== null && data.id !== null && data.title !== null;
@@ -33,9 +33,9 @@ const ArticleYamlType = new yaml.Type('!article', {
     data = data || {}; // in case of empty node
     return <Article data={data} key={data.id} />;
   },
-  instanceOf: Article
+  instanceOf: Article,
+  represent: function (data) {
+    const rtn = { _tag: '!article', ...data }
+    return rtn
+  }
 });
-
-export {
-   Article, ArticleYamlType
-}
