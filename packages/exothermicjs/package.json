@@ -1,7 +1,7 @@
 {
   "name": "exothermicjs",
   "version": "1.2.2",
-  "description": "ExothermicJS | Yaml based templating for ReactJS",
+  "description": "ExothermicJS | Yaml based template engine for Node.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/suhay/exothermicjs.git"
@@ -11,7 +11,8 @@
   },
   "author": "Matt Suhay <matthew.suhay@gmail.com>",
   "keywords": [
-    "react",
+    "nodejs",
+    "template engine",
     "yaml",
     "front end"
   ],

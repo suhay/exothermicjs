@@ -134,7 +134,7 @@ SSR_ONLY=false
 
 ```yaml
 top_template:
-- !get 'another-template.yml'
+- !get 'fragments/another-template.exo'
 ```
 
 Loads the content of the referenced Yaml file. Good for content reuse, keeping file sizes smaller, and keeping similar collections of information together.

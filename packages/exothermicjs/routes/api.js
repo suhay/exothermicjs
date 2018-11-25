@@ -19,8 +19,6 @@ router.get('/site', ensureLoggedIn, (req, res, next) => {
 
 router.patch('/*', ensureLoggedIn, (req, res, next) => {
   const url_parts = url.parse(req.url, true)
-  
-  console.log(path.join(process.env.PUBLIC, `pages/${url_parts.path}.exo`))
   if (fs.existsSync(path.join(process.env.PUBLIC, `pages/${url_parts.path}.exo`)) && req.body.text.length > 10) {
     fs.writeFile(path.join(process.env.PUBLIC, `pages/${url_parts.path}.exo`), req.body.text, (err) => {
       if (err) throw err;

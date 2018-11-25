@@ -1,15 +1,14 @@
 {
   "name": "exothermicjs-dashboard-endo",
-  "version": "1.0.0",
-  "description": "The Endothermic Dashboard",
+  "version": "0.1.0",
+  "description": "The Endothermic Dashboard | Basic dashboard for ExothermicJS",
   "repository": "https://github.com/suhay/exothermicjs/tree/master/packages/endothermicjs-dashboard-endo",
   "bugs": {
     "url": "https://github.com/suhay/exothermicjs/issues"
   },
   "author": "Matt Suhay <matthew.suhay@gmail.com>",
   "keywords": [
-    "react",
-    "yaml",
+    "nodejs",
     "back end",
     "exothermicjs"
   ],
