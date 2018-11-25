@@ -14,8 +14,8 @@ script:
   - yarn build:all
     
 deploy:
-  provider: npm
-  script: yarn publish:push
+  provider: script
+  script: lerna publish from-git
   email: matthew.suhay@gmail.com
   api_key: $NPM_TOKEN
   on:
