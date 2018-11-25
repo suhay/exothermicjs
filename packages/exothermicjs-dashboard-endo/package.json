@@ -1,6 +1,6 @@
 {
   "name": "exothermicjs-dashboard-endo",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "The Endothermic Dashboard | Basic dashboard for ExothermicJS",
   "repository": "https://github.com/suhay/exothermicjs/tree/master/packages/endothermicjs-dashboard-endo",
   "bugs": {
