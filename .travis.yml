@@ -12,6 +12,15 @@ install:
 script:
   - yarn test
   - yarn build:all
+    
+deploy:
+  provider: npm
+  script: yarn publish:push
+  email: matthew.suhay@gmail.com
+  api_key: $NPM_TOKEN
+  on:
+    tags: true
+  skip_cleanup: true
   
 notifications:
   email:
