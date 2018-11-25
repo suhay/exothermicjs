@@ -1,4 +1,4 @@
-# ExothermicJS - Yaml based templating for ReactJS
+# ExothermicJS | Yaml based template engine for Node.js
 
 [![Build Status](https://travis-ci.org/suhay/exothermicjs.svg?branch=master)](https://travis-ci.org/suhay/exothermicjs)
 [![NPM version](https://img.shields.io/npm/v/exothermicjs.svg)](https://www.npmjs.org/package/exothermicjs)

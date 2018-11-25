@@ -3,8 +3,10 @@
     "packages/*"
   ],
   "version": "independent",
+  "npmClient": "yarn",
   "useWorkspaces": true,
   "loglevel": "success",
+  "registry": "https://registry.npmjs.org/",
   "command": {
     "publish": {
       "allowBranch": "master",

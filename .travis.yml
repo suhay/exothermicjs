@@ -12,7 +12,7 @@ script:
     
 deploy:
   provider: script
-  script: lerna publish from-git
+  script: yarn publish:push
   email: matthew.suhay@gmail.com
   api_key: $NPM_TOKEN
   on:

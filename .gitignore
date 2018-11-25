@@ -11,4 +11,4 @@ packages/*/node_modules
 package-lock.json
 /coverage/
 dist/
-yarn.lock
+.npmrc

@@ -16,3 +16,4 @@ src
 coverage
 setupTests.js
 __mocks__
+.npmrc

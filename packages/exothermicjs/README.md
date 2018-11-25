@@ -1,4 +1,4 @@
-# ExothermicJS - Yaml based templating for ReactJS
+# ExothermicJS | Yaml based template engine for Node.js
 
 [![Build Status](https://travis-ci.org/suhay/exothermicjs.svg?branch=master)](https://travis-ci.org/suhay/exothermicjs)
 [![NPM version](https://img.shields.io/npm/v/exothermicjs.svg)](https://www.npmjs.org/package/exothermicjs)
@@ -9,7 +9,7 @@ Create dynamic page content using YAML and Markdown without lengthy build times.
 ## Installation
 
 ```
-yarn add exothermicjs
+npm install --save exothermicjs
 ```
 
 ## Basic usage
@@ -134,7 +134,7 @@ SSR_ONLY=false
 
 ```yaml
 top_template:
-- !get 'another-template.yml'
+- !get 'fragments/another-template.exo'
 ```
 
 Loads the content of the referenced Yaml file. Good for content reuse, keeping file sizes smaller, and keeping similar collections of information together.
