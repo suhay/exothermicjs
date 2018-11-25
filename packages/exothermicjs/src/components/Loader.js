@@ -21,8 +21,8 @@ export default class Loader extends Component {
   }
   
   componentDidMount() {
-    pageState.setState({ route: this.props.path })
-    fetch(`/load/${this.props.path}`.replace('//', '/'), { credentials: `same-origin` })
+    pageState.setState({ route: this.state.path })
+    fetch(`/load/${this.state.path}`.replace('//', '/'), { credentials: `same-origin` })
       .then(response => response.text())
       .then(data => this.setState({ 
         data: yaml.safeLoad(data, {
@@ -42,7 +42,7 @@ export default class Loader extends Component {
               ? <Spinner name='folding-cube' />
               : window && window.DASHBOARD
                 ? <BrowserRouter>
-                    <OffCanvas dump={this.props.dump}>
+                    <OffCanvas dump={this.props.dump} path={this.state.path}>
                       <Page data={state.data || this.state.data} />
                     </OffCanvas>
                   </BrowserRouter>

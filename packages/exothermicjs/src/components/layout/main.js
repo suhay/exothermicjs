@@ -22,7 +22,7 @@ export const MainYamlType = new yaml.Type('!main', {
   },
   construct: function (data) {
     data = data || {}; // in case of empty node
-    return <Main data={data} key={data.id} />;
+    return <Main data={data} key={data.id || 'main'} />;
   },
   instanceOf: Main,
   represent: function (data) {

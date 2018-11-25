@@ -35,7 +35,7 @@ passport.deserializeUser(function(user, done) {
 });
 
 router.use(bodyParser.json())
-router.use(bodyParser.urlencoded({ extended: false }))
+router.use(bodyParser.urlencoded({ extended: true }))
 router.use(session({
   store: new MemoryStore({
     checkPeriod: 86400000 // prune expired entries every 24h

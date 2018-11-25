@@ -1,40 +1,40 @@
 ---
-description: 'And the description.'
+description: And the description.
+tags: []
 page:
   - !header
     class: container
     items:
-    - !get fragments/nav
+      - !get fragments/nav
   - !main
     class: container
     items:
-    - !section
-      id: who
-      title: '# Who'
-      class: row
-      items:
-      - !col
-        id: one
-        content: |
-          ## Not sure
-          <span>Here's a span</span>
-    - !section
-      id: what-ive-done
-      title: "# What"
-      items:
-      - !get fragments/portfolio
-    - !section
-      id: what-im-doing
-      title: "# More What"
-      items:
-      - !get fragments/projects
+      - !section
+        id: who
+        title: '# Who'
+        class: row
+        items:
+          - !col
+            id: one
+            content: |
+              ## Not sure
+              <span>Here's a span</span>
+      - !section
+        id: what-ive-done
+        title: '# What'
+        items:
+          - !get fragments/portfolio
+      - !section
+        id: what-im-doing
+        title: '# More What'
+        items:
+          - !get fragments/projects
   - !footer
     class: container
     items:
-    - !section
-      id: where
-      class: row
-      title: '# Where - End of file!!'
-      items:
-      - !get fragments/about
-tags: []
+      - !section
+        id: where
+        class: row
+        title: '# Where - End of file!!'
+        items:
+          - !get fragments/about

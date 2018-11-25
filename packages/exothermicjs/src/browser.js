@@ -20,7 +20,7 @@ const dumpTag = (tag) => {
 }
 
 const dump = (data) => {
-  return yaml.dump({
+  return '---\n' + yaml.dump({
     description: data.props.data.description,
     tags: data.props.data.tags,
     page: data.props.data.page.map(part => dumpTag(part))

@@ -1,22 +1,34 @@
 import React, { Fragment } from 'react'
 import yaml from 'js-yaml'
+import fetch from 'isomorphic-fetch'
 
 import { 
   MainYamlType,
   SectionYamlType,
   FooterYamlType
 } from './types'
-import { Types } from '../../../exothermicjs/exothermic.config'
+import { Types } from 'exothermicjs/exothermic.config'
 
 export default class OffCanvas extends React.Component {
   constructor(props) {
     super(props)
-    
     this.handleSave = this.handleSave.bind(this)
   }
   
   handleSave() {
     const { children, dump } = this.props
+    fetch(`/api/${this.props.path}`.replace('//', '/'), { 
+      credentials: `same-origin`, 
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+      body: JSON.stringify({
+        text: dump(children)
+      })
+    })
+      .then(response => response.text())
+      .catch(error => { throw error})
     console.log(dump(children))
   }
   
