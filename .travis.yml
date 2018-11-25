@@ -5,11 +5,8 @@ node_js:
   
 cache: yarn
 
-install:
-  - yarn global add lerna jest
-  - lerna bootstrap
-
 script:
+  - yarn
   - yarn test
   - yarn build:all
     
