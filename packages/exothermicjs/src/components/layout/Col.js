@@ -5,21 +5,21 @@ import yaml from 'js-yaml'
 export class Col extends Component {
   render() {
     const { data } = this.props
-    const classes = data.hasOwnProperty('class') 
+    const classes = data.class
       ? data.class.startsWith('col') 
         ? data.class 
         : 'col ' + data.class 
       : `col`
     return (
       <div className={classes}>
-        {data.content && <ReactMarkdown source={data.content} escapeHtml={false} renderers={{root:React.Fragment}} />}
+        {data.content}
         {data.items}
       </div>
     );
   }
 }
 
-export const ColYamlType = new yaml.Type('!col', {
+export const Type = new yaml.Type('!col', {
   kind: 'mapping',
   resolve: function (data) {
     return data !== null && data.id !== null

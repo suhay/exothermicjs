@@ -18,7 +18,7 @@ export function render(route, options) {
   const templates = get(route, options)
   const base = yaml.safeLoad(templates[0])
   const page = yaml.safeLoad(templates[1], {
-    schema: options._dashboard ? DashboardSchema : Schema
+    schema: options._dashboard ? DashboardSchema : Schema()
   })
   const result = { ...base,	...page }
   const context = {}
