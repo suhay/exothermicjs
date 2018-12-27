@@ -14,7 +14,7 @@ export class Get extends Component {
   constructor(props) {
 		super(props)
 		this.state = { 
-			data: fs && typeof fs.readFileSync === 'function' ? yaml.safeLoad(fs.readFileSync(`${pageState.state.pagesPath}/${this.props.data}.exo`, 'utf8'), { schema: Schema }) : null,
+			data: fs && typeof fs.readFileSync === 'function' ? yaml.safeLoad(fs.readFileSync(`${pageState.state.pagesPath}/${this.props.data}.exo`, 'utf8'), { schema: Schema() }) : null,
 			loading: fs && typeof fs.readFileSync === 'function' ? false : true
 		}
 	}
@@ -24,7 +24,7 @@ export class Get extends Component {
 			.then(response => response.text())
 			.then(data => this.setState({ 
 				data: yaml.safeLoad(data, {
-					schema: window.DASHBOARD ? DashboardSchema : Schema
+					schema: window.DASHBOARD ? DashboardSchema : Schema()
 				}),
 				loading: false 
 			}))

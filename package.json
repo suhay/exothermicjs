@@ -3,7 +3,7 @@
     "bootstrap": "yarn && lerna bootstrap",
     "start": "run-s bootstrap dev",
     "watch": "lerna run watch --parallel",
-    "dev": "lerna run dev --parallel",
+    "dev": "lerna run build && lerna run dev --parallel",
     "build": "yarn clean && lerna run build",
     "build:all": "yarn clean && lerna run build:all",
     "build-preview": "yarn build && lerna run build-preview",

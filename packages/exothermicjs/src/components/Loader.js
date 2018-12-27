@@ -26,7 +26,7 @@ export default class Loader extends Component {
       .then(response => response.text())
       .then(data => this.setState({ 
         data: yaml.safeLoad(data, {
-          schema: window.DASHBOARD ? DashboardSchema : Schema
+          schema: window.DASHBOARD ? DashboardSchema : Schema()
         }),
         loading: false 
       }))

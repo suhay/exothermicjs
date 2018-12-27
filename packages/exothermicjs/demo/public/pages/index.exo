@@ -16,9 +16,7 @@ page:
         items:
           - !col
             id: one
-            content: |
-              ## Not sure
-              <span>Here's a span</span>
+            content: !markdown index-one
       - !section
         id: what-ive-done
         title: '# What'

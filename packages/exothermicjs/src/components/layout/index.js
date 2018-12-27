@@ -1,4 +1,4 @@
-import { ColYamlType } from './Col';
+import { Type as ColYamlType } from './Col';
 import { SectionYamlType } from './Section';
 import { FooterYamlType } from './footer';
 import { HeaderYamlType } from './header';

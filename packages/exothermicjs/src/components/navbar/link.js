@@ -24,7 +24,7 @@ export default class Link extends Component {
       .then(response => response.text())
       .then(data => pageState.setState({ 
         data: yaml.safeLoad(data, {
-          schema: window.DASHBOARD ? DashboardSchema : Schema
+          schema: window.DASHBOARD ? DashboardSchema : Schema()
         }),
         route: this.state.to.pathname
       }))
