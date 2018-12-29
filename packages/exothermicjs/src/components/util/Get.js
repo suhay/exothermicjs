@@ -32,7 +32,7 @@ export class Get extends Component {
 	
   render() {
 		return (
-			<Fragment>
+			<div className={this.state.loading ? `get-loading` : `get-loaded`}>
 				{!this.state.loading && this.state.data && this.state.data.hasOwnProperty('items') ? 
 					(<Fragment>
 						{this.state.data.items}
@@ -42,7 +42,7 @@ export class Get extends Component {
 						<ReactMarkdown source={this.state.data.content} renderers={{root:Fragment}} />
 					</Fragment>) : ``}
 				{this.state.loading && <Spinner name='folding-cube' />}
-			</Fragment>
+			</div>
 		)
   }
 }
