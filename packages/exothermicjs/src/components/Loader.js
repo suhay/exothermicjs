@@ -37,7 +37,7 @@ export default class Loader extends Component {
     return (
       <Subscribe to={[pageState]}>
         {state => (
-          <Fragment>
+          <div className='base'>
             {this.state.loading 
               ? <Spinner name='folding-cube' />
               : window && window.DASHBOARD
@@ -50,7 +50,7 @@ export default class Loader extends Component {
                    <Page data={state.data || this.state.data} />
                   </BrowserRouter>
              }
-           </Fragment>
+           </div>
          )}
       </Subscribe>
     )
