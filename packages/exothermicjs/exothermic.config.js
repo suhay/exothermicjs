@@ -17,7 +17,7 @@ const yamlTypes = {
 };
 
 // User plugins
-exports.pulgins = [
+exports.plugins = [
   require('../exothermicjs-plugin-markdown/src').Type
 ];
 
@@ -27,5 +27,5 @@ exports.Types = yamlTypes;
 exports.Schema = (plugins) => {
   return plugins ? 
     yaml.Schema.create(Object.keys(yamlTypes).map(function(key) { return yamlTypes[key]; }).concat(plugins)) : 
-    yaml.Schema.create(Object.keys(yamlTypes).map(function(key) { return yamlTypes[key]; }).concat(exports.pulgins))
+    yaml.Schema.create(Object.keys(yamlTypes).map(function(key) { return yamlTypes[key]; }).concat(exports.plugins))
 };

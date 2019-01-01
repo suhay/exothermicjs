@@ -7,7 +7,8 @@ import {
   SectionYamlType,
   FooterYamlType
 } from './types'
-import { Types } from 'exothermicjs/exothermic.config'
+import { Types, plugins } from 'exothermicjs/exothermic.config'
+import { Upload } from 'exothermicjs/src'
 
 export default class OffCanvas extends React.Component {
   constructor(props) {
@@ -40,6 +41,9 @@ export default class OffCanvas extends React.Component {
         {children}
         <button>Add</button>
         <button onClick={this.handleSave}>Save</button>
+        <div className="uploads">
+          <Upload />
+        </div>
       </Fragment>
     )
   }
@@ -48,7 +52,7 @@ export default class OffCanvas extends React.Component {
 const buildDashboardSchema = () => {
   const InteractiveTypes = { MainYamlType, SectionYamlType, FooterYamlType }
   const dashboardSchema = {...Types, ...InteractiveTypes}
-  return yaml.Schema.create(Object.values(dashboardSchema))
+  return yaml.Schema.create(Object.keys(dashboardSchema).map((key) => dashboardSchema[key]).concat(plugins))
 }
 
 export const DashboardSchema = buildDashboardSchema()
