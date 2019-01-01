@@ -33,6 +33,10 @@ router.get('/failure', (req, res) => {
   res.render('failure', req.session.options)
 })
 
+router.post('/*', (req, res) => {
+  res.send('posted!')
+})
+
 router.get('/*', (req, res, next) => {
   res.render(req.url.replace(/^\//, ''), { _dashboard: req.user ? true : false })
 })

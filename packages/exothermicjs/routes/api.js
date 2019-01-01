@@ -36,6 +36,16 @@ router.get('/*', ensureLoggedIn, (req, res, next) => {
   res.render(url_parts.query.path.replace(/^\//, '').replace('?', ''), { _get: true })
 })
 
+router.post('/upload', ensureLoggedIn, (req, res, next) => {
+  let theFile = req.files.file
+  theFile.mv(`${process.env.PUBLIC}/static/uploads/${req.body.filename}.${theFile.name.replace(/.*\.(.+)$/, '$1')}`, function(err) {
+    if (err) {
+      return res.status(500).send(err)
+    }
+    res.json({file: `/uploads/${req.body.filename}.${theFile.name.replace(/.*\.(.+)$/, '$1')}`})
+  })
+})
+
 // router.post()
 
 // router.put()
