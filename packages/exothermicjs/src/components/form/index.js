@@ -7,6 +7,8 @@ import { Formik, Field, Form as FormikForm, ErrorMessage } from 'formik'
 
 import Input from './input'
 import Checkbox from './checkbox'
+import Radio from './radio'
+import Select from './select'
 
 export default class Form extends Component {
   constructor(props) {
@@ -45,31 +47,29 @@ export default class Form extends Component {
                 }
               )
           }}
-          render={({ errors, status, isSubmitting, values }) => (
+          render={({ errors, status, isSubmitting, values, resetForm }) => (
             <FormikForm className={classes} method={method} action={action}>
               {items.map((field, i) => {
                 const { type, name, label } = field
-                let checked = false
                 switch (type) {
-                  case 'checkbox':
+                  case 'checkbox' :
                     return <Checkbox key={name + i} {...field} />
                   case 'radio' :
-                    return (
-                      <label key={name + i} className='clickableLabel'>
-                        <div className={`radio ${checked ? 'radioChecked' : ''}`}>
-                          <input value={values[name]} {...field} />
-                          {checked && <div className='radioIcon'>✓</div>}
-                        </div>
-                        <div>{label}</div>
-                      </label>)
+                    return <Radio key={name + i} {...field} />
+                  case 'select' :
+                    return <Select key={name + i} {...field} value={values && values[name] ? values[name] : ''} />
                   case 'reset' :
+                    return (
+                      <button key={type + i} type="button" disabled={isSubmitting} onClick={resetForm}>
+                        {label}
+                      </button>)
                   case 'submit' :
                     return (
                       <button key={type + i} type={type} disabled={isSubmitting}>
                         {label}
                       </button>)
                   default:
-                    return <Input key={name + i} value={values[name]} {...field} />
+                    return <Input key={name + i} value={values && values[name] ? values[name] : ''} {...field} />
                 }
               })}
             </FormikForm>

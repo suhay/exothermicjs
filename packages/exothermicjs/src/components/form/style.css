@@ -89,6 +89,54 @@
   top: 50%;
   transform: translate(-50%, -50%);
 }
+.selectWrapper {
+  position: relative;
+  display: block;
+  margin-top: 30px;
+  font-size: .9em;
+  background: #FFF;
+  border: 1px solid #EFF0F0;
+  border-radius: 4px;
+}
+.select {
+  background: transparent;
+  height: 36px;
+  position: relative;
+  z-index: 2;
+  display: block;
+  width: 100%;
+  font-size: 16px;
+  border: 0;
+  outline: none;
+}
+.selectFocus {
+  border: 1px solid #666;
+}
+.selectErr {
+  color: #f00;
+  border: 1px solid #f00;
+}
+.selectErrMsg {
+  position: absolute;
+  display: inline-block;
+  font-size: .75em;
+  right: 0;
+  bottom: -18px;
+}
+.selectLabel {
+  position: absolute;
+  top: -20px;
+  left: 0;
+  font-size: .8em;
+  display: block;
+  opacity: .75;
+  transition: transform .2s;
+  transform: translate(7px, 32px);
+  margin-bottom: 5px;
+}
+.selectLabelMoved {
+  transform: translate(0px, 0px);
+}
 .clickableLabel {
 	cursor: pointer;
 	display: -webkit-box;
@@ -100,4 +148,8 @@
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
+}
+.requiredInput:after {
+	content: "*";
+	color: #F00;
 }

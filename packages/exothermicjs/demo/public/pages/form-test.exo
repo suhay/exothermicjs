@@ -18,11 +18,12 @@ page:
         id: form-test
         method: POST
         items:
-        - { type: text, name: path, label: Path, required: true }
-        - { type: password, name: pass, label: Password }
+        - { type: tel, name: path, label: Path, required: true, mask: (999) 999-9999 }
+        - { type: password, name: pass, label: Password, required: true }
         - { type: radio, name: radio, label: Radio 1, value: radio-1 }
         - { type: radio, name: radio, label: Radio 2, value: radio-2 }
         - { type: checkbox, name: checkbox, label: Checkbox 1, value: checkbox-1 }
         - { type: checkbox, name: checkbox, label: Checkbox 2, value: checkbox-2 }
+        - { type: select, name: select, label: Pick one, options: [ { label: Option 1, value: option-1 }, { label: Option 2, value: option-2 } ] }
         - { type: submit, name: submit, label: Submit }
         - { type: reset, name: reset, label: Reset }

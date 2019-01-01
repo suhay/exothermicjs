@@ -15,16 +15,10 @@ export default class Input extends React.Component{
 	}
 
 	handleFocus(e) {
-		if (this.props.onFocus) {
-			this.props.onFocus(e)
-		}
 		this.setState({ focus: true })
 	}
 
   handleBlur(e) {
-    if (this.props.onBlur) {
-			this.props.onBlur(e)
-		}
 		this.setState({ focus: false })
   }
 
@@ -39,31 +33,32 @@ export default class Input extends React.Component{
 			type,
 			autoComplete,
 			name,
-			checked,
 			value,
+      required,
 		} = this.props
 		return (
 			<label className={`inputWrapper ${focus ? 'inputFocus' : ''} ${error ? 'inputErr' : ''}`}>
-				<span className={`inputLabel ${(value || focus) ? 'inputLabelMoved' : ''}`}>
+				<span className={`inputLabel ${(value || focus) ? 'inputLabelMoved' : ''} ${this.props.required ? 'requiredInput' : ``}`}>
 					{label}
 				</span>
 				{mask && (
-					<InputMask
-						mask={mask}
-            onFocus={this.handleFocus}
-            onBlur={this.handleBlur}
-					>
-						{(inputProps) => (
-							<Field
-								type={type || `text`}
-								autoComplete={autoComplete}
-								className='input'
-								name={name}
-                value={value || ''}
-								{...inputProps}
-							/>
-						)}
-					</InputMask>
+          <Field 
+						name={name}
+            render={({ field }) => {
+              return <InputMask 
+                mask={mask}
+                maskChar={null}
+						    className='input'
+                type={type || `text`}
+						    autoComplete={autoComplete}
+						    name={name}
+                onFocus={() => this.handleFocus()}
+                onBlur={() => this.handleBlur()}
+                {...this.props}
+                {...field}
+              />
+            }}
+          />
 				)}
 				{!mask && (
 					<Field
@@ -71,10 +66,9 @@ export default class Input extends React.Component{
 						autoComplete={autoComplete}
 						name={name}
 						className='input'
-            value={value || ''}
-            onFocus={this.handleFocus}
-            onBlur={this.handleBlur}
-						checked={checked}
+            onFocus={() => this.handleFocus()}
+            onBlur={() => this.handleBlur()}
+            {...this.props}
 					/>
 				)}
 				{error && (
