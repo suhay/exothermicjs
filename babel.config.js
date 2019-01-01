@@ -21,7 +21,8 @@ const plugins = () => {
     "@babel/plugin-transform-react-jsx",
     "@babel/plugin-transform-react-jsx-source",
     "@babel/plugin-transform-react-jsx-self",
-    "@babel/plugin-proposal-object-rest-spread"
+    "@babel/plugin-proposal-object-rest-spread",
+    "@babel/plugin-proposal-class-properties",
   ];
 
   if (isProduction) {

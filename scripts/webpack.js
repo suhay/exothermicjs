@@ -33,7 +33,8 @@ module.exports = (env, options, target = 'node') => {
               require("@babel/plugin-transform-react-jsx"),
               require("@babel/plugin-transform-react-jsx-source"),
               require("@babel/plugin-transform-react-jsx-self"),
-              require("@babel/plugin-proposal-object-rest-spread")
+              require("@babel/plugin-proposal-object-rest-spread"),
+              require("@babel/plugin-proposal-class-properties"),
             ]
           }
         }

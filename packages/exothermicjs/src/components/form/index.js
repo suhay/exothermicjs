@@ -3,49 +3,78 @@ import ReactMarkdown from 'react-markdown';
 import yaml from 'js-yaml';
 import fetch from 'isomorphic-fetch'
 import queryString from 'query-string'
+import { Formik, Field, Form as FormikForm, ErrorMessage } from 'formik'
 
-class Form extends Component {
+import Input from './input'
+import Checkbox from './checkbox'
+import Radio from './radio'
+import Select from './select'
+
+export default class Form extends Component {
   constructor(props) {
     super(props)
     this.state = {
       results: null,
       fieldValues: {}
     }
-    this.handleSubmit = this.handleSubmit.bind(this)
-    this.handleChange = this.handleChange.bind(this)
-  }
-  
-  handleChange(event) {
-    const val = {}
-    val[event.target.name] = event.target.value
-    this.setState({fieldValues: val})
-  }
-  
-  handleSubmit(event) {
-    event.preventDefault()
-    fetch(`${event.target.action}${event.target.method == `get` ? '?' + queryString.stringify(this.state.fieldValues) : ``}`, { method: event.target.method || `post` })
-			.then(response => response.text())
-			.then(data => this.setState({ 
-				results: data,
-			}))
   }
   
   render() {
-    const { action, method } = this.props.data
-    const classes = this.props.data.class
-    
+    const {
+      action = '', 
+      method = 'post',
+      items = []
+    } = this.props.data ? this.props.data : {}
+    const classes = this.props.data ? this.props.data.class : ''
     return (
       <Fragment>
-        <form className={classes} method={method} action={action} onSubmit={this.handleSubmit}>
-          {this.props.data.items.map((field, key) => {
-            const { type, id } = field
-            switch (type) {
-              default:
-                return <input key={key} onChange={this.handleChange} {...field} />
-            }
-          })}
-          <input type="submit" id="submit" name="submit"/>
-        </form>
+        <Formik
+  //         initialValues={}
+          onSubmit={(values, actions) => {
+            fetch(`${action}${method.toLowerCase() == 'get'
+                  ? '?' + queryString.stringify(values) 
+                  : ''}`, { 
+                    method: event.target.method || `post` 
+            })
+              .then(
+                response => response.text(),
+                data => this.setState({ 
+                  results: values,
+                }),
+                error => {
+                  actions.setSubmitting(false);
+                  actions.setStatus({ msg: 'Set some arbitrary status or data' });
+                }
+              )
+          }}
+          render={({ errors, status, isSubmitting, values, resetForm }) => (
+            <FormikForm className={classes} method={method} action={action}>
+              {items.map((field, i) => {
+                const { type, name, label } = field
+                switch (type) {
+                  case 'checkbox' :
+                    return <Checkbox key={name + i} {...field} />
+                  case 'radio' :
+                    return <Radio key={name + i} {...field} />
+                  case 'select' :
+                    return <Select key={name + i} {...field} value={values && values[name] ? values[name] : ''} />
+                  case 'reset' :
+                    return (
+                      <button key={type + i} type="button" disabled={isSubmitting} onClick={resetForm}>
+                        {label}
+                      </button>)
+                  case 'submit' :
+                    return (
+                      <button key={type + i} type={type} disabled={isSubmitting}>
+                        {label}
+                      </button>)
+                  default:
+                    return <Input key={name + i} value={values && values[name] ? values[name] : ''} {...field} />
+                }
+              })}
+            </FormikForm>
+          )} 
+        />
         {this.state.results && <div className="results">
           {this.state.results}
         </div>}
@@ -54,7 +83,7 @@ class Form extends Component {
   }
 }
 
-const FormYamlType = new yaml.Type('!form', {
+export const FormYamlType = new yaml.Type('!form', {
   kind: 'mapping',
   resolve: function (data) {
     return data && data.id
@@ -64,8 +93,4 @@ const FormYamlType = new yaml.Type('!form', {
     return <Form data={data} key={data.id} />;
   },
   instanceOf: Form
-});
-
-export {
-   Form, FormYamlType
-}
+})

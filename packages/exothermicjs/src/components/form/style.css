@@ -1,0 +1,155 @@
+.inputWrapper {
+  position: relative;
+  display: block;
+  margin-top: 30px;
+  font-size: .9em;
+  background: transparent;
+  border: 1px solid #EFF0F0;
+  border-radius: 4px;
+}
+.inputFocus {
+  border: 1px solid #666;
+}
+.inputErr {
+  color: #f00;
+  border: 1px solid #f00;
+}
+.inputLabel {
+  position: absolute;
+  top: -18px;
+  left: 0;
+  font-size: .85em;
+  display: block;
+  opacity: .75;
+  transition: transform .2s;
+  transform: translate(7px, 30px);
+}
+.inputLabelMoved {
+  transform: translate(0px, 0px);
+}
+.input {
+  width: 100%;
+  display: block;
+  background: transparent;
+  border: 0;
+  border-radius: 4px;
+  font-size: 16px;
+  padding: 0 10px;
+  height: 36px;
+  outline: none;
+}
+.inputErrMsg {
+  position: absolute;
+  display: inline-block;
+  font-size: .75em;
+  right: 0;
+  top: 42px;
+}
+.checkbox {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #666;
+  position: relative;
+  display: inline-block;
+  user-select: none;
+  margin-right: 10px;
+}
+.checkbox input {
+  display: none;
+}
+.checkboxChecked {
+  background: #666;
+}
+.checkboxIcon {
+  color: #fff;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.radio {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #666;
+  position: relative;
+  display: inline-block;
+  user-select: none;
+  margin-right: 10px;
+}
+.radio input {
+  display: none;
+}
+.radioChecked {
+  background: #666;
+}
+.radioIcon {
+  color: #fff;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.selectWrapper {
+  position: relative;
+  display: block;
+  margin-top: 30px;
+  font-size: .9em;
+  background: #FFF;
+  border: 1px solid #EFF0F0;
+  border-radius: 4px;
+}
+.select {
+  background: transparent;
+  height: 36px;
+  position: relative;
+  z-index: 2;
+  display: block;
+  width: 100%;
+  font-size: 16px;
+  border: 0;
+  outline: none;
+}
+.selectFocus {
+  border: 1px solid #666;
+}
+.selectErr {
+  color: #f00;
+  border: 1px solid #f00;
+}
+.selectErrMsg {
+  position: absolute;
+  display: inline-block;
+  font-size: .75em;
+  right: 0;
+  bottom: -18px;
+}
+.selectLabel {
+  position: absolute;
+  top: -20px;
+  left: 0;
+  font-size: .8em;
+  display: block;
+  opacity: .75;
+  transition: transform .2s;
+  transform: translate(7px, 32px);
+  margin-bottom: 5px;
+}
+.selectLabelMoved {
+  transform: translate(0px, 0px);
+}
+.clickableLabel {
+	cursor: pointer;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	margin-top: 30px;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+.requiredInput:after {
+	content: "*";
+	color: #F00;
+}
