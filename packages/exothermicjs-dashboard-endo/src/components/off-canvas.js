@@ -8,7 +8,8 @@ import {
   FooterYamlType
 } from './types'
 import { Types, plugins } from 'exothermicjs/exothermic.config'
-import { Upload } from 'exothermicjs/src'
+import { Upload } from 'exothermicjs'
+import { pageState } from 'exothermicjs/src/state'
 
 export default class OffCanvas extends React.Component {
   constructor(props) {
@@ -31,6 +32,14 @@ export default class OffCanvas extends React.Component {
       .then(response => response.text())
       .catch(error => { throw error})
     console.log(dump(children))
+  }
+  
+  componentDidMount() {
+    pageState.setState({ editing: true })
+  }
+  
+  componentDidUnmount() {
+    pageState.setState({ editing: false })
   }
   
   render() {

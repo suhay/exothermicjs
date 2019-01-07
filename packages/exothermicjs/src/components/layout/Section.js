@@ -9,14 +9,16 @@ export class Section extends Component {
         id,
         title,
       }, 
-      data
+      data,
+      children
     } = this.props
     const classes = data.hasOwnProperty('class') ? data.class : '';
     return (
       <section className={classes} id={id}>
         {title && <ReactMarkdown source={title} renderers={{root:React.Fragment}} />}
-        {data.content && <ReactMarkdown source={data.content} escapeHtml={false} renderers={{root:React.Fragment}} />}
+        {data.content}
         {data.items}
+        {children}
       </section>
     );
   }

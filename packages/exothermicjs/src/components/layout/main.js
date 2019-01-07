@@ -7,9 +7,10 @@ export class Main extends PureComponent {
     const { data, children } = this.props
     return (
       <main className={data.class ? data.class : ``}>
-        {children}
-        {data.content && <ReactMarkdown source={data.content} escapeHtml={false} renderers={{root:React.Fragment}} />}
+        {data.title && <ReactMarkdown source={data.title} renderers={{root:React.Fragment}} />}
+        {data.content}
         {data.items}
+        {children}
       </main>
     )
   }

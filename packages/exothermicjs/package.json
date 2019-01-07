@@ -65,7 +65,6 @@
     "test": "jest --no-cache",
     "stat": "webpack --mode production --profile --json > stats.json",
     "test:coverage": "jest --coverage",
-    "eject": "react-scripts eject",
     "dev": "webpack --env.NODE_ENV=development --watch --mode development"
   },
   "babel": {

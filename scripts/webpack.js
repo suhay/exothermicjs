@@ -3,12 +3,12 @@ const webpack = require('webpack')
 const pkg = require(path.join(process.cwd(), 'package.json'));
 const nodeExternals = require('webpack-node-externals')
 
-module.exports = (env, options, target = 'node') => {
+module.exports = (env, options, target = 'node', forDemo = false) => {
   return {
     entry: './src/index.js',
     output: {
-      path: options.mode === 'production' ? process.cwd() : path.resolve('../exothermicjs/demo/public/static'),
-      filename: options.mode === 'production' ? pkg.main : pkg.main.replace('dist/', ''),
+      path: options.mode === 'development' && forDemo ? path.resolve('../exothermicjs/demo/public/static') : process.cwd(),
+      filename: options.mode === 'development' && forDemo ?  pkg.main.replace('dist/', '') : pkg.main,
       library: pkg.name,
       libraryTarget: 'umd',
       umdNamedDefine: true,

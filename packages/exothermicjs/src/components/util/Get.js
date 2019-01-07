@@ -31,17 +31,14 @@ export class Get extends Component {
 	}
 	
   render() {
+    const { loading, data = {} } = this.state
 		return (
-			<div className={this.state.loading ? `get-loading` : `get-loaded`}>
-				{!this.state.loading && this.state.data && this.state.data.hasOwnProperty('items') ? 
-					(<Fragment>
-						{this.state.data.items}
-					</Fragment>) : ``}
-				{!this.state.loading && this.state.data && this.state.data.hasOwnProperty('content') ?
-					(<Fragment>
-						<ReactMarkdown source={this.state.data.content} renderers={{root:Fragment}} />
-					</Fragment>) : ``}
-				{this.state.loading && <Spinner name='folding-cube' />}
+			<div className={loading ? `get-loading` : `get-loaded`}>
+				{!loading && <Fragment>
+          {data.content}
+          {data.items}
+        </Fragment>}
+				{loading && <Spinner name='folding-cube' />}
 			</div>
 		)
   }
