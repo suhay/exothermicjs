@@ -30,6 +30,7 @@
     "react": "^16.6.3",
     "react-markdown": "^4.0.4",
     "react-simplemde-editor": "^3.6.22",
+    "shortid": "^2.2.14",
     "statable": "^0.3.2"
   }
 }
