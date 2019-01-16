@@ -4,8 +4,12 @@ import yaml from 'js-yaml'
 import fetch from 'isomorphic-fetch'
 import fs from 'fs'
 import path from 'path'
+import { Subscribe } from 'statable'
+import shortid from 'shortid'
+import "simplemde/dist/simplemde.min.css"
 
-import pageState from '../../exothermicjs/src/state/page'
+import { pageState } from 'exothermicjs/src/state'
+import Editor from './editor'
 
 export class Markdown extends Component {
   constructor(props) {
@@ -27,10 +31,16 @@ export class Markdown extends Component {
   
   render() {
     const { data } = this.state
+    const id = this.props.data || shortid.generate()
     return (
-      <Fragment> 
-        <ReactMarkdown source={data} escapeHtml={false} renderers={{root:React.Fragment}} />
-      </Fragment>
+      <Subscribe to={[pageState]}>
+        {state => (
+          <Fragment>
+            {!state.editing && <ReactMarkdown source={data} escapeHtml={false} renderers={{root:React.Fragment}} />}
+            {state.editing && !this.state.loading && <Editor id={id} value={data} />}
+          </Fragment>
+        )}
+      </Subscribe>
     )
   }
 }

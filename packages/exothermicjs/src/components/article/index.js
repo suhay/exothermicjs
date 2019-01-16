@@ -5,22 +5,21 @@ import yaml from 'js-yaml';
 
 export class Article extends Component {
   render() {
-    const classes = this.props.data.hasOwnProperty('class') ? this.props.data.class : '';
-    if (this.props.data.hasOwnProperty('items')) {
-      return (
-        <article className={classes} id={this.props.data.id}>
-          <ReactMarkdown source={this.props.data.title} renderers={{root:React.Fragment}} />
-          {this.props.data.items}
-        </article>
-      );
-    } else if (this.props.data.hasOwnProperty('content')) {
-      return (
-        <article className={classes} id={this.props.data.id}> 
-          <ReactMarkdown source={this.props.data.title} renderers={{root:React.Fragment}} />
-          <ReactMarkdown source={this.props.data.content} renderers={{root:React.Fragment}} />
-        </article>
-      );
-    }
+    const classes = this.props.data.class ? this.props.data.class : '';
+    const {
+      data: {
+        id,
+        title,
+      }, 
+      data
+    } = this.props
+    return (
+      <article className={classes} id={data.id}>
+        <ReactMarkdown source={data.title} renderers={{root:React.Fragment}} />
+        {data.content}
+        {data.items}
+      </article>
+    )
   }
 }
 

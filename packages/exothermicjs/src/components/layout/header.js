@@ -4,11 +4,13 @@ import yaml from 'js-yaml';
 
 export class Header extends PureComponent {
   render() {
-    const { data } = this.props
+    const { data, children } = this.props
     return (
       <header className={data.class ? data.class : ``}>
-        {data.content && <ReactMarkdown source={data.content} escapeHtml={false} renderers={{root:React.Fragment}} />}
+        {data.title && <ReactMarkdown source={data.title} renderers={{root:React.Fragment}} />}
+        {data.content}
         {data.items}
+        {children}
       </header>
     );
   }

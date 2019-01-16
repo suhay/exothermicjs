@@ -9,6 +9,7 @@ import {
 } from './types'
 import { Types, plugins } from 'exothermicjs/exothermic.config'
 import { Upload } from 'exothermicjs/src'
+import { pageState } from 'exothermicjs/src/state'
 
 export default class OffCanvas extends React.Component {
   constructor(props) {
@@ -30,7 +31,14 @@ export default class OffCanvas extends React.Component {
     })
       .then(response => response.text())
       .catch(error => { throw error})
-    console.log(dump(children))
+  }
+  
+  componentDidMount() {
+    pageState.setState({ editing: true })
+  }
+  
+  componentWillUnmount() {
+    pageState.setState({ editing: false })
   }
   
   render() {

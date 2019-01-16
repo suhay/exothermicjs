@@ -7,7 +7,6 @@ items:
   items:
   - !col
     id: write-up
-    content: |
-      Stuff
+    content: !markdown portfolio-one
   tags:
   - php
