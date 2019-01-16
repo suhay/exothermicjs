@@ -37,7 +37,7 @@ export class Markdown extends Component {
         {state => (
           <Fragment>
             {!state.editing && <ReactMarkdown source={data} escapeHtml={false} renderers={{root:React.Fragment}} />}
-            {state.editing && <Editor id={id} value={data} />}
+            {state.editing && !this.state.loading && <Editor id={id} value={data} />}
           </Fragment>
         )}
       </Subscribe>

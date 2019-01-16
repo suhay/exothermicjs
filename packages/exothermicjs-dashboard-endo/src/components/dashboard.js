@@ -7,6 +7,7 @@ export default class Dashboard extends React.Component {
     return (
       <div>
         <h1>Endothermic Dashboard!!!...</h1>
+        <a href="/">Return to Site</a>
         <ul>
           <li>Pages in site: {this.props.pages}</li>
           <li>Active users: {this.props.users}</li>
