@@ -1,8 +1,29 @@
-'use strict';
+import yaml from 'js-yaml'
 
-if (process.env.NODE_ENV && process.env.NODE_ENV === 'development') {
-  module.exports = require('./dist/exothermic.js');
-} else {
-  module.exports = require('./dist/exothermic.min.js');
+import { NavbarYamlType } from './src/components/navbar'
+import { SectionYamlType, ColYamlType, MainYamlType, HeaderYamlType, FooterYamlType } from './src/components/layout'
+import { ArticleYamlType } from './src/components/article'
+import { GetYamlType } from './src/components/util/Get'
+import { FormYamlType } from './src/components/form'
+
+const Types = {
+  NavbarYamlType,
+  SectionYamlType,
+  ColYamlType,
+  MainYamlType,
+  HeaderYamlType,
+  FooterYamlType,
+  ArticleYamlType,
+  GetYamlType,
+  FormYamlType
 }
 
+const BuildSchema = (plugins) => {
+  yaml.Schema.create(Object.keys(Types).map((key) => Types[key]).concat(plugins))
+};
+
+const Schema = yaml.Schema.create(Object.keys(Types).map((key) => Types[key]))
+
+export { version } from './package.json'
+
+export { Types, Schema }

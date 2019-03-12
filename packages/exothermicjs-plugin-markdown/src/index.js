@@ -29,15 +29,17 @@ export class Markdown extends Component {
 			}))
 	}
   
+  
+  
   render() {
     const { data } = this.state
-    const id = this.props.data || shortid.generate()
+    const id = data || shortid.generate()
     return (
       <Subscribe to={[pageState]}>
         {state => (
           <Fragment>
             {!state.editing && <ReactMarkdown source={data} escapeHtml={false} renderers={{root:React.Fragment}} />}
-            {state.editing && !this.state.loading && <Editor id={id} value={data} />}
+            {state.editing && !this.state.loading && <Editor id={id} value={data} editingThis={state.editingThis == id} />}
           </Fragment>
         )}
       </Subscribe>

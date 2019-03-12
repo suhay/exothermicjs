@@ -5,6 +5,7 @@ const pageState = new State({
 	route: ``,
 	pagesPath: ``,
   editing: false,
+  editingThis: ``,
 })
 
 export default pageState

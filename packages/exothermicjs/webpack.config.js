@@ -1,7 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
 const nodeExternals = require('webpack-node-externals')
-const NodemonPlugin = require('nodemon-webpack-plugin')
 
 module.exports = (env, options) => {
   return [{
@@ -47,23 +46,14 @@ module.exports = (env, options) => {
     },
     resolve: {
       alias: {
-        Components: path.resolve(__dirname, './src/components/'),
-        Modules: path.resolve(__dirname, './src/components/'),
-        Root: path.resolve(__dirname, '.'),
+        components: path.resolve(__dirname, './src/components/'),
+        modules: path.resolve(__dirname, './src/components/'),
+        Root: path.resolve(__dirname, '.')
       }
     },
     plugins: [
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(options.mode),
-      }),
-      !options.deploy && options.mode !== 'production' && new NodemonPlugin({
-        watch: [
-          path.resolve('./dist/exothermic.js'),
-          path.resolve('./routes'),
-          path.resolve('./server.js'),
-        ],
-        verbose: true,
-        script: './bin/exothermic-server'
       }),
     ].filter(e => e),
   },
@@ -108,8 +98,8 @@ module.exports = (env, options) => {
     },
     resolve: {
       alias: {
-        Components: path.resolve(__dirname, './src/components/'),
-        Modules: path.resolve(__dirname, './src/components/'),
+        components: path.resolve(__dirname, './src/components/'),
+        modules: path.resolve(__dirname, './src/components/'),
         Root: path.resolve(__dirname, '.'),
       },
     },

@@ -1,14 +1,15 @@
 import React, { Fragment } from 'react'
 import yaml from 'js-yaml'
 import fetch from 'isomorphic-fetch'
+import { Upload } from 'exothermicjs-plugin-upload'
 
 import { 
   MainYamlType,
   SectionYamlType,
   FooterYamlType
 } from './types'
+
 import { Types, plugins } from 'exothermicjs/exothermic.config'
-import { Upload } from 'exothermicjs/src'
 import { pageState } from 'exothermicjs/src/state'
 
 export default class OffCanvas extends React.Component {
@@ -60,6 +61,7 @@ export default class OffCanvas extends React.Component {
 const buildDashboardSchema = () => {
   const InteractiveTypes = { MainYamlType, SectionYamlType, FooterYamlType }
   const dashboardSchema = {...Types, ...InteractiveTypes}
+  const pluginsTypes = plugins.map(plugin => plugin.Type)
   return yaml.Schema.create(Object.keys(dashboardSchema).map((key) => dashboardSchema[key]).concat(plugins))
 }
 

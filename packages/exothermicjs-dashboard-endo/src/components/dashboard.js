@@ -1,6 +1,5 @@
 import React from 'react'
-
-import { Upload } from 'exothermicjs/src'
+import { Upload } from 'exothermicjs-plugin-upload'
 
 export default class Dashboard extends React.Component {
   render() {

@@ -14,9 +14,11 @@ export function dashboard(site) {
 
 export default class OffCanvas extends React.Component {
   render(){
+    const { dump, path, children } = this.props
+    
     return (
-      <CanvasBoard dump={this.props.dump} path={this.props.path}>
-        {this.props.children}
+      <CanvasBoard dump={dump} path={path}>
+        {children}
       </CanvasBoard>
     )
   }

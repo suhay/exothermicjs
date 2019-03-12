@@ -3,8 +3,8 @@ const webpack = require('webpack')
 const pkg = require(path.join(process.cwd(), 'package.json'));
 const nodeExternals = require('webpack-node-externals')
 
-module.exports = (env, options, target = 'node', forDemo = false) => {
-  return {
+module.exports = ({env, options, target = 'node', forDemo = false, plugins = []}) => {
+  const config = {
     entry: './src/index.js',
     output: {
       path: options.mode === 'development' && forDemo ? path.resolve('../exothermicjs/demo/public/static') : process.cwd(),
@@ -19,7 +19,6 @@ module.exports = (env, options, target = 'node', forDemo = false) => {
     })],
     node: {
       __dirname: true,
-      fs: target !== 'node' ? 'empty' : true,
     },
     module: {
       rules: [{
@@ -54,6 +53,13 @@ module.exports = (env, options, target = 'node', forDemo = false) => {
         'process.env.NODE_ENV': JSON.stringify(options.mode),
       }),
       new webpack.IgnorePlugin(/^esprima$/, /js-yaml/),
+      ...plugins,
     ].filter(e => e),
   }
+  
+  if (target != 'node') {
+    config.node.fs = 'empty'
+  }
+  
+  return config
 }

@@ -49,7 +49,6 @@ export const FooterYamlType = new yaml.Type('!footer', {
   }
 });
 
-
 export const SectionYamlType = new yaml.Type('!section', {
   kind: 'mapping',
   resolve: function (data) {

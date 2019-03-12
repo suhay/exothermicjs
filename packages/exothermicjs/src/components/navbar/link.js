@@ -4,10 +4,9 @@ import { NavHashLink } from 'react-router-hash-link'
 import fetch from 'isomorphic-fetch'
 import yaml from 'js-yaml'
 import URL from 'url-parse'
-import { DashboardSchema } from 'exothermicjs-dashboard-endo'
 
 import pageState from '../../state/page'
-import { Schema } from '../../../exothermic.config'
+import { Schema, Dashboard } from '../../../exothermic.config'
 
 export default class Link extends Component {
   constructor(props) {
@@ -24,7 +23,7 @@ export default class Link extends Component {
       .then(response => response.text())
       .then(data => pageState.setState({ 
         data: yaml.safeLoad(data, {
-          schema: window.DASHBOARD ? DashboardSchema : Schema()
+          schema: window.DASHBOARD && Dashboard ? DashboardSchema.DashboardSchema : Schema()
         }),
         route: this.state.to.pathname
       }))
