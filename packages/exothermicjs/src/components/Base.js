@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 
-import Page from 'Components/Page'
+import Page from './Page'
 
 export default class Base extends Component {
   render() {

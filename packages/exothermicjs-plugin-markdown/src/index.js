@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react'
 import ReactMarkdown from 'react-markdown'
-import yaml from 'js-yaml'
 import fetch from 'isomorphic-fetch'
 import fs from 'fs'
+import yaml from 'js-yaml'
 import path from 'path'
 import { Subscribe } from 'statable'
 import shortid from 'shortid'
@@ -28,9 +28,7 @@ export class Markdown extends Component {
 				loading: false 
 			}))
 	}
-  
-  
-  
+
   render() {
     const { data } = this.state
     const id = data || shortid.generate()

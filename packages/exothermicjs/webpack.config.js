@@ -6,16 +6,17 @@ module.exports = (env, options) => {
   return [{
     // Server
     entry: {
-      exothermic: path.resolve('./src/exothermic.js'),
+      exothermic: path.resolve('./index.js'),
     },
     output: {
       path: path.resolve('./dist'),
-      filename: options.mode === 'production' ? '[name].min.js' : '[name].js',
+      filename: options.mode === 'production' ? '[name].min.js' : '[name].min.js',
       library: 'exothermic',
       libraryTarget: 'umd',
       umdNamedDefine: true,
       publicPath: '/',
     },
+    devtool: 'source-map',
     target: 'node',
     node: {
       __dirname: true
@@ -72,7 +73,7 @@ module.exports = (env, options) => {
       'browser.exothermic': path.resolve('./src/browser.js'),
     },
     output: {
-      path: options.mode === 'production' ? path.resolve('./dist') : path.resolve('./demo/public/static'),
+      path: options.mode === 'production' ? path.resolve('./dist') : path.resolve('../../demo/public/static'),
       filename: options.mode === 'production' ? '[name].min.js' : 'browser.js',
     },
     module: {

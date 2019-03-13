@@ -8,7 +8,7 @@ module.exports = ({env, options, target = 'node', forDemo = false, plugins = []}
     entry: './src/index.js',
     output: {
       path: options.mode === 'development' && forDemo ? path.resolve('../exothermicjs/demo/public/static') : process.cwd(),
-      filename: options.mode === 'development' && forDemo ?  pkg.main.replace('dist/', '') : pkg.main,
+      filename: options.mode === 'development' && forDemo ? pkg.main.replace('dist/', '') : pkg.main,
       library: pkg.name,
       libraryTarget: 'umd',
       umdNamedDefine: true,

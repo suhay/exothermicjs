@@ -1,9 +1,0 @@
----
-items:
-- !navbar
-  items:
-  - 'Home': '/'
-  - "Nav test": '/test'
-  - "Nav test 2 - 404": '/test/more'
-  - "Form Test": '/form-test'
-  - "Fragment test": '/#exo'

@@ -5,19 +5,22 @@ import React from 'react'
 import ReactServer from 'react-dom/server'
 import { StaticRouter } from 'react-router'
 
-import { Schema, Dashboard } from '../exothermic.config.js'
+import { Dashboard, plugins } from '../exothermic.config.js'
+import { Schema } from '../'
 import { pageState } from './state'
-import Head from 'Components/Head'
-import Base from 'Components/Base'
-import Page from 'Components/Page'
-import { isBrowser } from 'Components/util'
+import Head from './components/Head'
+import Base from './components/Base'
+import Page from './components/Page'
+import { isBrowser } from './components/util'
 
 export function render(route, options) {
   const { _pages } = options
   const templates = get(route, options)
   const base = yaml.safeLoad(templates[0])
   const page = yaml.safeLoad(templates[1], {
-    schema: options._dashboard ? null: Schema()
+    schema: options._dashboard 
+      ? Dashboard.Schema() 
+      : Schema(plugins)
   })
   const result = { ...base,	...page }
   const context = {}
@@ -27,9 +30,9 @@ export function render(route, options) {
   let markup = ReactServer.renderToString(
     options._dashboard
     ? <StaticRouter location={route} context={context}>
-//         <Dashboard.OffCanvas>
-//           <Base data={result} browser={options._test ? false : isBrowser()} />
-//         </Dashboard.OffCanvas>
+        <Dashboard.OffCanvas>
+          <Base data={result} browser={options._test ? false : isBrowser()} />
+        </Dashboard.OffCanvas>
       </StaticRouter>
     : <StaticRouter location={route} context={context}>
         <Base data={result} browser={options._test ? false : isBrowser()} />

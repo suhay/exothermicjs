@@ -1,12 +1,12 @@
 require('dotenv').config()
 
-const Exothermic = require("exothermicjs")
+const exothermic = require("exothermicjs")
 const createError = require('http-errors')
 const express = require('express')
 const path = require('path')
 const logger = require('morgan')
 const helmet = require('helmet')
-const { Auth } = require('exothermicjs/exothermic.config')
+const { Auth } = require('exothermicjs')
 const fileUpload = require('express-fileupload')
 
 const indexRouter = require('./routes/index')
@@ -20,20 +20,20 @@ app.engine('exo', function (filePath, options, callback) {
   options._pages = options._pages || app.get('views')
   options._hydrate = options._hydrate || false
   const page = options._get
-    ? Exothermic.get(filePath, options)
+    ? exothermic.get(filePath, options)
     : options._hydrate
-      ? Exothermic.hydrate(filePath, options) 
-      : Exothermic.render(filePath, options)
+      ? exothermic.hydrate(filePath, options) 
+      : exothermic.render(filePath, options)
   return callback(null, page)
 })
 
-app.set('views', [process.env.PUBLIC + '/pages/' || './public/pages/', __dirname + '/templates'])
-app.set('view engine', 'exo')
+app.set('views', [path.resolve(process.env.PUBLIC) + '/pages/' || './public/pages/', path.resolve(__dirname) + '/../../exothermicjs/templates'])
 
+app.set('view engine', 'exo')
 app.use(helmet())
 app.use(logger('dev'))
 app.use(Auth)
-app.use(express.static(process.env.PUBLIC + '/static' || './public/static')) 
+app.use(express.static(path.resolve(process.env.PUBLIC) + '/static' || './public/static')) 
 app.use(fileUpload())
 
 app.use('/admin', adminRouter)

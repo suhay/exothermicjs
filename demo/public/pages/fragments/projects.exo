@@ -1,0 +1,10 @@
+---
+items:
+- !article
+  id: exo
+  title: '## ExothermicJS'
+  class: project
+  content: !markdown projects-1
+  tags:
+  - react
+  - yaml

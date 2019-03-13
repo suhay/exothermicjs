@@ -1,6 +1,6 @@
 "use strict";
 
-exports = {
+module.exports = {
   plugins: [
     require('exothermicjs-plugin-markdown')
   ],

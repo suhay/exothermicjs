@@ -6,7 +6,7 @@ import { ArticleYamlType } from './src/components/article'
 import { GetYamlType } from './src/components/util/Get'
 import { FormYamlType } from './src/components/form'
 
-const Types = {
+export const Types = {
   NavbarYamlType,
   SectionYamlType,
   ColYamlType,
@@ -18,12 +18,18 @@ const Types = {
   FormYamlType
 }
 
-const BuildSchema = (plugins) => {
-  yaml.Schema.create(Object.keys(Types).map((key) => Types[key]).concat(plugins))
-};
-
-const Schema = yaml.Schema.create(Object.keys(Types).map((key) => Types[key]))
+export const Schema = (plugins = []) => {
+  if (plugins && plugins.length > 0) {
+    const schemaTypes = [...Object.keys(Types).map(key => Types[key]), ...plugins.map(plugin => plugin.Type)]
+    return yaml.Schema.create(schemaTypes)
+  }
+  else {
+    return yaml.Schema.create(Object.keys(Types).map(key => Types[key]))
+  }
+}
 
 export { version } from './package.json'
 
-export { Types, Schema }
+export * from './src/exothermic'
+
+export * from './exothermic.config'

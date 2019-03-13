@@ -24,4 +24,4 @@ export default class OffCanvas extends React.Component {
   }
 }
 
-export { DashboardSchema } from './components/off-canvas'
+export { Schema } from './components/off-canvas'

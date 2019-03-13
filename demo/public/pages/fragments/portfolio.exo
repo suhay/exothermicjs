@@ -1,0 +1,12 @@
+---
+items:
+- !article
+  id: objects
+  title: '## Some objects'
+  class: row
+  items:
+  - !col
+    id: write-up
+    content: !markdown portfolio-one
+  tags:
+  - php

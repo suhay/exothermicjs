@@ -7,13 +7,16 @@ import path from 'path'
 
 import Spinner from './Spinner'
 import pageState from '../../state/page'
-import { Schema, Dashboard } from '../../../exothermic.config'
+import { Dashboard, plugins } from '../../../exothermic.config'
+import { Schema } from '../../../'
 
 export class Get extends Component {
   constructor(props) {
 		super(props)
 		this.state = { 
-			data: fs && typeof fs.readFileSync === 'function' ? yaml.safeLoad(fs.readFileSync(`${pageState.state.pagesPath}/${this.props.data}.exo`, 'utf8'), { schema: Schema() }) : null,
+			data: fs && typeof fs.readFileSync === 'function' 
+        ? yaml.safeLoad(fs.readFileSync(`${pageState.state.pagesPath}/${this.props.data}.exo`, 'utf8'), { schema: Schema(plugins) }) 
+        : null,
 			loading: fs && typeof fs.readFileSync === 'function' ? false : true
 		}
 	}
@@ -23,7 +26,7 @@ export class Get extends Component {
 			.then(response => response.text())
 			.then(data => this.setState({ 
 				data: yaml.safeLoad(data, {
-					schema: window.DASHBOARD && Dashboard ? Dashboard.DashboardSchema : Schema()
+					schema: window.DASHBOARD && Dashboard ? Dashboard.Schema() : Schema(plugins)
 				}),
 				loading: false 
 			}))

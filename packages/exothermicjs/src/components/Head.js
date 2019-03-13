@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import Meta from 'Modules/Meta';
-import Link from 'Modules/Link';
-import Script from 'Modules/Script';
-import { Version } from 'Root/exothermic.config';
+import Meta from './Meta';
+import Link from './Link';
+import Script from './Script';
+import { Version } from '../../exothermic.config';
 
 class Head extends Component {
   render() {

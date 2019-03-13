@@ -16,7 +16,7 @@
     "yaml",
     "front end"
   ],
-  "main": "dist/exothermicjs.min.js",
+  "main": "dist/exothermic.min.js",
   "module": "index.js",
   "homepage": "https://github.com/suhay/exothermicjs#readme",
   "license": "MIT",
@@ -26,7 +26,7 @@
     "dotenv": "^6.0.0",
     "formik": "^1.4.1",
     "isomorphic-fetch": "^2.2.1",
-    "js-yaml": "^3.12.0",
+    "js-yaml": "^3.12.2",
     "passport": "^0.4.0",
     "query-string": "^6.2.0",
     "react": "^16.6.1",
