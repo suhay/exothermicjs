@@ -1,3 +1,6 @@
+require('dotenv').config()
+const path = require(`path`)
+
 const express = require('express')
 const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn()
 const router = express.Router()
@@ -6,8 +9,7 @@ const { Auth } = require('exothermicjs/exothermic.config')
 router.get('/dashboard', ensureLoggedIn, (req, res, next) => {
   req.session.options = { user: req.user.displayName, userProfile: JSON.stringify(req.user, null, '  ') }
   if (Auth) {
-    const site = require('../' + process.env.PUBLIC + '/site.json')
-    res.send(Auth(site))
+    res.send(Auth)
   }
   else {
     res.render('admin/dashboard', req.session.options)

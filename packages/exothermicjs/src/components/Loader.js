@@ -6,7 +6,8 @@ import { Subscribe } from 'statable'
 
 import Spinner from './util/Spinner'
 import Page from './Page'
-import { Schema, plugins, Dashboard } from '../../exothermic.config'
+import { Dashboard } from '../../exothermic.config'
+import { Schema } from '../../'
 import pageState from '../state/page'
 
 export default class Loader extends Component {
@@ -25,7 +26,7 @@ export default class Loader extends Component {
       .then(response => response.text())
       .then(data => this.setState({ 
         data: yaml.safeLoad(data, {
-          schema: window.DASHBOARD ? Dashboard.Schema() : Schema(plugins)
+          schema: window.DASHBOARD ? Dashboard.Schema() : Schema()
         }),
         loading: false 
       }))

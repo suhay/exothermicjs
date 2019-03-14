@@ -18,13 +18,14 @@ export const Types = {
   FormYamlType
 }
 
-export const Schema = (plugins = []) => {
-  if (plugins && plugins.length > 0) {
-    const schemaTypes = [...Object.keys(Types).map(key => Types[key]), ...plugins.map(plugin => plugin.Type)]
+export const Schema = (addedPlugins = []) => {
+  const plugins = require('./exothermic.config').plugins
+  if (addedPlugins && addedPlugins.length > 0) {
+    const schemaTypes = [...Object.keys(Types).map(key => Types[key]), ...plugins.map(plugin => plugin.Type), ...addedPlugins.map(plugin => plugin.Type || plugin)]
     return yaml.Schema.create(schemaTypes)
   }
   else {
-    return yaml.Schema.create(Object.keys(Types).map(key => Types[key]))
+    return yaml.Schema.create([...Object.keys(Types).map(key => Types[key]), ...plugins.map(plugin => plugin.Type)])
   }
 }
 

@@ -6,7 +6,8 @@ import yaml from 'js-yaml'
 import URL from 'url-parse'
 
 import pageState from '../../state/page'
-import { Schema, Dashboard, plugins } from '../../../exothermic.config'
+import { Dashboard } from '../../../exothermic.config'
+import { Schema } from '../../../'
 
 export default class Link extends Component {
   constructor(props) {
@@ -23,7 +24,7 @@ export default class Link extends Component {
       .then(response => response.text())
       .then(data => pageState.setState({ 
         data: yaml.safeLoad(data, {
-          schema: window.DASHBOARD && Dashboard ? Dashboard.Schema() : Schema(plugins)
+          schema: window.DASHBOARD && Dashboard ? Dashboard.Schema() : Schema()
         }),
         route: this.state.to.pathname
       }))

@@ -7,7 +7,7 @@ import path from 'path'
 
 import Spinner from './Spinner'
 import pageState from '../../state/page'
-import { Dashboard, plugins } from '../../../exothermic.config'
+import { Dashboard } from '../../../exothermic.config'
 import { Schema } from '../../../'
 
 export class Get extends Component {
@@ -15,7 +15,7 @@ export class Get extends Component {
 		super(props)
 		this.state = { 
 			data: fs && typeof fs.readFileSync === 'function' 
-        ? yaml.safeLoad(fs.readFileSync(`${pageState.state.pagesPath}/${this.props.data}.exo`, 'utf8'), { schema: Schema(plugins) }) 
+        ? yaml.safeLoad(fs.readFileSync(`${pageState.state.pagesPath}/${this.props.data}.exo`, 'utf8'), { schema: Schema() }) 
         : null,
 			loading: fs && typeof fs.readFileSync === 'function' ? false : true
 		}
@@ -26,7 +26,7 @@ export class Get extends Component {
 			.then(response => response.text())
 			.then(data => this.setState({ 
 				data: yaml.safeLoad(data, {
-					schema: window.DASHBOARD && Dashboard ? Dashboard.Schema() : Schema(plugins)
+					schema: window.DASHBOARD && Dashboard ? Dashboard.Schema() : Schema()
 				}),
 				loading: false 
 			}))

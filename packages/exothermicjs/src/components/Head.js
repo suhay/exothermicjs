@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Meta from './Meta';
 import Link from './Link';
 import Script from './Script';
-import { Version } from '../../exothermic.config';
+import { version } from '../../';
 
 class Head extends Component {
   render() {
@@ -10,7 +10,7 @@ class Head extends Component {
     return (
       <React.Fragment>
         <Meta tags={this.props.data.meta} />
-        <meta name="generator" content={"ExothermicJS " + Version} />
+        <meta name="generator" content={"ExothermicJS " + version} />
         <title>{this.props.data.title}</title>
         <Meta tags={description} />
         <Link links={this.props.data.links} />

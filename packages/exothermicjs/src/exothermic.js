@@ -5,7 +5,7 @@ import React from 'react'
 import ReactServer from 'react-dom/server'
 import { StaticRouter } from 'react-router'
 
-import { Dashboard, plugins } from '../exothermic.config.js'
+import { Dashboard } from '../exothermic.config.js'
 import { Schema } from '../'
 import { pageState } from './state'
 import Head from './components/Head'
@@ -20,7 +20,7 @@ export function render(route, options) {
   const page = yaml.safeLoad(templates[1], {
     schema: options._dashboard 
       ? Dashboard.Schema() 
-      : Schema(plugins)
+      : Schema()
   })
   const result = { ...base,	...page }
   const context = {}
@@ -29,14 +29,14 @@ export function render(route, options) {
   
   let markup = ReactServer.renderToString(
     options._dashboard
-    ? <StaticRouter location={route} context={context}>
-        <Dashboard.OffCanvas>
+      ? <StaticRouter location={route} context={context}>
+          <Dashboard.OffCanvas>
+            <Base data={result} browser={options._test ? false : isBrowser()} />
+          </Dashboard.OffCanvas>
+        </StaticRouter>
+      : <StaticRouter location={route} context={context}>
           <Base data={result} browser={options._test ? false : isBrowser()} />
-        </Dashboard.OffCanvas>
-      </StaticRouter>
-    : <StaticRouter location={route} context={context}>
-        <Base data={result} browser={options._test ? false : isBrowser()} />
-      </StaticRouter>
+        </StaticRouter>
   )
 
   for (var key in options) {

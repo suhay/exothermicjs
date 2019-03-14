@@ -12,7 +12,7 @@ export function dashboard(site) {
   )
 }
 
-export default class OffCanvas extends React.Component {
+export class OffCanvas extends React.Component {
   render(){
     const { dump, path, children } = this.props
     
