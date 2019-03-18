@@ -1,12 +1,13 @@
 require('dotenv').config()
 
 const exothermic = require("exothermicjs")
+const auth = require("exothermicjs/src/auth")
+
 const createError = require('http-errors')
 const express = require('express')
 const path = require('path')
 const logger = require('morgan')
 const helmet = require('helmet')
-const { Auth } = require('exothermicjs')
 const fileUpload = require('express-fileupload')
 
 const indexRouter = require('./routes/index')
@@ -32,7 +33,9 @@ app.set('views', [path.resolve(process.env.PUBLIC) + '/pages/' || './public/page
 app.set('view engine', 'exo')
 app.use(helmet())
 app.use(logger('dev'))
-app.use(Auth)
+if (auth) {
+  app.use(auth)
+}
 app.use(express.static(path.resolve(process.env.PUBLIC) + '/static' || './public/static')) 
 app.use(fileUpload())
 

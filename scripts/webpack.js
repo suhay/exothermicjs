@@ -59,6 +59,10 @@ module.exports = ({env, options, target = 'node', forDemo = false, plugins = []}
   
   if (target != 'node') {
     config.node.fs = 'empty'
+    config.node.console = false
+    config.node.fs = 'empty'
+    config.node.net = 'empty'
+    config.node.tls = 'empty'
   }
   
   return config

@@ -6,7 +6,22 @@ import { ArticleYamlType } from './src/components/article'
 import { GetYamlType } from './src/components/util/Get'
 import { FormYamlType } from './src/components/form'
 
-export const Types = {
+const configBuilder = () => {
+  const def = require('./exothermic.config')
+  let user = {}
+  try {
+    user = require('../../exothermic.config')
+  }
+  catch (e) { }
+  return {
+    ...def,
+    ...user
+  }
+}
+
+const conf = configBuilder()
+
+const Types = {
   NavbarYamlType,
   SectionYamlType,
   ColYamlType,
@@ -19,9 +34,11 @@ export const Types = {
 }
 
 export const Schema = (addedPlugins = []) => {
-  const plugins = require('./exothermic.config').plugins
+  const plugins = conf.plugins.map(plug => require('../' + plug + '/src'))
   if (addedPlugins && addedPlugins.length > 0) {
-    const schemaTypes = [...Object.keys(Types).map(key => Types[key]), ...plugins.map(plugin => plugin.Type), ...addedPlugins.map(plugin => plugin.Type || plugin)]
+    // Override all Types with their addedPlugins replacers
+    const addedPlusStandard = { ...Types, ...addedPlugins }
+    const schemaTypes = [...Object.keys(addedPlusStandard).map(key => addedPlusStandard[key]), ...plugins.map(plugin => plugin.Type)]
     return yaml.Schema.create(schemaTypes)
   }
   else {
@@ -29,8 +46,10 @@ export const Schema = (addedPlugins = []) => {
   }
 }
 
+export { Types, conf }
+
 export { version } from './package.json'
 
 export * from './src/exothermic'
 
-export * from './exothermic.config'
+export { plugins } from './exothermic.config'

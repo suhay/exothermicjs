@@ -59,6 +59,6 @@ export default class OffCanvas extends React.Component {
 
 export const Schema = () => {
   const exo = require('exothermicjs')
-  const InteractiveTypes = [ MainYamlType, SectionYamlType, FooterYamlType ]
+  const InteractiveTypes = { MainYamlType, SectionYamlType, FooterYamlType }
   return exo.Schema(InteractiveTypes)
 }
