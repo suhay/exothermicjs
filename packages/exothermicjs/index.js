@@ -19,8 +19,6 @@ const configBuilder = () => {
   }
 }
 
-const conf = configBuilder()
-
 const Types = {
   NavbarYamlType,
   SectionYamlType,
@@ -34,6 +32,7 @@ const Types = {
 }
 
 export const Schema = (addedPlugins = []) => {
+  const conf = configBuilder()
   const plugins = conf.plugins.map(plug => require('../' + plug + '/src'))
   if (addedPlugins && addedPlugins.length > 0) {
     // Override all Types with their addedPlugins replacers
@@ -46,7 +45,7 @@ export const Schema = (addedPlugins = []) => {
   }
 }
 
-export { Types, conf }
+export { Types }
 
 export { version } from './package.json'
 

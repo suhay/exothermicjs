@@ -7,7 +7,6 @@ import path from 'path'
 
 import Spinner from './Spinner'
 import pageState from '../../state/page'
-import { Dashboard } from '../../../exothermic.config'
 import { Schema } from '../../../'
 
 export class Get extends Component {
@@ -22,6 +21,8 @@ export class Get extends Component {
 	}
 	
 	componentDidMount() {
+    let Dashboard = null
+    try { Dashboard = require('../../dashboard') } catch (e) {}
 		fetch(`/load/${this.props.data}`)
 			.then(response => response.text())
 			.then(data => this.setState({ 

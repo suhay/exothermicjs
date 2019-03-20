@@ -6,7 +6,6 @@ import yaml from 'js-yaml'
 import URL from 'url-parse'
 
 import pageState from '../../state/page'
-import { Dashboard } from '../../../exothermic.config'
 import { Schema } from '../../../'
 
 export default class Link extends Component {
@@ -20,6 +19,8 @@ export default class Link extends Component {
   
   handleNav() {
     if (this.state.to.pathname === '') { return }
+    let Dashboard = null
+    try { Dashboard = require('../../dashboard') } catch (e) {}
     fetch(`/load${this.state.to.pathname == '/' ? '/index' : this.state.to.pathname}`)
       .then(response => response.text())
       .then(data => pageState.setState({ 

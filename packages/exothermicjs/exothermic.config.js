@@ -2,6 +2,6 @@ module.exports = {
   plugins: [
     'exothermicjs-plugin-markdown'
   ],
-  Dashboard: 'exothermicjs-dashboard-endo',
+  dashboard: 'exothermicjs-dashboard-endo',
   auth: 'exothermicjs-lib-auth0'
 }

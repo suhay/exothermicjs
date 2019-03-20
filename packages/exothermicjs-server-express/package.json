@@ -29,6 +29,9 @@
   "bugs": {
     "url": "https://github.com/suhay/exothermicjs/issues"
   },
+  "devDependencies": {
+    "nodemon-webpack-plugin": "^4.0.8"
+  },
   "dependencies": {
     "connect-ensure-login": "^0.1.1",
     "dotenv": "^6.2.0",

@@ -21,10 +21,10 @@
     "src/"
   ],
   "scripts": {
-    "watch": "webpack --env.NODE_ENV=production --watch --mode production",
-    "build": "webpack --mode production",
+    "watch": "webpack --env.NODE_ENV=production --watch --mode development",
+    "build": "webpack --mode development",
     "build:prod": "webpack --mode production",
-    "build:all": "yarn build"
+    "build:all": "yarn build && yarn build:prod"
   },
   "dependencies": {
     "body-parser": "^1.18.3",

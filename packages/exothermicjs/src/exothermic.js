@@ -5,7 +5,6 @@ import React from 'react'
 import ReactServer from 'react-dom/server'
 import { StaticRouter } from 'react-router'
 
-import { Dashboard } from '../exothermic.config.js'
 import { Schema } from '../'
 import { pageState } from './state'
 import Head from './components/Head'
@@ -17,8 +16,10 @@ export function render(route, options) {
   const { _pages } = options
   const templates = get(route, options)
   const base = yaml.safeLoad(templates[0])
+  let Dashboard = null
+  try { Dashboard = require('./dashboard') } catch (e) {}
   const page = yaml.safeLoad(templates[1], {
-    schema: options._dashboard 
+    schema: options._dashboard && Dashboard
       ? Dashboard.Schema() 
       : Schema()
   })

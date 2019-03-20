@@ -18,7 +18,8 @@ export default class Editor extends Component {
   }
 
   componentDidMount() {
-    const ls = localStorage.getItem(`smde_${this.props.id}`).trim()
+    const smde = localStorage.getItem(`smde_${this.props.id}`)
+    const ls = smde ? smde.trim() : ''
     if (ls && ls !== '') {
       this.setState({
         value: ls
