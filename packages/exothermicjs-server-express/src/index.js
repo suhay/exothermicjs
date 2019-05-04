@@ -3,7 +3,7 @@ require('dotenv').config()
 const exothermic = require("exothermicjs")
 const auth = require("exothermicjs/src/auth")
 
-const createError = require('http-errors')
+// const createError = require('http-errors')
 const express = require('express')
 const path = require('path')
 const logger = require('morgan')
@@ -20,11 +20,11 @@ app.engine('exo', function (filePath, options, callback) {
   options = options || {}
   options._pages = options._pages || app.get('views')
   options._hydrate = options._hydrate || false
-  const page = options._get
-    ? exothermic.get(filePath, options)
-    : options._hydrate
-      ? exothermic.hydrate(filePath, options) 
-      : exothermic.render(filePath, options)
+  const page = options._get ? 
+    exothermic.get(filePath, options) : 
+    options._hydrate ? 
+      exothermic.hydrate(filePath, options) :
+      exothermic.render(filePath, options)
   return callback(null, page)
 })
 
@@ -50,7 +50,7 @@ app.use(function(req, res, next) {
 }) 
 
 if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
+  app.use(function(err, req, res) {
     res.status(err.status || 500) 
     console.error(err)
     res.render('error', {
@@ -60,7 +60,7 @@ if (app.get('env') === 'development') {
   }) 
 }
 
-app.use(function(err, req, res, next) {
+app.use(function(err, req, res) {
   res.status(err.status || 500) 
   res.render('error', {
     message: err.message,

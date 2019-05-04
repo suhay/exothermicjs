@@ -15,12 +15,15 @@
     "publish:version": "lerna version --no-push",
     "publish:push": "lerna publish from-git",
     "publish:git": "git push --follow-tags",
-    "publish:dry-run": "lerna version --no-git-tag-version --no-push"
+    "publish:dry-run": "lerna version --no-git-tag-version --no-push",
+    "lint": "eslint ./"
   },
   "devDependencies": {
     "@babel/core": "^7.1.5",
     "@babel/plugin-proposal-class-properties": "^7.2.3",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/plugin-transform-arrow-functions": "^7.2.0",
     "@babel/plugin-transform-react-jsx": "^7.0.0",
     "@babel/plugin-transform-react-jsx-self": "^7.0.0",
     "@babel/plugin-transform-react-jsx-source": "^7.0.0",
@@ -32,6 +35,11 @@
     "babel-loader": "^8.0.2",
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.7.0",
+    "eslint": "5.3.0",
+    "eslint-config-airbnb": "17.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-react": "^7.11.0",
     "jest": "^23.6.0",
     "lerna": "^3.4.3",
     "rimraf": "^2.6.2",

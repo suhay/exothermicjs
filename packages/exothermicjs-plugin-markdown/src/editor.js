@@ -10,7 +10,8 @@ export default class Editor extends Component {
     this.state = {
       delay: 1000,
       value: props.value,
-      id: props.id
+      id: props.id,
+      prevValue: ''
     }
     this.handleEdit = this.handleEdit.bind(this)
     this.handleChange = this.handleChange.bind(this)
@@ -32,10 +33,12 @@ export default class Editor extends Component {
   }
   
   handleEdit() {
+    this.setState({ prevValue: this.state.value })
     pageState.setState({ editingThis: this.state.id })
   }
   
   handleCancel() {
+    this.setState({ prevValue: this.state.prevValue })
     pageState.setState({ editingThis: `` })
   }
   

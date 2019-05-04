@@ -18,7 +18,8 @@ export class Container extends Component {
       <div>
         <SmoothContainer 
           groupName="1" 
-          getChildPayload={i => this.state.items[i]} 
+          getChildPayload={i => this.state.items[i]}
+          dragHandleSelector=".drag-handle"
           onDrop={e => {
             const result = applyDrag(this.state.items, e)
             const draggables = dragState.state.draggables
@@ -38,6 +39,7 @@ export class Draggable extends Component {
   render() {
     return (
       <SmoothDraggable>
+        <span className="drag-handle">[]</span>
         <div className="draggable-item">
           {this.props.children}
         </div>

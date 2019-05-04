@@ -5,6 +5,26 @@ const router = express.Router()
 const fs = require(`fs`)
 const path = require(`path`)
 
+router.get('/load/module/:module', (req, res) => {
+  const mod = req.params.module
+  if ((mod.includes('exothermicjs-dashboard') || mod.includes('exothermicjs-plugin'))) {
+    const cwd = process.cwd()
+    let modulePath = path.resolve(`${cwd}/../${mod}/index.js`)
+    if (fs.existsSync(modulePath)) {
+      console.log(modulePath)
+      res.sendFile(modulePath)
+    }
+    else {
+      res.send('Module not found!')
+      throw new Error('Module not found');
+    }
+  }
+  else {
+    res.send('Module not found!')
+    throw new Error('Module not found');
+  }
+})
+
 router.get('/load/*', (req, res) => {
   let options = req.session && req.session.options ? req.session.options : {}
   options._hydrate = true

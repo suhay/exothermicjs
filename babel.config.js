@@ -23,6 +23,7 @@ const plugins = () => {
     "@babel/plugin-transform-react-jsx-self",
     "@babel/plugin-proposal-object-rest-spread",
     "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-syntax-dynamic-import",
   ];
 
   if (isProduction) {

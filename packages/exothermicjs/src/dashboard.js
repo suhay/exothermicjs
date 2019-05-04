@@ -15,4 +15,8 @@ const configBuilder = () => {
 
 const conf = configBuilder()
 const dashboard = conf.dashboard
-module.exports = require('../../' + dashboard + '/src')
+
+module.exports = {
+  load: () => require('../../' + dashboard + '/src'),
+  config: () => require('../../' + dashboard + '/exothermic.config')
+}

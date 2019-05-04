@@ -48,6 +48,7 @@
     "webpack-node-externals": "^1.6.0"
   },
   "scripts": {
+    "dev": "webpack --watch --mode development",
     "clean": "rimraf dist",
     "build": "yarn clean && webpack --mode development",
     "build:prod": "yarn clean && webpack --mode production",

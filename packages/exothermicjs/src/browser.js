@@ -27,7 +27,14 @@ const dump = (data) => {
   }).replace(/_tag: '!(.*)'/g, '!$1')
 }
 
-hydrate(
-	<Loader dump={dump} path={window.location.pathname == '/' ? 'index' : window.location.pathname.replace(/^\//, '')} />, 
-	document.getElementById("__exothermic")
-)
+window.EXOTHERMIC = window.EXOTHERMIC || (() => {
+  return {
+    initialize: (config) => {
+      hydrate(
+        <Loader dump={dump} config={config} path={window.location.pathname == '/' ? 'index' : window.location.pathname.replace(/^\//, '')} />, 
+        document.getElementById("__exothermic")
+      )
+    }
+  }
+})()
+

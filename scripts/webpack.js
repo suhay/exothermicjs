@@ -34,6 +34,7 @@ module.exports = ({env, options, target = 'node', forDemo = false, plugins = []}
               require("@babel/plugin-transform-react-jsx-self"),
               require("@babel/plugin-proposal-object-rest-spread"),
               require("@babel/plugin-proposal-class-properties"),
+              require("@babel/plugin-transform-arrow-functions"),
             ]
           }
         }

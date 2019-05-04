@@ -12,7 +12,7 @@
     "back end",
     "exothermicjs"
   ],
-  "main": "dist/endothermicjs-dashboard-endo.min.js",
+  "main": "dist/exothermicjs-dashboard-endo.min.js",
   "module": "src/index.js",
   "license": "MIT",
   "homepage": "https://github.com/suhay/exothermicjs#readme",

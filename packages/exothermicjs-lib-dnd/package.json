@@ -10,7 +10,7 @@
   "homepage": "https://github.com/suhay/exothermicjs#readme",
   "license": "MIT",
   "module": "src/index.js",
-  "main": "dist/endothermicjs-lib-dnd.min.js",
+  "main": "dist/exothermicjs-lib-dnd.min.js",
   "files": [
     "dist/",
     "src/"

@@ -12,15 +12,26 @@ import Base from './components/Base'
 import Page from './components/Page'
 import { isBrowser } from './components/util'
 
+let Dashboard = null, dasboardConfig = null
+
 export function render(route, options) {
   const { _pages } = options
   const templates = get(route, options)
   const base = yaml.safeLoad(templates[0])
-  let Dashboard = null
-  try { Dashboard = require('./dashboard') } catch (e) {}
+  console.log(Dashboard)
+  if (options._dashboard && !Dashboard) {
+    try { 
+      const dash = require('./dashboard')
+      Dashboard = dash.load() 
+      dasboardConfig = dash.config()
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
   const page = yaml.safeLoad(templates[1], {
     schema: options._dashboard && Dashboard
-      ? Dashboard.Schema() 
+      ? Dashboard.Schema()
       : Schema()
   })
   const result = { ...base,	...page }
@@ -49,16 +60,23 @@ export function render(route, options) {
   const head = ReactServer.renderToString(
     <Head data={result} />
   )
-  const browserScript = process.env.SSR_ONLY === 'true' || options._ssr_only 
-    ? ``
-    : process.env.NODE_ENV && process.env.NODE_ENV == 'development'
-      ? "/browser.js"
-      : "https://unpkg.com/exothermicjs/dist/browser.exothermic.min.js"
-  const dashboardScript = options._dashboard
-    ? process.env.NODE_ENV && process.env.NODE_ENV == 'development'
-      ? "/endothermicjs-lib-dnd.min.js"
-      : "https://unpkg.com/exothermicjs/dist/browser.exothermic.min.js"
-    : ``
+  
+  const footerScripts = `
+    ${process.env.SSR_ONLY === 'true' || options._ssr_only 
+        ? `` 
+        : process.env.NODE_ENV && process.env.NODE_ENV == 'development'
+          ? `<script src="/browser.js"></script>`
+          : `<script src="https://unpkg.com/exothermicjs/dist/browser.exothermic.min.js"></script>`}
+    ${options._dashboard && dasboardConfig
+        ? `<script src="${process.env.NODE_ENV && process.env.NODE_ENV == 'development' ? dasboardConfig.dev : dasboardConfig.live}"></script>`
+        : `` }
+    <script>
+        var config = {
+          dashboard: ${options._dashboard ? `'endo'` : null}
+        };
+        EXOTHERMIC.initialize(config);
+     </script>
+  `
   
   return `
     <!doctype html>
@@ -66,11 +84,7 @@ export function render(route, options) {
       <head>${head}</head>
       <body>
         <div id="__exothermic">${markup}</div>
-        ${browserScript == `` ? `` : `<script src="${browserScript}"></script>`}
-        ${dashboardScript == `` 
-          ? `` 
-          : `<script src="${dashboardScript}"></script>
-             <script>window.DASHBOARD = 'endothermic'</script>`}
+        ${footerScripts}
       </body>
     </html>
   `

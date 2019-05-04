@@ -15,43 +15,71 @@ export default class Loader extends Component {
     this.state = { 
       data: null,
       loading: true,
-      path: this.props.path
+      path: props.path,
+      config: props.config,
+      page: null,
     }
   }
   
   componentDidMount() {
     pageState.setState({ route: this.state.path })
-    let Dashboard = null
-    try { Dashboard = require('../dashboard') } catch (e) {}
-    fetch(`/load/${this.state.path}`.replace('//', '/'), { credentials: `same-origin` })
-      .then(response => response.text())
-      .then(data => this.setState({ 
-        data: yaml.safeLoad(data, {
-          schema: window.DASHBOARD && Dashboard ? Dashboard.Schema() : Schema()
-        }),
-        loading: false 
-      }))
-      .catch(error => { throw error})
+    if (this.state.config && this.state.config.dashboard) {
+      import('../browser.config')
+        .then(config => config.default())
+        .then(config => {
+          fetch(`/load/${this.state.path}`.replace('//', '/'), { credentials: `same-origin` })
+            .then(response => response.text())
+            .then(data => fetch('/load/module/' + config.dashboard))
+            .then(dashboard => console.log(dashboard))
+            .then(data => {
+              const pageData = yaml.safeLoad(data, {
+                schema: typeof config.dashboard.Schema === `function` ? dashboard.Schema() : Schema()
+              })
+              console.log(pageData)
+              this.setState({
+                data: pageData,
+                loading: false,
+                page: (
+                  <dashboard.OffCanvas dump={this.props.dump} path={this.state.path}>
+                    <Page data={pageData || this.state.data} />
+                  </dashboard.OffCanvas>
+                )
+              })
+            })
+            .catch(error => {
+              console.error(error)
+              throw error 
+            })
+        })
+        .catch(error => { throw error })
+    }
+    else {
+      fetch(`/load/${this.state.path}`.replace('//', '/'), { credentials: `same-origin` })
+        .then(response => response.text())
+        .then(data => {
+          const pageData = yaml.safeLoad(data, {
+            schema: Schema()
+          })
+          this.setState({ 
+            data: pageData,
+            loading: false,
+            page: (<Page data={pageData || this.state.data} />)
+          })
+        })
+        .catch(error => { throw error })
+    }
   }
   
   render() {
-    let Dashboard = null
-    try { Dashboard = require('../dashboard') } catch (e) {}
     return (
       <Subscribe to={[pageState]}>
         {state => (
-          <div className='base'>
+          <div className='base loader'>
             {this.state.loading 
               ? <Spinner name='folding-cube' />
-              : window && window.DASHBOARD && Dashboard
-                ? <BrowserRouter>
-                    <Dashboard.OffCanvas dump={this.props.dump} path={this.state.path}>
-                      <Page data={state.data || this.state.data} />
-                    </Dashboard.OffCanvas>
-                  </BrowserRouter>
-                : <BrowserRouter>
-                    <Page data={state.data || this.state.data} />
-                  </BrowserRouter>
+              : <BrowserRouter>
+                  {this.state.page}
+                </BrowserRouter>
              }
            </div>
          )}
