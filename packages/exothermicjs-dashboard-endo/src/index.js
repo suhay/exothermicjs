@@ -1,27 +1,20 @@
 import React from 'react'
-import ReactServer from 'react-dom/server'
 
-import Dashboard from './components/dashboard'
-import CanvasBoard from './components/off-canvas'
-
+import CanvasBoard, { Schema } from './components/off-canvas'
 import './styles/endothermic.css'
 
-export function dashboard(site) {
-  return ReactServer.renderToString(
-    <Dashboard {...site} />
-  )
-}
+export const OffCanvas = ({ dump, path, children }) => (
+  <CanvasBoard dump={dump} path={path}>
+    {children}
+  </CanvasBoard>
+)
 
-export class OffCanvas extends React.Component {
-  render(){
-    const { dump, path, children } = this.props
-    
-    return (
-      <CanvasBoard dump={dump} path={path}>
-        {children}
-      </CanvasBoard>
-    )
-  }
-}
+export { Schema }
 
-export { Schema } from './components/off-canvas'
+window.EXOTHERMIC = window.EXOTHERMIC || {}
+window.EXOTHERMIC.Dashboard = window.EXOTHERMIC.Dashboard || {}
+window.EXOTHERMIC.Dashboard = {
+  ...window.EXOTHERMIC.Dashboard,
+  OffCanvas,
+  Schema,
+}

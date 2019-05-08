@@ -1,33 +1,34 @@
-import React, { PureComponent } from 'react';
-import { val, key } from './util';
+import React, { PureComponent } from 'react'
+import { val, key } from './util'
 
 class Link extends PureComponent {
   render() {
-    if (!this.props.links) {
-      return null;
+    const { links } = this.props
+    if (!links) {
+      return null
     }
-    let linkTags = [];
-    this.props.links.forEach((tag, index) => {
-      if (typeof tag === "string") {
-        linkTags.push({'href':tag, 'rel':'stylesheet', 'type':"text/css"});
+    const linkTags = []
+    links.forEach((tag) => {
+      if (typeof tag === `string`) {
+        linkTags.push({ href: tag, rel: `stylesheet`, type: `text/css` })
       } else {
-        let numTags = Object.keys(tag).length;
+        const numTags = Object.keys(tag).length
         if (numTags > 1) { // Not just a key and value
-          let link = {};
+          const link = {}
           for (let i = 0; i < numTags; i++) {
-            link[key(tag, i)] = val(tag, i);
+            link[key(tag, i)] = val(tag, i)
           }
-          linkTags.push(link);
+          linkTags.push(link)
         } else {
-          linkTags.push({'href':val(tag), 'rel':key(tag)});
+          linkTags.push({ href: val(tag), rel: key(tag) })
         }
       }
-    });
+    })
 
-    return linkTags.map((item) => (
+    return linkTags.map(item => (
       <link {...item} />
-    ));
+    ))
   }
 }
 
-export default Link;
+export default Link

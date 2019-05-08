@@ -1,22 +1,19 @@
-const path = require('path')
-
 const configBuilder = () => {
-  const def = require('../exothermic.config')
+  const def = require(`../exothermic.config`)
   let user = {}
   try {
-    user = require('../../../exothermic.config')
-  }
-  catch (e) { }
+    user = require(`../../../exothermic.config`)
+  } catch (e) { }
   return {
     ...def,
-    ...user
+    ...user,
   }
 }
 
 const conf = configBuilder()
-const dashboard = conf.dashboard
+const { dashboard } = conf
 
 module.exports = {
-  load: () => require('../../' + dashboard + '/src'),
-  config: () => require('../../' + dashboard + '/exothermic.config')
+  load: () => require(`../../${dashboard}/src`),
+  config: () => require(`../../${dashboard}/exothermic.config`),
 }

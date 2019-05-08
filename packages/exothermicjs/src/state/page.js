@@ -1,9 +1,9 @@
 import { State } from "statable"
 
 const pageState = new State({
-	page: ``,
-	route: ``,
-	pagesPath: ``,
+  page: ``,
+  route: ``,
+  pagesPath: ``,
   editing: false,
   editingThis: ``,
 })

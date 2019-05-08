@@ -1,12 +1,12 @@
-import React, { Component, Fragment } from 'react'
+import React, { PureComponent } from 'react'
 
 import Page from './Page'
 
-export default class Base extends Component {
+export default class Base extends PureComponent {
   render() {
-    const { children, browser, data } = this.props;
+    const { children, data } = this.props
     return (
-      <div className='base'>
+      <div className="base">
         <Page data={data}>
           {children}
         </Page>

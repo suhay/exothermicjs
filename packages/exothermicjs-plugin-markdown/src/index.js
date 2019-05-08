@@ -3,7 +3,6 @@ import ReactMarkdown from 'react-markdown'
 import fetch from 'isomorphic-fetch'
 import fs from 'fs'
 import yaml from 'js-yaml'
-import path from 'path'
 import { Subscribe } from 'statable'
 import shortid from 'shortid'
 import "simplemde/dist/simplemde.min.css"
@@ -13,31 +12,32 @@ import Editor from './editor'
 
 export class Markdown extends Component {
   constructor(props) {
-		super(props)
-		this.state = { 
-			data: fs && typeof fs.readFileSync === 'function' ? fs.readFileSync(`${pageState.state.pagesPath}markdown/${this.props.data}.md`, 'utf8') : null,
-			loading: fs && typeof fs.readFileSync === 'function' ? false : true
-		}
-	}
-	
-	componentDidMount() {
-		fetch(`/load/pages/markdown/${this.props.data}.md`)
-			.then(response => response.text())
-			.then(data => this.setState({ 
-				data,
-				loading: false 
-			}))
-	}
+    super(props)
+    this.state = {
+      data: fs && typeof fs.readFileSync === `function` ? fs.readFileSync(`${pageState.state.pagesPath}markdown/${props.data}.md`, `utf8`) : null,
+      loading: !(fs && typeof fs.readFileSync === `function`),
+    }
+  }
+
+  componentDidMount() {
+    const { data: fetchPath } = this.props
+    fetch(`/load/pages/markdown/${fetchPath}.md`)
+      .then(response => response.text())
+      .then(data => this.setState({
+        data,
+        loading: false,
+      }))
+  }
 
   render() {
-    const { data } = this.state
+    const { data, loading } = this.state
     const id = data || shortid.generate()
     return (
       <Subscribe to={[pageState]}>
         {state => (
           <Fragment>
-            {!state.editing && <ReactMarkdown source={data} escapeHtml={false} renderers={{root:React.Fragment}} />}
-            {state.editing && !this.state.loading && <Editor id={id} value={data} editingThis={state.editingThis == id} />}
+            {!state.editing && <ReactMarkdown source={data} escapeHtml={false} renderers={{ root: Fragment }} />}
+            {state.editing && !loading && <Editor id={id} value={data} editingThis={state.editingThis === id} />}
           </Fragment>
         )}
       </Subscribe>
@@ -45,18 +45,17 @@ export class Markdown extends Component {
   }
 }
 
-export const Type = new yaml.Type('!markdown', {
-  kind: 'scalar',
-  resolve: function (data) {
-    return data !== null;
+export const Type = new yaml.Type(`!markdown`, {
+  kind: `scalar`,
+  resolve(data) {
+    return data !== null
   },
-  construct: function (data) {
-    data = data || {}; // in case of empty node
-    return <Markdown data={data} key="content" />;
+  construct(data = {}) {
+    return <Markdown data={data} key="content" />
   },
   instanceOf: Markdown,
-  represent: function (data) {
-    const rtn = { _tag: '!markdown', ...data }
+  represent(data) {
+    const rtn = { tag: `!markdown`, ...data }
     return rtn
-  }
-});
+  },
+})

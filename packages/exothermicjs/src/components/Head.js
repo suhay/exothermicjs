@@ -1,23 +1,24 @@
-import React, { Component } from 'react';
-import Meta from './Meta';
-import Link from './Link';
-import Script from './Script';
-import { version } from '../../';
+import React, { PureComponent } from 'react'
+import Meta from './Meta'
+import HeadLink from './Link'
+import Script from './Script'
+import { version } from '../../'
 
-class Head extends Component {
+class Head extends PureComponent {
   render() {
-    let description = [{description:this.props.data.description}];
+    const { data } = this.props
+    const description = [{ description: data.description }]
     return (
       <React.Fragment>
-        <Meta tags={this.props.data.meta} />
-        <meta name="generator" content={"ExothermicJS " + version} />
-        <title>{this.props.data.title}</title>
+        <Meta tags={data.meta} />
+        <meta name="generator" content={`ExothermicJS ${version}`} />
+        <title>{data.title}</title>
         <Meta tags={description} />
-        <Link links={this.props.data.links} />
-        <Script scripts={this.props.data.headScripts} />
+        <HeadLink links={data.links} />
+        <Script scripts={data.headScripts} />
       </React.Fragment>
-    );
+    )
   }
 }
 
-export default Head;
+export default Head

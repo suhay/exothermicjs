@@ -1,15 +1,16 @@
 import React from 'react'
 import { Upload } from 'exothermicjs-plugin-upload'
 
-export default class Dashboard extends React.Component {
+export default class Dashboard extends React.PureComponent {
   render() {
+    const { pages, users } = this.props
     return (
       <div>
         <h1>Endothermic Dashboard!!!...</h1>
         <a href="/">Return to Site</a>
         <ul>
-          <li>Pages in site: {this.props.pages}</li>
-          <li>Active users: {this.props.users}</li>
+          <li>{`Pages in site: ${pages}`}</li>
+          <li>{`Active users: ${users}`}</li>
         </ul>
         <div className="uploads">
           <Upload />

@@ -1,7 +1,7 @@
 import { State } from "statable"
 
 const dragState = new State({
-	draggables: {},
+  draggables: {},
 })
 
 export default dragState

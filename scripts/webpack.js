@@ -1,21 +1,24 @@
-const path = require('path')
-const webpack = require('webpack')
-const pkg = require(path.join(process.cwd(), 'package.json'));
-const nodeExternals = require('webpack-node-externals')
+const path = require(`path`)
+const webpack = require(`webpack`)
 
-module.exports = ({env, options, target = 'node', forDemo = false, plugins = []}) => {
+const pkg = require(path.join(process.cwd(), `package.json`))
+const nodeExternals = require(`webpack-node-externals`)
+
+module.exports = ({
+  options, target = `node`, forDemo = false, plugins = [],
+}) => {
   const config = {
-    entry: './src/index.js',
+    entry: `./src/index.js`,
     output: {
-      path: options.mode === 'development' && forDemo ? path.resolve('../../demo/public/static') : process.cwd(),
-      filename: options.mode === 'development' && forDemo ? pkg.main.replace('dist/', '') : pkg.main,
+      path: options.mode === `development` && forDemo ? path.resolve(`../../demo/public/static`) : process.cwd(),
+      filename: options.mode === `development` && forDemo ? pkg.main.replace(`dist/`, ``) : pkg.main,
       library: pkg.name,
-      libraryTarget: 'umd',
+      libraryTarget: `umd`,
       umdNamedDefine: true,
     },
-    target: target,
-    externals: target !== 'node' ? [] : [nodeExternals({
-      whitelist: ['react', 'react-dom/server']
+    target,
+    externals: target !== `node` ? [] : [nodeExternals({
+      whitelist: [`react`, `react-dom/server`],
     })],
     node: {
       __dirname: true,
@@ -25,29 +28,29 @@ module.exports = ({env, options, target = 'node', forDemo = false, plugins = []}
         test: /\.js$/,
         exclude: /(node_modules|bower_components)/,
         use: {
-          loader: 'babel-loader',
+          loader: `babel-loader`,
           options: {
-            presets: ['@babel/preset-env'],
+            presets: [`@babel/preset-env`],
             plugins: [
-              require("@babel/plugin-transform-react-jsx"),
-              require("@babel/plugin-transform-react-jsx-source"),
-              require("@babel/plugin-transform-react-jsx-self"),
-              require("@babel/plugin-proposal-object-rest-spread"),
-              require("@babel/plugin-proposal-class-properties"),
-              require("@babel/plugin-transform-arrow-functions"),
-            ]
-          }
-        }
+              require(`@babel/plugin-transform-react-jsx`),
+              require(`@babel/plugin-transform-react-jsx-source`),
+              require(`@babel/plugin-transform-react-jsx-self`),
+              require(`@babel/plugin-proposal-object-rest-spread`),
+              require(`@babel/plugin-proposal-class-properties`),
+              require(`@babel/plugin-transform-arrow-functions`),
+            ],
+          },
+        },
       }, {
         test: /\.css$/,
-        use: [ 'css-loader' ]
-      }]
+        use: [`css-loader`],
+      }],
     },
     resolve: {
       alias: {
-        Root: path.resolve(__dirname, '.'),
-        'hiredis': path.join(__dirname, 'aliases/hiredis.js'),
-      }
+        Root: path.resolve(__dirname, `.`),
+        hiredis: path.join(__dirname, `aliases/hiredis.js`),
+      },
     },
     plugins: [
       new webpack.DefinePlugin({
@@ -57,14 +60,14 @@ module.exports = ({env, options, target = 'node', forDemo = false, plugins = []}
       ...plugins,
     ].filter(e => e),
   }
-  
-  if (target != 'node') {
-    config.node.fs = 'empty'
+
+  if (target !== `node`) {
+    config.node.fs = `empty`
     config.node.console = false
-    config.node.fs = 'empty'
-    config.node.net = 'empty'
-    config.node.tls = 'empty'
+    config.node.fs = `empty`
+    config.node.net = `empty`
+    config.node.tls = `empty`
   }
-  
+
   return config
 }

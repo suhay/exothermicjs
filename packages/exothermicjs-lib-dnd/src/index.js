@@ -1,49 +1,38 @@
 import React, { Component } from 'react'
-import { Container as SmoothContainer, Draggable as SmoothDraggable } from 'react-smooth-dnd'
-
+import { Container as SmoothContainer } from 'react-smooth-dnd'
 import dragState from 'exothermicjs/src/state/draggables'
 
-import { applyDrag } from './utils'
+import applyDrag from './utils'
 
-export class Container extends Component {
+export default class Container extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      items: this.props.items
+      items: props.items,
     }
   }
-  
+
   render() {
+    const { items } = this.state
+    const { id } = this.props
     return (
       <div>
-        <SmoothContainer 
-          groupName="1" 
-          getChildPayload={i => this.state.items[i]}
+        <SmoothContainer
+          groupName="1"
+          getChildPayload={i => items[i]}
           dragHandleSelector=".drag-handle"
-          onDrop={e => {
-            const result = applyDrag(this.state.items, e)
-            const draggables = dragState.state.draggables
-            draggables[this.props.id] = result
+          onDrop={(e) => {
+            const result = applyDrag(items, e)
+            const { draggables } = dragState.state
+            draggables[id] = result
             dragState.setState({ draggables })
-            this.setState({ items: result })}
+            this.setState({ items: result })
+          }
           }
         >
-          {this.state.items}
+          {items}
         </SmoothContainer>
       </div>
-    )
-  }
-}
-
-export class Draggable extends Component {
-  render() {
-    return (
-      <SmoothDraggable>
-        <span className="drag-handle">[]</span>
-        <div className="draggable-item">
-          {this.props.children}
-        </div>
-      </SmoothDraggable>
     )
   }
 }

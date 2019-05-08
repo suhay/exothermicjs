@@ -6,12 +6,11 @@ import { pageState } from 'exothermicjs/src/state'
 
 export default class Editor extends Component {
   constructor(props) {
-		super(props)
+    super(props)
     this.state = {
-      delay: 1000,
       value: props.value,
       id: props.id,
-      prevValue: ''
+      prevValue: ``,
     }
     this.handleEdit = this.handleEdit.bind(this)
     this.handleChange = this.handleChange.bind(this)
@@ -19,35 +18,41 @@ export default class Editor extends Component {
   }
 
   componentDidMount() {
-    const smde = localStorage.getItem(`smde_${this.props.id}`)
-    const ls = smde ? smde.trim() : ''
-    if (ls && ls !== '') {
+    const { id } = this.props
+    const smde = global.localStorage.getItem(`smde_${id}`)
+    const ls = smde ? smde.trim() : ``
+    if (ls && ls !== ``) {
       this.setState({
-        value: ls
+        value: ls,
       })
     }
   }
-  
+
   handleChange(value) {
     this.setState({ value })
   }
-  
+
   handleEdit() {
-    this.setState({ prevValue: this.state.value })
-    pageState.setState({ editingThis: this.state.id })
+    const { id, value } = this.state
+    this.setState({ prevValue: value })
+    pageState.setState({ editingThis: id })
   }
-  
+
   handleCancel() {
-    this.setState({ prevValue: this.state.prevValue })
+    const { prevValue } = this.state
+    this.setState({ prevValue })
     pageState.setState({ editingThis: `` })
   }
-  
+
   render() {
-    const { options, delay, id, editingThis, ...rest } = this.props
+    const {
+      options, delay, id, editingThis, ...rest
+    } = this.props
     const { value } = this.state
     return (
       <Fragment>
-        {editingThis && 
+        {editingThis
+          && (
           <div>
             <SimpleMDEReact
               {...rest}
@@ -58,19 +63,22 @@ export default class Editor extends Component {
                 autosave: {
                   enabled: true,
                   uniqueId: id,
-                  delay
+                  delay,
                 },
-                ...options
+                ...options,
               }}
             />
-            <button onClick={this.handleCancel}>cancel</button>
-            <button>save</button>
-          </div>}
-        {!editingThis && 
-          <div>
-            <ReactMarkdown source={value} escapeHtml={false} renderers={{root:Fragment}} />
-            <button onClick={this.handleEdit}>edit</button>
+            <button type="button" onClick={this.handleCancel}>cancel</button>
+            <button type="button">save</button>
           </div>
+          )}
+        {!editingThis
+          && (
+          <div>
+            <ReactMarkdown source={value} escapeHtml={false} renderers={{ root: Fragment }} />
+            <button type="button" onClick={this.handleEdit}>edit</button>
+          </div>
+          )
         }
       </Fragment>
     )

@@ -1,6 +1,65 @@
 {
-  "extends": ["airbnb"],
+  "extends": [
+    "eslint:recommended",
+		"plugin:react/recommended",
+		"plugin:jest/recommended",
+    "airbnb"
+  ],
   "env": {
-    "jest": true
-  }
+    "jest": true,
+    "es6": true,
+		"node": true
+  },
+  "parserOptions": {
+		"ecmaFeatures": {
+			"jsx": true
+		},
+		"ecmaVersion": 2018,
+		"sourceType": "module"
+  },
+  "plugins": [
+		"react",
+		"jest"
+	],
+	"globals": {
+		"graphql": true,
+		"window": true,
+		"document": true
+	},
+	"rules": {
+		"linebreak-style": [
+			"error",
+			"unix"
+		],
+		"quotes": [
+			"error",
+			"backtick"
+		],
+		"semi": [
+			"error",
+			"never"
+		],
+		"comma-dangle": [
+			"error",
+			"always-multiline"
+		],
+		"no-console": 0,
+		"react/jsx-uses-vars": 1,
+		"react/prop-types": 0,
+		"react/no-unescaped-entities": 0,
+		"react/jsx-filename-extension": 0,
+		"no-underscore-dangle": 0,
+		"global-require": 0,
+		"no-nested-ternary": 0,
+		"no-empty": 0,
+		"import/no-dynamic-require": 0,
+		"import/no-useless-path-segments": 0,
+		"no-plusplus": 0,
+		"react/no-array-index-key": 0,
+		"import/no-extraneous-dependencies": 0,
+		"jsx-a11y/label-has-associated-control": 0,
+		"import/no-unresolved": 0,
+		"max-len": 0,
+		"jsx-a11y/label-has-for": 0
+	}
 }

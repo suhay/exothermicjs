@@ -1,6 +1,6 @@
-import React, { Component, Fragment } from 'react'
+import React, { Fragment, PureComponent } from 'react'
 
-export default class Page extends Component {
+export default class Page extends PureComponent {
   render() {
     const { data } = this.props
     if (data && data.page) {
@@ -8,13 +8,12 @@ export default class Page extends Component {
         <Fragment>
           {data.page}
         </Fragment>
-      );
-    } else {
-      return (
-        <div>
-          <p>Page not found!</p>
-        </div>
-      );
+      )
     }
+    return (
+      <div>
+        <p>Page not found!</p>
+      </div>
+    )
   }
 }

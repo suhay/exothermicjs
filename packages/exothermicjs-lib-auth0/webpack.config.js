@@ -1,5 +1,3 @@
-const webpack = require('../../scripts/webpack')
+const webpack = require(`../../scripts/webpack`)
 
-module.exports = (env, options) => {
-  return webpack({ env, options })
-}
+module.exports = (env, options) => webpack({ env, options })

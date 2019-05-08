@@ -12,31 +12,34 @@ export default class Link extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      to: new URL(this.props.to)
+      to: new URL(props.to),
     }
     this.handleNav = this.handleNav.bind(this)
   }
-  
+
   handleNav() {
-    if (this.state.to.pathname === '') { return }
+    const { to } = this.state
+    if (to.pathname === ``) { return }
     let Dashboard = null
-    try { Dashboard = require('../../dashboard') } catch (e) {}
-    fetch(`/load${this.state.to.pathname == '/' ? '/index' : this.state.to.pathname}`)
+    try { Dashboard = require(`../../dashboard`) } catch (e) {}
+    fetch(`/load${to.pathname === `/` ? `/index` : to.pathname}`)
       .then(response => response.text())
-      .then(data => pageState.setState({ 
+      .then(data => pageState.setState({
         data: yaml.safeLoad(data, {
-          schema: window.DASHBOARD && Dashboard ? Dashboard.Schema() : Schema()
+          schema: window.DASHBOARD && Dashboard ? Dashboard.Schema() : Schema(),
         }),
-        route: this.state.to.pathname
+        route: to.pathname,
       }))
   }
-  
+
   render() {
+    const { to } = this.state
+    const { children } = this.props
     return (
       <Fragment>
-        {this.state.to.hash === ''
-          ? <NavLink activeClassName="selected" to={this.state.to.pathname} onClick={this.handleNav} {...this.props}>{this.props.children}</NavLink>
-          : <NavHashLink smooth activeClassName="selected" to={this.state.to.href} onClick={this.handleNav} {...this.props}>{this.props.children}</NavHashLink>
+        {to.hash === ``
+          ? <NavLink activeClassName="selected" to={to.pathname} onClick={this.handleNav} {...this.props}>{children}</NavLink>
+          : <NavHashLink smooth activeClassName="selected" to={to.href} onClick={this.handleNav} {...this.props}>{children}</NavHashLink>
         }
       </Fragment>
     )

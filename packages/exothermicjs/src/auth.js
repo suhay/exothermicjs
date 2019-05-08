@@ -1,17 +1,16 @@
 const configBuilder = () => {
-  const def = require('../exothermic.config')
+  const def = require(`../exothermic.config`)
   let user = {}
   try {
-    user = require('../../../exothermic.config')
-  }
-  catch (e) { }
+    user = require(`../../../exothermic.config`)
+  } catch (e) { }
   return {
     ...def,
-    ...user
+    ...user,
   }
 }
 
 const conf = configBuilder()
-const auth = conf.auth
+const { auth } = conf
 
-module.exports = require('../../' + auth + '/src')
+module.exports = require(`../../${auth}/src`)

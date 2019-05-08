@@ -1,34 +1,37 @@
 import React from 'react'
 import { Field } from "formik"
 
-export default class Checkbox extends React.Component{
+export default class Checkbox extends React.PureComponent {
   render() {
+    const {
+      name, value, required, label,
+    } = this.props
     return (
-      <Field name={this.props.name} value={this.props.value}>
+      <Field name={name} value={value}>
         {({ field, form }) => (
-          <label className='clickableLabel'>
-            <div className={`checkbox ${field.value && field.value.includes(this.props.value) ? 'checkboxChecked' : ''}`}>
-              <label className='inputWrapper'>
+          <label className="clickableLabel">
+            <div className={`checkbox ${field.value && field.value.includes(value) ? `checkboxChecked` : ``}`}>
+              <label className="inputWrapper">
                 <input
                   type="checkbox"
                   {...this.props}
-                  checked={field.value && field.value.includes(this.props.value) ? true : false}
+                  checked={!!(field.value && field.value.includes(value))}
                   onChange={() => {
-                    if (field.value && field.value.includes(this.props.value)) {
+                    if (field.value && field.value.includes(value)) {
                       const nextValue = field.value.filter(
-                        value => value !== this.props.value
-                      );
-                      form.setFieldValue(this.props.name, nextValue);
+                        val => val !== value
+                      )
+                      form.setFieldValue(name, nextValue)
                     } else {
-                      const nextValue = field.value ? field.value.concat(this.props.value) : [this.props.value];
-                      form.setFieldValue(this.props.name, nextValue);
+                      const nextValue = field.value ? field.value.concat(value) : [value]
+                      form.setFieldValue(name, nextValue)
                     }
                   }}
                 />
               </label>
-              {field.value && field.value.includes(this.props.value) && <div className='checkboxIcon'>✓</div>}
+              {field.value && field.value.includes(value) && <div className="checkboxIcon">✓</div>}
             </div>
-            <div className={this.props.required ? 'requiredInput' : ``}>{this.props.label}</div>
+            <div className={required ? `requiredInput` : ``}>{label}</div>
           </label>
         )}
       </Field>

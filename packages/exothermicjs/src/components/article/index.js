@@ -1,40 +1,41 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react'
 
-import ReactMarkdown from 'react-markdown';
-import yaml from 'js-yaml';
+import ReactMarkdown from 'react-markdown'
+import yaml from 'js-yaml'
 
-export class Article extends Component {
+export class Article extends PureComponent {
   render() {
-    const classes = this.props.data.class ? this.props.data.class : '';
     const {
       data: {
         id,
         title,
-      }, 
-      data
+        content,
+        items,
+      },
+      data,
     } = this.props
+    const classes = data.class ? data.class : ``
     return (
-      <article className={classes} id={data.id}>
-        <ReactMarkdown source={data.title} renderers={{root:React.Fragment}} />
-        {data.content}
-        {data.items}
+      <article className={classes} id={id}>
+        <ReactMarkdown source={title} renderers={{ root: React.Fragment }} />
+        {content}
+        {items}
       </article>
     )
   }
 }
 
-export const ArticleYamlType = new yaml.Type('!article', {
-  kind: 'mapping',
-  resolve: function (data) {
-    return data !== null && data.id !== null && data.title !== null;
+export const ArticleYamlType = new yaml.Type(`!article`, {
+  kind: `mapping`,
+  resolve(data) {
+    return data !== null && data.id !== null && data.title !== null
   },
-  construct: function (data) {
-    data = data || {}; // in case of empty node
-    return <Article data={data} key={data.id} />;
+  construct(data = {}) {
+    return <Article data={data} key={data.id} />
   },
   instanceOf: Article,
-  represent: function (data) {
-    const rtn = { _tag: '!article', ...data }
+  represent(data) {
+    const rtn = { tag: `!article`, ...data }
     return rtn
-  }
-});
+  },
+})

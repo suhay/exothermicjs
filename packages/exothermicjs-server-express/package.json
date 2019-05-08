@@ -37,6 +37,7 @@
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "express-fileupload": "^1.1.2-alpha.1",
+    "find-config": "^1.0.0",
     "helmet": "^3.16.0",
     "http-errors": "^1.7.2",
     "morgan": "^1.9.1"

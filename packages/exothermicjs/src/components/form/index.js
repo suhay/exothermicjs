@@ -1,9 +1,10 @@
-import React, { Component, Fragment } from 'react';
-import ReactMarkdown from 'react-markdown';
-import yaml from 'js-yaml';
+import React, { Component, Fragment } from 'react'
+import yaml from 'js-yaml'
 import fetch from 'isomorphic-fetch'
 import queryString from 'query-string'
-import { Formik, Field, Form as FormikForm, ErrorMessage } from 'formik'
+import {
+  Formik, Form as FormikForm,
+} from 'formik'
 
 import Input from './input'
 import Checkbox from './checkbox'
@@ -15,82 +16,92 @@ export default class Form extends Component {
     super(props)
     this.state = {
       results: null,
-      fieldValues: {}
     }
   }
-  
+
   render() {
     const {
-      action = '', 
-      method = 'post',
-      items = []
-    } = this.props.data ? this.props.data : {}
-    const classes = this.props.data ? this.props.data.class : ''
+      data: {
+        action = ``,
+        method = `post`,
+        items = [],
+        class: classes = ``,
+      },
+    } = this.props || { data: {} }
+    const {
+      results,
+    } = this.state
     return (
       <Fragment>
         <Formik
   //         initialValues={}
           onSubmit={(values, actions) => {
-            fetch(`${action}${method.toLowerCase() == 'get'
-                  ? '?' + queryString.stringify(values) 
-                  : ''}`, { 
-                    method: event.target.method || `post` 
+            fetch(`${action}${method.toLowerCase() === `get`
+              ? `?${queryString.stringify(values)}`
+              : ``}`, {
+              method: global.event.target.method || `post`,
             })
               .then(
                 response => response.text(),
-                data => this.setState({ 
+                () => this.setState({
                   results: values,
                 }),
-                error => {
-                  actions.setSubmitting(false);
-                  actions.setStatus({ msg: 'Set some arbitrary status or data' });
+                (error) => {
+                  console.error(error)
+                  actions.setSubmitting(false)
+                  actions.setStatus({ msg: `Set some arbitrary status or data` })
                 }
               )
           }}
-          render={({ errors, status, isSubmitting, values, resetForm }) => (
+          render={({
+            isSubmitting, values, resetForm,
+          }) => (
             <FormikForm className={classes} method={method} action={action}>
               {items.map((field, i) => {
                 const { type, name, label } = field
                 switch (type) {
-                  case 'checkbox' :
+                  case `checkbox`:
                     return <Checkbox key={name + i} {...field} />
-                  case 'radio' :
+                  case `radio`:
                     return <Radio key={name + i} {...field} />
-                  case 'select' :
-                    return <Select key={name + i} {...field} value={values && values[name] ? values[name] : ''} />
-                  case 'reset' :
+                  case `select`:
+                    return <Select key={name + i} {...field} value={values && values[name] ? values[name] : ``} />
+                  case `reset`:
                     return (
                       <button key={type + i} type="button" disabled={isSubmitting} onClick={resetForm}>
                         {label}
-                      </button>)
-                  case 'submit' :
+                      </button>
+                    )
+                  case `submit`:
                     return (
-                      <button key={type + i} type={type} disabled={isSubmitting}>
+                      <button key={type + i} type="submit" disabled={isSubmitting}>
                         {label}
-                      </button>)
+                      </button>
+                    )
                   default:
-                    return <Input key={name + i} value={values && values[name] ? values[name] : ''} {...field} />
+                    return <Input key={name + i} value={values && values[name] ? values[name] : ``} {...field} />
                 }
               })}
             </FormikForm>
-          )} 
+          )}
         />
-        {this.state.results && <div className="results">
-          {this.state.results}
-        </div>}
+        {results && (
+          <div className="results">
+            {results}
+          </div>
+        )}
       </Fragment>
     )
   }
 }
 
-export const FormYamlType = new yaml.Type('!form', {
-  kind: 'mapping',
-  resolve: function (data) {
+export const FormYamlType = new yaml.Type(`!form`, {
+  kind: `mapping`,
+  resolve(data) {
     return data && data.id
   },
-  construct: function (data) {
-    data = data || {}; // in case of empty node
-    return <Form data={data} key={data.id} />;
+  construct(data = {}) {
+    return <Form data={data} key={data.id} />
   },
-  instanceOf: Form
+  instanceOf: Form,
 })

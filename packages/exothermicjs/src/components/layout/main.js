@@ -7,7 +7,7 @@ export class Main extends PureComponent {
     const { data, children } = this.props
     return (
       <main className={data.class ? data.class : ``}>
-        {data.title && <ReactMarkdown source={data.title} renderers={{root:React.Fragment}} />}
+        {data.title && <ReactMarkdown source={data.title} renderers={{ root: React.Fragment }} />}
         {data.content}
         {data.items}
         {children}
@@ -16,18 +16,17 @@ export class Main extends PureComponent {
   }
 }
 
-export const MainYamlType = new yaml.Type('!main', {
-  kind: 'mapping',
-  resolve: function (data) {
+export const MainYamlType = new yaml.Type(`!main`, {
+  kind: `mapping`,
+  resolve(data) {
     return data !== null
   },
-  construct: function (data) {
-    data = data || {}; // in case of empty node
-    return <Main data={data} key={data.id || 'main'} />;
+  construct(data = {}) {
+    return <Main data={data} key={data.id || `main`} />
   },
   instanceOf: Main,
-  represent: function (data) {
-    const rtn = { _tag: '!main', ...data }
+  represent(data) {
+    const rtn = { tag: `!main`, ...data }
     return rtn
-  }
+  },
 })

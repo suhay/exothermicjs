@@ -1,3 +1,3 @@
 module.exports = {
-  dev: `/endothermicjs-dashboard-endo.min.js`
+  dev: `/exothermicjs-dashboard-endo.min.js`,
 }

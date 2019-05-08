@@ -1,27 +1,28 @@
-import React, { PureComponent } from 'react';
-import { key, val } from './util';
+import React, { PureComponent } from 'react'
+import { key, val } from './util'
 
 export default class Meta extends PureComponent {
   render() {
-    if (!this.props.tags) {
-      return null;
+    const { tags } = this.props
+    if (!tags) {
+      return null
     }
-    let metaTags = [];
-    this.props.tags.forEach((tag, index) => {
-      let numTags = Object.keys(tag).length;
-      if ('charSet' in tag || numTags > 1) { // Not just a key and value
-        let meta = {};
+    const metaTags = []
+    tags.forEach((tag) => {
+      const numTags = Object.keys(tag).length
+      if (`charSet` in tag || numTags > 1) { // Not just a key and value
+        const meta = {}
         for (let i = 0; i < numTags; i++) {
-          meta[key(tag, i)] = val(tag, i);
+          meta[key(tag, i)] = val(tag, i)
         }
-        metaTags.push(meta);
+        metaTags.push(meta)
       } else {
-        metaTags.push({'name':key(tag), 'content':val(tag)});
+        metaTags.push({ name: key(tag), content: val(tag) })
       }
-    });
+    })
 
-    return metaTags.map((item) => (
+    return metaTags.map(item => (
       <meta {...item} />
-    ));
+    ))
   }
 }
