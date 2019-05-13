@@ -54,12 +54,12 @@ export const render = (route, options) => {
   pageState.setState({ pagesPath: pages[0] })
 
   let markup = ReactServer.renderToString(
-    dashboard
+    dashboard && Dashboard
       ? (
         <StaticRouter location={route} context={context}>
-          <Dashboard.OffCanvas>
+          <Dashboard.OffCanvasContainer>
             <Base data={result} browser={test ? false : isBrowser()} />
-          </Dashboard.OffCanvas>
+          </Dashboard.OffCanvasContainer>
         </StaticRouter>
       )
       : (
@@ -70,7 +70,9 @@ export const render = (route, options) => {
   )
 
   Object.keys(options).forEach((key) => {
-    markup = markup.replace(`{{${key}}}`, options[key])
+    if (options[key] !== Object(options[key])) {
+      markup = markup.replace(`{{${key}}}`, options[key])
+    }
   })
 
   const head = ReactServer.renderToString(
@@ -109,7 +111,9 @@ export const render = (route, options) => {
 export const hydrate = (route, options) => {
   let markup = fs.readFileSync(route, `utf8`)
   Object.keys(options).forEach((key) => {
-    markup = markup.replace(`{{${key}}}`, options[key])
+    if (options[key] !== Object(options[key])) {
+      markup = markup.replace(`{{${key}}}`, options[key])
+    }
   })
   return markup
 }

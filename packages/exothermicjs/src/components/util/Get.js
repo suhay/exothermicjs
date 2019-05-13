@@ -20,13 +20,12 @@ export class Get extends Component {
 
   componentDidMount() {
     const { data: fetchPath } = this.props
-    let Dashboard = null
-    try { Dashboard = require(`../../dashboard`) } catch (e) {}
+    const { Dashboard } = window ? window.EXOTHERMIC : { Dashboard: null }
     fetch(`/load/${fetchPath}`)
       .then(response => response.text())
       .then(data => this.setState({
         data: yaml.safeLoad(data, {
-          schema: window.DASHBOARD && Dashboard ? Dashboard.Schema() : Schema(),
+          schema: Dashboard ? Dashboard.Schema() : Schema(),
         }),
         loading: false,
       }))
@@ -37,10 +36,10 @@ export class Get extends Component {
     return (
       <div className={loading ? `get-loading` : `get-loaded`}>
         {!loading && (
-        <Fragment>
-          {data.content}
-          {data.items}
-        </Fragment>
+          <Fragment>
+            {data.content}
+            {data.items}
+          </Fragment>
         )}
         {loading && <Spinner name="folding-cube" />}
       </div>

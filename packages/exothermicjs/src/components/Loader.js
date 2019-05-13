@@ -13,8 +13,6 @@ export default class Loader extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      data: null,
-      loading: true,
       path: props.path,
     }
   }
@@ -22,13 +20,12 @@ export default class Loader extends Component {
   componentDidMount() {
     const { path } = this.state
     pageState.setState({ route: path })
-    let Dashboard = null
-    try { Dashboard = require(`../dashboard`) } catch (e) {}
+    const { Dashboard } = window ? window.EXOTHERMIC : { Dashboard: null }
     fetch(`/load/${path}`.replace(`//`, `/`), { credentials: `same-origin` })
       .then(response => response.text())
-      .then(data => this.setState({
+      .then(data => pageState.setState({
         data: yaml.safeLoad(data, {
-          schema: window.DASHBOARD && Dashboard ? Dashboard.Schema() : Schema(),
+          schema: Dashboard ? Dashboard.Schema() : Schema(),
         }),
         loading: false,
       }))
@@ -36,12 +33,11 @@ export default class Loader extends Component {
   }
 
   render() {
-    const { loading, path, data } = this.state
     const { dump } = this.props
     const { Dashboard } = window ? window.EXOTHERMIC : { Dashboard: null }
     return (
       <Subscribe to={[pageState]}>
-        {state => (
+        {({ path, loading, data }) => (
           <div className="base">
             {loading
               ? <Spinner name="folding-cube" />
@@ -49,13 +45,13 @@ export default class Loader extends Component {
                 ? (
                   <BrowserRouter>
                     <Dashboard.OffCanvas dump={dump} path={path}>
-                      <Page data={state.data || data} />
+                      <Page data={data} />
                     </Dashboard.OffCanvas>
                   </BrowserRouter>
                 )
                 : (
                   <BrowserRouter>
-                    <Page data={state.data || data} />
+                    <Page data={data} />
                   </BrowserRouter>
                 )
              }

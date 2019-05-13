@@ -11,10 +11,11 @@ export class Section extends PureComponent {
       },
       data,
       children,
+      ...rest
     } = this.props
     const classes = data.class || ``
     return (
-      <section className={classes} id={id}>
+      <section className={classes} id={id} {...rest}>
         {title && <ReactMarkdown source={title} renderers={{ root: React.Fragment }} />}
         {data.content}
         {data.items}

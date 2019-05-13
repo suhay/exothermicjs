@@ -5,7 +5,6 @@ import fs from 'fs'
 import yaml from 'js-yaml'
 import { Subscribe } from 'statable'
 import shortid from 'shortid'
-import "simplemde/dist/simplemde.min.css"
 
 import { pageState } from 'exothermicjs/src/state'
 import Editor from './editor'
@@ -34,10 +33,10 @@ export class Markdown extends Component {
     const id = data || shortid.generate()
     return (
       <Subscribe to={[pageState]}>
-        {state => (
+        {({ editing, editingThis }) => (
           <Fragment>
-            {!state.editing && <ReactMarkdown source={data} escapeHtml={false} renderers={{ root: Fragment }} />}
-            {state.editing && !loading && <Editor id={id} value={data} editingThis={state.editingThis === id} />}
+            {!editing && <ReactMarkdown source={data} escapeHtml={false} renderers={{ root: Fragment }} />}
+            {editing && !loading && <Editor id={id} value={data} editingThis={editingThis === id} />}
           </Fragment>
         )}
       </Subscribe>

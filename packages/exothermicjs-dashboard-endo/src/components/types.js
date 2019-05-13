@@ -6,7 +6,7 @@ import {
   Main,
   Section,
   Footer,
-} from 'exothermicjs/src'
+} from 'exothermicjs'
 
 export const MainYamlType = new yaml.Type(`!main`, {
   kind: `mapping`,
@@ -18,7 +18,7 @@ export const MainYamlType = new yaml.Type(`!main`, {
       class: data.class,
     }
     return (
-      <Main data={classes} key={data.id || `main`}>
+      <Main data={classes} key={data.id || `main`} data-state="endo">
         <Container items={data.items} id={data.id || `main`} />
       </Main>
     )
@@ -37,7 +37,7 @@ export const FooterYamlType = new yaml.Type(`!footer`, {
   },
   construct(data = {}) {
     return (
-      <Footer key={data.id || `footer`} data={data} />
+      <Footer key={data.id || `footer`} data={data} data-state="endo" />
     )
   },
   instanceOf: Footer,
@@ -55,7 +55,7 @@ export const SectionYamlType = new yaml.Type(`!section`, {
   construct(data = {}) {
     return (
       <Draggable key={data.id}>
-        <Section data={data} />
+        <Section data={data} data-state="endo" />
       </Draggable>
     )
   },

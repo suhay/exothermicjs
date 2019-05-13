@@ -4,9 +4,9 @@ import yaml from 'js-yaml'
 
 export class Footer extends PureComponent {
   render() {
-    const { data, children } = this.props
+    const { data, children, ...rest } = this.props
     return (
-      <footer className={data.class ? data.class : ``}>
+      <footer className={data.class ? data.class : ``} {...rest}>
         {data.title && <ReactMarkdown source={data.title} renderers={{ root: React.Fragment }} />}
         {data.content}
         {data.items}

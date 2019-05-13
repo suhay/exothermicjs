@@ -20,13 +20,12 @@ export default class Link extends Component {
   handleNav() {
     const { to } = this.state
     if (to.pathname === ``) { return }
-    let Dashboard = null
-    try { Dashboard = require(`../../dashboard`) } catch (e) {}
+    const { Dashboard } = window ? window.EXOTHERMIC : { Dashboard: null }
     fetch(`/load${to.pathname === `/` ? `/index` : to.pathname}`)
       .then(response => response.text())
       .then(data => pageState.setState({
         data: yaml.safeLoad(data, {
-          schema: window.DASHBOARD && Dashboard ? Dashboard.Schema() : Schema(),
+          schema: Dashboard ? Dashboard.Schema() : Schema(),
         }),
         route: to.pathname,
       }))

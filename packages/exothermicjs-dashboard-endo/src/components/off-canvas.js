@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 import fetch from 'isomorphic-fetch'
-import { Upload } from 'exothermicjs-plugin-upload'
+import Upload from 'exothermicjs-plugin-upload'
+import { Schema as ExoSchema } from 'exothermicjs'
 import { pageState } from 'exothermicjs/src/state'
 
 import {
@@ -56,7 +57,6 @@ export default class OffCanvas extends React.Component {
 }
 
 export const Schema = () => {
-  const exo = require(`exothermicjs`)
   const InteractiveTypes = { MainYamlType, SectionYamlType, FooterYamlType }
-  return exo.Schema(InteractiveTypes)
+  return ExoSchema(InteractiveTypes)
 }

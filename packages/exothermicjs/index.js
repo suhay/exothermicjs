@@ -40,7 +40,7 @@ const Types = {
 export const Schema = (addedPlugins = []) => {
   const conf = configBuilder()
   const plugins = conf.plugins.map(plug => require(`../${plug}/src`))
-  if (addedPlugins && addedPlugins.length > 0) {
+  if (addedPlugins && Object.keys(addedPlugins).length > 0) {
     // Override all Types with their addedPlugins replacers
     const addedPlusStandard = { ...Types, ...addedPlugins }
     const schemaTypes = [...Object.keys(addedPlusStandard).map(
@@ -56,3 +56,8 @@ export const Schema = (addedPlugins = []) => {
 export { Types }
 export { version } from './package.json'
 export { plugins } from './exothermic.config'
+export { render, hydrate } from './src/exothermic'
+
+export { Footer } from './src/components/layout/footer'
+export { Main } from './src/components/layout/main'
+export { Section } from './src/components/layout/Section'
