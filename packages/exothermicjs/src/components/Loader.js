@@ -5,7 +5,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { Subscribe } from 'statable'
 
 import Spinner from './util/Spinner'
-import Page from './Page'
+import Page from './page'
 import { Schema } from '../../'
 import pageState from '../state/page'
 

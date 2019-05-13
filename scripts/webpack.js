@@ -43,7 +43,7 @@ module.exports = ({
         },
       }, {
         test: /\.css$/,
-        use: [`css-loader`],
+        use: target === `web` ? [`style-loader`, `css-loader`] : [`css-loader`],
       }],
     },
     resolve: {

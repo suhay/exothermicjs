@@ -1,19 +1,11 @@
-import React, { Fragment, PureComponent } from 'react'
+import React, { Fragment } from 'react'
 
-export default class Page extends PureComponent {
-  render() {
-    const { data } = this.props
-    if (data && data.page) {
-      return (
-        <Fragment>
-          {data.page}
-        </Fragment>
-      )
-    }
-    return (
-      <div>
-        <p>Page not found!</p>
-      </div>
-    )
-  }
-}
+const Page = ({ data }) => (
+  <Fragment>
+    {data && data.page
+      ? data.page
+      : (<p>Page not found!</p>)}
+  </Fragment>
+)
+
+export default Page

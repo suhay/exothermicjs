@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 
-import Page from './Page'
+import Page from './page'
 
 export default class Base extends PureComponent {
   render() {

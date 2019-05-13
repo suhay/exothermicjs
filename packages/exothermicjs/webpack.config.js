@@ -1,6 +1,7 @@
 const path = require(`path`)
 const webpack = require(`webpack`)
 const nodeExternals = require(`webpack-node-externals`)
+const OpenBrowserPlugin = require(`open-browser-webpack-plugin`)
 
 module.exports = (env, options) => [{
   // Server
@@ -109,6 +110,7 @@ module.exports = (env, options) => [{
       'process.env.APP_ENV': (process.env.APP_ENV && JSON.stringify(process.env.APP_ENV)) || undefined,
     }),
     new webpack.IgnorePlugin(/^esprima$/, /js-yaml/),
+    new OpenBrowserPlugin({ url: `http://localhost:3000` }),
   ].filter(e => e),
 },
 ]

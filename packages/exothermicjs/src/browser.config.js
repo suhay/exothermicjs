@@ -1,3 +1,4 @@
+/* eslint-disable */
 export default () => import('../exothermic.config')
   .then(defConfig => //console.log(defConfig)
     import('../../../exothermic.config')

@@ -1,20 +1,13 @@
-.draggable-item {
-	position: relative;
+.drag-handle {
   cursor: grab;
 }
 
-.draggable-item:before {
-	content: "";
-	position: absolute;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	top: 0;
-	border-radius: 4px;
+.smooth-dnd-draggable-wrapper {
   border: 1px solid transparent;
-  transition: all 1s ease;
+	transition: border 1s ease;
+	border-radius: 4px;
 }
 
-.draggable-item:hover:before {
+.smooth-dnd-draggable-wrapper:hover {
 	border: 1px solid #CCC;
 }
