@@ -6,7 +6,6 @@ import dragState from './state/draggables'
 import Loader from './components/loader'
 
 const dumpTag = (tag) => {
-  console.log('tag: ', tag)
   let represent = tag._self.represent && tag.props.data ? tag._self.represent(tag.props.data) : {}
   if (represent.content) {
     represent.content = represent.content._self.represent ? represent.content._self.represent(represent.content.props.data) : represent.content
@@ -20,7 +19,6 @@ const dumpTag = (tag) => {
       ? dragState.state.draggables[tag.props.id].map(part => dumpTag(part))
       : tag.props.items.map(part => dumpTag(part))
   }
-  console.log('represent: ', represent)
   return represent
 }
 

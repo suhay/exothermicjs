@@ -2,7 +2,7 @@
 title: Dashboard
 description: ''
 page:
-  main:
+  - !main
     class: container
     items:
     - !section

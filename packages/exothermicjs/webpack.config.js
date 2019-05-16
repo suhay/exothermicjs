@@ -123,7 +123,7 @@ module.exports = (env, options) => [{
     }),
     new webpack.IgnorePlugin(/^esprima$/, /js-yaml/),
     new OpenBrowserPlugin({ url: `http://localhost:3000` }),
-    new BundleAnalyzerPlugin(),
+    // new BundleAnalyzerPlugin(),
   ].filter(e => e),
 },
 ]

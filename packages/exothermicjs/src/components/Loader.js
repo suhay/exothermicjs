@@ -28,14 +28,14 @@ const Loader = ({ path: propsPath, dump }) => {
   const { Dashboard } = window ? window.EXOTHERMIC : { Dashboard: null }
   return (
     <Subscribe to={[pageState]}>
-      {({ path: statePath, loading, data }) => (
+      {({ route, loading, data }) => (
         <div className="base">
           {loading
             ? <Spinner name="folding-cube" />
             : Dashboard
               ? (
                 <BrowserRouter>
-                  <Dashboard.OffCanvas dump={dump} path={statePath}>
+                  <Dashboard.OffCanvas dump={dump} path={route}>
                     <Page data={data} />
                   </Dashboard.OffCanvas>
                 </BrowserRouter>
