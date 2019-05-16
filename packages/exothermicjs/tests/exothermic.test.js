@@ -3,7 +3,8 @@ import {
 } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import React from 'react'
-import Spinner from '../src/components/util/Spinner'
+
+import Spinner from '../src/components/util/spinner'
 // import { hydrate } from '../src/exothermic'
 
 configure({ adapter: new Adapter() })

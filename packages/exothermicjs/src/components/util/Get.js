@@ -3,7 +3,7 @@ import yaml from 'js-yaml'
 import fetch from 'isomorphic-fetch'
 import fs from 'fs'
 
-import Spinner from './Spinner'
+import Spinner from './spinner'
 import pageState from '../../state/page'
 import { Schema } from '../../../'
 

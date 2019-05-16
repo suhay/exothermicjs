@@ -5,8 +5,8 @@ import fs from 'fs'
 import yaml from 'js-yaml'
 import { Subscribe } from 'statable'
 import shortid from 'shortid'
-
 import { pageState } from 'exothermicjs/src/state'
+
 import Editor from './editor'
 
 export class Markdown extends Component {
@@ -54,7 +54,7 @@ export const Type = new yaml.Type(`!markdown`, {
   },
   instanceOf: Markdown,
   represent(data) {
-    const rtn = { tag: `!markdown`, ...data }
+    const rtn = { tag: `!markdown`, data }
     return rtn
   },
 })

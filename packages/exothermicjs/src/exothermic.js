@@ -7,8 +7,8 @@ import { StaticRouter } from 'react-router'
 
 import { Schema } from "../"
 import { pageState } from './state'
-import Head from './components/Head'
-import Base from './components/Base'
+import Head from './components/head'
+import Base from './components/base'
 import { isBrowser } from './components/util'
 
 let Dashboard = null
@@ -83,7 +83,10 @@ export const render = (route, options) => {
     ${process.env.SSR_ONLY === `true` || options.ssr_only
     ? ``
     : process.env.NODE_ENV && process.env.NODE_ENV === `development`
-      ? `<script src="/browser.js"></script>`
+      ? `
+        <script src="/browser.js"></script>
+        <script src="/vendors.browser.js"></script>
+      `
       : `<script src="https://unpkg.com/exothermicjs/dist/browser.exothermic.min.js"></script>`}
     ${dashboard && dashboardConfig
     ? `<script src="${process.env.NODE_ENV && process.env.NODE_ENV === `development` ? dashboardConfig.dev : dashboardConfig.live}"></script>`

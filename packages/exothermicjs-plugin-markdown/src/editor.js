@@ -14,6 +14,7 @@ export default class Editor extends Component {
       prevValue: ``,
     }
     this.handleEdit = this.handleEdit.bind(this)
+    this.handleSave = this.handleSave.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.handleCancel = this.handleCancel.bind(this)
   }
@@ -39,9 +40,16 @@ export default class Editor extends Component {
     pageState.setState({ editingThis: id })
   }
 
+  handleSave() {
+    const { id, value } = this.state
+    global.localStorage.setItem(`smde_${id}`, value)
+    pageState.setState({ editingThis: `` })
+  }
+
   handleCancel() {
-    const { prevValue } = this.state
-    this.setState({ prevValue })
+    const { prevValue, id } = this.state
+    this.setState({ value: prevValue })
+    global.localStorage.setItem(`smde_${id}`, prevValue)
     pageState.setState({ editingThis: `` })
   }
 
@@ -70,7 +78,7 @@ export default class Editor extends Component {
               }}
             />
             <button type="button" onClick={this.handleCancel}>cancel</button>
-            <button type="button">save</button>
+            <button type="button" onClick={this.handleSave}>save</button>
           </div>
           )}
         {!editingThis

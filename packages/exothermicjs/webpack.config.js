@@ -2,6 +2,7 @@ const path = require(`path`)
 const webpack = require(`webpack`)
 const nodeExternals = require(`webpack-node-externals`)
 const OpenBrowserPlugin = require(`open-browser-webpack-plugin`)
+const { BundleAnalyzerPlugin } = require(`webpack-bundle-analyzer`)
 
 module.exports = (env, options) => [{
   // Server
@@ -79,7 +80,7 @@ module.exports = (env, options) => [{
   module: {
     rules: [{
       test: /\.js$/,
-      exclude: /(node_modules|bower_components)/,
+      exclude: /(node_modules|bower_components|dist)/,
       use: {
         loader: `babel-loader`,
         options: {
@@ -97,6 +98,17 @@ module.exports = (env, options) => [{
       use: [`style-loader`, `css-loader`],
     }],
   },
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          test: /[\\/]node_modules[\\/]/,
+          name: `vendors`,
+          chunks: `all`,
+        },
+      },
+    },
+  },
   resolve: {
     alias: {
       components: path.resolve(__dirname, `./src/components/`),
@@ -111,6 +123,7 @@ module.exports = (env, options) => [{
     }),
     new webpack.IgnorePlugin(/^esprima$/, /js-yaml/),
     new OpenBrowserPlugin({ url: `http://localhost:3000` }),
+    new BundleAnalyzerPlugin(),
   ].filter(e => e),
 },
 ]

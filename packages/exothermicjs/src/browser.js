@@ -3,10 +3,14 @@ import { hydrate } from "react-dom"
 import yaml from 'js-yaml'
 
 import dragState from './state/draggables'
-import Loader from './components/Loader'
+import Loader from './components/loader'
 
 const dumpTag = (tag) => {
+  console.log('tag: ', tag)
   let represent = tag._self.represent && tag.props.data ? tag._self.represent(tag.props.data) : {}
+  if (represent.content) {
+    represent.content = represent.content._self.represent ? represent.content._self.represent(represent.content.props.data) : represent.content
+  }
   if (represent.items) {
     represent.items = represent.items.map(part => dumpTag(part))
   } else if (tag.props.children) {
@@ -16,14 +20,18 @@ const dumpTag = (tag) => {
       ? dragState.state.draggables[tag.props.id].map(part => dumpTag(part))
       : tag.props.items.map(part => dumpTag(part))
   }
+  console.log('represent: ', represent)
   return represent
 }
 
-const dump = data => `---\n${yaml.dump({
-  description: data.props.data.description,
-  tags: data.props.data.tags,
-  page: data.props.data.page.map(part => dumpTag(part)),
-}).replace(/tag: '!(.*)'/g, `!$1`)}`
+const dump = (data) => {
+  const { description, tags, page } = data.props.data
+  return `---\n${yaml.dump({
+    description,
+    tags,
+    page: page.map(part => dumpTag(part)),
+  }).replace(/tag: '!(.*)'/g, `!$1`)}`
+}
 
 window.EXOTHERMIC = window.EXOTHERMIC || {}
 

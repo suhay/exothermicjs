@@ -1,24 +1,17 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import fetch from 'isomorphic-fetch'
 import yaml from 'js-yaml'
 import { BrowserRouter } from 'react-router-dom'
 import { Subscribe } from 'statable'
 
-import Spinner from './util/Spinner'
+import Spinner from './util/spinner'
 import Page from './page'
 import { Schema } from '../../'
 import pageState from '../state/page'
 
-export default class Loader extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      path: props.path,
-    }
-  }
-
-  componentDidMount() {
-    const { path } = this.state
+const Loader = ({ path: propsPath, dump }) => {
+  const [path] = useState(propsPath)
+  useEffect(() => {
     pageState.setState({ route: path })
     const { Dashboard } = window ? window.EXOTHERMIC : { Dashboard: null }
     fetch(`/load/${path}`.replace(`//`, `/`), { credentials: `same-origin` })
@@ -30,34 +23,33 @@ export default class Loader extends Component {
         loading: false,
       }))
       .catch((error) => { throw error })
-  }
+  })
 
-  render() {
-    const { dump } = this.props
-    const { Dashboard } = window ? window.EXOTHERMIC : { Dashboard: null }
-    return (
-      <Subscribe to={[pageState]}>
-        {({ path, loading, data }) => (
-          <div className="base">
-            {loading
-              ? <Spinner name="folding-cube" />
-              : Dashboard
-                ? (
-                  <BrowserRouter>
-                    <Dashboard.OffCanvas dump={dump} path={path}>
-                      <Page data={data} />
-                    </Dashboard.OffCanvas>
-                  </BrowserRouter>
-                )
-                : (
-                  <BrowserRouter>
+  const { Dashboard } = window ? window.EXOTHERMIC : { Dashboard: null }
+  return (
+    <Subscribe to={[pageState]}>
+      {({ path: statePath, loading, data }) => (
+        <div className="base">
+          {loading
+            ? <Spinner name="folding-cube" />
+            : Dashboard
+              ? (
+                <BrowserRouter>
+                  <Dashboard.OffCanvas dump={dump} path={statePath}>
                     <Page data={data} />
-                  </BrowserRouter>
-                )
-             }
-          </div>
-        )}
-      </Subscribe>
-    )
-  }
+                  </Dashboard.OffCanvas>
+                </BrowserRouter>
+              )
+              : (
+                <BrowserRouter>
+                  <Page data={data} />
+                </BrowserRouter>
+              )
+            }
+        </div>
+      )}
+    </Subscribe>
+  )
 }
+
+export default Loader

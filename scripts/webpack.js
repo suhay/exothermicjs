@@ -23,6 +23,9 @@ module.exports = ({
     node: {
       __dirname: true,
     },
+    optimization: {
+      usedExports: true,
+    },
     module: {
       rules: [{
         test: /\.js$/,

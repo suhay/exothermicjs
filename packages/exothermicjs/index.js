@@ -8,7 +8,7 @@ import {
   HeaderYamlType,
   FooterYamlType,
 } from './src/components/layout'
-import { ArticleYamlType } from './src/components/article'
+import ArticleYamlType from './src/components/article/type'
 import { GetYamlType } from './src/components/util/Get'
 import { FormYamlType } from './src/components/form'
 
@@ -60,4 +60,4 @@ export { render, hydrate } from './src/exothermic'
 
 export { Footer } from './src/components/layout/footer'
 export { Main } from './src/components/layout/main'
-export { Section } from './src/components/layout/Section'
+export { default as Section } from './src/components/layout/section'

@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import { Draggable as SmoothDraggable } from 'react-smooth-dnd'
-import { DragIndicator } from '@material-ui/icons'
+import DragIndicator from '@material-ui/icons/DragIndicator'
 
 export default class Draggable extends PureComponent {
   render() {

@@ -1,6 +1,5 @@
 import yaml from 'js-yaml'
-import { Type as ColYamlType } from './Col'
-import { SectionYamlType } from './Section'
+import { ColYamlType, SectionYamlType } from './type'
 import { FooterYamlType } from './footer'
 import { HeaderYamlType } from './header'
 import { MainYamlType } from './main'

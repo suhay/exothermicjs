@@ -20,7 +20,6 @@ const app = express()
 
 app.engine(`exo`, (filePath, options, callback) => {
   const theseOptions = options || {}
-  theseOptions.dashboard = true
   theseOptions.pages = theseOptions.pages || app.get(`views`)
   theseOptions.hydrate = theseOptions.hydrate || false
   const page = theseOptions.get

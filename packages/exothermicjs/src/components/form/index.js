@@ -3,7 +3,8 @@ import yaml from 'js-yaml'
 import fetch from 'isomorphic-fetch'
 import queryString from 'query-string'
 import {
-  Formik, Form as FormikForm,
+  Formik,
+  Form as FormikForm,
 } from 'formik'
 
 import Input from './input'
