@@ -5,6 +5,7 @@ import fs from 'fs'
 import yaml from 'js-yaml'
 import { Subscribe } from 'statable'
 import shortid from 'shortid'
+
 import { pageState } from 'exothermicjs/src/state'
 
 import Editor from './editor'
@@ -19,18 +20,35 @@ export class Markdown extends Component {
   }
 
   componentDidMount() {
-    const { data: fetchPath } = this.props
+    const { data: fetchPath, cacheId } = this.props
     fetch(`/load/pages/markdown/${fetchPath}.md`)
       .then(response => response.text())
-      .then(data => this.setState({
-        data,
-        loading: false,
-      }))
+      .then((data) => {
+        this.setState({
+          data,
+          loading: false,
+        })
+        const cache = { ...pageState.state.cache }
+        cache[cacheId] = data
+        pageState.setState({
+          cache,
+        })
+      })
+  }
+
+  componentWillUnmount() {
+    const { cacheId } = this.props
+    const cache = { ...pageState.state.cache }
+    delete cache[cacheId]
+    pageState.setState({
+      cache,
+    })
   }
 
   render() {
     const { data, loading } = this.state
-    const id = data || shortid.generate()
+    const { cacheId } = this.props
+    const id = data || cacheId
     return (
       <Subscribe to={[pageState]}>
         {({ editing, editingThis }) => (
@@ -50,11 +68,15 @@ export const Type = new yaml.Type(`!markdown`, {
     return data !== null
   },
   construct(data = {}) {
-    return <Markdown data={data} key="content" />
+    const cacheId = shortid.generate()
+    return <Markdown data={data} cacheId={cacheId} key={cacheId} />
   },
   instanceOf: Markdown,
-  represent(data) {
-    const rtn = { tag: `!markdown`, data }
+  represent(props) {
+    console.log(pageState.state.cache[props.cacheId])
+    const rtn = {
+      tag: `!markdown ${props.data}`,
+    }
     return rtn
   },
 })

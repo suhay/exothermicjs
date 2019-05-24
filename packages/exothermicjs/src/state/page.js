@@ -6,6 +6,7 @@ const pageState = new State({
   pagesPath: ``,
   editing: false,
   editingThis: ``,
+  cache: {},
 })
 
 export default pageState

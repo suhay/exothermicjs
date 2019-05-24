@@ -2,9 +2,10 @@ import React, { Component, Fragment } from 'react'
 import yaml from 'js-yaml'
 import fetch from 'isomorphic-fetch'
 import fs from 'fs'
+import shortid from 'shortid'
 
 import Spinner from './spinner'
-import pageState from '../../state/page'
+import { pageState } from '../../state'
 import { Schema } from '../../../'
 
 export class Get extends Component {
@@ -19,16 +20,33 @@ export class Get extends Component {
   }
 
   componentDidMount() {
-    const { data: fetchPath } = this.props
+    const { data: fetchPath, cacheId } = this.props
     const { Dashboard } = window ? window.EXOTHERMIC : { Dashboard: null }
     fetch(`/load/${fetchPath}`)
       .then(response => response.text())
-      .then(data => this.setState({
-        data: yaml.safeLoad(data, {
+      .then((data) => {
+        const yamlData = yaml.safeLoad(data, {
           schema: Dashboard ? Dashboard.Schema() : Schema(),
-        }),
-        loading: false,
-      }))
+        })
+        this.setState({
+          data: yamlData,
+          loading: false,
+        })
+        const cache = { ...pageState.state.cache }
+        cache[cacheId] = data
+        pageState.setState({
+          cache,
+        })
+      })
+  }
+
+  componentWillUnmount() {
+    const { cacheId } = this.props
+    const cache = { ...pageState.state.cache }
+    delete cache[cacheId]
+    pageState.setState({
+      cache,
+    })
   }
 
   render() {
@@ -53,11 +71,13 @@ export const GetYamlType = new yaml.Type(`!get`, {
     return data !== null
   },
   construct(data = {}) {
-    return <Get data={data} key="get" />
+    const cacheId = shortid.generate()
+    return <Get data={data} cacheId={cacheId} key={cacheId} />
   },
   instanceOf: Get,
-  represent(data) {
-    const rtn = { tag: `!get ${data}` }
+  represent(props) {
+    console.log(pageState.state.cache[props.cacheId])
+    const rtn = { tag: `!get ${props.data}` }
     return rtn
   },
 })

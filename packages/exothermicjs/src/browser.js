@@ -2,13 +2,14 @@ import React from 'react'
 import { hydrate } from "react-dom"
 import yaml from 'js-yaml'
 
-import dragState from './state/draggables'
+import { dragState } from './state'
 import Loader from './components/loader'
 
 const dumpTag = (tag) => {
-  let represent = tag._self.represent && tag.props.data ? tag._self.represent(tag.props.data) : {}
+  let represent = tag._self.represent && tag.props.data ? tag._self.represent(tag.props.cacheId ? tag.props : tag.props.data) : {}
+  console.log(tag)
   if (represent.content) {
-    represent.content = represent.content._self.represent ? represent.content._self.represent(represent.content.props.data) : represent.content
+    represent.content = represent.content._self.represent ? represent.content._self.represent(represent.content.props) : represent.content
   }
   if (represent.items) {
     represent.items = represent.items.map(part => dumpTag(part))
