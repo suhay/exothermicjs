@@ -3,7 +3,7 @@ import React from 'react'
 import Meta from './meta'
 import HeadLink from './link'
 import Script from './script'
-import { version } from '../../'
+import version from '../version'
 
 const Head = ({ data }) => {
   const description = [{ description: data.description }]

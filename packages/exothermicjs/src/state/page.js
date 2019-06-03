@@ -7,6 +7,7 @@ const pageState = new State({
   editing: false,
   editingThis: ``,
   cache: {},
+  cacheId: ``,
 })
 
 export default pageState

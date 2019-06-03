@@ -5,8 +5,7 @@ import fetch from 'isomorphic-fetch'
 import yaml from 'js-yaml'
 import URL from 'url-parse'
 
-import pageState from '../../state/page'
-import { Schema } from '../../../'
+import { pageState, schemaState } from '../../state'
 
 export default class Link extends Component {
   constructor(props) {
@@ -19,13 +18,15 @@ export default class Link extends Component {
 
   handleNav() {
     const { to } = this.state
+
     if (to.pathname === ``) { return }
+
     const { Dashboard } = window ? window.EXOTHERMIC : { Dashboard: null }
     fetch(`/load${to.pathname === `/` ? `/index` : to.pathname}`)
       .then(response => response.text())
       .then(data => pageState.setState({
         data: yaml.safeLoad(data, {
-          schema: Dashboard ? Dashboard.Schema() : Schema(),
+          schema: Dashboard ? Dashboard.Schema() : schemaState.state.schema(),
         }),
         route: to.pathname,
       }))

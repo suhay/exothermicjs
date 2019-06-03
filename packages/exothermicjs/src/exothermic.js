@@ -5,8 +5,7 @@ import React from 'react'
 import ReactServer from 'react-dom/server'
 import { StaticRouter } from 'react-router'
 
-import { Schema } from "../"
-import { pageState } from './state'
+import { pageState, schemaState } from './state'
 import Head from './components/head'
 import Base from './components/base'
 import { isBrowser } from './components/util'
@@ -46,7 +45,7 @@ export const render = (route, options) => {
   const page = yaml.safeLoad(templates[1], {
     schema: dashboard && Dashboard
       ? Dashboard.Schema()
-      : Schema(),
+      : schemaState.state.schema(),
   })
   const result = { ...base, ...page }
   const context = {}

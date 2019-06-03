@@ -6,8 +6,7 @@ import { Subscribe } from 'statable'
 
 import Spinner from './util/spinner'
 import Page from './page'
-import { Schema } from '../../'
-import pageState from '../state/page'
+import { pageState, schemaState } from '../state'
 
 const Loader = ({ path: propsPath, dump }) => {
   const [path] = useState(propsPath)
@@ -18,7 +17,7 @@ const Loader = ({ path: propsPath, dump }) => {
       .then(response => response.text())
       .then(data => pageState.setState({
         data: yaml.safeLoad(data, {
-          schema: Dashboard ? Dashboard.Schema() : Schema(),
+          schema: Dashboard ? Dashboard.Schema() : schemaState.state.schema(),
         }),
         loading: false,
       }))

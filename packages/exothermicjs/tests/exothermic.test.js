@@ -5,20 +5,19 @@ import Adapter from 'enzyme-adapter-react-16'
 import React from 'react'
 
 import Spinner from '../src/components/util/spinner'
-// import { hydrate } from '../src/exothermic'
+import { hydrate, render } from '../'
 
 configure({ adapter: new Adapter() })
 
-// const options = { pages: [`${__dirname}/../../../demo/public/pages/`, `${__dirname}/../templates/`], test: true }
+const options = { pages: [`${__dirname}/../../../demo/public/pages/`, `${__dirname}/../templates/`], test: true }
 
-// test(`demo site renders`, () => {
-//   console.log(hydrate)
-//   expect(render(`${options.pages[0]}index.exo`, options)).toContain(`Where - End of file!!`)
-// })
+test(`demo site renders`, () => {
+  expect(render(`${options.pages[0]}index.exo`, options)).toContain(`Where - End of file!!`)
+})
 
-// test(`hydrate returns content`, () => {
-//   expect(hydrate(`${options.pages[0]}index.exo`, options)).toContain(`Where - End of file!!`)
-// })
+test(`hydrate returns content`, () => {
+  expect(hydrate(`${options.pages[0]}index.exo`, options)).toContain(`Where - End of file!!`)
+})
 
 test(`<Spinner>`, () => {
   const wrapper = shallow(<Spinner />)

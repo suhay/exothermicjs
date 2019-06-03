@@ -1,19 +1,19 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import yaml from 'js-yaml'
 import fetch from 'isomorphic-fetch'
 import fs from 'fs'
-import shortid from 'shortid'
 
 import Spinner from './spinner'
-import { pageState } from '../../state'
-import { Schema } from '../../../'
+import { pageState, schemaState } from '../../state'
 
-export class Get extends Component {
+export const GetContext = React.createContext(``)
+
+export default class Get extends Component {
   constructor(props) {
     super(props)
     this.state = {
       data: fs && typeof fs.readFileSync === `function`
-        ? yaml.safeLoad(fs.readFileSync(`${pageState.state.pagesPath}/${props.data}.exo`, `utf8`), { schema: Schema() })
+        ? yaml.safeLoad(fs.readFileSync(`${pageState.state.pagesPath}/${props.data}.exo`, `utf8`), { schema: schemaState.state.schema() })
         : null,
       loading: !(fs && typeof fs.readFileSync === `function`),
     }
@@ -26,14 +26,14 @@ export class Get extends Component {
       .then(response => response.text())
       .then((data) => {
         const yamlData = yaml.safeLoad(data, {
-          schema: Dashboard ? Dashboard.Schema() : Schema(),
+          schema: Dashboard ? Dashboard.Schema() : schemaState.state.schema(),
         })
         this.setState({
           data: yamlData,
           loading: false,
         })
         const cache = { ...pageState.state.cache }
-        cache[cacheId] = data
+        cache[cacheId] = {}
         pageState.setState({
           cache,
         })
@@ -51,33 +51,17 @@ export class Get extends Component {
 
   render() {
     const { loading, data = {} } = this.state
+    const { cacheId } = this.props
     return (
       <div className={loading ? `get-loading` : `get-loaded`}>
         {!loading && (
-          <Fragment>
+          <GetContext.Provider value={cacheId}>
             {data.content}
             {data.items}
-          </Fragment>
+          </GetContext.Provider>
         )}
         {loading && <Spinner name="folding-cube" />}
       </div>
     )
   }
 }
-
-export const GetYamlType = new yaml.Type(`!get`, {
-  kind: `scalar`,
-  resolve(data) {
-    return data !== null
-  },
-  construct(data = {}) {
-    const cacheId = shortid.generate()
-    return <Get data={data} cacheId={cacheId} key={cacheId} />
-  },
-  instanceOf: Get,
-  represent(props) {
-    console.log(pageState.state.cache[props.cacheId])
-    const rtn = { tag: `!get ${props.data}` }
-    return rtn
-  },
-})

@@ -1,10 +1,12 @@
 const path = require(`path`)
 const babelConfig = require(`../../babel.config.js`)
 
-module.exports = {
-  ...babelConfig,
+module.exports = api => {
+  console.log(api)
+  return {
+  ...babelConfig(api),
   plugins: [
-    ...babelConfig.plugins,
+    ...babelConfig(api).plugins,
     [
       `module-resolver`,
       {
@@ -12,9 +14,8 @@ module.exports = {
         alias: {
           Root: path.join(__dirname, `.`),
           Components: path.resolve(__dirname, `src/components/`),
-          Modules: path.resolve(__dirname, `src/components/`),
         },
       },
     ],
   ],
-}
+}}

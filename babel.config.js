@@ -1,9 +1,17 @@
-const isProduction = process.env.NODE_ENV === `production`
-const isTest = process.env.NODE_ENV === `test`
-
-const presets = () => {
+const presets = (api) => {
+  const isTest = api.env() === `development`
   if (isTest) {
-    return [`@babel/preset-react`, `@babel/preset-env`]
+    return [
+      `@babel/preset-react`,
+      [
+        `@babel/preset-env`,
+        {
+          targets: {
+            node: `current`,
+          },
+        },
+      ],
+    ]
   }
   return [
     `@babel/preset-react`,
@@ -16,7 +24,8 @@ const presets = () => {
   ]
 }
 
-const plugins = () => {
+const plugins = (api) => {
+  const isTest = api.env() === `development`
   const defaultPlugins = [
     `@babel/plugin-transform-react-jsx`,
     `@babel/plugin-transform-react-jsx-source`,
@@ -26,10 +35,6 @@ const plugins = () => {
     `@babel/plugin-syntax-dynamic-import`,
   ]
 
-  if (isProduction) {
-    return defaultPlugins
-  }
-
   if (isTest) {
     return defaultPlugins
   }
@@ -37,7 +42,11 @@ const plugins = () => {
   return defaultPlugins
 }
 
-module.exports = {
-  presets: presets(),
-  plugins: plugins(),
+module.exports = (api) => {
+  const pres = presets(api)
+  const plugs = plugins(api)
+  return {
+    presets: pres,
+    plugins: plugs,
+  }
 }

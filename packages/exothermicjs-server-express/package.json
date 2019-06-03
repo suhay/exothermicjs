@@ -24,13 +24,15 @@
     "build": "webpack --mode development",
     "build:prod": "webpack --mode production",
     "build:all": "yarn build && yarn build:prod",
-    "dev": "webpack --env.NODE_ENV=development --watch --mode development"
+    "dev": "webpack --env.NODE_ENV=development --watch --mode development",
+    "debug": "node --inspect-brk src"
   },
   "bugs": {
     "url": "https://github.com/suhay/exothermicjs/issues"
   },
   "devDependencies": {
-    "nodemon-webpack-plugin": "^4.0.8"
+    "nodemon-webpack-plugin": "^4.0.8",
+    "webpack": "^4.32.2"
   },
   "dependencies": {
     "connect-ensure-login": "^0.1.1",

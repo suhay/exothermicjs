@@ -16,7 +16,7 @@
     "yaml",
     "front end"
   ],
-  "main": "dist/exothermic.min.js",
+  "main": "index.js",
   "module": "index.js",
   "homepage": "https://github.com/suhay/exothermicjs#readme",
   "license": "MIT",

@@ -7,6 +7,7 @@ import { Subscribe } from 'statable'
 import shortid from 'shortid'
 
 import { pageState } from 'exothermicjs/src/state'
+import { GetContext } from 'exothermicjs/src/components/util/get'
 
 import Editor from './editor'
 
@@ -20,7 +21,7 @@ export class Markdown extends Component {
   }
 
   componentDidMount() {
-    const { data: fetchPath, cacheId } = this.props
+    const { data: fetchPath, cacheId, parentCacheId } = this.props
     fetch(`/load/pages/markdown/${fetchPath}.md`)
       .then(response => response.text())
       .then((data) => {
@@ -30,6 +31,10 @@ export class Markdown extends Component {
         })
         const cache = { ...pageState.state.cache }
         cache[cacheId] = data
+        if (parentCacheId && parentCacheId !== ``) {
+          cache[parentCacheId] = cache[parentCacheId] || {}
+          cache[parentCacheId][cacheId] = data
+        }
         pageState.setState({
           cache,
         })
@@ -69,11 +74,19 @@ export const Type = new yaml.Type(`!markdown`, {
   },
   construct(data = {}) {
     const cacheId = shortid.generate()
-    return <Markdown data={data} cacheId={cacheId} key={cacheId} />
+    return (
+      <GetContext.Consumer>
+        {value => (
+          <Markdown data={data} parentCacheId={value} cacheId={cacheId} key={cacheId} />
+        )}
+      </GetContext.Consumer>
+    )
   },
   instanceOf: Markdown,
   represent(props) {
     console.log(pageState.state.cache[props.cacheId])
+    console.log(pageState.state.cache)
+    console.log(props.cacheId)
     const rtn = {
       tag: `!markdown ${props.data}`,
     }

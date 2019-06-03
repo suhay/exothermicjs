@@ -1,6 +1,7 @@
 import yaml from 'js-yaml'
 
-import { NavbarYamlType } from './src/components/navbar'
+import { schemaState } from './src/state'
+import { NavbarYamlType } from './src/components/navbar/type'
 import {
   SectionYamlType,
   ColYamlType,
@@ -9,8 +10,20 @@ import {
   FooterYamlType,
 } from './src/components/layout'
 import ArticleYamlType from './src/components/article/type'
-import { GetYamlType } from './src/components/util/Get'
+import { GetYamlType } from './src/components/util/types'
 import { FormYamlType } from './src/components/form'
+
+export const Types = {
+  NavbarYamlType,
+  SectionYamlType,
+  ColYamlType,
+  MainYamlType,
+  HeaderYamlType,
+  FooterYamlType,
+  ArticleYamlType,
+  GetYamlType,
+  FormYamlType,
+}
 
 const configBuilder = () => {
   const def = require(`./exothermic.config`)
@@ -25,19 +38,7 @@ const configBuilder = () => {
   }
 }
 
-const Types = {
-  NavbarYamlType,
-  SectionYamlType,
-  ColYamlType,
-  MainYamlType,
-  HeaderYamlType,
-  FooterYamlType,
-  ArticleYamlType,
-  GetYamlType,
-  FormYamlType,
-}
-
-export const Schema = (addedPlugins = []) => {
+const Schema = (addedPlugins = []) => {
   const conf = configBuilder()
   const plugins = conf.plugins.map(plug => require(`../${plug}/src`))
   if (addedPlugins && Object.keys(addedPlugins).length > 0) {
@@ -53,10 +54,11 @@ export const Schema = (addedPlugins = []) => {
     ...plugins.map(plugin => plugin.Type)])
 }
 
-export { Types }
+schemaState.setState({ schema: () => Schema() })
+
 export { version } from './package.json'
 export { plugins } from './exothermic.config'
-export { render, hydrate } from './src/exothermic'
+export { render, hydrate, get } from './src/exothermic'
 
 export { Footer } from './src/components/layout/footer'
 export { Main } from './src/components/layout/main'

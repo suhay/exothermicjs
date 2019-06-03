@@ -1,7 +1,6 @@
 import React from 'react'
 import { Container, Draggable } from 'exothermicjs-lib-dnd'
 import yaml from 'js-yaml'
-
 import {
   Main,
   Section,
