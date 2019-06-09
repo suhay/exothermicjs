@@ -12,3 +12,4 @@ package-lock.json
 /coverage/
 dist/
 .npmrc
+.compiled

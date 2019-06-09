@@ -5,7 +5,7 @@ import Adapter from 'enzyme-adapter-react-16'
 import React from 'react'
 
 import Spinner from '../src/components/util/spinner'
-import { hydrate, render } from '../'
+import { hydrate, render } from '../src'
 
 configure({ adapter: new Adapter() })
 

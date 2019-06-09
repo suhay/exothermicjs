@@ -33,6 +33,7 @@ const plugins = (api) => {
     `@babel/plugin-proposal-object-rest-spread`,
     `@babel/plugin-proposal-class-properties`,
     `@babel/plugin-syntax-dynamic-import`,
+    `css-modules-transform`,
   ]
 
   if (isTest) {

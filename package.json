@@ -9,7 +9,7 @@
     "build-preview": "yarn build && lerna run build-preview",
     "clean": "rimraf packages/*/dist",
     "reset": "rimraf packages/*/node_modules && yarn clean && lerna run clean",
-    "test": "yarn build:all && yarn jest",
+    "test": "yarn jest",
     "jest": "jest",
     "publish": "yarn publish:version && yarn publish:push",
     "publish:version": "lerna version --no-push",
@@ -17,10 +17,13 @@
     "publish:git": "git push --follow-tags",
     "publish:dry-run": "lerna version --no-git-tag-version --no-push",
     "lint": "eslint ./",
-    "debug": "lerna run debug"
+    "debug": "babel-node --inspect-brk --ignore '/node_modules/(?!exothermicjs)' node_modules/.bin/exothermic-server",
+    "compile": "lerna run compile"
   },
   "devDependencies": {
+    "@babel/cli": "^7.4.4",
     "@babel/core": "^7.1.5",
+    "@babel/node": "^7.4.5",
     "@babel/plugin-proposal-class-properties": "^7.2.3",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
@@ -34,6 +37,7 @@
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^23.6.0",
     "babel-loader": "^8.0.2",
+    "babel-plugin-css-modules-transform": "^1.6.2",
     "css-loader": "^2.1.1",
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.7.0",

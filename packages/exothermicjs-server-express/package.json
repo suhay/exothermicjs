@@ -25,12 +25,14 @@
     "build:prod": "webpack --mode production",
     "build:all": "yarn build && yarn build:prod",
     "dev": "webpack --env.NODE_ENV=development --watch --mode development",
-    "debug": "node --inspect-brk src"
+    "compile": "rimraf .compiled && babel src --out-dir .compiled --source-maps"
   },
   "bugs": {
     "url": "https://github.com/suhay/exothermicjs/issues"
   },
   "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/node": "^7.4.5",
     "nodemon-webpack-plugin": "^4.0.8",
     "webpack": "^4.32.2"
   },
