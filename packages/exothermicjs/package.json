@@ -21,6 +21,7 @@
   "homepage": "https://github.com/suhay/exothermicjs#readme",
   "license": "MIT",
   "dependencies": {
+    "aphrodite": "^2.3.1",
     "babel-runtime": "^6.26.0",
     "dotenv": "^6.0.0",
     "find-config": "^1.0.0",
@@ -42,6 +43,7 @@
   "devDependencies": {
     "@babel/cli": "^7.4.4",
     "@babel/core": "^7.4.5",
+    "babel-loader": "^8.0.6",
     "babel-plugin-module-resolver": "^3.1.1",
     "css-loader": "^1.0.0",
     "rimraf": "^2.6.3",
@@ -52,14 +54,12 @@
     "webpack-node-externals": "^1.6.0"
   },
   "scripts": {
-    "dev": "webpack --watch --mode development",
     "clean": "rimraf dist",
     "build": "yarn clean && webpack --mode development",
     "build:prod": "yarn clean && webpack --mode production",
     "build:all": "yarn clean && yarn build && yarn build:prod",
     "test": "jest --no-cache",
     "stat": "webpack --mode production --profile --json > stats.json",
-    "test:coverage": "jest --coverage",
-    "compile": "rimraf .compiled && babel src --out-dir .compiled --source-maps"
+    "test:coverage": "jest --coverage"
   }
 }

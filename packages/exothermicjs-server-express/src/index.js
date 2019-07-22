@@ -1,10 +1,7 @@
-const configPath = require(`find-config`)(`.env`)
-require(`dotenv`).config({ path: configPath })
-
-const projectRoot = configPath.replace(`/.env`, ``)
+require(`dotenv`).config()
 
 const exothermic = require(`exothermicjs`)
-const auth = require(`exothermicjs/src/auth`)
+// const auth = require(`exothermicjs/src/auth`)
 
 const express = require(`express`)
 const path = require(`path`)
@@ -29,15 +26,15 @@ app.engine(`exo`, (filePath, options, callback) => {
       : exothermic.render(filePath, theseOptions)
   return callback(null, page)
 })
-app.set(`views`, [`${path.resolve(`${projectRoot}/${process.env.PUBLIC}`)}/pages/` || `./public/pages/`, `${path.resolve(`${projectRoot}/node_modules/exothermicjs/templates`)}`])
+app.set(`views`, [`${path.resolve(`./${process.env.PUBLIC}`)}/pages/` || `./public/pages/`, `${path.resolve(`./node_modules/exothermicjs/templates`)}`])
 
 app.set(`view engine`, `exo`)
 app.use(helmet())
 app.use(logger(`dev`))
-if (auth) {
-  app.use(auth)
-}
-app.use(express.static(`${path.resolve(`${projectRoot}/${process.env.PUBLIC}`)}/static` || `./public/static`))
+// if (auth) {
+//   app.use(auth)
+// }
+app.use(express.static(`${path.resolve(`./${process.env.PUBLIC}`)}/static` || `./public/static`))
 app.use(fileUpload())
 
 app.use(`/admin`, adminRouter)

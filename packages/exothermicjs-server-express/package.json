@@ -9,39 +9,36 @@
   "author": "Matt Suhay <matthew.suhay@gmail.com>",
   "homepage": "https://github.com/suhay/exothermicjs#readme",
   "license": "MIT",
-  "module": "src/index.js",
-  "main": "dist/exothermicjs-server-express.min.js",
   "files": [
     "dist/",
     "src/"
   ],
   "bin": {
-    "exothermic-server": "./bin/exothermic-server"
+    "exothermic-server": "./bin/exothermic-server",
+    "exothermic-server-dev": "./bin/exothermic-server-dev"
   },
   "scripts": {
-    "start": "node ./bin/exothermic-server",
-    "watch": "webpack --env.NODE_ENV=production --watch --mode production",
-    "build": "webpack --mode development",
-    "build:prod": "webpack --mode production",
-    "build:all": "yarn build && yarn build:prod",
-    "dev": "webpack --env.NODE_ENV=development --watch --mode development",
-    "compile": "rimraf .compiled && babel src --out-dir .compiled --source-maps"
+    "start": "node ./bin/exothermic-server"
   },
   "bugs": {
     "url": "https://github.com/suhay/exothermicjs/issues"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.5.4",
     "@babel/node": "^7.4.5",
-    "nodemon-webpack-plugin": "^4.0.8",
-    "webpack": "^4.32.2"
+    "@babel/preset-env": "^7.5.4",
+    "child_process": "^1.0.2",
+    "nodemon": "^1.19.1",
+    "webpack-dev-server": "^3.7.2"
   },
   "dependencies": {
+    "commander": "^2.20.0",
     "connect-ensure-login": "^0.1.1",
     "dotenv": "^6.2.0",
+    "esm": "^3.2.25",
     "express": "^4.16.4",
     "express-fileupload": "^1.1.2-alpha.1",
-    "find-config": "^1.0.0",
     "helmet": "^3.16.0",
     "http-errors": "^1.7.2",
     "morgan": "^1.9.1"

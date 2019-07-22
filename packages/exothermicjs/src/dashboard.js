@@ -1,19 +1,5 @@
-const configBuilder = () => {
-  const def = require(`../exothermic.config`)
-  let user = {}
-  try {
-    user = require(`../../../exothermic.config`)
-  } catch (e) { }
-  return {
-    ...def,
-    ...user,
-  }
-}
+import { configBuilder } from './exothermic'
 
-const conf = configBuilder()
-const { dashboard } = conf
+const { dashboard } = configBuilder()
 
-module.exports = {
-  load: () => require(`../../${dashboard}/src`),
-  config: () => require(`../../${dashboard}/exothermic.config`),
-}
+module.exports = require(`../../${dashboard}/src`)

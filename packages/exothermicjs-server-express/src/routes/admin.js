@@ -1,6 +1,3 @@
-// eslint-disable-next-line global-require
-require(`dotenv`).config({ path: require(`find-config`)(`.env`) })
-
 const express = require(`express`)
 const ensureLoggedIn = require(`connect-ensure-login`).ensureLoggedIn()
 

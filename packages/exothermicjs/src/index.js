@@ -12,6 +12,7 @@ import {
 import ArticleYamlType from './components/article/type'
 import { GetYamlType } from './components/util/types'
 import { FormYamlType } from './components/form'
+import { configBuilder } from './exothermic'
 
 export const Types = {
   NavbarYamlType,
@@ -23,19 +24,6 @@ export const Types = {
   ArticleYamlType,
   GetYamlType,
   FormYamlType,
-}
-
-const configBuilder = () => {
-  const def = require(`../exothermic.config`)
-  let user = {}
-  try {
-    user = require(`../../../exothermic.config`)
-  } catch (e) { }
-
-  return {
-    ...def,
-    ...user,
-  }
 }
 
 const Schema = (addedPlugins = []) => {

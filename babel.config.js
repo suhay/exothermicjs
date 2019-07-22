@@ -1,53 +1,45 @@
-const presets = (api) => {
-  const isTest = api.env() === `development`
-  if (isTest) {
-    return [
-      `@babel/preset-react`,
+module.exports = (api) => {
+  api.cache.forever()
+  return {
+    babelrcRoots: [
+      `.`,
+      `./packages/*`,
+    ],
+    presets: [
       [
-        `@babel/preset-env`,
+        `@babel/env`,
         {
+          modules: false,
+          useBuiltIns: `entry`,
+          corejs: `core-js@3`,
           targets: {
-            node: `current`,
+            browsers: [`> 1%`],
           },
         },
       ],
-    ]
-  }
-  return [
-    `@babel/preset-react`,
-    [
-      `@babel/preset-env`,
-      {
-        modules: false,
-      },
+      `@babel/react`,
     ],
-  ]
-}
-
-const plugins = (api) => {
-  const isTest = api.env() === `development`
-  const defaultPlugins = [
-    `@babel/plugin-transform-react-jsx`,
-    `@babel/plugin-transform-react-jsx-source`,
-    `@babel/plugin-transform-react-jsx-self`,
-    `@babel/plugin-proposal-object-rest-spread`,
-    `@babel/plugin-proposal-class-properties`,
-    `@babel/plugin-syntax-dynamic-import`,
-    `css-modules-transform`,
-  ]
-
-  if (isTest) {
-    return defaultPlugins
-  }
-
-  return defaultPlugins
-}
-
-module.exports = (api) => {
-  const pres = presets(api)
-  const plugs = plugins(api)
-  return {
-    presets: pres,
-    plugins: plugs,
+    plugins: [
+      `@babel/syntax-dynamic-import`,
+      `@babel/plugin-proposal-object-rest-spread`,
+      `css-modules-transform`,
+    ],
+    env: {
+      test: {
+        presets: [
+          [
+            `@babel/env`,
+            {
+              useBuiltIns: `entry`,
+              corejs: `core-js@3`,
+              targets: {
+                browsers: [`> 1%`],
+              },
+            },
+          ],
+          `@babel/react`,
+        ],
+      },
+    },
   }
 }

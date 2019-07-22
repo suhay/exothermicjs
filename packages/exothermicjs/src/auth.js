@@ -1,16 +1,5 @@
-const configBuilder = () => {
-  const def = require(`../exothermic.config`)
-  let user = {}
-  try {
-    user = require(`../../../exothermic.config`)
-  } catch (e) { }
-  return {
-    ...def,
-    ...user,
-  }
-}
+import { configBuilder } from './exothermic'
 
-const conf = configBuilder()
-const { auth } = conf
+const { auth } = configBuilder()
 
 module.exports = require(`../../${auth}/src`)

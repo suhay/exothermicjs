@@ -3,7 +3,8 @@
     "bootstrap": "yarn && lerna bootstrap",
     "start": "yarn bootstrap && yarn dev",
     "watch": "lerna run watch --parallel",
-    "dev": "lerna run dev --parallel",
+    "dev": "./node_modules/.bin/exothermic-server-dev",
+    "debug": "./node_modules/.bin/exothermic-server-dev --debug",
     "build": "yarn clean && lerna run build",
     "build:all": "yarn clean && lerna run build:all",
     "build-preview": "yarn build && lerna run build-preview",
@@ -16,9 +17,7 @@
     "publish:push": "lerna publish from-git",
     "publish:git": "git push --follow-tags",
     "publish:dry-run": "lerna version --no-git-tag-version --no-push",
-    "lint": "eslint ./",
-    "debug": "babel-node --inspect-brk --ignore '/node_modules/(?!exothermicjs)' node_modules/.bin/exothermic-server",
-    "compile": "lerna run compile"
+    "lint": "eslint ./"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",
@@ -38,6 +37,7 @@
     "babel-jest": "^23.6.0",
     "babel-loader": "^8.0.2",
     "babel-plugin-css-modules-transform": "^1.6.2",
+    "core-js": "3",
     "css-loader": "^2.1.1",
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.7.0",
@@ -50,6 +50,7 @@
     "jest": "^23.6.0",
     "lerna": "^3.4.3",
     "nodemon": "^1.19.1",
+    "npm-run-all": "^4.1.5",
     "open-browser-webpack-plugin": "^0.0.5",
     "react": "^16.0.0-0",
     "react-dom": "^16.0.0-0",

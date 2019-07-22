@@ -1,50 +1,37 @@
 #!/usr/bin/env node
 
-/**
- * Module dependencies.
- */
-
-const app = require(`../src`)
+const program = require(`commander`)
+const { version } = require(`../package.json`)
 const debug = require(`debug`)(`exothermicjs:server`)
+const esm = require(`esm`)(module /* , options */)
 const http = require(`http`)
 
-/**
- * Normalize a port into a number, string, or false.
- */
+program
+  .version(version)
+  .option(`-p, --port [port]`, `Port number (this will override the value set in the .env file)`)
+  .parse(process.argv)
 
 function normalizePort(val) {
   const port = parseInt(val, 10)
 
   // eslint-disable-next-line no-restricted-globals
   if (isNaN(port)) {
-    // named pipe
     return val
   }
 
   if (port >= 0) {
-    // port number
     return port
   }
 
   return false
 }
 
-/**
- * Get port from environment and store in Express.
- */
+const port = normalizePort(program.port || process.env.PORT || `3000`)
 
-const port = normalizePort(process.env.PORT || `3000`)
+const app = esm(`../src`)
 app.set(`port`, port)
 
-/**
- * Create HTTP server.
- */
-
 const server = http.createServer(app)
-
-/**
- * Event listener for HTTP server "error" event.
- */
 
 function onError(error) {
   if (error.syscall !== `listen`) {
@@ -55,7 +42,6 @@ function onError(error) {
     ? `Pipe ${port}`
     : `Port ${port}`
 
-  // handle specific listen errors with friendly messages
   switch (error.code) {
     case `EACCES`:
       console.error(`${bind} requires elevated privileges`)
@@ -70,10 +56,6 @@ function onError(error) {
   }
 }
 
-/**
- * Event listener for HTTP server "listening" event.
- */
-
 function onListening() {
   const addr = server.address()
   const bind = typeof addr === `string`
@@ -81,10 +63,6 @@ function onListening() {
     : `port ${addr.port}`
   debug(`Listening on ${bind}`)
 }
-
-/**
- * Listen on provided port, on all network interfaces.
- */
 
 server.listen(port)
 server.on(`error`, onError)

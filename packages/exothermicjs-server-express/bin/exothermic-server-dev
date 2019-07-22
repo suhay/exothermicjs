@@ -1,0 +1,50 @@
+#!/usr/bin/env node
+
+const program = require(`commander`)
+const { version } = require(`../package.json`)
+
+program
+  .version(version)
+  .option(`-p, --port [port]`, `Port number`, 3000)
+  .option(`--debug`, `Launches the server in development mode, and attaches the '--inspect' flag to the node command`)
+  .parse(process.argv)
+
+const nodemon = require(`nodemon`)
+const childProcess = require(`child_process`)
+
+const nodemonExec = program.debug ? `babel-node --inspect` : `babel-node`
+
+nodemon({
+  exec: nodemonExec,
+  script: `./node_modules/.bin/exothermic-server`,
+  ignore: [
+    `node_cache/**/*`,
+    `node_modules/**/*`,
+    `demo/**/*`,
+    `test/**/*`,
+    `public/**/*`,
+  ],
+  verbose: true,
+  args: [`--port=${program.port}`],
+  ext: `js json`,
+  env: { NODE_ENV: `development` },
+  stdout: true,
+  colours: true,
+})
+  .on(`restart`, (files) => {
+    console.log(`App restarted due to: `, files)
+  })
+  .on(`start`, () => {
+    console.log(`App has started`)
+  })
+  .on(`quit`, () => {
+    console.log(`\nApp has quit`)
+    process.exit()
+  })
+  .on(`error`, (err) => {
+    console.error(err)
+  })
+
+const webpackServer = childProcess.spawn(`./node_modules/.bin/webpack-dev-server`)
+webpackServer.stdout.pipe(process.stdout)
+webpackServer.stderr.pipe(process.stderr)

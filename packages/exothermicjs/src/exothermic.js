@@ -5,13 +5,31 @@ import React from 'react'
 import ReactServer from 'react-dom/server'
 import { StaticRouter } from 'react-router'
 
-import { pageState, schemaState } from './state'
+import { pageState, schemaState, configState } from './state'
 import Head from './components/head'
 import Base from './components/base'
 import { isBrowser } from './components/util'
 
 let Dashboard = null
 let dashboardConfig = null
+
+export const configBuilder = () => {
+  if (configState.state.config) {
+    return configState.state.config
+  }
+  const base = JSON.parse(fs.readFileSync(path.resolve(`${__dirname}/../exothermic.config.json`), `utf8`))
+  let user = {}
+  if (fs.existsSync(`exothermic.config.json`)) {
+    user = JSON.parse(fs.readFileSync(path.resolve(`exothermic.config.json`), `utf8`))
+  }
+  const config = {
+    ...base,
+    ...user,
+  }
+
+  configState.setState(config)
+  return config
+}
 
 export const get = (route, options) => {
   try {
@@ -78,24 +96,33 @@ export const render = (route, options) => {
     <Head data={result} />
   )
 
+  const devScripts = `
+<script src="/browser.js"></script>
+<script src="/vendors.browser.js"></script>
+`
+
+  // ${configBuilder().plugins.map(conf => `<script src="/${conf}.min.js" />`)}
+
+
+  const prodScripts = `
+<script src="https://unpkg.com/exothermicjs/dist/browser.exothermic.min.js"></script>
+  `
+
   const footerScripts = `
     ${process.env.SSR_ONLY === `true` || options.ssr_only
     ? ``
     : process.env.NODE_ENV && process.env.NODE_ENV === `development`
-      ? `
-        <script src="/browser.js"></script>
-        <script src="/vendors.browser.js"></script>
-      `
-      : `<script src="https://unpkg.com/exothermicjs/dist/browser.exothermic.min.js"></script>`}
+      ? devScripts
+      : prodScripts}
     ${dashboard && dashboardConfig
     ? `<script src="${process.env.NODE_ENV && process.env.NODE_ENV === `development` ? dashboardConfig.dev : dashboardConfig.live}"></script>`
     : ``}
     <script>
-        var config = {
-          dashboard: ${dashboard ? `'endo'` : null}
-        };
-        EXOTHERMIC.initialize(config);
-     </script>
+      var config = {
+        dashboard: ${dashboard ? `'endo'` : null}
+      };
+      EXOTHERMIC.initialize(config);
+    </script>
   `
 
   return `

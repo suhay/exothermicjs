@@ -1,9 +1,3 @@
-/* eslint-disable no-underscore-dangle */
-// eslint-disable-next-line global-require
-const configPath = require(`find-config`)(`.env`)
-require(`dotenv`).config({ path: configPath })
-
-const projectRoot = configPath.replace(`/.env`, ``)
 const express = require(`express`)
 
 const router = express.Router()
@@ -13,7 +7,7 @@ const path = require(`path`)
 router.get(`/load/module/:module`, (req, res) => {
   const mod = req.params.module
   if ((mod.includes(`exothermicjs-dashboard`) || mod.includes(`exothermicjs-plugin`))) {
-    const modulePath = path.resolve(`${projectRoot}/../${mod}/index.js`)
+    const modulePath = path.resolve(`./node_modules/${mod}/index.js`)
     if (fs.existsSync(modulePath)) {
       res.sendFile(modulePath)
     } else {
@@ -32,7 +26,7 @@ router.get(`/load/*`, (req, res) => {
   if (req.params[0].endsWith(`.exo`) || req.params[0].indexOf(`.`) < 0) {
     res.render(req.params[0], options)
   } else {
-    res.sendFile(req.params[0], { root: path.resolve(`${projectRoot}/${process.env.PUBLIC}`) })
+    res.sendFile(req.params[0], { root: path.resolve(`./${process.env.PUBLIC}`) })
   }
 })
 

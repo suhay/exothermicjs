@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react"
 import SimpleMDEReact from "react-simplemde-editor"
 import ReactMarkdown from 'react-markdown'
-import "simplemde/dist/simplemde.min.css"
+// import "simplemde/dist/simplemde.min.css"
 
 import { pageState } from 'exothermicjs/src/state'
 
