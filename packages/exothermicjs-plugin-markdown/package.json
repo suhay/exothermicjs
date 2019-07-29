@@ -10,7 +10,7 @@
   "homepage": "https://github.com/suhay/exothermicjs#readme",
   "license": "MIT",
   "module": "src/index.js",
-  "main": "dist/exothermicjs-plugin-markdown.min.js",
+  "main": "dist/exothermicjs-plugin-markdown.js",
   "files": [
     "dist/",
     "src/"

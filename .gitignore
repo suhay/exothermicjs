@@ -13,3 +13,4 @@ package-lock.json
 dist/
 .npmrc
 .compiled
+ssr/

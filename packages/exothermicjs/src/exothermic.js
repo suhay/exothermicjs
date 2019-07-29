@@ -10,12 +10,10 @@ import Head from './components/head'
 import Base from './components/base'
 import { isBrowser } from './components/util'
 
-let Dashboard = null
-let dashboardConfig = null
-
-export const configBuilder = () => {
+export const configBuilder = (options = {}) => {
+  const { stringify } = options
   if (configState.state.config) {
-    return configState.state.config
+    return stringify ? JSON.stringify(configState.state.config) : configState.state.config
   }
   const base = JSON.parse(fs.readFileSync(path.resolve(`${__dirname}/../exothermic.config.json`), `utf8`))
   let user = {}
@@ -28,7 +26,7 @@ export const configBuilder = () => {
   }
 
   configState.setState(config)
-  return config
+  return stringify ? JSON.stringify(config) : config
 }
 
 export const get = (route, options) => {
@@ -47,23 +45,12 @@ export const get = (route, options) => {
 }
 
 export const render = (route, options) => {
-  const { pages, dashboard, test } = options
+  const { pages, test } = options
   const templates = get(route, options)
   const base = yaml.safeLoad(templates[0])
-  if (dashboard && !Dashboard) {
-    try {
-      const dash = require(`./dashboard`)
-      Dashboard = dash.load()
-      dashboardConfig = dash.config()
-    } catch (e) {
-      console.error(e)
-    }
-  }
 
   const page = yaml.safeLoad(templates[1], {
-    schema: dashboard && Dashboard
-      ? Dashboard.Schema()
-      : schemaState.state.schema(),
+    schema: schemaState.state.schema(),
   })
   const result = { ...base, ...page }
   const context = {}
@@ -71,19 +58,20 @@ export const render = (route, options) => {
   pageState.setState({ pagesPath: pages[0] })
 
   let markup = ReactServer.renderToString(
-    dashboard && Dashboard
-      ? (
-        <StaticRouter location={route} context={context}>
-          <Dashboard.OffCanvasContainer>
-            <Base data={result} browser={test ? false : isBrowser()} />
-          </Dashboard.OffCanvasContainer>
-        </StaticRouter>
-      )
-      : (
-        <StaticRouter location={route} context={context}>
-          <Base data={result} browser={test ? false : isBrowser()} />
-        </StaticRouter>
-      ),
+    // dashboard && Dashboard
+    //   ? (
+    //     <StaticRouter location={route} context={context}>
+    //       <Dashboard.OffCanvasContainer>
+    //         <Base data={result} browser={test ? false : isBrowser()} />
+    //       </Dashboard.OffCanvasContainer>
+    //     </StaticRouter>
+    //   )
+    //   :
+    (
+      <StaticRouter location={route} context={context}>
+        <Base data={result} browser={test ? false : isBrowser()} />
+      </StaticRouter>
+    ),
   )
 
   Object.keys(options).forEach((key) => {
@@ -97,15 +85,14 @@ export const render = (route, options) => {
   )
 
   const devScripts = `
-<script src="/browser.js"></script>
-<script src="/vendors.browser.js"></script>
-`
+    <script src="http://localhost:8081/bundle.js"></script>
+  `
 
   // ${configBuilder().plugins.map(conf => `<script src="/${conf}.min.js" />`)}
 
 
   const prodScripts = `
-<script src="https://unpkg.com/exothermicjs/dist/browser.exothermic.min.js"></script>
+    <script src="https://unpkg.com/exothermicjs/dist/browser.exothermic.min.js"></script>
   `
 
   const footerScripts = `
@@ -114,14 +101,9 @@ export const render = (route, options) => {
     : process.env.NODE_ENV && process.env.NODE_ENV === `development`
       ? devScripts
       : prodScripts}
-    ${dashboard && dashboardConfig
-    ? `<script src="${process.env.NODE_ENV && process.env.NODE_ENV === `development` ? dashboardConfig.dev : dashboardConfig.live}"></script>`
-    : ``}
     <script>
-      var config = {
-        dashboard: ${dashboard ? `'endo'` : null}
-      };
-      EXOTHERMIC.initialize(config);
+      exothermicjs.initialize(window.location.pathname);
+      exothermicjs.config = ${configBuilder({ stringify: true })};
     </script>
   `
 

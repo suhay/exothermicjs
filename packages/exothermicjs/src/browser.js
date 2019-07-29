@@ -31,9 +31,9 @@ const dump = (data) => {
   }).replace(/tag: '!(.*)'/g, `!$1`)}`
 }
 
-window.EXOTHERMIC = window.EXOTHERMIC || {}
+export default () => {}
 
-window.EXOTHERMIC.initialize = config => hydrate(
-  <Loader dump={dump} config={config} path={window.location.pathname === `/` ? `index` : window.location.pathname.replace(/^\//, ``)} />,
+export const initialize = (path = `/`) => hydrate(
+  <Loader dump={dump} path={path === `/` ? `index` : path.replace(/^\//, ``)} />,
   document.getElementById(`__exothermic`)
 )

@@ -5,6 +5,8 @@ const { version } = require(`../package.json`)
 const debug = require(`debug`)(`exothermicjs:server`)
 const esm = require(`esm`)(module /* , options */)
 const http = require(`http`)
+// eslint-disable-next-line no-unused-vars
+const colors = require(`colors`)
 
 program
   .version(version)
@@ -67,4 +69,4 @@ function onListening() {
 server.listen(port)
 server.on(`error`, onError)
 server.on(`listening`, onListening)
-console.log(`Ready on port ${port}!`)
+console.log(`🔥  ${`[exothermic-server]`.dim}: ${`Ready`.bold.green} on port ${`${port}`.bold.cyan}!`)

@@ -12,39 +12,36 @@ const Loader = ({ path: propsPath, dump }) => {
   const [path] = useState(propsPath)
   useEffect(() => {
     pageState.setState({ route: path })
-    const { Dashboard } = window ? window.EXOTHERMIC : { Dashboard: null }
     fetch(`/load/${path}`.replace(`//`, `/`), { credentials: `same-origin` })
       .then(response => response.text())
       .then(data => pageState.setState({
         data: yaml.safeLoad(data, {
-          schema: Dashboard ? Dashboard.Schema() : schemaState.state.schema(),
+          schema: schemaState.state.schema(),
         }),
         loading: false,
       }))
       .catch((error) => { throw error })
   })
 
-  const { Dashboard } = window ? window.EXOTHERMIC : { Dashboard: null }
   return (
     <Subscribe to={[pageState]}>
       {({ route, loading, data }) => (
         <div className="base">
           {loading
             ? <Spinner name="folding-cube" />
-            : Dashboard
-              ? (
-                <BrowserRouter>
-                  <Dashboard.OffCanvas dump={dump} path={route}>
-                    <Page data={data} />
-                  </Dashboard.OffCanvas>
-                </BrowserRouter>
-              )
-              : (
-                <BrowserRouter>
-                  <Page data={data} />
-                </BrowserRouter>
-              )
-            }
+            // : Dashboard
+            //   ? (
+            //     <BrowserRouter>
+            //       <Dashboard.OffCanvas dump={dump} path={route}>
+            //         <Page data={data} />
+            //       </Dashboard.OffCanvas>
+            //     </BrowserRouter>
+            //   )
+            : (
+              <BrowserRouter>
+                <Page data={data} />
+              </BrowserRouter>
+            )}
         </div>
       )}
     </Subscribe>

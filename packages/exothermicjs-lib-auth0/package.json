@@ -12,7 +12,7 @@
     "authentication",
     "exothermicjs"
   ],
-  "main": "dist/exothermicjs-lib-auth0.min.js",
+  "main": "dist/exothermicjs-lib-auth0.js",
   "module": "src/index.js",
   "license": "MIT",
   "homepage": "https://github.com/suhay/exothermicjs#readme",
@@ -34,7 +34,6 @@
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
-    "find-config": "^1.0.0",
     "memorystore": "^1.6.0",
     "passport": "^0.4.0",
     "passport-auth0": "^1.0.0"

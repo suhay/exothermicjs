@@ -45,6 +45,6 @@ nodemon({
     console.error(err)
   })
 
-const webpackServer = childProcess.spawn(`./node_modules/.bin/webpack-dev-server`)
+const webpackServer = childProcess.spawn(`./node_modules/.bin/webpack-dev-server`, [`--color`])
 webpackServer.stdout.pipe(process.stdout)
 webpackServer.stderr.pipe(process.stderr)

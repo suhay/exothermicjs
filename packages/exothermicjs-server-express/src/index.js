@@ -37,6 +37,10 @@ app.use(logger(`dev`))
 app.use(express.static(`${path.resolve(`./${process.env.PUBLIC}`)}/static` || `./public/static`))
 app.use(fileUpload())
 
+if (app.get(`env`) === `development`) {
+  app.use(`/sockjs-node`, require(`./routes/sockjs-node`))
+}
+
 app.use(`/admin`, adminRouter)
 app.use(`/api`, apiRouter)
 app.use(`/`, indexRouter)
