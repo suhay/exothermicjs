@@ -31,8 +31,6 @@ const dump = (data) => {
   }).replace(/tag: '!(.*)'/g, `!$1`)}`
 }
 
-export default () => {}
-
 export const initialize = (path = `/`) => hydrate(
   <Loader dump={dump} path={path === `/` ? `index` : path.replace(/^\//, ``)} />,
   document.getElementById(`__exothermic`)

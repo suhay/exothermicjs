@@ -19,7 +19,8 @@
   },
   "plugins": [
 		"react",
-		"jest"
+		"jest",
+		"react-hooks"
 	],
 	"globals": {
 		"graphql": true,
@@ -61,6 +62,12 @@
 		"import/no-unresolved": 0,
 		"max-len": 0,
 		"jsx-a11y/label-has-for": 0,
-		"no-use-before-define": 0
+		"no-use-before-define": 0,
+		"react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
+		"react-hooks/exhaustive-deps": "warn", // Checks effect dependencies
+		"prefer-destructuring": 0,
+		"no-trailing-spaces": 0,
+		"import/no-cycle": "warn",
+		"import/prefer-default-export": 0
 	}
 }

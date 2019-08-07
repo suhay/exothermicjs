@@ -36,6 +36,7 @@
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "react-router-hash-link": "^1.2.0",
+    "reactn": "^2.1.7",
     "statable": "^0.3.2",
     "url-parse": "^1.4.3"
   },

@@ -4,7 +4,8 @@ import fetch from 'isomorphic-fetch'
 import fs from 'fs'
 
 import Spinner from './spinner'
-import { pageState, schemaState } from '../../state'
+import { pageState } from '../../state'
+import schema from '../../schema'
 
 export const GetContext = React.createContext(``)
 
@@ -13,7 +14,7 @@ export default class Get extends Component {
     super(props)
     this.state = {
       data: fs && typeof fs.readFileSync === `function`
-        ? yaml.safeLoad(fs.readFileSync(`${pageState.state.pagesPath}/${props.data}.exo`, `utf8`), { schema: schemaState.state.schema() })
+        ? yaml.safeLoad(fs.readFileSync(`${pageState.state.pagesPath}/${props.data}.exo`, `utf8`), { schema: schema() })
         : null,
       loading: !(fs && typeof fs.readFileSync === `function`),
     }
@@ -21,12 +22,12 @@ export default class Get extends Component {
 
   componentDidMount() {
     const { data: fetchPath, cacheId } = this.props
-    const { Dashboard } = window ? window.EXOTHERMIC : { Dashboard: null }
+    
     fetch(`/load/${fetchPath}`)
       .then(response => response.text())
       .then((data) => {
         const yamlData = yaml.safeLoad(data, {
-          schema: Dashboard ? Dashboard.Schema() : schemaState.state.schema(),
+          schema: schema(),
         })
         this.setState({
           data: yamlData,

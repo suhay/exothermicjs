@@ -5,29 +5,12 @@ import React from 'react'
 import ReactServer from 'react-dom/server'
 import { StaticRouter } from 'react-router'
 
-import { pageState, schemaState, configState } from './state'
+import { pageState } from './state'
 import Head from './components/head'
 import Base from './components/base'
 import { isBrowser } from './components/util'
-
-export const configBuilder = (options = {}) => {
-  const { stringify } = options
-  if (configState.state.config) {
-    return stringify ? JSON.stringify(configState.state.config) : configState.state.config
-  }
-  const base = JSON.parse(fs.readFileSync(path.resolve(`${__dirname}/../exothermic.config.json`), `utf8`))
-  let user = {}
-  if (fs.existsSync(`exothermic.config.json`)) {
-    user = JSON.parse(fs.readFileSync(path.resolve(`exothermic.config.json`), `utf8`))
-  }
-  const config = {
-    ...base,
-    ...user,
-  }
-
-  configState.setState(config)
-  return stringify ? JSON.stringify(config) : config
-}
+import configBuilder from './config'
+import schema from './schema'
 
 export const get = (route, options) => {
   try {
@@ -50,7 +33,7 @@ export const render = (route, options) => {
   const base = yaml.safeLoad(templates[0])
 
   const page = yaml.safeLoad(templates[1], {
-    schema: schemaState.state.schema(),
+    schema: schema(),
   })
   const result = { ...base, ...page }
   const context = {}

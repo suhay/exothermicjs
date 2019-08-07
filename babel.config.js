@@ -1,5 +1,5 @@
 module.exports = (api) => {
-  api.cache.forever()
+  const isTest = api.env(`test`)
   return {
     babelrcRoots: [
       `.`,
@@ -28,16 +28,19 @@ module.exports = (api) => {
       test: {
         presets: [
           [
-            `@babel/env`,
+            `@babel/preset-env`,
             {
-              useBuiltIns: `entry`,
-              corejs: `core-js@3`,
               targets: {
-                browsers: [`> 1%`],
+                node: `current`,
               },
             },
           ],
           `@babel/react`,
+        ],
+        plugins: [
+          `@babel/syntax-dynamic-import`,
+          `@babel/plugin-proposal-object-rest-spread`,
+          `css-modules-transform`,
         ],
       },
     },
