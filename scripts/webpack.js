@@ -11,8 +11,8 @@ module.exports = ({
     entry: `./src/index.js`,
     output: {
       path: process.cwd(),
-      filename: pkg.main,
-      library: pkg.name.split(`-`),
+      filename: pkg.browser || pkg.main,
+      library: pkg.name.replace(`@`, ``).split(/[/-]/),
       libraryTarget: `window`,
       publicPath: `/`,
     },

@@ -67,7 +67,7 @@
 		"react-hooks/exhaustive-deps": "warn", // Checks effect dependencies
 		"prefer-destructuring": 0,
 		"no-trailing-spaces": 0,
-		"import/no-cycle": "warn",
+		"import/no-cycle": "info",
 		"import/prefer-default-export": 0
 	}
 }
