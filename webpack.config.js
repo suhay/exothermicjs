@@ -1,5 +1,6 @@
 const path = require(`path`)
 const fs = require(`fs`)
+const webpack = require(`webpack`)
 
 const dirs = fs.readdirSync(path.resolve(__dirname, `./packages`)).filter(dir => !dir.includes(`server-`))
 
@@ -7,7 +8,9 @@ module.exports = () => (
   {
     output: {
       filename: `bundle.js`,
-      libraryTarget: `window`,
+      libraryTarget: `umd`,
+      publicPath: `/`,
+      umdNamedDefine: true,
       library: `exothermic`,
     },
     node: {
@@ -15,7 +18,7 @@ module.exports = () => (
       net: `empty`,
       tls: `empty`,
     },
-    devtool: `inline-source-map`,
+    devtool: `source-map`,
     devServer: {
       contentBase: dirs.map(dir => path.resolve(__dirname, path.join(`./packages`, `${dir}/dist`))),
       port: 8081,
@@ -44,5 +47,12 @@ module.exports = () => (
         },
       ],
     },
+    plugins: [
+      new webpack.ProvidePlugin({
+        React: `react`,
+        ReactDOM: `react-dom`,
+      }),
+      // new BundleAnalyzerPlugin(),
+    ].filter(e => e),
   }
 )

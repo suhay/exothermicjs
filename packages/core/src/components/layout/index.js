@@ -1,8 +1,11 @@
 import yaml from 'js-yaml'
-import { ColYamlType, SectionYamlType } from './type'
-import { FooterYamlType } from './footer'
-import { HeaderYamlType } from './header'
-import { MainYamlType } from './main'
+import {
+  ColYamlType,
+  SectionYamlType,
+  FooterYamlType,
+  MainYamlType,
+  HeaderYamlType,
+} from './type'
 
 const LAYOUT_SCHEMA = yaml.Schema.create([
   SectionYamlType,

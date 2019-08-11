@@ -3,9 +3,10 @@ import { hydrate } from "react-dom"
 import yaml from 'js-yaml'
 import { Base64 } from 'js-base64'
 
-import { dragState } from './state'
 import Loader from './components/loader'
 import schema from './schema'
+
+window.React = React
 
 const dumpTag = (tag) => {
   let represent = tag._self.represent && tag.props.data ? tag._self.represent(tag.props.cacheId ? tag.props : tag.props.data) : {}
@@ -16,11 +17,7 @@ const dumpTag = (tag) => {
     represent.items = represent.items.map(part => dumpTag(part))
   } else if (tag.props.children) {
     represent = { ...represent, ...dumpTag(tag.props.children) }
-  } else if (tag.props.items) {
-    represent.items = tag.props.id && dragState.state.draggables[tag.props.id]
-      ? dragState.state.draggables[tag.props.id].map(part => dumpTag(part))
-      : tag.props.items.map(part => dumpTag(part))
-  }
+  } 
   return represent
 }
 
@@ -35,15 +32,25 @@ const dump = (data) => {
 
 export const initialize = (path = `/`) => {
   let data = null
+  const raw = {}
   if (window && window.exothermic) {
     const base = yaml.safeLoad(Base64.decode(window.exothermic.base))
     const page = yaml.safeLoad(Base64.decode(window.exothermic.page), {
       schema: schema(),
     })
     data = { ...base, ...page }
+    const parsedRaw = JSON.parse(Base64.decode(window.exothermic.raw))
+
+    Object.keys(parsedRaw).forEach((key) => {
+      raw[key] = parsedRaw[key].startsWith(`---`) 
+        ? yaml.safeLoad(parsedRaw[key], {
+          schema: schema(),
+        }) 
+        : parsedRaw[key]
+    })
   }
   hydrate(
-    <Loader dump={dump} path={path === `/` ? `index` : path.replace(/^\//, ``)} data={data} />,
+    <Loader dump={dump} path={path === `/` ? `index` : path.replace(/^\//, ``)} data={data} raw={raw} />,
     document.getElementById(`__exothermic`),
     () => {
       delete window.exothermic.base

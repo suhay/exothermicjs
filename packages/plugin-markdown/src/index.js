@@ -1,91 +1,83 @@
-import React, { Component, Fragment } from 'react'
+import React, { Fragment, useState, useEffect } from 'react'
 import ReactMarkdown from 'react-markdown'
 import fetch from 'isomorphic-fetch'
 import fs from 'fs'
-import { Subscribe } from 'statable'
-import shortid from 'shortid'
+import { setGlobal, useGlobal } from 'reactn'
 
-import { pageState } from '@exothermic/core/src/state'
+// import Editor from './editor'
 
-import Editor from './editor'
+const Markdown = ({ path }) => {
+  const [cache] = useGlobal(path)
+  const [raw, setRaw] = useGlobal(`raw`)
+  const [pagesPath] = useGlobal(`pagesPath`)
+  const initialData = cache || (fs && typeof fs.readFileSync === `function`
+    ? (() => {
+      const rawMd = fs.readFileSync(`${pagesPath}markdown/${path}.md`, `utf8`)
+      raw[path] = rawMd
+      setRaw({ ...raw })
+      return rawMd
+    })()
+    : null)
 
-export class Markdown extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      data: fs && typeof fs.readFileSync === `function` ? fs.readFileSync(`${pageState.state.pagesPath}markdown/${props.data}.md`, `utf8`) : null,
-      loading: !(fs && typeof fs.readFileSync === `function`),
+  const [data, setData] = useState(initialData)
+  const [loading, setLoading] = useState(false)
+
+  if (initialData && !cache) {
+    const newCache = {}
+    newCache[path] = initialData
+    setGlobal(newCache)
+  }
+
+  useEffect(() => {
+    let unmounted = false
+    if (!cache) {
+      setLoading(true)
+      fetch(`/load/pages/markdown/${path}.md`)
+        .then(response => response.text())
+        .then((text) => {
+          const newCache = {}
+          newCache[path] = text
+          setGlobal(newCache)
+
+          if (!unmounted) {
+            setData(text)
+            setLoading(false)
+          }
+        })
     }
-  }
+    return () => {
+      unmounted = true      
+    }
+  }, [path, cache])
 
-  componentDidMount() {
-    const { data: fetchPath, cacheId, parentCacheId } = this.props
-    fetch(`/load/pages/markdown/${fetchPath}.md`)
-      .then(response => response.text())
-      .then((data) => {
-        this.setState({
-          data,
-          loading: false,
-        })
-        const cache = { ...pageState.state.cache }
-        cache[cacheId] = data
-        if (parentCacheId && parentCacheId !== ``) {
-          cache[parentCacheId] = cache[parentCacheId] || {}
-          cache[parentCacheId][cacheId] = data
-        }
-        pageState.setState({
-          cache,
-        })
-      })
-  }
-
-  componentWillUnmount() {
-    const { cacheId } = this.props
-    const cache = { ...pageState.state.cache }
-    delete cache[cacheId]
-    pageState.setState({
-      cache,
-    })
-  }
-
-  render() {
-    const { data, loading } = this.state
-    const { cacheId } = this.props
-    const id = data || cacheId
-    return (
-      <Subscribe to={[pageState]}>
-        {({ editing, editingThis }) => (
-          <Fragment>
-            {!editing && <ReactMarkdown source={data} escapeHtml={false} renderers={{ root: Fragment }} />}
-            {editing && !loading && <Editor id={id} value={data} editingThis={editingThis === id} />}
-          </Fragment>
-        )}
-      </Subscribe>
-    )
-  }
+  return (
+    <Fragment>
+      {loading && <p>Loading...</p>}
+      <ReactMarkdown source={data} escapeHtml={false} renderers={{ root: Fragment }} />
+      {/* {editing && !loading && <Editor id={id} value={data} editingThis={editingThis === id} />} */}
+    </Fragment>
+  )
 }
+
+export default Markdown
 
 export const Type = yaml => new yaml.Type(`!markdown`, {
   kind: `scalar`,
-  resolve(data) {
-    return data !== null
+  resolve(path) {
+    return path !== null
   },
-  construct(data = {}) {
-    const cacheId = shortid.generate()
+  construct(path = `/`) {
     return (
-      <Markdown data={data} key={cacheId} />
+      <Markdown path={path} key={path} />
     )
   },
   instanceOf: Markdown,
   represent(props) {
-    console.log(pageState.state.cache[props.cacheId])
-    console.log(pageState.state.cache)
-    console.log(props.cacheId)
     const rtn = {
-      tag: `!markdown ${props.data}`,
+      tag: `!markdown ${props.path}`,
     }
     return rtn
   },
 })
 
-export * from '../exothermic.config.json'
+export { dev, live } from '../exothermic.config.json'

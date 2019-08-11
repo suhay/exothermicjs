@@ -30,8 +30,6 @@
     "js-yaml": "^3.12.2",
     "passport": "^0.4.0",
     "query-string": "^6.2.0",
-    "react": "^16.6.1",
-    "react-dom": "^16.6.1",
     "react-input-mask": "^2.0.4",
     "react-markdown": "^4.0.3",
     "react-router": "^4.3.1",
@@ -62,5 +60,9 @@
     "test": "jest --no-cache",
     "stat": "webpack --mode production --profile --json > stats.json",
     "test:coverage": "jest --coverage"
+  },
+  "peerDependencies": {
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
   }
 }

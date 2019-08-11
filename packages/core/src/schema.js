@@ -30,7 +30,7 @@ const schema = (options = {}) => {
   const conf = configBuilder()
   
   const plugins = typeof window !== `undefined` && window.exothermic
-    ? Object.values(window.exothermic.plugin).map(plugin => plugin.Type(yaml))
+    ? Object.values(window.exothermic.plugin || []).map(plugin => plugin.Type(yaml))
     : conf.plugins.map(plug => require(`${plug.replace(`@exothermic/`, `../../`)}/src`).Type(yaml))
 
   if (addedPlugins && Object.keys(addedPlugins).length > 0) {

@@ -9,6 +9,7 @@ module.exports = ({
 }) => {
   const config = {
     entry: `./src/index.js`,
+    devtool: `source-map`,
     output: {
       path: process.cwd(),
       filename: pkg.browser || pkg.main,
@@ -17,9 +18,15 @@ module.exports = ({
       publicPath: `/`,
     },
     target,
-    externals: target !== `node` ? [] : [nodeExternals({
-      whitelist: [`react`, `react-dom/server`],
-    })],
+    externals: target !== `node` 
+      ? [{
+        react: `React`,
+        ReactDOM: `react-dom`,
+      }] 
+      : [
+        nodeExternals({
+          whitelist: [`react`, `react-dom/server`],
+        })],
     node: {
       __dirname: true,
     },
@@ -51,7 +58,6 @@ module.exports = ({
     },
     resolve: {
       alias: {
-        Root: path.resolve(__dirname, `.`),
         hiredis: path.join(__dirname, `aliases/hiredis.js`),
       },
     },

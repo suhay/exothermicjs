@@ -3,6 +3,9 @@ import yaml from 'js-yaml'
 
 import Col from './col'
 import Section from './section'
+import Footer from './footer'
+import Main from './main'
+import Header from './header'
 
 export const ColYamlType = new yaml.Type(`!col`, {
   kind: `mapping`,
@@ -30,6 +33,51 @@ export const SectionYamlType = new yaml.Type(`!section`, {
   instanceOf: Section,
   represent(data) {
     const rtn = { tag: `!section`, ...data }
+    return rtn
+  },
+})
+
+export const FooterYamlType = new yaml.Type(`!footer`, {
+  kind: `mapping`,
+  resolve(data) {
+    return data !== null
+  },
+  construct(data = {}) {
+    return <Footer data={data} key="footer" />
+  },
+  instanceOf: Footer,
+  represent(data) {
+    const rtn = { tag: `!footer`, ...data }
+    return rtn
+  },
+})
+
+export const MainYamlType = new yaml.Type(`!main`, {
+  kind: `mapping`,
+  resolve(data) {
+    return data !== null
+  },
+  construct(data = {}) {
+    return <Main data={data} key={data.id || `main`} />
+  },
+  instanceOf: Main,
+  represent(data) {
+    const rtn = { tag: `!main`, ...data }
+    return rtn
+  },
+})
+
+export const HeaderYamlType = new yaml.Type(`!header`, {
+  kind: `mapping`,
+  resolve(data) {
+    return data !== null
+  },
+  construct(data = {}) {
+    return <Header data={data} key="header" />
+  },
+  instanceOf: Header,
+  represent(data) {
+    const rtn = { tag: `!header`, ...data }
     return rtn
   },
 })

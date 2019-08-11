@@ -1,68 +1,69 @@
-import React, { Component } from 'react'
+import React, { useEffect, Fragment, useState } from 'react'
 import yaml from 'js-yaml'
 import fetch from 'isomorphic-fetch'
 import fs from 'fs'
+import { setGlobal, useGlobal } from 'reactn'
 
 import Spinner from './spinner'
-import { pageState } from '../../state'
 import schema from '../../schema'
 
-export const GetContext = React.createContext(``)
+const Get = ({ path }) => {
+  const [cache] = useGlobal(path)
+  const [raw, setRaw] = useGlobal(`raw`)
+  const [pagesPath] = useGlobal(`pagesPath`)
 
-export default class Get extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      data: fs && typeof fs.readFileSync === `function`
-        ? yaml.safeLoad(fs.readFileSync(`${pageState.state.pagesPath}/${props.data}.exo`, `utf8`), { schema: schema() })
-        : null,
-      loading: !(fs && typeof fs.readFileSync === `function`),
+  const initialData = cache || (fs && typeof fs.readFileSync === `function`
+    ? (() => {
+      const rawYaml = fs.readFileSync(`${pagesPath}/${path}.exo`, `utf8`)
+      raw[path] = rawYaml
+      setRaw({ ...raw })
+      return yaml.safeLoad(rawYaml, { schema: schema() })
+    })()
+    : null)
+  const [data, setData] = useState(initialData)
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    let unmounted = false
+    if (!cache) {
+      setLoading(true)
+      fetch(`/load/${path}`)
+        .then(response => response.text())
+        .then((text) => {
+          const yamlData = yaml.safeLoad(text, {
+            schema: schema(),
+          })
+  
+          const newCache = {}
+          newCache[path] = yamlData
+          setGlobal(newCache)
+  
+          if (!unmounted) {
+            setData(yamlData)
+            setLoading(false)
+          }
+        })
+    } else if (initialData) {
+      const newCache = {}
+      newCache[path] = initialData
+      setGlobal(newCache)
     }
-  }
+    return () => {
+      unmounted = true
+    }
+  }, [path, cache, initialData])
 
-  componentDidMount() {
-    const { data: fetchPath, cacheId } = this.props
-    
-    fetch(`/load/${fetchPath}`)
-      .then(response => response.text())
-      .then((data) => {
-        const yamlData = yaml.safeLoad(data, {
-          schema: schema(),
-        })
-        this.setState({
-          data: yamlData,
-          loading: false,
-        })
-        const cache = { ...pageState.state.cache }
-        cache[cacheId] = {}
-        pageState.setState({
-          cache,
-        })
-      })
-  }
-
-  componentWillUnmount() {
-    const { cacheId } = this.props
-    const cache = { ...pageState.state.cache }
-    delete cache[cacheId]
-    pageState.setState({
-      cache,
-    })
-  }
-
-  render() {
-    const { loading, data = {} } = this.state
-    const { cacheId } = this.props
-    return (
-      <div className={loading ? `get-loading` : `get-loaded`}>
-        {!loading && (
-          <GetContext.Provider value={cacheId}>
-            {data.content}
-            {data.items}
-          </GetContext.Provider>
-        )}
-        {loading && <Spinner name="folding-cube" />}
-      </div>
-    )
-  }
+  return (
+    <div className={loading ? `get-loading` : `get-loaded`}>
+      {!loading && (
+        <Fragment>
+          {data && data.content}
+          {data && data.items}
+        </Fragment>
+      )}
+      {loading && <Spinner name="folding-cube" />}
+    </div>
+  )
 }
+
+export default Get

@@ -1,29 +1,32 @@
 import React, { useState, useEffect } from 'react'
 import { BrowserRouter } from 'react-router-dom'
-import { Subscribe } from 'statable'
+import { useGlobal } from 'reactn'
+
 
 import Page from './page'
-import { pageState } from '../state'
 
 const Loader = ({ 
   data: propsData,
+  raw,
 }) => {
-  if (propsData) {
-    pageState.setState({
-      data: propsData,
-    })
+  const [data] = useGlobal(`data`)
+  const [global, setGlobal] = useGlobal()
+  if (Object.keys(global).length === 0) {
+    setGlobal(raw)
   }
 
+  const [localData, setData] = useState(propsData)
+  useEffect(() => {
+    if (data) setData(data)
+    return () => {}
+  }, [data])
+
   return (
-    <Subscribe to={[pageState]}>
-      {({ data }) => (
-        <div className="base">
-          <BrowserRouter>
-            <Page data={data} />
-          </BrowserRouter>
-        </div>
-      )}
-    </Subscribe>
+    <div className="base">
+      <BrowserRouter>
+        <Page data={localData} />
+      </BrowserRouter>
+    </div>
   )
 }
 

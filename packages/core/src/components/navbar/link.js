@@ -4,8 +4,8 @@ import { NavHashLink } from 'react-router-hash-link'
 import fetch from 'isomorphic-fetch'
 import yaml from 'js-yaml'
 import URL from 'url-parse'
+import { setGlobal } from 'reactn'
 
-import { pageState } from '../../state'
 import schema from '../../schema'
 
 export default class Link extends Component {
@@ -23,8 +23,8 @@ export default class Link extends Component {
     if (to.pathname === ``) { return }
     fetch(`/load${to.pathname === `/` ? `/index` : to.pathname}`)
       .then(response => response.text())
-      .then(data => pageState.setState({
-        data: yaml.safeLoad(data, {
+      .then(text => setGlobal({
+        data: yaml.safeLoad(text, {
           schema: schema(),
         }),
         route: to.pathname,

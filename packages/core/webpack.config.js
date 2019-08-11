@@ -18,9 +18,10 @@ module.exports = (env, options) => [
     output: {
       path: path.resolve(`./dist`),
       filename: options.mode === `production` ? `[name].production.js` : `[name].development.js`,
-      libraryTarget: `window`,
       library: [`exothermic`, `browser`],
+      libraryTarget: `umd`,
       publicPath: `/`,
+      umdNamedDefine: true,
     },
     module: {
       rules: [{
@@ -60,6 +61,10 @@ module.exports = (env, options) => [
         'process.env.APP_ENV': (process.env.APP_ENV && JSON.stringify(process.env.APP_ENV)) || undefined,
       }),
       new webpack.IgnorePlugin(/^esprima$/, /js-yaml/),
+      new webpack.ProvidePlugin({
+        React: `react`,
+        ReactDOM: `react-dom`,
+      }),
       // new BundleAnalyzerPlugin(),
     ].filter(e => e),
   },
