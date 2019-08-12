@@ -22,6 +22,7 @@ module.exports = ({
       ? [{
         react: `React`,
         ReactDOM: `react-dom`,
+        reactn: `reactn`,
       }] 
       : [
         nodeExternals({

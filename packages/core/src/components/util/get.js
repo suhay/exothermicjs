@@ -30,14 +30,14 @@ const Get = ({ path }) => {
       fetch(`/load/${path}`)
         .then(response => response.text())
         .then((text) => {
-          const yamlData = yaml.safeLoad(text, {
+          const yamlData = text.startsWith(`---`) ? yaml.safeLoad(text, {
             schema: schema(),
-          })
+          }) : null
   
           const newCache = {}
           newCache[path] = yamlData
           setGlobal(newCache)
-  
+
           if (!unmounted) {
             setData(yamlData)
             setLoading(false)

@@ -2,11 +2,14 @@ import React from 'react'
 import { hydrate } from "react-dom"
 import yaml from 'js-yaml'
 import { Base64 } from 'js-base64'
+import reactn from 'reactn'
+import { StyleSheet } from 'aphrodite'
 
 import Loader from './components/loader'
 import schema from './schema'
 
 window.React = React
+window.reactn = reactn
 
 const dumpTag = (tag) => {
   let represent = tag._self.represent && tag.props.data ? tag._self.represent(tag.props.cacheId ? tag.props : tag.props.data) : {}
@@ -31,6 +34,9 @@ const dump = (data) => {
 }
 
 export const initialize = (path = `/`) => {
+
+  StyleSheet.rehydrate(window.renderedClassNames)
+
   let data = null
   const raw = {}
   if (window && window.exothermic) {

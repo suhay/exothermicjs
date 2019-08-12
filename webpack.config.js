@@ -1,6 +1,5 @@
 const path = require(`path`)
 const fs = require(`fs`)
-const webpack = require(`webpack`)
 
 const dirs = fs.readdirSync(path.resolve(__dirname, `./packages`)).filter(dir => !dir.includes(`server-`))
 
@@ -47,12 +46,5 @@ module.exports = () => (
         },
       ],
     },
-    plugins: [
-      new webpack.ProvidePlugin({
-        React: `react`,
-        ReactDOM: `react-dom`,
-      }),
-      // new BundleAnalyzerPlugin(),
-    ].filter(e => e),
   }
 )

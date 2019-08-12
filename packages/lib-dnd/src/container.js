@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Container as SmoothContainer } from 'react-smooth-dnd'
-import dragState from '@exothermic/core/src/state/draggables'
 
 import applyDrag from './utils'
 
@@ -15,12 +14,8 @@ export default class Container extends Component {
 
   onDrop(e) {
     const { items } = this.state
-    const { id } = this.props
 
     const result = applyDrag(items, e)
-    const { draggables } = dragState.state
-    draggables[id] = result
-    dragState.setState({ draggables })
     this.setState({ items: result })
   }
 

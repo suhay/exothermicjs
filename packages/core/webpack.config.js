@@ -61,10 +61,6 @@ module.exports = (env, options) => [
         'process.env.APP_ENV': (process.env.APP_ENV && JSON.stringify(process.env.APP_ENV)) || undefined,
       }),
       new webpack.IgnorePlugin(/^esprima$/, /js-yaml/),
-      new webpack.ProvidePlugin({
-        React: `react`,
-        ReactDOM: `react-dom`,
-      }),
       // new BundleAnalyzerPlugin(),
     ].filter(e => e),
   },

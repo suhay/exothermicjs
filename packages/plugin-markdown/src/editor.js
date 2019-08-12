@@ -3,8 +3,6 @@ import SimpleMDEReact from "react-simplemde-editor"
 import ReactMarkdown from 'react-markdown'
 // import "simplemde/dist/simplemde.min.css"
 
-import { pageState } from '@exothermic/core/src/state'
-
 export default class Editor extends Component {
   constructor(props) {
     super(props)
@@ -35,22 +33,19 @@ export default class Editor extends Component {
   }
 
   handleEdit() {
-    const { id, value } = this.state
+    const { value } = this.state
     this.setState({ prevValue: value })
-    pageState.setState({ editingThis: id })
   }
 
   handleSave() {
     const { id, value } = this.state
     global.localStorage.setItem(`smde_${id}`, value)
-    pageState.setState({ editingThis: `` })
   }
 
   handleCancel() {
     const { prevValue, id } = this.state
     this.setState({ value: prevValue })
     global.localStorage.setItem(`smde_${id}`, prevValue)
-    pageState.setState({ editingThis: `` })
   }
 
   render() {

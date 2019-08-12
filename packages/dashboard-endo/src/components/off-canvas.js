@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react'
 import fetch from 'isomorphic-fetch'
 import Upload from '@exothermic/plugin-upload'
-import { pageState, schemaState } from '@exothermic/core/src/state'
 
 import {
   MainYamlType,
@@ -13,14 +12,6 @@ export default class OffCanvas extends React.Component {
   constructor(props) {
     super(props)
     this.handleSave = this.handleSave.bind(this)
-  }
-
-  componentDidMount() {
-    pageState.setState({ editing: true })
-  }
-
-  componentWillUnmount() {
-    pageState.setState({ editing: false })
   }
 
   handleSave() {
@@ -57,5 +48,5 @@ export default class OffCanvas extends React.Component {
 
 export const Schema = () => {
   const addedPlugins = { MainYamlType, SectionYamlType, FooterYamlType }
-  return schemaState.state.schema({ addedPlugins })
+  return addedPlugins.schema({ addedPlugins })
 }

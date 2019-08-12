@@ -1,13 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 
-import { configState } from './state'
-
 const configBuilder = (options = {}) => {
   const { stringify } = options
-  if (configState.state.config) {
-    return stringify ? JSON.stringify(configState.state.config) : configState.state.config
-  }
 
   let config = {}
   if (typeof window !== `undefined` && window.exothermic) {
@@ -27,7 +22,6 @@ const configBuilder = (options = {}) => {
     }    
   }
 
-  configState.setState(config)
   return stringify ? JSON.stringify(config) : config
 }
 

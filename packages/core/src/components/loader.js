@@ -10,12 +10,15 @@ const Loader = ({
   raw,
 }) => {
   const [data] = useGlobal(`data`)
+  const [status] = useGlobal(`status`)
   const [global, setGlobal] = useGlobal()
+
   if (Object.keys(global).length === 0) {
     setGlobal(raw)
   }
 
   const [localData, setData] = useState(propsData)
+
   useEffect(() => {
     if (data) setData(data)
     return () => {}
@@ -24,7 +27,7 @@ const Loader = ({
   return (
     <div className="base">
       <BrowserRouter>
-        <Page data={localData} />
+        {status && status === 404 ? (<p>Sorry can't find that!</p>) : (<Page data={localData} />)}
       </BrowserRouter>
     </div>
   )

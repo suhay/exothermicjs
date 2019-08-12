@@ -10,7 +10,10 @@ const Markdown = ({ path }) => {
   const [cache] = useGlobal(path)
   const [raw, setRaw] = useGlobal(`raw`)
   const [pagesPath] = useGlobal(`pagesPath`)
-  const initialData = cache || (fs && typeof fs.readFileSync === `function`
+
+  const ssr = fs && typeof fs.readFileSync === `function`
+
+  const initialData = cache || (ssr
     ? (() => {
       const rawMd = fs.readFileSync(`${pagesPath}markdown/${path}.md`, `utf8`)
       raw[path] = rawMd
@@ -18,6 +21,11 @@ const Markdown = ({ path }) => {
       return rawMd
     })()
     : null)
+
+  if (cache && ssr) {
+    raw[path] = cache
+    setRaw({ ...raw })
+  }
 
   const [data, setData] = useState(initialData)
   const [loading, setLoading] = useState(false)
@@ -30,7 +38,7 @@ const Markdown = ({ path }) => {
 
   useEffect(() => {
     let unmounted = false
-    if (!cache) {
+    if (!initialData && !cache) {
       setLoading(true)
       fetch(`/load/pages/markdown/${path}.md`)
         .then(response => response.text())
@@ -48,7 +56,7 @@ const Markdown = ({ path }) => {
     return () => {
       unmounted = true      
     }
-  }, [path, cache])
+  }, [path, cache, initialData])
 
   return (
     <Fragment>

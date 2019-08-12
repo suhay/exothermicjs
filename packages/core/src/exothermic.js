@@ -5,6 +5,7 @@ import React from 'react'
 import { getGlobal } from 'reactn'
 import ReactServer from 'react-dom/server'
 import { Base64 } from 'js-base64'
+import { StyleSheetServer } from 'aphrodite'
 
 import Head from './components/head'
 import Base from './components/base'
@@ -36,22 +37,25 @@ export const render = (route, options) => {
   })
   const result = { ...base, ...page }
 
-  let markup = ReactServer.renderToString(
-    <Base data={result} pagesPath={pages[0]} route={route} />
-  )
-
-  Object.keys(options).forEach((key) => {
-    if (options[key] !== Object(options[key])) {
-      markup = markup.replace(`{{${key}}}`, options[key])
-    }
-  })
-
-  const config = configBuilder()
-
+  // eslint-disable-next-line prefer-const
+  let { html, css } = StyleSheetServer 
+    ? StyleSheetServer.renderStatic(() => ReactServer.renderToString(<Base data={result} pagesPath={pages[0]} route={route} />))
+    : ({
+      html: ReactServer.renderToString(<Base data={result} pagesPath={pages[0]} route={route} />),
+      css: {},
+    })
+    
   const head = ReactServer.renderToString(
     <Head data={result} />
   )
 
+  Object.keys(options).forEach((key) => {
+    if (options[key] !== Object(options[key])) {
+      html = html.replace(`{{${key}}}`, options[key])
+    }
+  })
+
+  const config = configBuilder()
   const { raw } = getGlobal()
 
   const footerScripts = `
@@ -75,6 +79,8 @@ export const render = (route, options) => {
       exothermic.base = "${Base64.encode(templates[0])}";
       exothermic.page = "${Base64.encode(templates[1])}";
       exothermic.raw = "${Base64.encode(JSON.stringify(raw))}";
+
+      window.renderedClassNames = ${JSON.stringify(css.renderedClassNames)};
       exothermic.initialize(window.location.pathname);
     </script>
   `
@@ -82,9 +88,12 @@ export const render = (route, options) => {
   return `
     <!doctype html>
     <html lang="en">
-      <head>${head}</head>
+      <head>
+        ${head}
+        <style data-aphrodite>${css.content}</style>
+      </head>
       <body>
-        <div id="__exothermic">${markup}</div>
+        <div id="__exothermic">${html}</div>
         ${footerScripts}
       </body>
     </html>
