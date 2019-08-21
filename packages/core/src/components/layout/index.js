@@ -1,20 +1,5 @@
-import yaml from 'js-yaml'
-import {
-  ColYamlType,
-  SectionYamlType,
-  FooterYamlType,
-  MainYamlType,
-  HeaderYamlType,
-} from './type'
-
-const LAYOUT_SCHEMA = yaml.Schema.create([
-  SectionYamlType,
-  ColYamlType,
-  FooterYamlType,
-  HeaderYamlType,
-  MainYamlType,
-])
-
-export {
-  SectionYamlType, ColYamlType, LAYOUT_SCHEMA, FooterYamlType, HeaderYamlType, MainYamlType,
-}
+export { default as Col } from './col'
+export { default as Footer } from './footer'
+export { default as Header } from './header'
+export { default as Main } from './main'
+export { default as Section } from './section'

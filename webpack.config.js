@@ -23,7 +23,7 @@ module.exports = () => (
       port: 8081,
     },
     watchOptions: {
-      ignored: /dist/,
+      ignored: [`**/dist/.*`, `**/tests/.*`],
     },
     module: {
       rules: [

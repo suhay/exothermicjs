@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import yaml from 'js-yaml'
 import fetch from 'isomorphic-fetch'
 import fs from 'fs'
@@ -6,13 +6,14 @@ import { setGlobal, useGlobal } from 'reactn'
 
 import Spinner from './spinner'
 import schema from '../../schema'
+import content from './content'
 
 const Get = ({ path }) => {
   const [cache] = useGlobal(path)
   const [raw, setRaw] = useGlobal(`raw`)
   const [pagesPath] = useGlobal(`pagesPath`)
 
-  const initialData = cache || (fs && typeof fs.readFileSync === `function`
+  const initialData = cache || raw[path] || (fs && typeof fs.readFileSync === `function`
     ? (() => {
       const rawYaml = fs.readFileSync(`${pagesPath}/${path}.exo`, `utf8`)
       raw[path] = rawYaml
@@ -20,6 +21,7 @@ const Get = ({ path }) => {
       return yaml.safeLoad(rawYaml, { schema: schema() })
     })()
     : null)
+
   const [data, setData] = useState(initialData)
   const [loading, setLoading] = useState(false)
 
@@ -56,10 +58,10 @@ const Get = ({ path }) => {
   return (
     <div className={loading ? `get-loading` : `get-loaded`}>
       {!loading && (
-        <Fragment>
-          {data && data.content}
+        <>
+          {data && content(data.content)}
           {data && data.items}
-        </Fragment>
+        </>
       )}
       {loading && <Spinner name="folding-cube" />}
     </div>

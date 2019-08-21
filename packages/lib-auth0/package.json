@@ -12,19 +12,12 @@
     "authentication",
     "exothermicjs"
   ],
-  "main": "dist/exothermicjs-lib-auth0.js",
-  "module": "src/index.js",
+  "main": "src/index.js",
   "license": "MIT",
   "homepage": "https://github.com/suhay/exothermicjs#readme",
   "files": [
-    "dist/",
     "src/"
   ],
-  "scripts": {
-    "build": "webpack --mode development",
-    "build:prod": "webpack --mode production",
-    "build:all": "yarn build && yarn build:prod"
-  },
   "dependencies": {
     "body-parser": "^1.18.3",
     "connect-ensure-login": "^0.1.1",
@@ -37,11 +30,14 @@
     "passport-auth0": "^1.0.0"
   },
   "devDependencies": {
+    "passport-mock-strategy": "^2.0.0",
+    "supertest": "^4.0.2",
     "webpack": "^4.20.2",
     "webpack-cli": "^3.1.2",
     "webpack-node-externals": "^1.7.2"
   },
   "peerDependencies": {
+    "@exothermic/server-express": "^0.1.0",
     "express": "^4.16.3"
   }
 }

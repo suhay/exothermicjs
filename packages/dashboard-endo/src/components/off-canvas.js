@@ -1,12 +1,6 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import fetch from 'isomorphic-fetch'
-import Upload from '@exothermic/plugin-upload'
-
-import {
-  MainYamlType,
-  SectionYamlType,
-  FooterYamlType,
-} from './types'
+// import Upload from '@exothermic/plugin-upload'
 
 export default class OffCanvas extends React.Component {
   constructor(props) {
@@ -33,20 +27,15 @@ export default class OffCanvas extends React.Component {
   render() {
     const { children } = this.props
     return (
-      <Fragment>
+      <>
         <h1>Endothermic Dashboard Off-Canvas!!!</h1>
         {children}
         <button type="button">Add</button>
         <button type="button" onClick={this.handleSave}>Save</button>
         <div className="uploads">
-          <Upload />
+          {/* <Upload /> */}
         </div>
-      </Fragment>
+      </>
     )
   }
-}
-
-export const Schema = () => {
-  const addedPlugins = { MainYamlType, SectionYamlType, FooterYamlType }
-  return addedPlugins.schema({ addedPlugins })
 }

@@ -10,7 +10,6 @@
   "homepage": "https://github.com/suhay/exothermicjs#readme",
   "license": "MIT",
   "files": [
-    "dist/",
     "src/"
   ],
   "bin": {
@@ -23,6 +22,7 @@
   "bugs": {
     "url": "https://github.com/suhay/exothermicjs/issues"
   },
+  "main": "src/index.js",
   "devDependencies": {
     "@babel/cli": "^7.4.4",
     "@babel/core": "^7.5.4",

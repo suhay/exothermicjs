@@ -14,10 +14,10 @@ import schema from './schema'
 
 export const get = (route, options) => {
   try {
-    const { pages } = options
-    const baseTemplate = fs.existsSync(path.resolve(`${pages[0]}/base.exo`))
-      ? fs.readFileSync(path.resolve(`${pages[0]}/base.exo`), `utf8`)
-      : fs.readFileSync(path.resolve(`${pages[1]}/base.exo`), `utf8`)
+    const [userPages, defaultPages] = options.pages
+    const baseTemplate = fs.existsSync(path.resolve(`${userPages}/base.exo`))
+      ? fs.readFileSync(path.resolve(`${userPages}/base.exo`), `utf8`)
+      : fs.readFileSync(path.resolve(`${defaultPages}/base.exo`), `utf8`)
     const pageTemplate = fs.readFileSync(route, `utf8`)
 
     return [baseTemplate, pageTemplate]
@@ -28,20 +28,32 @@ export const get = (route, options) => {
 }
 
 export const render = (route, options) => {
-  const { pages } = options
-  const templates = get(route, options)
-  const base = yaml.safeLoad(templates[0])
+  const [userPages] = options.pages
 
-  const page = yaml.safeLoad(templates[1], {
-    schema: schema(),
+  // const { loggedIn } = options
+  const loggedIn = true
+  const Dashboard = loggedIn ? require(`./dashboard`) : null
+  options.ssr_only = true
+
+  const [baseTemplate, pageTemplate] = get(route, options)
+
+  const base = yaml.safeLoad(baseTemplate)
+  const page = yaml.safeLoad(pageTemplate, {
+    schema: Dashboard ? Dashboard.schema() : schema({ set: true }),
   })
   const result = { ...base, ...page }
 
   // eslint-disable-next-line prefer-const
   let { html, css } = StyleSheetServer 
-    ? StyleSheetServer.renderStatic(() => ReactServer.renderToString(<Base data={result} pagesPath={pages[0]} route={route} />))
+    ? StyleSheetServer.renderStatic(() => ReactServer.renderToString(loggedIn && Dashboard
+      ? (
+        <Dashboard.OffCanvasContainer>
+          <Base data={result} pagesPath={userPages} route={route} />
+        </Dashboard.OffCanvasContainer>
+      )
+      : (<Base data={result} pagesPath={userPages} route={route} />)))
     : ({
-      html: ReactServer.renderToString(<Base data={result} pagesPath={pages[0]} route={route} />),
+      html: ReactServer.renderToString(<Base data={result} pagesPath={userPages} route={route} />),
       css: {},
     })
     
@@ -57,7 +69,7 @@ export const render = (route, options) => {
 
   const config = configBuilder()
   const { raw } = getGlobal()
-
+  
   const footerScripts = `
     ${process.env.SSR_ONLY === `true` || options.ssr_only
     ? ``
@@ -75,13 +87,15 @@ export const render = (route, options) => {
     return plug.live ? `<script src="${plug.live}"></script>` : ``
   })}`}
     <script>
-      exothermic.config = ${configBuilder({ stringify: true })};
-      exothermic.base = "${Base64.encode(templates[0])}";
-      exothermic.page = "${Base64.encode(templates[1])}";
-      exothermic.raw = "${Base64.encode(JSON.stringify(raw))}";
+      window.exothermic = window.exothermic || {};
+      window.exothermic.config = ${configBuilder({ stringify: true })};
+      window.exothermic.base = "${Base64.encode(baseTemplate)}";
+      window.exothermic.page = "${Base64.encode(pageTemplate)}";
+      window.exothermic.raw = "${Base64.encode(JSON.stringify(raw))}";
+      window.exothermic.options = ${JSON.stringify({ user: options.user, userProfile: options.userProfile })};
 
       window.renderedClassNames = ${JSON.stringify(css.renderedClassNames)};
-      exothermic.initialize(window.location.pathname);
+      window.exothermic.initialize ? window.exothermic.initialize(window.location.pathname) : null;
     </script>
   `
 
@@ -94,7 +108,7 @@ export const render = (route, options) => {
       </head>
       <body>
         <div id="__exothermic">${html}</div>
-        ${footerScripts}
+        ${process.env.SSR_ONLY === `true` || options.ssr_only ? `` : footerScripts}
       </body>
     </html>
   `

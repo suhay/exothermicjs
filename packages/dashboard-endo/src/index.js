@@ -1,7 +1,14 @@
 import React from 'react'
+import coreSchema from '@exothermic/core/src/schema'
 
-import CanvasBoard, { Schema } from './components/off-canvas'
-import './styles/endothermic.css'
+import CanvasBoard from './components/off-canvas'
+import {
+  MainYamlType,
+  FooterYamlType,
+  SectionYamlType,
+} from './components/types'
+
+// import './styles/endothermic.css'
 
 export const OffCanvasContainer = ({ dump, path, children }) => (
   <CanvasBoard dump={dump} path={path}>
@@ -9,4 +16,4 @@ export const OffCanvasContainer = ({ dump, path, children }) => (
   </CanvasBoard>
 )
 
-export { Schema }
+export const schema = () => coreSchema({ adds: { MainYamlType, FooterYamlType, SectionYamlType }, set: true })

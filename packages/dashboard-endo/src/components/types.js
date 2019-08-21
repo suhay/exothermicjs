@@ -5,7 +5,7 @@ import {
   Main,
   Section,
   Footer,
-} from '@exothermic/core'
+} from '@exothermic/core/src/components/layout'
 
 export const MainYamlType = new yaml.Type(`!main`, {
   kind: `mapping`,

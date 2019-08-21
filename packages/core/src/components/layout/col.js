@@ -1,5 +1,7 @@
 import React from 'react'
 
+import content from '../util/content'
+
 const Col = ({ data }) => {
   const classes = data.class
     ? data.class.startsWith(`col`)
@@ -8,7 +10,7 @@ const Col = ({ data }) => {
     : `col`
   return (
     <div className={classes}>
-      {data.content}
+      {content(data.content)}
       {data.items}
     </div>
   )

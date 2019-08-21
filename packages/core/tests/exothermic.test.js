@@ -7,7 +7,7 @@ import * as Aphrodite from 'aphrodite'
 import * as AphroditeNoImportant from 'aphrodite/no-important'
 
 import Spinner from '../src/components/util/spinner'
-import { hydrate, render } from '../src'
+import { hydrate, render } from '../src/exothermic'
 
 Aphrodite.StyleSheetTestUtils.suppressStyleInjection()
 AphroditeNoImportant.StyleSheetTestUtils.suppressStyleInjection()

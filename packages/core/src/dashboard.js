@@ -1,5 +1,5 @@
-import { configBuilder } from './exothermic'
+import configBuilder from './config'
 
 const { dashboard } = configBuilder()
 
-module.exports = require(`../../${dashboard}/src`)
+module.exports = require(`${dashboard}`)

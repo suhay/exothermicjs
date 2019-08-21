@@ -2,22 +2,23 @@ import React, { useState, useEffect } from 'react'
 import { BrowserRouter } from 'react-router-dom'
 import { useGlobal } from 'reactn'
 
-
 import Page from './page'
 
 const Loader = ({ 
   data: propsData,
   raw,
+  options,
 }) => {
   const [data] = useGlobal(`data`)
   const [status] = useGlobal(`status`)
   const [global, setGlobal] = useGlobal()
 
-  if (Object.keys(global).length === 0) {
-    setGlobal(raw)
-  }
-
   const [localData, setData] = useState(propsData)
+  
+  if (Object.keys(global).length === 0) {
+    setGlobal({ raw })
+  }
+  setGlobal({ options })
 
   useEffect(() => {
     if (data) setData(data)

@@ -2,51 +2,52 @@ import React, { Fragment, useState, useEffect } from 'react'
 import ReactMarkdown from 'react-markdown'
 import fetch from 'isomorphic-fetch'
 import fs from 'fs'
-import { setGlobal, useGlobal } from 'reactn'
+import * as localForage from 'localforage'
+import { useGlobal } from 'reactn'
 
 // import Editor from './editor'
-
 const Markdown = ({ path }) => {
-  const [cache] = useGlobal(path)
   const [raw, setRaw] = useGlobal(`raw`)
   const [pagesPath] = useGlobal(`pagesPath`)
 
+  const [loading, setLoading] = useState(false)
+  const [data, setData] = useState(raw ? raw[path] : null)
+  const [checkLocalCache, setCheckLocalCache] = useState(true)
+
   const ssr = fs && typeof fs.readFileSync === `function`
 
-  const initialData = cache || (ssr
-    ? (() => {
-      const rawMd = fs.readFileSync(`${pagesPath}markdown/${path}.md`, `utf8`)
-      raw[path] = rawMd
+  if (!data && !loading) {
+    if (ssr) {
+      const initialData = fs.readFileSync(`${pagesPath}markdown/${path}.md`, `utf8`)
+      raw[path] = initialData
       setRaw({ ...raw })
-      return rawMd
-    })()
-    : null)
-
-  if (cache && ssr) {
-    raw[path] = cache
-    setRaw({ ...raw })
-  }
-
-  const [data, setData] = useState(initialData)
-  const [loading, setLoading] = useState(false)
-
-  if (initialData && !cache) {
-    const newCache = {}
-    newCache[path] = initialData
-    setGlobal(newCache)
+      setData(initialData)
+    } else if (checkLocalCache) {
+      setLoading(true)
+      localForage
+        .getItem(path)
+        .then((value) => {
+          if (!value) {
+            setCheckLocalCache(false)
+          } else {
+            setData(value)
+            setLoading(false)
+          }
+        })
+        .catch((err) => {
+          console.error(err)
+          setLoading(false)        
+        })
+    }
   }
 
   useEffect(() => {
     let unmounted = false
-    if (!initialData && !cache) {
-      setLoading(true)
+    if (!data && loading && !checkLocalCache) {
       fetch(`/load/pages/markdown/${path}.md`)
         .then(response => response.text())
         .then((text) => {
-          const newCache = {}
-          newCache[path] = text
-          setGlobal(newCache)
-
+          localForage.setItem(path, text)
           if (!unmounted) {
             setData(text)
             setLoading(false)
@@ -56,12 +57,12 @@ const Markdown = ({ path }) => {
     return () => {
       unmounted = true      
     }
-  }, [path, cache, initialData])
+  }, [path, data, loading, checkLocalCache])
 
   return (
     <Fragment>
       {loading && <p>Loading...</p>}
-      <ReactMarkdown source={data} escapeHtml={false} renderers={{ root: Fragment }} />
+      {!loading && <ReactMarkdown source={data} escapeHtml={false} renderers={{ root: Fragment }} />}
       {/* {editing && !loading && <Editor id={id} value={data} editingThis={editingThis === id} />} */}
     </Fragment>
   )

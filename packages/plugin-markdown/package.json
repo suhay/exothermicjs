@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "isomorphic-fetch": "^2.2.1",
+    "localforage": "^1.7.3",
     "react-markdown": "^4.0.4",
     "react-simplemde-editor": "^3.6.22",
     "shortid": "^2.2.14"

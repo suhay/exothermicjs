@@ -5,5 +5,8 @@
   "dashboard": "@exothermic/dashboard-endo",
   "auth": "@exothermic/lib-auth0",
   "dev": "/browser.js",
-  "live": "https://unpkg.com/exothermicjs/dist/browser.exothermic.min.js"
+  "live": [
+    "https://unpkg.com/@exothermic/core/dist/browser.exothermic.production.js",
+    "https://unpkg.com/@exothermic/core/dist/vendors.production.js"
+  ]
 }

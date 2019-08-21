@@ -81,3 +81,11 @@ export const HeaderYamlType = new yaml.Type(`!header`, {
     return rtn
   },
 })
+
+export const LAYOUT_SCHEMA = yaml.Schema.create([
+  SectionYamlType,
+  ColYamlType,
+  FooterYamlType,
+  HeaderYamlType,
+  MainYamlType,
+])

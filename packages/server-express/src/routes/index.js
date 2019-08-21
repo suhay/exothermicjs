@@ -71,6 +71,10 @@ router.patch(`/*`, (req, res) => {
   res.send(`Yarr!`)
 })
 
+router.delete(`/*`, (req, res) => {
+  res.send(`Are you sure?`)
+})
+
 router.get(`/*`, (req, res) => {
   res.render(req.url.replace(/^\//, ``), { dashboard: !!req.user }, (err, html) => {
     if (err) {

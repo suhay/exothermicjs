@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from "react"
 import SimpleMDEReact from "react-simplemde-editor"
 import ReactMarkdown from 'react-markdown'
+// import { setGlobal, useGlobal } from 'reactn'
 // import "simplemde/dist/simplemde.min.css"
 
 export default class Editor extends Component {

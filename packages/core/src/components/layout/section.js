@@ -1,6 +1,8 @@
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
 
+import content from '../util/content'
+
 const Section = ({
   data: {
     id,
@@ -14,7 +16,7 @@ const Section = ({
   return (
     <section className={classes} id={id} {...rest}>
       {title && <ReactMarkdown source={title} renderers={{ root: React.Fragment }} />}
-      {data.content}
+      {content(data.content)}
       {data.items}
       {children}
     </section>

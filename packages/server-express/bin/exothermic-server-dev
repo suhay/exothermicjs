@@ -2,6 +2,7 @@
 
 const program = require(`commander`)
 const { version } = require(`../package.json`)
+require(`colors`)
 
 program
   .version(version)
@@ -21,8 +22,11 @@ nodemon({
     `node_cache/**/*`,
     `node_modules/**/*`,
     `demo/**/*`,
-    `test/**/*`,
+    `tests/**/*`,
     `public/**/*`,
+    `dist/**/*`,
+    `browser.js`,
+    `loader.js`,
   ],
   verbose: true,
   args: [`--port=${program.port}`],
@@ -32,13 +36,13 @@ nodemon({
   colours: true,
 })
   .on(`restart`, (files) => {
-    console.log(`App restarted due to: `, files)
+    console.log(`🔄  ${`[exothermic-server]`.dim}: ${`Restarted due to`.magenta.bold}`, files)
   })
   .on(`start`, () => {
-    console.log(`App has started`)
+    console.log(`💡  ${`[exothermic-server]`.dim}: ${`Starting...`.green.bold}`)
   })
   .on(`quit`, () => {
-    console.log(`\nApp has quit`)
+    console.log(`\n👋  ${`[exothermic-server]`.dim}: ${`Has quit!`.bold}\n`)
     process.exit()
   })
   .on(`error`, (err) => {

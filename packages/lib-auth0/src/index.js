@@ -40,8 +40,15 @@ router.use(session({
   resave: true,
   saveUninitialized: true,
 }))
+
+if (process.env.NODE_ENV === `test` || process.env.NODE_ENV === `development`) {
+  router.use(require(`./mock`).mockMiddleware)
+  router.get(`/auth/fake`, require(`./mock`).mockRoute)
+}
+
 router.use(passport.initialize())
 router.use(passport.session())
+
 router.use(flash())
 router.use((req, res, next) => {
   if (req && req.query && req.query.error) {
@@ -55,7 +62,8 @@ router.use((req, res, next) => {
 
 router.use((req, res, next) => {
   res.locals.loggedIn = false
-  if (req.session && req.session.passport && typeof req.session.passport.user !== `undefined`) {
+  if ((req.session && req.session.passport && typeof req.session.passport.user !== `undefined`)
+      || ((process.env.NODE_ENV === `test` || process.env.NODE_ENV === `development`) && req.session.user_tmp)) {
     res.locals.loggedIn = true
   }
   next()
