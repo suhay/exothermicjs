@@ -10,7 +10,7 @@ import content from './content'
 
 const Get = ({ path }) => {
   const [cache] = useGlobal(path)
-  const [raw, setRaw] = useGlobal(`raw`)
+  const [raw = {}, setRaw] = useGlobal(`raw`)
   const [pagesPath] = useGlobal(`pagesPath`)
 
   const initialData = cache || raw[path] || (fs && typeof fs.readFileSync === `function`

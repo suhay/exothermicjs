@@ -14,3 +14,4 @@ dist/
 .npmrc
 .compiled
 ssr/
+stats.json

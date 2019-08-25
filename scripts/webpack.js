@@ -21,8 +21,10 @@ module.exports = ({
     externals: target !== `node` 
       ? [{
         react: `React`,
-        ReactDOM: `react-dom`,
+        'react-dom': `ReactDOM`,
+        'react-router-dom': `react-router-dom`,
         reactn: `reactn`,
+        yaml: `js-yaml`,
       }] 
       : [
         nodeExternals({

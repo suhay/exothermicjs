@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import ReactMarkdown from 'react-markdown'
 import fetch from 'isomorphic-fetch'
 import fs from 'fs'
@@ -60,11 +60,11 @@ const Markdown = ({ path }) => {
   }, [path, data, loading, checkLocalCache])
 
   return (
-    <Fragment>
+    <>
       {loading && <p>Loading...</p>}
-      {!loading && <ReactMarkdown source={data} escapeHtml={false} renderers={{ root: Fragment }} />}
+      {!loading && <ReactMarkdown source={data} escapeHtml={false} renderers={{ root: React.Fragment }} />}
       {/* {editing && !loading && <Editor id={id} value={data} editingThis={editingThis === id} />} */}
-    </Fragment>
+    </>
   )
 }
 
@@ -89,4 +89,4 @@ export const Type = yaml => new yaml.Type(`!markdown`, {
   },
 })
 
-export { dev, live } from '../exothermic.config.json'
+export * from '../exothermic.config'

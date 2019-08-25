@@ -1,6 +1,6 @@
 require(`dotenv`).config()
 
-const exothermic = require(`@exothermic/core`)
+const { get, hydrate, render } = require(`@exothermic/core/src/server`)
 const auth = require(`@exothermic/core/src/auth`)
 
 const express = require(`express`)
@@ -19,11 +19,13 @@ app.engine(`exo`, (filePath, options, callback) => {
   const theseOptions = options || {}
   theseOptions.pages = theseOptions.pages || app.get(`views`)
   theseOptions.hydrate = theseOptions.hydrate || false
+  theseOptions.loggedIn = theseOptions.loggedIn || process.env.LOGGED_IN === `true` || false
+  theseOptions.ssrOnly = theseOptions.ssrOnly || process.env.SSR_ONLY === `true` || false
   const page = theseOptions.get
-    ? exothermic.get(filePath, theseOptions)
+    ? get(filePath, theseOptions)
     : theseOptions.hydrate
-      ? exothermic.hydrate(filePath, theseOptions)
-      : exothermic.render(filePath, theseOptions)
+      ? hydrate(filePath, theseOptions)
+      : render(filePath, theseOptions)
   return callback(null, page)
 })
 app.set(`views`, [`${path.resolve(`./${process.env.PUBLIC}`)}/pages/` || `./public/pages/`, `${path.resolve(`./node_modules/@exothermic/core/templates`)}`])

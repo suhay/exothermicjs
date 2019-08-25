@@ -17,3 +17,5 @@ export const OffCanvasContainer = ({ dump, path, children }) => (
 )
 
 export const schema = () => coreSchema({ adds: { MainYamlType, FooterYamlType, SectionYamlType }, set: true })
+
+export * from '../exothermic.config'

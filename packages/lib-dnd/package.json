@@ -19,7 +19,9 @@
   "scripts": {
     "build": "webpack --mode development",
     "build:prod": "webpack --mode production",
-    "build:all": "yarn build && yarn build:prod"
+    "build:all": "yarn build && yarn build:prod",
+    "profile": "webpack --profile --mode development --json > stats.json",
+    "profile:prod": "webpack --profile --mode production --json > stats.json"
   },
   "bugs": {
     "url": "https://github.com/suhay/exothermicjs/issues"
@@ -27,11 +29,11 @@
   "dependencies": {
     "@material-ui/core": "^3.9.3",
     "@material-ui/icons": "^3.0.2",
-    "react-smooth-dnd": "^0.5.3"
+    "react-smooth-dnd": "^0.11.0"
   },
   "peerDependencies": {
-    "react": "^16.8.6",
-    "@exothermic/core": "^1.3.1"
+    "@exothermic/core": "^1.3.1",
+    "react": "^16.8.6"
   },
   "babel": {
     "env": {

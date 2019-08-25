@@ -30,6 +30,7 @@ const schema = (options = {}) => {
   const { adds = {}, set = false } = options
   const { schema: globalSchema = null } = getGlobal()
 
+  let newSchema = null
   if (set || !globalSchema) {
     const conf = configBuilder()
     
@@ -38,12 +39,16 @@ const schema = (options = {}) => {
       : conf.plugins.map(plug => require(`${plug.replace(`@exothermic/`, `../../`)}/src`).Type(yaml))
 
     if (adds && Object.keys(adds).length > 0) {
+      Object.keys(adds).forEach((key) => {
+        adds[key] = adds[key](yaml)
+      })
       // Override all Types with their addedPlugins replacers
       const addedPlusStandard = { ...Types, ...adds }
-      return yaml.Schema.create(Object.keys(addedPlusStandard).map(key => Types[key]).concat(plugins))
+      newSchema = yaml.Schema.create(Object.keys(addedPlusStandard).map(key => Types[key]).concat(plugins))
+    } else {
+      newSchema = yaml.Schema.create(Object.keys(Types).map(key => Types[key]).concat(plugins))
     }
 
-    const newSchema = yaml.Schema.create(Object.keys(Types).map(key => Types[key]).concat(plugins))
     setGlobal({ schema: newSchema })
     return newSchema
   }

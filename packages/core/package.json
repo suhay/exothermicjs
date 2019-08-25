@@ -25,6 +25,7 @@
     "babel-runtime": "^6.26.0",
     "dotenv": "^6.0.0",
     "formik": "^1.4.1",
+    "history": "^4.9.0",
     "isomorphic-fetch": "^2.2.1",
     "js-base64": "^2.5.1",
     "js-yaml": "^3.12.2",
@@ -33,7 +34,7 @@
     "react-input-mask": "^2.0.4",
     "react-markdown": "^4.0.3",
     "react-router": "^5.0.0",
-    "react-router-dom": "^5.0.0",
+    "react-router-dom": "^5.0.1",
     "react-router-hash-link": "^1.2.0",
     "reactn": "^2.1.7",
     "url-parse": "^1.4.3"
@@ -49,7 +50,6 @@
     "rimraf": "^2.6.3",
     "style-loader": "^0.23.0",
     "webpack": "^4.18.0",
-    "webpack-bundle-analyzer": "^3.3.2",
     "webpack-cli": "^3.1.0",
     "webpack-node-externals": "^1.6.0"
   },
@@ -60,7 +60,9 @@
     "build:all": "yarn clean && yarn build && yarn build:prod",
     "test": "jest --no-cache",
     "stat": "webpack --mode production --profile --json > stats.json",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "profile": "webpack --profile --mode development --json > stats.json",
+    "profile:prod": "webpack --profile --mode production --json > stats.json"
   },
   "peerDependencies": {
     "react": "^16.8.6",

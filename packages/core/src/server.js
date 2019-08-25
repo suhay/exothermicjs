@@ -6,6 +6,7 @@ import { getGlobal } from 'reactn'
 import ReactServer from 'react-dom/server'
 import { Base64 } from 'js-base64'
 import { StyleSheetServer } from 'aphrodite'
+import { StaticRouter } from 'react-router'
 
 import Head from './components/head'
 import Base from './components/base'
@@ -29,11 +30,14 @@ export const get = (route, options) => {
 
 export const render = (route, options) => {
   const [userPages] = options.pages
-
-  // const { loggedIn } = options
-  const loggedIn = true
+  const { 
+    loggedIn, 
+    ssrOnly, 
+    user, 
+    userProfile,
+  } = options
+  
   const Dashboard = loggedIn ? require(`./dashboard`) : null
-  options.ssr_only = true
 
   const [baseTemplate, pageTemplate] = get(route, options)
 
@@ -43,20 +47,30 @@ export const render = (route, options) => {
   })
   const result = { ...base, ...page }
 
+  const context = {}
   // eslint-disable-next-line prefer-const
   let { html, css } = StyleSheetServer 
     ? StyleSheetServer.renderStatic(() => ReactServer.renderToString(loggedIn && Dashboard
       ? (
-        <Dashboard.OffCanvasContainer>
-          <Base data={result} pagesPath={userPages} route={route} />
-        </Dashboard.OffCanvasContainer>
-      )
-      : (<Base data={result} pagesPath={userPages} route={route} />)))
+        <StaticRouter location={route} context={context}>
+          <Dashboard.OffCanvasContainer>
+            <Base data={result} pagesPath={userPages} />
+          </Dashboard.OffCanvasContainer>
+        </StaticRouter>
+      ) : (
+        <StaticRouter location={route} context={context}>
+          <Base data={result} pagesPath={userPages} />
+        </StaticRouter>
+      )))
     : ({
-      html: ReactServer.renderToString(<Base data={result} pagesPath={userPages} route={route} />),
+      html: ReactServer.renderToString(
+        <StaticRouter location={route} context={context}>
+          <Base data={result} pagesPath={userPages} />
+        </StaticRouter>
+      ),
       css: {},
     })
-    
+
   const head = ReactServer.renderToString(
     <Head data={result} />
   )
@@ -71,7 +85,7 @@ export const render = (route, options) => {
   const { raw } = getGlobal()
   
   const footerScripts = `
-    ${process.env.SSR_ONLY === `true` || options.ssr_only
+    ${ssrOnly
     ? ``
     : process.env.NODE_ENV && process.env.NODE_ENV === `development`
       ? `
@@ -79,20 +93,23 @@ export const render = (route, options) => {
   ${config.plugins.map((plugin) => {
     const plug = require(plugin)
     return plug.dev ? `<script src="${plug.dev}"></script>` : ``
-  })}`
-      : `
+  })}
+  ${Dashboard ? `<script src="${Dashboard.dev}"></script>` : ``}
+  ` : `
   <script src="https://unpkg.com/@exothermic/core/dist/browser.exothermic.min.js"></script>
   ${config.plugins.map((plugin) => {
     const plug = require(plugin)
     return plug.live ? `<script src="${plug.live}"></script>` : ``
-  })}`}
+  })}
+  ${Dashboard ? `<script src="${Dashboard.live}"></script>` : ``}
+  `}
     <script>
       window.exothermic = window.exothermic || {};
       window.exothermic.config = ${configBuilder({ stringify: true })};
       window.exothermic.base = "${Base64.encode(baseTemplate)}";
       window.exothermic.page = "${Base64.encode(pageTemplate)}";
       window.exothermic.raw = "${Base64.encode(JSON.stringify(raw))}";
-      window.exothermic.options = ${JSON.stringify({ user: options.user, userProfile: options.userProfile })};
+      window.exothermic.options = ${JSON.stringify({ user, userProfile, dashboard: Dashboard ? Dashboard.name : `` })};
 
       window.renderedClassNames = ${JSON.stringify(css.renderedClassNames)};
       window.exothermic.initialize ? window.exothermic.initialize(window.location.pathname) : null;

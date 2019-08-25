@@ -7,7 +7,7 @@ import * as Aphrodite from 'aphrodite'
 import * as AphroditeNoImportant from 'aphrodite/no-important'
 
 import Spinner from '../src/components/util/spinner'
-import { hydrate, render } from '../src/exothermic'
+import { hydrate, render } from '../src/server'
 
 Aphrodite.StyleSheetTestUtils.suppressStyleInjection()
 AphroditeNoImportant.StyleSheetTestUtils.suppressStyleInjection()
@@ -16,7 +16,7 @@ configure({ adapter: new Adapter() })
 
 const options = { pages: [`${__dirname}/../../../demo/public/pages/`, `${__dirname}/../templates/`], test: true }
 
-describe(`exothermic`, () => {
+describe(`server`, () => {
   test(`demo site renders`, () => {
     expect(render(`${options.pages[0]}index.exo`, options)).toContain(`Where - End of file!!`)
   })

@@ -20,7 +20,9 @@
     "watch": "webpack --env.NODE_ENV=development --watch --mode development",
     "build": "webpack --mode development",
     "build:prod": "webpack --mode production",
-    "build:all": "yarn build && yarn build:prod"
+    "build:all": "yarn build && yarn build:prod",
+    "profile": "webpack --profile --mode development --json > stats.json",
+    "profile:prod": "webpack --profile --mode production --json > stats.json"
   },
   "bugs": {
     "url": "https://github.com/suhay/exothermicjs/issues"

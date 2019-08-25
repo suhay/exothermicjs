@@ -2,14 +2,8 @@ import React from 'react'
 import fetch from 'isomorphic-fetch'
 // import Upload from '@exothermic/plugin-upload'
 
-export default class OffCanvas extends React.Component {
-  constructor(props) {
-    super(props)
-    this.handleSave = this.handleSave.bind(this)
-  }
-
-  handleSave() {
-    const { children, dump, path } = this.props
+const OffCanvas = ({ children, dump, path }) => {
+  const handleSave = () => {
     fetch(`/api/${path}`.replace(`//`, `/`), {
       credentials: `same-origin`,
       method: `PATCH`,
@@ -24,18 +18,17 @@ export default class OffCanvas extends React.Component {
       .catch((error) => { throw error })
   }
 
-  render() {
-    const { children } = this.props
-    return (
-      <>
-        <h1>Endothermic Dashboard Off-Canvas!!!</h1>
-        {children}
-        <button type="button">Add</button>
-        <button type="button" onClick={this.handleSave}>Save</button>
-        <div className="uploads">
-          {/* <Upload /> */}
-        </div>
-      </>
-    )
-  }
+  return (
+    <>
+      <h1>Endothermic Dashboard Off-Canvas!!!</h1>
+      {children}
+      <button type="button">Add</button>
+      <button type="button" onClick={handleSave}>Save</button>
+      <div className="uploads">
+        {/* <Upload /> */}
+      </div>
+    </>
+  )
 }
+
+export default OffCanvas
