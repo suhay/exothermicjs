@@ -14,7 +14,6 @@ export default class Container extends Component {
 
   onDrop(e) {
     const { items } = this.state
-
     const result = applyDrag(items, e)
     this.setState({ items: result })
   }

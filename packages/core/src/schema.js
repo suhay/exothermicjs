@@ -8,7 +8,7 @@ import {
   MainYamlType,
   HeaderYamlType,
   FooterYamlType,
-} from './components/layout/type'
+} from './components/layout/types'
 import ArticleYamlType from './components/article/type'
 import { GetYamlType } from './components/util/types'
 import { FormYamlType } from './components/form'
@@ -44,7 +44,7 @@ const schema = (options = {}) => {
       })
       // Override all Types with their addedPlugins replacers
       const addedPlusStandard = { ...Types, ...adds }
-      newSchema = yaml.Schema.create(Object.keys(addedPlusStandard).map(key => Types[key]).concat(plugins))
+      newSchema = yaml.Schema.create(Object.keys(addedPlusStandard).map(key => addedPlusStandard[key]).concat(plugins))
     } else {
       newSchema = yaml.Schema.create(Object.keys(Types).map(key => Types[key]).concat(plugins))
     }
