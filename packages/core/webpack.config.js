@@ -58,6 +58,7 @@ module.exports = (env, options) => [
       new webpack.DefinePlugin({
         'process.env.WEBPACK_ENV': JSON.stringify(`browser`),
         'process.env.APP_ENV': (process.env.APP_ENV && JSON.stringify(process.env.APP_ENV)) || undefined,
+        'process.env.BROWSER': JSON.stringify(true),
       }),
       new webpack.IgnorePlugin(/^esprima$/, /js-yaml/),
     ].filter(e => e),

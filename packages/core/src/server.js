@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import path from 'path'
 import fs from 'fs'
 import yaml from 'js-yaml'
@@ -84,25 +85,20 @@ export const render = (route, options) => {
   const config = configBuilder()
   const { raw } = getGlobal()
   
+  const pluginType = process.env.NODE_ENV && process.env.NODE_ENV === `development` ? `dev` : `live`
+
   const footerScripts = `
     ${ssrOnly
-    ? ``
-    : process.env.NODE_ENV && process.env.NODE_ENV === `development`
-      ? `
-  <script src="http://localhost:8081/bundle.js"></script>
-  ${config.plugins.map((plugin) => {
-    const plug = require(plugin)
-    return plug.dev ? `<script src="${plug.dev}"></script>` : ``
-  })}
-  ${Dashboard ? `<script src="${Dashboard.dev}"></script>` : ``}
-  ` : `
-  <script src="https://unpkg.com/@exothermic/core/dist/browser.exothermic.min.js"></script>
-  ${config.plugins.map((plugin) => {
-    const plug = require(plugin)
-    return plug.live ? `<script src="${plug.live}"></script>` : ``
-  })}
-  ${Dashboard ? `<script src="${Dashboard.live}"></script>` : ``}
-  `}
+      ? ``
+      : `
+        <script src="http://localhost:8081/bundle.js"></script>
+        ${config.plugins.map((plugin) => {
+          const plug = require(plugin)
+          return plug[pluginType] ? `<script src="${plug[pluginType]}"></script>` : ``
+        })}
+        ${Dashboard ? `<script src="${Dashboard[pluginType]}"></script>` : ``}
+      `
+    }
     <script>
       window.exothermic = window.exothermic || {};
       window.exothermic.config = ${configBuilder({ stringify: true })};

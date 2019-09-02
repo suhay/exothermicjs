@@ -63,9 +63,9 @@ function onListening() {
     ? `pipe ${addr}`
     : `port ${addr.port}`
   debug(`Listening on ${bind}`)
+  console.log(`🔥  ${`[exothermic-server]`.dim}: ${`Ready`.bold.green} on port ${`${port}`.bold.cyan}!`)
 }
 
 server.listen(port)
 server.on(`error`, onError)
 server.on(`listening`, onListening)
-console.log(`🔥  ${`[exothermic-server]`.dim}: ${`Ready`.bold.green} on port ${`${port}`.bold.cyan}!`)

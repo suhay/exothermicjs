@@ -15,6 +15,8 @@ const apiRouter = require(`./routes/api`)
 
 const app = express()
 
+delete process.env.BROWSER
+
 app.engine(`exo`, (filePath, options, callback) => {
   const theseOptions = options || {}
   theseOptions.pages = theseOptions.pages || app.get(`views`)

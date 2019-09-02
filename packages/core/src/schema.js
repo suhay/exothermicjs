@@ -1,7 +1,7 @@
 import yaml from 'js-yaml'
 import { setGlobal, getGlobal } from 'reactn'
 
-import NavbarYamlType from './components/navbar/type'
+import NavbarYamlType from './components/navbar/types'
 import {
   SectionYamlType,
   ColYamlType,
@@ -9,10 +9,11 @@ import {
   HeaderYamlType,
   FooterYamlType,
 } from './components/layout/types'
-import ArticleYamlType from './components/article/type'
+import ArticleYamlType from './components/article/types'
 import { GetYamlType } from './components/util/types'
 import { FormYamlType } from './components/form'
 import configBuilder from './config'
+import { isBrowser } from './components/util'
 
 export const Types = {
   NavbarYamlType,
@@ -34,8 +35,8 @@ const schema = (options = {}) => {
   if (set || !globalSchema) {
     const conf = configBuilder()
     
-    const plugins = typeof window !== `undefined` && window.exothermic
-      ? Object.values(window.exothermic.plugin || []).map(plugin => plugin.Type(yaml))
+    const plugins = isBrowser && window.exothermic
+      ? Object.values(window.exothermic.plugin || []).map(plugin => plugin.Type ? plugin.Type(yaml) : null).filter(plugin => plugin)
       : conf.plugins.map(plug => require(`${plug.replace(`@exothermic/`, `../../`)}/src`).Type(yaml))
 
     if (adds && Object.keys(adds).length > 0) {

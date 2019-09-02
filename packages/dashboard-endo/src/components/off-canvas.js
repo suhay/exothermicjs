@@ -15,6 +15,7 @@ const OffCanvas = ({ children, dump, path }) => {
       }),
     })
       .then(response => response.text())
+      .then(text => console.log(text))
       .catch((error) => { throw error })
   }
 

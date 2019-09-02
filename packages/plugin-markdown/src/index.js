@@ -85,6 +85,11 @@ export const Type = yaml => new yaml.Type(`!markdown`, {
     const rtn = {
       tag: `!markdown ${props.path}`,
     }
+    localForage
+      .getItem(props.path)
+      .then((value) => {
+        console.log(`save: ${props.path}\n${value}`)
+      })
     return rtn
   },
 })

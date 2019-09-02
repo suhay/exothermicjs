@@ -8,8 +8,6 @@ import {
   SectionYamlType,
 } from './components/types'
 
-// import './styles/endothermic.css'
-
 export const OffCanvasContainer = ({ dump, path, children }) => (
   <CanvasBoard dump={dump} path={path}>
     {children}

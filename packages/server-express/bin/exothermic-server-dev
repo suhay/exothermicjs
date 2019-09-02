@@ -2,7 +2,10 @@
 
 const program = require(`commander`)
 const { version } = require(`../package.json`)
+const open = require(`open`)
 require(`colors`)
+
+let firstStart = true
 
 program
   .version(version)
@@ -27,6 +30,7 @@ nodemon({
     `dist/**/*`,
     `browser.js`,
     `loader.js`,
+    `lib-dnd/**/*`,
   ],
   verbose: true,
   args: [`--port=${program.port}`],
@@ -39,6 +43,10 @@ nodemon({
     console.log(`🔄  ${`[exothermic-server]`.dim}: ${`Restarted due to`.magenta.bold}`, files)
   })
   .on(`start`, () => {
+    if (firstStart) {
+      open(`http://localhost:${program.port}`)
+    }
+    firstStart = false
     console.log(`💡  ${`[exothermic-server]`.dim}: ${`Starting...`.green.bold}`)
   })
   .on(`quit`, () => {

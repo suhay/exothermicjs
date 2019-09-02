@@ -22,10 +22,6 @@ export const MainYamlType = yaml => new yaml.Type(`!main`, {
     )
   },
   instanceOf: Main,
-  represent(data) {
-    const rtn = { tag: `!main`, ...data }
-    return rtn
-  },
 })
 
 export const FooterYamlType = yaml => new yaml.Type(`!footer`, {
@@ -39,10 +35,6 @@ export const FooterYamlType = yaml => new yaml.Type(`!footer`, {
     )
   },
   instanceOf: Footer,
-  represent(data) {
-    const rtn = { tag: `!footer`, ...data }
-    return rtn
-  },
 })
 
 export const SectionYamlType = yaml => new yaml.Type(`!section`, {
@@ -58,8 +50,4 @@ export const SectionYamlType = yaml => new yaml.Type(`!section`, {
     )
   },
   instanceOf: Section,
-  represent(data) {
-    const rtn = { tag: `!section`, ...data }
-    return rtn
-  },
 })

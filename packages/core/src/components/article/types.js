@@ -12,10 +12,6 @@ const ArticleYamlType = new yaml.Type(`!article`, {
     return <Article data={data} key={data.id} />
   },
   instanceOf: Article,
-  represent(data) {
-    const rtn = { tag: `!article`, ...data }
-    return rtn
-  },
 })
 
 export default ArticleYamlType

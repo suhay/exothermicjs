@@ -1,24 +1,7 @@
 const express = require(`express`)
-
-const router = express.Router()
-// const fs = require(`fs`)
 const path = require(`path`)
 
-// router.get(`/load/module/:module`, (req, res) => {
-//   const mod = req.params.module
-//   if ((mod.includes(`dashboard`) || mod.includes(`plugin`))) {
-//     const modulePath = path.resolve(`./node_modules/${mod}/index.js`)
-//     if (fs.existsSync(modulePath)) {
-//       res.sendFile(modulePath)
-//     } else {
-//       res.send(`Module not found!`)
-//       throw new Error(`Module not found`)
-//     }
-//   } else {
-//     res.send(`Module not found!`)
-//     throw new Error(`Module not found`)
-//   }
-// })
+const router = express.Router()
 
 router.get(`/load/*`, (req, res) => {
   const options = req.session && req.session.options ? req.session.options : {}
@@ -27,7 +10,7 @@ router.get(`/load/*`, (req, res) => {
     res.render(req.params[0], options, (err, html) => {
       if (err) {
         console.error(err)
-        res.status(404).send(`Sorry can't find that!`)
+        res.status(404).send(`Sorry, can't find that!`)
       }
       res.send(html)
     })
@@ -60,26 +43,26 @@ router.get(`/failure`, (req, res) => {
 })
 
 router.post(`/*`, (req, res) => {
-  res.send(`Yup, that's a post!!`)
+  res.status(403).send(`Yup, that's a post!!`)
 })
 
 router.put(`/*`, (req, res) => {
-  res.send(`Where did you want me to put that?`)
+  res.status(403).send(`Where did you want me to put that?`)
 })
 
 router.patch(`/*`, (req, res) => {
-  res.send(`Yarr!`)
+  res.status(403).send(`Yarr!`)
 })
 
 router.delete(`/*`, (req, res) => {
-  res.send(`Are you sure?`)
+  res.status(403).send(`Are you sure?`)
 })
 
 router.get(`/*`, (req, res) => {
   res.render(req.url.replace(/^\//, ``), { dashboard: !!req.user }, (err, html) => {
     if (err) {
       console.error(err)
-      res.status(404).send(`Sorry can't find that!`)
+      res.status(404).send(`Sorry, can't find that!`)
     }
     res.send(html)
   })

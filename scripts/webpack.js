@@ -67,6 +67,7 @@ module.exports = ({
     plugins: [
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(options.mode),
+        'process.env.BROWSER': JSON.stringify(true),
       }),
       new webpack.IgnorePlugin(/^esprima$/, /js-yaml/),
       ...plugins,

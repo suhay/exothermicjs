@@ -8,34 +8,13 @@ import { BrowserRouter, NavLink } from 'react-router-dom'
 
 import Loader from './components/loader'
 import schema from './schema'
+import { dump } from './components/util'
 
 window.React = React
 window.reactn = reactn
 window[`js-yaml`] = yaml
 window[`react-router-dom`] = {
   NavLink,
-}
-
-const dumpTag = (tag) => {
-  let represent = tag._self.represent && tag.props.data ? tag._self.represent(tag.props.cacheId ? tag.props : tag.props.data) : {}
-  if (represent.content) {
-    represent.content = represent.content._self.represent ? represent.content._self.represent(represent.content.props) : represent.content
-  }
-  if (represent.items) {
-    represent.items = represent.items.map(part => dumpTag(part))
-  } else if (tag.props.children) {
-    represent = { ...represent, ...dumpTag(tag.props.children) }
-  } 
-  return represent
-}
-
-const dump = (data) => {
-  const { description, tags, page } = data.props.data
-  return `---\n${yaml.dump({
-    description,
-    tags,
-    page: page.map(part => dumpTag(part)),
-  }).replace(/tag: '!(.*)'/g, `!$1`)}`
 }
 
 export const initialize = (path = `/`) => {
@@ -70,14 +49,13 @@ export const initialize = (path = `/`) => {
     Dashboard
       ? (
         <BrowserRouter>
-          <Dashboard.OffCanvasContainer>
-            <Loader dump={dump} path={path === `/` ? `index` : path.replace(/^\//, ``)} data={data} raw={raw} options={options} />
+          <Dashboard.OffCanvasContainer dump={dump} path={path === `/` ? `index` : path.replace(/^\//, ``)}>
+            <Loader data={data} raw={raw} options={options} />
           </Dashboard.OffCanvasContainer>
         </BrowserRouter>
-      )
-      : (
+      ) : (
         <BrowserRouter>
-          <Loader dump={dump} path={path === `/` ? `index` : path.replace(/^\//, ``)} data={data} raw={raw} options={options} />
+          <Loader data={data} raw={raw} options={options} />
         </BrowserRouter>
       ),
     document.getElementById(`__exothermic`),

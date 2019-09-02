@@ -1,11 +1,13 @@
 import fs from 'fs'
 import path from 'path'
 
+import { isBrowser } from './components/util'
+
 const configBuilder = (options = {}) => {
   const { stringify } = options
 
   let config = {}
-  if (typeof window !== `undefined` && window.exothermic) {
+  if (isBrowser && window.exothermic) {
     config = window.exothermic.config
   } else if (fs && typeof fs.readFileSync !== `undefined`) {
     const base = JSON.parse(fs.readFileSync(path.resolve(`${__dirname}/../exothermic.config.json`), `utf8`))

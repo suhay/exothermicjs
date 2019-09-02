@@ -10,7 +10,8 @@
   "homepage": "https://github.com/suhay/exothermicjs#readme",
   "license": "MIT",
   "module": "src/index.js",
-  "main": "dist/exothermicjs-plugin-upload.js",
+  "main": "src/index.js",
+  "browser": "dist/exothermicjs-plugin-upload.js",
   "files": [
     "dist/",
     "src/"
