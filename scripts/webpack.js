@@ -1,59 +1,86 @@
-const path = require('path')
-const webpack = require('webpack')
-const pkg = require(path.join(process.cwd(), 'package.json'));
-const nodeExternals = require('webpack-node-externals')
+const path = require(`path`)
+const webpack = require(`webpack`)
 
-module.exports = (env, options, target = 'node', forDemo = false) => {
-  return {
-    entry: './src/index.js',
+const pkg = require(path.join(process.cwd(), `package.json`))
+const nodeExternals = require(`webpack-node-externals`)
+
+module.exports = ({
+  options, target = `node`, plugins = [],
+}) => {
+  const config = {
+    entry: `./src/index.js`,
+    devtool: `source-map`,
     output: {
-      path: options.mode === 'development' && forDemo ? path.resolve('../exothermicjs/demo/public/static') : process.cwd(),
-      filename: options.mode === 'development' && forDemo ?  pkg.main.replace('dist/', '') : pkg.main,
-      library: pkg.name,
-      libraryTarget: 'umd',
-      umdNamedDefine: true,
+      path: process.cwd(),
+      filename: pkg.browser || pkg.main,
+      library: pkg.name.replace(`@`, ``).split(/[/-]/),
+      libraryTarget: `window`,
+      publicPath: `/`,
     },
-    target: target,
-    externals: target !== 'node' ? [] : [nodeExternals({
-      whitelist: ['react', 'react-dom/server']
-    })],
+    target,
+    externals: target !== `node` 
+      ? [{
+        react: `React`,
+        'react-dom': `ReactDOM`,
+        'react-router-dom': `react-router-dom`,
+        reactn: `reactn`,
+        yaml: `js-yaml`,
+      }] 
+      : [
+        nodeExternals({
+          whitelist: [`react`, `react-dom/server`],
+        })],
     node: {
       __dirname: true,
-      fs: target !== 'node' ? 'empty' : true,
+    },
+    optimization: {
+      usedExports: true,
     },
     module: {
       rules: [{
         test: /\.js$/,
         exclude: /(node_modules|bower_components)/,
         use: {
-          loader: 'babel-loader',
+          loader: `babel-loader`,
           options: {
-            presets: ['@babel/preset-env'],
+            presets: [`@babel/preset-env`],
             plugins: [
-              require("@babel/plugin-transform-react-jsx"),
-              require("@babel/plugin-transform-react-jsx-source"),
-              require("@babel/plugin-transform-react-jsx-self"),
-              require("@babel/plugin-proposal-object-rest-spread"),
-              require("@babel/plugin-proposal-class-properties"),
-            ]
-          }
-        }
+              require(`@babel/plugin-transform-react-jsx`),
+              require(`@babel/plugin-transform-react-jsx-source`),
+              require(`@babel/plugin-transform-react-jsx-self`),
+              require(`@babel/plugin-proposal-object-rest-spread`),
+              require(`@babel/plugin-proposal-class-properties`),
+              require(`@babel/plugin-transform-arrow-functions`),
+            ],
+          },
+        },
       }, {
         test: /\.css$/,
-        use: [ 'css-loader' ]
-      }]
+        use: target === `web` ? [`style-loader`, `css-loader`] : [`css-loader`],
+      }],
     },
     resolve: {
       alias: {
-        Root: path.resolve(__dirname, '.'),
-        'hiredis': path.join(__dirname, 'aliases/hiredis.js'),
-      }
+        hiredis: path.join(__dirname, `aliases/hiredis.js`),
+      },
     },
     plugins: [
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(options.mode),
+        'process.env.BROWSER': JSON.stringify(true),
       }),
       new webpack.IgnorePlugin(/^esprima$/, /js-yaml/),
+      ...plugins,
     ].filter(e => e),
   }
+
+  if (target !== `node`) {
+    config.node.fs = `empty`
+    config.node.console = false
+    config.node.fs = `empty`
+    config.node.net = `empty`
+    config.node.tls = `empty`
+  }
+
+  return config
 }

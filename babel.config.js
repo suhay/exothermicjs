@@ -1,42 +1,48 @@
-const isProduction = process.env.NODE_ENV === 'production';
-const isTest = process.env.NODE_ENV === 'test';
-
-const presets = () => {
-  if (isTest) {
-    return ['@babel/preset-react', '@babel/preset-env'];
-  }
-  return [
-    '@babel/preset-react',
-    [
-      '@babel/preset-env',
-      {
-        modules: false,
-      },
+module.exports = (api) => {
+  const isTest = api.env(`test`)
+  return {
+    babelrcRoots: [
+      `.`,
+      `./packages/*`,
     ],
-  ];
-};
-
-const plugins = () => {
-  const defaultPlugins = [
-    "@babel/plugin-transform-react-jsx",
-    "@babel/plugin-transform-react-jsx-source",
-    "@babel/plugin-transform-react-jsx-self",
-    "@babel/plugin-proposal-object-rest-spread",
-    "@babel/plugin-proposal-class-properties",
-  ];
-
-  if (isProduction) {
-    return defaultPlugins;
+    presets: [
+      [
+        `@babel/env`,
+        {
+          modules: false,
+          useBuiltIns: `entry`,
+          corejs: `core-js@3`,
+          targets: {
+            browsers: [`> 1%`],
+          },
+        },
+      ],
+      `@babel/react`,
+    ],
+    plugins: [
+      `@babel/syntax-dynamic-import`,
+      `@babel/plugin-proposal-object-rest-spread`,
+      `css-modules-transform`,
+    ],
+    env: {
+      test: {
+        presets: [
+          [
+            `@babel/preset-env`,
+            {
+              targets: {
+                node: `current`,
+              },
+            },
+          ],
+          `@babel/react`,
+        ],
+        plugins: [
+          `@babel/syntax-dynamic-import`,
+          `@babel/plugin-proposal-object-rest-spread`,
+          `css-modules-transform`,
+        ],
+      },
+    },
   }
-
-  if (isTest) {
-    return defaultPlugins;
-  }
-
-  return defaultPlugins;
-};
-
-module.exports = {
-  presets: presets(),
-  plugins: plugins(),
-};
+}
