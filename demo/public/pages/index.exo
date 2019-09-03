@@ -16,7 +16,8 @@ page:
         items:
           - !col
             id: one
-            content: !markdown index-one
+            content:
+              !markdown index-one
       - !section
         id: what-ive-done
         title: '# What'

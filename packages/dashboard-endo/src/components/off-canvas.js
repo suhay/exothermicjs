@@ -4,7 +4,7 @@ import fetch from 'isomorphic-fetch'
 
 const OffCanvas = ({ children, dump, path }) => {
   const handleSave = () => {
-    fetch(`/api/${path}`.replace(`//`, `/`), {
+    fetch(`/admin/${path}`.replace(`//`, `/`), {
       credentials: `same-origin`,
       method: `PATCH`,
       headers: {

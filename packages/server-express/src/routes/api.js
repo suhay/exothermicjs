@@ -1,12 +1,12 @@
 const express = require(`express`)
 const url = require(`url`)
-
-const router = express.Router()
-const ensureLoggedIn = require(`connect-ensure-login`).ensureLoggedIn()
 const fs = require(`fs`)
 const path = require(`path`)
+const passport = require(`passport`)
 
-router.get(`/site`, ensureLoggedIn, (req, res) => {
+const router = express.Router()
+
+router.get(`/site`, passport.authenticate(`bearer`, { session: false }), (req, res) => {
   if (!fs.existsSync(path.join(process.env.PUBLIC, `site.json`))) {
     fs.writeFile(path.join(process.env.PUBLIC, `site.json`), `{}`, (err) => {
       if (err) throw err
@@ -15,14 +15,18 @@ router.get(`/site`, ensureLoggedIn, (req, res) => {
   res.sendFile(`site.json`, { root: path.resolve(process.env.PUBLIC) })
 })
 
-router.get(`/*`, ensureLoggedIn, (req, res) => {
+router.get(`/*`, passport.authenticate(`bearer`, { session: false }), (req, res) => {
   const urlParts = url.parse(req.url, true)
   if (urlParts.query && urlParts.query.path) {
     res.render(urlParts.query.path.replace(/^\//, ``).replace(`?`, ``), { get: true })
+  } else if (urlParts.query) {
+    res.render(urlParts.path.replace(/^\//, ``), { get: true })
+  } else {
+    res.status(500).send(`I couldn't find that thing...`)
   }
 })
 
-router.patch(`/*`, ensureLoggedIn, (req, res) => {
+router.patch(`/*`, passport.authenticate(`bearer`, { session: false }), (req, res) => {
   const urlParts = url.parse(req.url, true)
   if (fs.existsSync(path.join(process.env.PUBLIC, `pages/${urlParts.path}.exo`)) && req.body.text.length > 10) {
     fs.writeFile(path.join(process.env.PUBLIC, `pages/${urlParts.path}.exo`), req.body.text, (err) => {
@@ -34,7 +38,7 @@ router.patch(`/*`, ensureLoggedIn, (req, res) => {
   }
 })
 
-router.post(`/upload`, ensureLoggedIn, (req, res) => {
+router.post(`/upload`, passport.authenticate(`bearer`, { session: false }), (req, res) => {
   const theFile = req.files.file
   theFile.mv(`${process.env.PUBLIC}/static/uploads/${req.body.filename}.${theFile.name.replace(/.*\.(.+)$/, `$1`)}`, (err) => {
     if (err) {

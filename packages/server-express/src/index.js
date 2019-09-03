@@ -1,14 +1,21 @@
 require(`dotenv`).config()
 
-const { get, hydrate, render } = require(`@exothermic/core/src/server`)
-const auth = require(`@exothermic/core/src/auth`)
-
 const express = require(`express`)
 const path = require(`path`)
 const logger = require(`morgan`)
 const helmet = require(`helmet`)
 const fileUpload = require(`express-fileupload`)
+const passport = require(`passport`)
+const HttpBearerStrategy = require(`passport-http-bearer`).Strategy
+const bodyParser = require(`body-parser`)
+const cookieParser = require(`cookie-parser`)
+const session = require(`express-session`)
+const MemoryStore = require(`memorystore`)(session)
 
+const { get, hydrate, render } = require(`@exothermic/core/src/server`)
+const auth = require(`@exothermic/core/src/auth`)
+
+const users = require(`./users`)
 const indexRouter = require(`./routes/index`)
 const adminRouter = require(`./routes/admin`)
 const apiRouter = require(`./routes/api`)
@@ -35,9 +42,42 @@ app.set(`views`, [`${path.resolve(`./${process.env.PUBLIC}`)}/pages/` || `./publ
 app.set(`view engine`, `exo`)
 app.use(helmet())
 app.use(logger(`dev`))
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(cookieParser())
+app.use(session({
+  store: new MemoryStore({
+    checkPeriod: 86400000, // prune expired entries every 24h
+  }),
+  secret: process.env.SESSION_SECRET || `shhhhhhhhh`,
+  resave: true,
+  saveUninitialized: true,
+}))
+
+passport.use(new HttpBearerStrategy(
+  (token, cb) => {
+    users.findByToken(token, (err, user) => {
+      if (err) { return cb(err) }
+      if (!user) { return cb(null, false) }
+      return cb(null, user)
+    })
+  }
+))
+
 if (auth) {
   app.use(auth)
 }
+
+passport.serializeUser((user, done) => {
+  done(null, user)
+})
+passport.deserializeUser((user, done) => {
+  done(null, user)
+})
+
+app.use(passport.initialize())
+app.use(passport.session())
+
 app.use(express.static(`${path.resolve(`./${process.env.PUBLIC}`)}/static` || `./public/static`))
 app.use(fileUpload())
 
