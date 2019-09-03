@@ -87,9 +87,19 @@ export const Type = yaml => new yaml.Type(`!markdown`, {
     }
     localForage
       .getItem(props.path)
-      .then((value) => {
-        console.log(`save: ${props.path}\n${value}`)
-      })
+      .then(text => fetch(`/admin/${props.path}`.replace(`//`, `/`), {
+        credentials: `same-origin`,
+        method: `PATCH`,
+        headers: {
+          'Content-Type': `application/json; charset=utf-8`,
+        },
+        body: JSON.stringify({
+          text,
+        }),
+      }))
+      .then(response => response.text())
+      .then(text => console.log(text))
+      .catch((error) => { throw error })
     return rtn
   },
 })
