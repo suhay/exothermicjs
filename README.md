@@ -1,7 +1,7 @@
 # ExothermicJS | Yaml based template engine for Node.js
 
 [![Build Status](https://travis-ci.org/suhay/exothermicjs.svg?branch=master)](https://travis-ci.org/suhay/exothermicjs)
-[![NPM version](https://img.shields.io/npm/v/exothermicjs.svg)](https://www.npmjs.org/package/exothermicjs)
+[![NPM version](https://img.shields.io/npm/v/@exothermic/core.svg)](https://www.npmjs.org/package/@exothermic/core)
 ![Dependencies](https://david-dm.org/suhay/exothermicjs.svg)
 
 Create dynamic page content using YAML and Markdown without lengthy build times.
