@@ -1,11 +1,12 @@
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
 
+import content from '../util/content'
+
 const Article = ({
   data: {
     id,
     title,
-    content,
     items,
   },
   data,
@@ -14,7 +15,7 @@ const Article = ({
   return (
     <article className={classes} id={id}>
       <ReactMarkdown source={title} renderers={{ root: React.Fragment }} />
-      {content}
+      {content(data.content)}
       {items}
     </article>
   )

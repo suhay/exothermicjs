@@ -1,3 +1,6 @@
+import React from 'react'
+import ReactMarkdown from 'react-markdown'
+
 import { getGlobal } from 'reactn'
 
 export default (content) => {
@@ -12,5 +15,5 @@ export default (content) => {
     }
   }
 
-  return appliedContent
+  return <ReactMarkdown source={appliedContent} renderers={{ root: React.Fragment }} />
 }

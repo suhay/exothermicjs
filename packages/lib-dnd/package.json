@@ -1,6 +1,6 @@
 {
   "name": "@exothermic/lib-dnd",
-  "version": "0.1.0",
+  "version": "1.4.0",
   "description": "Drag and Drop Library for ExothermicJS",
   "repository": {
     "type": "git",
@@ -28,7 +28,7 @@
     "react-smooth-dnd": "^0.11.0"
   },
   "peerDependencies": {
-    "@exothermic/core": "^1.3.1",
+    "@exothermic/core": "^1.4.0",
     "react": "^16.8.6"
   },
   "babel": {

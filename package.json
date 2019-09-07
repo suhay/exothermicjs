@@ -1,7 +1,7 @@
 {
   "scripts": {
     "bootstrap": "yarn && lerna bootstrap",
-    "start": "./node_modules/.bin/exothermic-server",
+    "start": "NODE_ENV=production ./node_modules/.bin/exothermic-server",
     "watch": "lerna run watch --parallel",
     "dev:server": "./node_modules/.bin/exothermic-server-dev",
     "debug:server": "./node_modules/.bin/exothermic-server-dev --debug",

@@ -12,7 +12,9 @@ const cookieParser = require(`cookie-parser`)
 const session = require(`express-session`)
 const MemoryStore = require(`memorystore`)(session)
 
-const { get, hydrate, render } = require(`@exothermic/core/src/server`)
+const { get, hydrate, render } = process.env.NODE_ENV === `production` 
+  ? require(`@exothermic/core/dist/server.exothermic`) 
+  : require(`@exothermic/core/src/server`)
 const auth = require(`@exothermic/core/src/auth`)
 
 const users = require(`./users`)

@@ -1,6 +1,6 @@
 {
   "name": "@exothermic/lib-auth0",
-  "version": "0.1.0",
+  "version": "1.4.0",
   "description": "Auth0 authentication point for ExothermicJS",
   "repository": "https://github.com/suhay/exothermicjs/tree/master/packages/exothermicjs-lib-auth0",
   "bugs": {
@@ -32,7 +32,7 @@
     "webpack-node-externals": "^1.7.2"
   },
   "peerDependencies": {
-    "@exothermic/server-express": "^0.1.0",
+    "@exothermic/server-express": "^1.4.0",
     "express": "^4.16.3",
     "passport": "^0.4.0"
   }

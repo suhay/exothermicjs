@@ -5,23 +5,31 @@ import { isBrowser } from './components/util'
 
 const configBuilder = (options = {}) => {
   const { stringify } = options
+  const def = {
+    plugins: [
+      `@exothermic/plugin-markdown`,
+    ],
+  }
 
   let config = {}
   if (isBrowser && window.exothermic) {
     config = window.exothermic.config
   } else if (fs && typeof fs.readFileSync !== `undefined`) {
-    const base = JSON.parse(fs.readFileSync(path.resolve(`${__dirname}/../exothermic.config.json`), `utf8`))
-    const user = fs.existsSync(`exothermic.config.json`) ? JSON.parse(fs.readFileSync(path.resolve(`exothermic.config.json`), `utf8`)) : {}
+    const base = fs.existsSync(path.resolve(`${__dirname}/../exothermic.config.json`)) 
+      ? JSON.parse(fs.readFileSync(path.resolve(`${__dirname}/../exothermic.config.json`), `utf8`))
+      : (() => {
+        console.error(`Base config not found: `, path.resolve(`${__dirname}/../exothermic.config.json`))
+        return def
+      })()
+    const user = fs.existsSync(path.resolve(`exothermic.config.json`)) 
+      ? JSON.parse(fs.readFileSync(path.resolve(`exothermic.config.json`), `utf8`)) 
+      : {}
     config = {
       ...base,
       ...user,
     }
   } else {
-    config = {
-      plugins: [
-        `@exothermic/plugin-markdown`,
-      ],
-    }    
+    config = def
   }
 
   return stringify ? JSON.stringify(config) : config

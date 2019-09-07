@@ -3,6 +3,44 @@ const webpack = require(`webpack`)
 
 module.exports = (env, options) => [
   {
+    mode: `production`,
+    target: `node`,
+    node: {
+      __dirname: true,
+    },
+    entry: {
+      'server.exothermic': path.resolve(`./src/server.js`),
+    },
+    output: {
+      path: path.resolve(`./dist`),
+      filename: `[name].js`,
+      libraryTarget: `umd`,
+      publicPath: `/`,
+      umdNamedDefine: true,
+    },
+    module: {
+      rules: [{
+        test: /\.js$/,
+        exclude: /(node_modules|bower_components|dist)/,
+        use: {
+          loader: `babel-loader`,
+          options: {
+            presets: [`@babel/preset-env`],
+            plugins: [
+              require(`@babel/plugin-transform-react-jsx`),
+              require(`@babel/plugin-transform-react-jsx-source`),
+              require(`@babel/plugin-transform-react-jsx-self`),
+              require(`@babel/plugin-proposal-object-rest-spread`),
+            ],
+          },
+        },
+      }, {
+        test: /\.css$/,
+        use: [`style-loader`, `css-loader`],
+      }],
+    },
+  },
+  {
     target: `web`,
     node: {
       __dirname: true,

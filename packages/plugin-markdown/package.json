@@ -1,6 +1,6 @@
 {
   "name": "@exothermic/plugin-markdown",
-  "version": "0.1.0",
+  "version": "1.4.0",
   "description": "Markdown plugin for ExothermicJS",
   "repository": {
     "type": "git",
@@ -35,7 +35,7 @@
     "shortid": "^2.2.14"
   },
   "peerDependencies": {
-    "@exothermic/core": "^1.3.1",
+    "@exothermic/core": "^1.4.0",
     "react": "^16.8.6",
     "reactn": "^2.1.7"
   }

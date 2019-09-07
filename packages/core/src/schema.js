@@ -37,7 +37,7 @@ const schema = (options = {}) => {
     
     const plugins = isBrowser && window.exothermic
       ? Object.values(window.exothermic.plugin || []).map(plugin => plugin.Type ? plugin.Type(yaml) : null).filter(plugin => plugin)
-      : conf.plugins.map(plug => require(`${plug.replace(`@exothermic/`, `../../`)}/src`).Type(yaml))
+      : (conf.plugins || []).map(plug => require(`${plug.replace(`@exothermic/`, `../../`)}/src`).Type(yaml))
 
     if (adds && Object.keys(adds).length > 0) {
       Object.keys(adds).forEach((key) => {
@@ -45,9 +45,9 @@ const schema = (options = {}) => {
       })
       // Override all Types with their addedPlugins replacers
       const addedPlusStandard = { ...Types, ...adds }
-      newSchema = yaml.Schema.create(Object.keys(addedPlusStandard).map(key => addedPlusStandard[key]).concat(plugins))
+      newSchema = yaml.Schema.create(Object.keys(addedPlusStandard || []).map(key => addedPlusStandard[key]).concat(plugins))
     } else {
-      newSchema = yaml.Schema.create(Object.keys(Types).map(key => Types[key]).concat(plugins))
+      newSchema = yaml.Schema.create(Object.keys(Types || []).map(key => Types[key]).concat(plugins))
     }
 
     setGlobal({ schema: newSchema })

@@ -92,7 +92,7 @@ export const render = (route, options) => {
       ? ``
       : `
         <script src="http://localhost:8081/bundle.js"></script>
-        ${config.plugins.map((plugin) => {
+        ${(config.plugins || []).map((plugin) => {
           const plug = require(plugin)
           return plug[pluginType] ? `<script src="${plug[pluginType]}"></script>` : ``
         })}
