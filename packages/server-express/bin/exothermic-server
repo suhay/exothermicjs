@@ -1,0 +1,75 @@
+#!/usr/bin/env node
+
+const program = require(`commander`)
+const { version } = require(`../package.json`)
+const debug = require(`debug`)(`exothermicjs:server`)
+const esm = require(`esm`)(module /* , options */)
+const http = require(`http`)
+require(`colors`)
+
+program
+  .version(version)
+  .option(`-p, --port [port]`, `Port number (this will override the value set in the .env file)`)
+  .parse(process.argv)
+
+function normalizePort(val) {
+  const port = parseInt(val, 10)
+
+  // eslint-disable-next-line no-restricted-globals
+  if (isNaN(port)) {
+    return val
+  }
+
+  if (port >= 0) {
+    return port
+  }
+
+  return false
+}
+
+const port = normalizePort(program.port || process.env.PORT || `3000`)
+
+const app = esm(`../src`)
+app.set(`port`, port)
+
+const server = http.createServer(app)
+
+function onError(error) {
+  if (error.syscall !== `listen`) {
+    throw error
+  }
+
+  const bind = typeof port === `string`
+    ? `Pipe ${port}`
+    : `Port ${port}`
+
+  switch (error.code) {
+    case `EACCES`:
+      console.error(`${bind} requires elevated privileges`)
+      process.exit(1)
+      break
+    case `EADDRINUSE`:
+      console.error(`${bind} is already in use`)
+      process.exit(1)
+      break
+    default:
+      throw error
+  }
+}
+
+function onListening() {
+  const addr = server.address()
+  const bind = typeof addr === `string`
+    ? `pipe ${addr}`
+    : `port ${addr.port}`
+  debug(`Listening on ${bind}`)
+  console.log(`🔥  ${`[exothermic-server]`.dim}: ${`Ready`.bold.green} on port ${`${port}`.bold.cyan}!`)
+}
+
+server.listen(port)
+server.on(`error`, onError)
+server.on(`listening`, onListening)
+
+process.once(`SIGUSR2`, () => {
+  process.kill(process.pid, `SIGUSR2`)
+})

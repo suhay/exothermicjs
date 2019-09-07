@@ -1,0 +1,39 @@
+---
+description: And the description.
+tags: []
+page:
+  - !header
+    class: container
+    items:
+      - !get fragments/nav
+  - !main
+    class: container
+    items:
+      - !section
+        id: who
+        title: '# Who'
+        class: row
+        items:
+          - !col
+            id: one
+            content:
+              !markdown index-one
+      - !section
+        id: what-ive-done
+        title: '# What'
+        items:
+          - !get fragments/portfolio
+      - !section
+        id: what-im-doing
+        title: '# More What'
+        items:
+          - !get fragments/projects
+  - !footer
+    class: container
+    items:
+      - !section
+        id: where
+        class: row
+        title: '# Where - End of file!!'
+        items:
+          - !get fragments/about

@@ -12,3 +12,7 @@ package-lock.json
 /coverage/
 dist/
 .npmrc
+.compiled
+ssr/
+stats.json
+token.json

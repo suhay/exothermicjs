@@ -1,0 +1,36 @@
+{
+  "name": "@exothermic/plugin-upload",
+  "version": "1.4.0",
+  "description": "Upload plugin for ExothermicJS",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/suhay/exothermicjs.git"
+  },
+  "author": "Matt Suhay <matthew.suhay@gmail.com>",
+  "homepage": "https://github.com/suhay/exothermicjs#readme",
+  "license": "MIT",
+  "module": "src/index.js",
+  "main": "src/index.js",
+  "browser": "dist/exothermicjs-plugin-upload.js",
+  "files": [
+    "dist/",
+    "src/"
+  ],
+  "scripts": {
+    "build": "webpack --mode development",
+    "build:prod": "webpack --mode production",
+    "build:all": "yarn build && yarn build:prod",
+    "profile": "webpack --profile --mode development --json > stats.json",
+    "profile:prod": "webpack --profile --mode production --json > stats.json"
+  },
+  "bugs": {
+    "url": "https://github.com/suhay/exothermicjs/issues"
+  },
+  "dependencies": {
+    "isomorphic-fetch": "^2.2.1"
+  },
+  "peerDependencies": {
+    "react": "^16.8.6",
+    "@exothermic/core": "^1.4.0"
+  }
+}
