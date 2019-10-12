@@ -32,5 +32,6 @@
     "@exothermic/server-express": "^1.4.0",
     "express": "^4.16.3",
     "passport": "^0.4.0"
-  }
+  },
+  "gitHead": "0705f7304b1032a36ea6fd18a9c7941a9d5df2e4"
 }

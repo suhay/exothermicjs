@@ -15,8 +15,8 @@
     "test": "NODE_ENV=test jest --no-cache",
     "debug:test": "NODE_ENV=test node --inspect-brk node_modules/.bin/jest --runInBand --no-cache",
     "publish": "yarn publish:version && yarn publish:push",
-    "publish:version": "lerna version --no-push",
-    "publish:push": "lerna publish from-git",
+    "publish:version": "lerna version --no-push --yes",
+    "publish:push": "lerna publish from-git --yes",
     "publish:git": "git push --follow-tags",
     "publish:dry-run": "lerna version --no-git-tag-version --no-push",
     "lint": "eslint ./"
