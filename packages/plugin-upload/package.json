@@ -1,6 +1,6 @@
 {
   "name": "@exothermic/plugin-upload",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "Upload plugin for ExothermicJS",
   "repository": {
     "type": "git",

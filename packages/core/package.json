@@ -1,6 +1,6 @@
 {
   "name": "@exothermic/core",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "ExothermicJS | Yaml based template engine for Node.js",
   "repository": {
     "type": "git",

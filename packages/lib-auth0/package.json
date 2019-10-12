@@ -1,6 +1,6 @@
 {
   "name": "@exothermic/lib-auth0",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "Auth0 authentication point for ExothermicJS",
   "repository": "https://github.com/suhay/exothermicjs/tree/master/packages/exothermicjs-lib-auth0",
   "bugs": {

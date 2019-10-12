@@ -1,6 +1,6 @@
 {
   "name": "@exothermic/lib-dnd",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "Drag and Drop Library for ExothermicJS",
   "repository": {
     "type": "git",
