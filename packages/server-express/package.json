@@ -1,6 +1,6 @@
 {
   "name": "@exothermic/server-express",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Express Server for ExothermicJS",
   "repository": {
     "type": "git",

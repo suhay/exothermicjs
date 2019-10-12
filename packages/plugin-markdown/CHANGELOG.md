@@ -5,12 +5,4 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.4.1](https://github.com/suhay/exothermicjs/compare/v1.4.0...v1.4.1) (2019-10-12)
 
-**Note:** Version bump only for package @exothermic/lib-dnd
-
-
-
-
-
-# 0.1.0 (2018-11-25)
-
-**Note:** Version bump only for package exothermicjs-lib-dnd
+**Note:** Version bump only for package @exothermic/plugin-markdown

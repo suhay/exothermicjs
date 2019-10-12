@@ -1,6 +1,6 @@
 {
   "name": "@exothermic/dashboard-endo",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "The Endothermic Dashboard | Basic dashboard for ExothermicJS",
   "repository": "https://github.com/suhay/exothermicjs/tree/master/packages/endothermicjs-dashboard-endo",
   "bugs": {
@@ -27,8 +27,8 @@
     "profile:prod": "webpack --profile --mode production --json > stats.json"
   },
   "dependencies": {
-    "@exothermic/lib-dnd": "^1.4.0",
-    "@exothermic/plugin-upload": "^1.4.0",
+    "@exothermic/lib-dnd": "^1.4.1",
+    "@exothermic/plugin-upload": "^1.4.1",
     "@material-ui/core": "^3.4.0",
     "isomorphic-fetch": "^2.2.1"
   },
