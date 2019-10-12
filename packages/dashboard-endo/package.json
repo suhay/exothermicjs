@@ -17,10 +17,6 @@
   "browser": "dist/exothermicjs-dashboard-endo.js",
   "license": "MIT",
   "homepage": "https://github.com/suhay/exothermicjs#readme",
-  "files": [
-    "dist/",
-    "src/"
-  ],
   "scripts": {
     "watch": "webpack --env.NODE_ENV=development --watch --mode development",
     "build": "webpack --mode development",

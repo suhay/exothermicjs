@@ -9,9 +9,6 @@
   "author": "Matt Suhay <matthew.suhay@gmail.com>",
   "homepage": "https://github.com/suhay/exothermicjs#readme",
   "license": "MIT",
-  "files": [
-    "src/"
-  ],
   "bin": {
     "exothermic-server": "./bin/exothermic-server",
     "exothermic-server-dev": "./bin/exothermic-server-dev"

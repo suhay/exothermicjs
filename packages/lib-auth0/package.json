@@ -15,9 +15,6 @@
   "main": "src/index.js",
   "license": "MIT",
   "homepage": "https://github.com/suhay/exothermicjs#readme",
-  "files": [
-    "src/"
-  ],
   "dependencies": {
     "connect-ensure-login": "^0.1.1",
     "connect-flash": "^0.1.1",
