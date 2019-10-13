@@ -3,7 +3,7 @@ import path from 'path'
 import fs from 'fs'
 import yaml from 'js-yaml'
 import React from 'react'
-import { getGlobal } from 'reactn'
+import { getGlobal, setGlobal } from 'reactn'
 import ReactServer from 'react-dom/server'
 import { Base64 } from 'js-base64'
 import { StyleSheetServer } from 'aphrodite'
@@ -31,6 +31,8 @@ export const get = (route, options) => {
 
 export const render = (route, options) => {
   const [userPages] = options.pages
+  setGlobal({ route: route.replace(userPages, `/`).replace(/index\.exo|\.exo/, ``) })
+
   const { 
     loggedIn, 
     ssrOnly, 
@@ -51,7 +53,7 @@ export const render = (route, options) => {
   const context = {}
   // eslint-disable-next-line prefer-const
   let { html, css } = StyleSheetServer 
-    ? StyleSheetServer.renderStatic(() => ReactServer.renderToString(loggedIn && Dashboard
+    ? StyleSheetServer.renderStatic(() => ReactServer.renderToString(loggedIn && Dashboard && Dashboard.set !== false
       ? (
         <StaticRouter location={route} context={context}>
           <Dashboard.OffCanvasContainer>
@@ -88,24 +90,28 @@ export const render = (route, options) => {
   const pluginType = process.env.NODE_ENV && process.env.NODE_ENV === `development` ? `dev` : `live`
 
   const footerScripts = `
-    ${ssrOnly
-      ? ``
-      : `
-        <script src="http://localhost:8081/bundle.js"></script>
-        ${(config.plugins || []).map((plugin) => {
-          const plug = require(plugin)
-          return plug[pluginType] ? `<script src="${plug[pluginType]}"></script>` : ``
-        })}
-        ${Dashboard ? `<script src="${Dashboard[pluginType]}"></script>` : ``}
-      `
+    ${Array.isArray(config[pluginType])
+      ? config[pluginType].map((plugin) => `<script src="${plugin}"></script>`).join(``)
+      : config[pluginType] ? `<script src="${config[pluginType]}"></script>` : ``}
+    ${(config.plugins || [])
+      .filter(plug => {
+        try { require.resolve(plug) } 
+        catch { return false }
+        return true
+      })
+      .map((plugin) => {
+        const plug = require(plugin)
+        return plug[pluginType] ? `<script src="${plug[pluginType]}"></script>` : ``
+      })
     }
+    ${Dashboard && Dashboard.set !== false ? `<script src="${Dashboard[pluginType]}"></script>` : ``}
     <script>
       window.exothermic = window.exothermic || {};
-      window.exothermic.config = ${configBuilder({ stringify: true })};
+      window.exothermic.config = ${JSON.stringify(config)};
       window.exothermic.base = "${Base64.encode(baseTemplate)}";
       window.exothermic.page = "${Base64.encode(pageTemplate)}";
       window.exothermic.raw = "${Base64.encode(JSON.stringify(raw))}";
-      window.exothermic.options = ${JSON.stringify({ user, userProfile, dashboard: Dashboard ? Dashboard.name : `` })};
+      window.exothermic.options = ${JSON.stringify({ user, userProfile, dashboard: Dashboard && Dashboard.set !== false ? Dashboard.name : `` })};
 
       window.renderedClassNames = ${JSON.stringify(css.renderedClassNames)};
       window.exothermic.initialize ? window.exothermic.initialize(window.location.pathname) : null;
@@ -121,7 +127,7 @@ export const render = (route, options) => {
       </head>
       <body>
         <div id="__exothermic">${html}</div>
-        ${process.env.SSR_ONLY === `true` || options.ssr_only ? `` : footerScripts}
+        ${process.env.SSR_ONLY === `true` || ssrOnly ? `` : footerScripts}
       </body>
     </html>
   `

@@ -29,5 +29,8 @@
     "@exothermic/core": "^1.4.0",
     "react": "^16.8.6"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "gitHead": "eef5be8067d0f111147c117d47e4e9390d4ae006"
 }

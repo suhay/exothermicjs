@@ -4,7 +4,7 @@
   ],
   "dashboard": "@exothermic/dashboard-endo",
   "auth": "@exothermic/lib-auth0",
-  "dev": "/browser.js",
+  "dev": "http://localhost:8081/bundle.js",
   "live": [
     "https://unpkg.com/@exothermic/core/dist/browser.exothermic.production.js",
     "https://unpkg.com/@exothermic/core/dist/vendors.production.js"

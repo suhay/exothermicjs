@@ -12,15 +12,11 @@ const configBuilder = (options = {}) => {
   }
 
   let config = {}
+
   if (isBrowser && window.exothermic) {
     config = window.exothermic.config
   } else if (fs && typeof fs.readFileSync !== `undefined`) {
-    const base = fs.existsSync(path.resolve(`${__dirname}/../exothermic.config.json`)) 
-      ? JSON.parse(fs.readFileSync(path.resolve(`${__dirname}/../exothermic.config.json`), `utf8`))
-      : (() => {
-        console.error(`Base config not found: `, path.resolve(`${__dirname}/../exothermic.config.json`))
-        return def
-      })()
+    const base = require('@exothermic/core/exothermic.config')
     const user = fs.existsSync(path.resolve(`exothermic.config.json`)) 
       ? JSON.parse(fs.readFileSync(path.resolve(`exothermic.config.json`), `utf8`)) 
       : {}

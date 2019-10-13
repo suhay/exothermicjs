@@ -66,7 +66,7 @@ passport.use(new HttpBearerStrategy(
   }
 ))
 
-if (auth) {
+if (auth && auth.set !== false) {
   app.use(auth)
 }
 

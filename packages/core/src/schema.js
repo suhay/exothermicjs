@@ -37,7 +37,13 @@ const schema = (options = {}) => {
     
     const plugins = isBrowser && window.exothermic
       ? Object.values(window.exothermic.plugin || []).map(plugin => plugin.Type ? plugin.Type(yaml) : null).filter(plugin => plugin)
-      : (conf.plugins || []).map(plug => require(`${plug.replace(`@exothermic/`, `../../`)}/src`).Type(yaml))
+      : (conf.plugins || [])
+        .filter(plug => {
+          try { require.resolve(`${plug.replace(`@exothermic/`, `../../`)}/src`) } 
+          catch { return false }
+          return true
+        })
+        .map(plug => require(`${plug.replace(`@exothermic/`, `../../`)}/src`).Type(yaml))
 
     if (adds && Object.keys(adds).length > 0) {
       Object.keys(adds).forEach((key) => {
