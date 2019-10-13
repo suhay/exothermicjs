@@ -13,14 +13,14 @@ script:
   - yarn test
   - yarn build:prod
     
-deploy:
-  provider: script
-  script: yarn publish:push
-  email: matthew.suhay@gmail.com
-  api_key: $NPM_TOKEN
-  on:
-    tags: true
-  skip_cleanup: true
+# deploy:
+#   provider: script
+#   script: yarn publish:push
+#   email: matthew.suhay@gmail.com
+#   api_key: $NPM_TOKEN
+#   on:
+#     tags: true
+#   skip_cleanup: true
   
 notifications:
   email:
