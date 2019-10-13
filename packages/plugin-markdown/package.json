@@ -1,6 +1,6 @@
 {
   "name": "@exothermic/plugin-markdown",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "description": "Markdown plugin for ExothermicJS",
   "repository": {
     "type": "git",
