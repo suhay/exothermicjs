@@ -11,6 +11,7 @@ import schema from '../../schema'
 const Link = (props) => {
   const { children, to: propsTo } = props
   const [pagesPath] = useGlobal(`pagesPath`)
+  const [route] = useGlobal(`route`)
   const [to] = useState(new URL(propsTo))
 
   const handleNav = () => {
@@ -32,9 +33,9 @@ const Link = (props) => {
 
   return (
     <>
-      {to.hash === ``
-        ? <NavLink exact activeClassName="selected" to={to.pathname} onClick={handleNav} isActive={(match, location) => (!!(match && location) || to.pathname === `/${location.pathname.replace(isActiveRegex, ``)}`)} {...props}>{children}</NavLink>
-        : <NavHashLink smooth activeClassName="selected" to={to.href} onClick={handleNav} {...props}>{children}</NavHashLink>
+      {to.hash !== ``
+        ? <NavHashLink smooth activeClassName="selected" to={route + to.hash}>{children}</NavHashLink>
+        : <NavLink exact activeClassName="selected" to={to.pathname} onClick={handleNav} isActive={(match, location) => (!!(match && location) || to.pathname === `/${location.pathname.replace(isActiveRegex, ``)}`)} {...props}>{children}</NavLink>
       }
     </>
   )

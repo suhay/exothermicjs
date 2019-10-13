@@ -2,4 +2,4 @@ import configBuilder from './config'
 
 const { auth } = configBuilder()
 
-module.exports = require(`${auth}`)
+module.exports = auth ? require(`${auth}`) : { set: false }

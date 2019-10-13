@@ -2,4 +2,4 @@ import configBuilder from './config'
 
 const { dashboard } = configBuilder()
 
-module.exports = require(`${dashboard}`)
+module.exports = dashboard ? require(`${dashboard}`) : { set: false }

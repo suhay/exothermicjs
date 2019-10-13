@@ -19,6 +19,7 @@ window[`react-router-dom`] = {
 
 export const initialize = (path = `/`) => {
   StyleSheet.rehydrate(window.renderedClassNames)
+  reactn.setGlobal({ route: path })
 
   let data = null
   let options = null

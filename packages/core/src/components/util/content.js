@@ -4,16 +4,16 @@ import ReactMarkdown from 'react-markdown'
 import { getGlobal } from 'reactn'
 
 export default (content) => {
-  let appliedContent = content
-
-  if (appliedContent && typeof appliedContent === `string`) {
+  if (content && typeof content === `string`) {
     const { options } = getGlobal()
-    if (appliedContent) {
-      Object.keys(options || []).forEach((key) => {
-        appliedContent = appliedContent.replace(`{{${key}}}`, options[key])
-      })
-    }
+    let appliedContent = content
+    Object.keys(options || []).forEach((key) => {
+      const regex = new RegExp(`{{${key}}}`, `gi`)
+      appliedContent = appliedContent.replace(regex, options[key])
+    })
+    return <ReactMarkdown source={appliedContent} renderers={{ root: React.Fragment }} />
+  } else if (content) {
+    return <>{content}</>
   }
-
-  return <ReactMarkdown source={appliedContent} renderers={{ root: React.Fragment }} />
+  return <></>
 }
