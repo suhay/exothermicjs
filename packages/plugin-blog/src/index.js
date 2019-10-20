@@ -85,7 +85,7 @@ export const Type = (yaml) => new yaml.Type(`!blog`, {
       return (
         <Blog basePath={data} key={data} />
       )
-    } else if (Object.keys(data).length > 0) {
+    } if (Object.keys(data).length > 0) {
       return (
         <Blog {...data} key={data.slug} />
       )
