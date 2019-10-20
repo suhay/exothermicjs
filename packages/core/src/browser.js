@@ -7,7 +7,7 @@ import { StyleSheet } from 'aphrodite'
 import { BrowserRouter, NavLink } from 'react-router-dom'
 
 import Loader from './components/loader'
-import schema from './schema'
+import { apply } from './schema'
 import { dump } from './components/util'
 
 window.React = React
@@ -29,18 +29,14 @@ export const initialize = (path = `/`) => {
     Dashboard = window.exothermic.dashboard && window.exothermic.options.dashboard.trim().length > 0 ? window.exothermic.dashboard[window.exothermic.options.dashboard.trim()] : null
 
     const base = yaml.safeLoad(Base64.decode(window.exothermic.base))
-    const page = yaml.safeLoad(Base64.decode(window.exothermic.page), {
-      schema: Dashboard ? Dashboard.schema() : schema({ set: true }),
-    })
+    const page = apply(Base64.decode(window.exothermic.page), { set: true })
     data = { ...base, ...page }
 
     const parsedRaw = JSON.parse(Base64.decode(window.exothermic.raw))
 
     Object.keys(parsedRaw).forEach((key) => {
       raw[key] = parsedRaw[key].startsWith(`---`) 
-        ? yaml.safeLoad(parsedRaw[key], {
-          schema: schema(),
-        }) 
+        ? apply(parsedRaw[key])
         : parsedRaw[key]
     })
 

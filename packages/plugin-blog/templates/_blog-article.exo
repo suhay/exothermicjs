@@ -1,0 +1,15 @@
+---
+title: '{{title}}'
+page:
+- !main
+  class: container
+  items:
+  - !section
+    id: blog-sec
+    title: '# {{title}}'
+    class: row
+    items:
+    - !blog
+      basePath: blog
+      slug: '{{slug}}'
+  

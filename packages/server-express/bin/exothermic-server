@@ -17,7 +17,7 @@ function normalizePort(val) {
 
   // eslint-disable-next-line no-restricted-globals
   if (isNaN(port)) {
-    return val
+    return false
   }
 
   if (port >= 0) {
@@ -28,6 +28,8 @@ function normalizePort(val) {
 }
 
 const port = normalizePort(program.port || process.env.PORT || `3000`)
+
+process.env.NODE_ENV = process.env.NODE_ENV || `production`
 
 const app = esm(`../src`)
 app.set(`port`, port)

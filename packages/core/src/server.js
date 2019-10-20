@@ -12,7 +12,7 @@ import { StaticRouter } from 'react-router'
 import Head from './components/head'
 import Base from './components/base'
 import configBuilder from './config'
-import schema from './schema'
+import { apply } from './schema'
 
 export const get = (route, options) => {
   try {
@@ -29,9 +29,34 @@ export const get = (route, options) => {
   }
 }
 
+export const template = (route, options, config = {}) => {
+  try {
+    const [baseTemplate, pageTemplate] = get(route, options, config)
+    const base = yaml.safeLoad(baseTemplate)
+    const page = apply(pageTemplate)
+
+    return {
+      result: {
+        ...base, 
+        ...page, 
+      },
+      baseTemplate,
+      pageTemplate,
+    }
+  } catch (e) {
+    console.error(e)
+    throw new Error(e)
+  }
+}
+
 export const render = (route, options) => {
+  const config = configBuilder()
   const [userPages] = options.pages
-  setGlobal({ route: route.replace(userPages, `/`).replace(/index\.exo|\.exo/, ``) })
+  
+  setGlobal({ 
+    route: route.replace(userPages, `/`).replace(/index\.exo|\.exo/, ``),
+    ...options,
+  })
 
   const { 
     loggedIn, 
@@ -41,14 +66,7 @@ export const render = (route, options) => {
   } = options
   
   const Dashboard = loggedIn ? require(`./dashboard`) : null
-
-  const [baseTemplate, pageTemplate] = get(route, options)
-
-  const base = yaml.safeLoad(baseTemplate)
-  const page = yaml.safeLoad(pageTemplate, {
-    schema: Dashboard ? Dashboard.schema() : schema({ set: true }),
-  })
-  const result = { ...base, ...page }
+  const { result, baseTemplate, pageTemplate } = template(route, options)
 
   const context = {}
   // eslint-disable-next-line prefer-const
@@ -84,7 +102,6 @@ export const render = (route, options) => {
     }
   })
 
-  const config = configBuilder()
   const { raw } = getGlobal()
   
   const pluginType = process.env.NODE_ENV && process.env.NODE_ENV === `development` ? `dev` : `live`
@@ -94,15 +111,19 @@ export const render = (route, options) => {
       ? config[pluginType].map((plugin) => `<script src="${plugin}"></script>`).join(``)
       : config[pluginType] ? `<script src="${config[pluginType]}"></script>` : ``}
     ${(config.plugins || [])
-      .filter(plug => {
-        try { require.resolve(plug) } 
-        catch { return false }
+      .filter((plug) => {
+        try { 
+          require.resolve(plug) 
+        } catch (e) { 
+          return false 
+        }
         return true
       })
       .map((plugin) => {
         const plug = require(plugin)
         return plug[pluginType] ? `<script src="${plug[pluginType]}"></script>` : ``
       })
+      .join(``)
     }
     ${Dashboard && Dashboard.set !== false ? `<script src="${Dashboard[pluginType]}"></script>` : ``}
     <script>
@@ -133,12 +154,4 @@ export const render = (route, options) => {
   `
 }
 
-export const hydrate = (route, options) => {
-  let markup = fs.readFileSync(route, `utf8`)
-  Object.keys(options).forEach((key) => {
-    if (options[key] !== Object(options[key])) {
-      markup = markup.replace(`{{${key}}}`, options[key])
-    }
-  })
-  return markup
-}
+export { default as hydrate } from './hydrate'

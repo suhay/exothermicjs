@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import yaml from 'js-yaml'
 import fetch from 'isomorphic-fetch'
 import queryString from 'query-string'
@@ -33,7 +33,7 @@ export default class Form extends Component {
       results,
     } = this.state
     return (
-      <Fragment>
+      <>
         <Formik
   //         initialValues={}
           onSubmit={(values, actions) => {
@@ -43,7 +43,7 @@ export default class Form extends Component {
               method: global.event.target.method || `post`,
             })
               .then(
-                response => response.text(),
+                (response) => response.text(),
                 () => this.setState({
                   results: values,
                 }),
@@ -91,7 +91,7 @@ export default class Form extends Component {
             {results}
           </div>
         )}
-      </Fragment>
+      </>
     )
   }
 }

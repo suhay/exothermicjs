@@ -6,7 +6,7 @@ import {
   Footer,
 } from '@exothermic/core/src/components/layout'
 
-export const MainYamlType = yaml => new yaml.Type(`!main`, {
+export const MainYamlType = (yaml) => new yaml.Type(`!main`, {
   kind: `mapping`,
   resolve(data) {
     return data !== null
@@ -24,7 +24,7 @@ export const MainYamlType = yaml => new yaml.Type(`!main`, {
   instanceOf: Main,
 })
 
-export const FooterYamlType = yaml => new yaml.Type(`!footer`, {
+export const FooterYamlType = (yaml) => new yaml.Type(`!footer`, {
   kind: `mapping`,
   resolve(data) {
     return data !== null
@@ -37,7 +37,7 @@ export const FooterYamlType = yaml => new yaml.Type(`!footer`, {
   instanceOf: Footer,
 })
 
-export const SectionYamlType = yaml => new yaml.Type(`!section`, {
+export const SectionYamlType = (yaml) => new yaml.Type(`!section`, {
   kind: `mapping`,
   resolve(data) {
     return data !== null && data.items !== null && data.id !== null && data.title !== null

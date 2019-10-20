@@ -15,7 +15,7 @@ const Container = ({ items: propItems }) => {
     <div>
       <SmoothContainer
         groupName="1"
-        getChildPayload={i => items[i]}
+        getChildPayload={(i) => items[i]}
         dragHandleSelector=".drag-handle"
         onDrop={onDrop}
       >

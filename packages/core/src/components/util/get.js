@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import yaml from 'js-yaml'
 import fetch from 'isomorphic-fetch'
 import fs from 'fs'
 import { setGlobal, useGlobal } from 'reactn'
 
 import Spinner from './spinner'
-import schema from '../../schema'
+import { apply } from '../../schema'
 import content from './content'
 
 const Get = ({ path }) => {
@@ -18,7 +17,7 @@ const Get = ({ path }) => {
       const rawYaml = fs.readFileSync(`${pagesPath}/${path}.exo`, `utf8`)
       raw[path] = rawYaml
       setRaw({ ...raw })
-      return yaml.safeLoad(rawYaml, { schema: schema() })
+      return apply(rawYaml)
     })()
     : null)
 
@@ -30,11 +29,9 @@ const Get = ({ path }) => {
     if (!cache) {
       setLoading(true)
       fetch(`/load/${path}`)
-        .then(response => response.text())
+        .then((response) => response.text())
         .then((text) => {
-          const yamlData = text.startsWith(`---`) ? yaml.safeLoad(text, {
-            schema: schema(),
-          }) : null
+          const yamlData = text.startsWith(`---`) ? apply(text) : null
   
           const newCache = {}
           newCache[path] = yamlData

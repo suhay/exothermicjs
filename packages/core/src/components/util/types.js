@@ -29,8 +29,8 @@ export const GetYamlType = new yaml.Type(`!get`, {
         text: dumpFragment(glob[props.path]),
       }),
     })
-      .then(response => response.text())
-      .then(text => console.log(text))
+      .then((response) => response.text())
+      .then((text) => console.log(text))
       .catch((error) => { throw error })
       
     return rtn

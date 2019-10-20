@@ -1,0 +1,18 @@
+---
+title: Blog
+page:
+- !header
+  class: container
+  items:
+  - !get fragments/nav
+- !main
+  class: container
+  items:
+  - !section
+    id: blog-sec
+    title: '# Blog listing'
+    class: row
+    items:
+    - !blog blog
+  
+

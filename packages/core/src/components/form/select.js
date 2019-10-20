@@ -44,7 +44,7 @@ export default class Select extends React.Component {
           onBlur={this.handleBlur}
           value={value}
         >
-          <option disabled value="" />
+          <option disabled value="">-- Select --</option>
           {options.map((option, i) => <option key={i} value={option.value}>{option.label}</option>)}
         </Field>
       </label>

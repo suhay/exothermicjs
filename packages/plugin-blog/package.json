@@ -1,0 +1,28 @@
+{
+  "name": "@exothermic/plugin-blog",
+  "version": "1.4.4",
+  "description": "Blog plugin for ExothermicJS",
+  "author": "Matt Suhay <matthew.suhay@gmail.com>",
+  "homepage": "https://github.com/suhay/exothermicjs#readme",
+  "license": "MIT",
+  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/suhay/exothermicjs.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/suhay/exothermicjs/issues"
+  },
+  "dependencies": {
+    "front-matter": "^3.0.2"
+  },
+  "peerDependencies": {
+    "@exothermic/core": "^1.4.0",
+    "react": "^16.8.6",
+    "reactn": "^2.1.7",
+    "isomorphic-fetch": "^2.2.1"
+  }
+}

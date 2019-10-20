@@ -1,7 +1,7 @@
 const path = require(`path`)
 const fs = require(`fs`)
 
-const dirs = fs.readdirSync(path.resolve(__dirname, `./packages`)).filter(dir => !dir.includes(`server-`))
+const dirs = fs.readdirSync(path.resolve(__dirname, `./packages`)).filter((dir) => !dir.includes(`server-`))
 
 module.exports = () => (
   {
@@ -19,7 +19,7 @@ module.exports = () => (
     },
     devtool: `source-map`,
     devServer: {
-      contentBase: dirs.map(dir => path.resolve(__dirname, path.join(`./packages`, `${dir}/dist`))),
+      contentBase: dirs.map((dir) => path.resolve(__dirname, path.join(`./packages`, `${dir}/dist`))),
       port: 8081,
     },
     watchOptions: {

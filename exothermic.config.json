@@ -1,1 +1,6 @@
-{}
+{
+  "plugins": [
+    "@exothermic/plugin-markdown",
+    "@exothermic/plugin-blog"
+  ]
+}

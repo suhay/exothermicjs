@@ -10,8 +10,7 @@ const Loader = ({
 }) => {
   const [data] = useGlobal(`data`)
   const [status] = useGlobal(`status`)
-  // eslint-disable-next-line no-unused-vars
-  const [global, setGlobal] = useGlobal()
+  const [, setGlobal] = useGlobal()
 
   const [localData, setData] = useState(propsData)
   

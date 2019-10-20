@@ -1,5 +1,3 @@
-require(`dotenv`).config()
-
 const express = require(`express`)
 const ensureLoggedIn = require(`connect-ensure-login`).ensureLoggedIn()
 const fs = require(`fs`)

@@ -25,10 +25,10 @@ const Upload = () => {
   return (
     <form onSubmit={handleUpload}>
       <div>
-        <input ref={ref => setUploadInput(ref)} type="file" />
+        <input ref={(ref) => setUploadInput(ref)} type="file" />
       </div>
       <div>
-        <input ref={ref => setFileName(ref)} type="text" placeholder="Enter the desired name of file" />
+        <input ref={(ref) => setFileName(ref)} type="text" placeholder="Enter the desired name of file" />
       </div>
       <br />
       <div>

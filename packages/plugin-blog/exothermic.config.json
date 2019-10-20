@@ -1,0 +1,4 @@
+{
+  "dev": "http://localhost:8081/exothermicjs-plugin-blog.js",
+  "live": "https://unpkg.com/@exothermic/plugin-blog/dist/exothermicjs-plugin-blog.js"
+}

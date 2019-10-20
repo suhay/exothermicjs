@@ -17,7 +17,7 @@ const Meta = ({ tags }) => {
     return { name: key(tag), content: val(tag) }
   })
 
-  return metaTags.map(item => (
+  return metaTags.map((item) => (
     <meta {...item} />
   ))
 }

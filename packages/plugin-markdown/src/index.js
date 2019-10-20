@@ -18,7 +18,7 @@ const Markdown = ({ path }) => {
 
   if (!data && !loading) {
     if (ssr) {
-      const initialData = fs.readFileSync(`${pagesPath}markdown/${path}.md`, `utf8`)
+      const initialData = fs.readFileSync(`${pagesPath}/markdown/${path}.md`, `utf8`)
       raw[path] = initialData
       setRaw({ ...raw })
       setData(initialData)
@@ -45,7 +45,7 @@ const Markdown = ({ path }) => {
     let unmounted = false
     if (!data && loading && !checkLocalCache) {
       fetch(`/load/pages/markdown/${path}.md`)
-        .then(response => response.text())
+        .then((response) => response.text())
         .then((text) => {
           localForage.setItem(path, text)
           if (!unmounted) {
@@ -70,7 +70,7 @@ const Markdown = ({ path }) => {
 
 export default Markdown
 
-export const Type = yaml => new yaml.Type(`!markdown`, {
+export const Type = (yaml) => new yaml.Type(`!markdown`, {
   kind: `scalar`,
   resolve(path) {
     return path !== null
@@ -87,7 +87,7 @@ export const Type = yaml => new yaml.Type(`!markdown`, {
     }
     localForage
       .getItem(props.path)
-      .then(text => fetch(`/admin/${props.path}`.replace(`//`, `/`), {
+      .then((text) => fetch(`/admin/${props.path}`.replace(`//`, `/`), {
         credentials: `same-origin`,
         method: `PATCH`,
         headers: {
@@ -97,8 +97,7 @@ export const Type = yaml => new yaml.Type(`!markdown`, {
           text,
         }),
       }))
-      .then(response => response.text())
-      .then(text => console.log(text))
+      .then((response) => response.text())
       .catch((error) => { throw error })
     return rtn
   },

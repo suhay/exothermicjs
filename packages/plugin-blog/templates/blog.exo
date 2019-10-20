@@ -1,0 +1,13 @@
+---
+title: Blog
+page:
+- !main
+  class: container
+  items:
+  - !section
+    id: blog-sec
+    title: '# Blog listing'
+    class: row
+    items:
+    - !blog blog
+  

@@ -71,7 +71,7 @@ module.exports = ({
       }),
       new webpack.IgnorePlugin(/^esprima$/, /js-yaml/),
       ...plugins,
-    ].filter(e => e),
+    ].filter((e) => e),
   }
 
   if (target !== `node`) {

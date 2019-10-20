@@ -21,7 +21,7 @@ const Link = ({ links }) => {
     return { href: val(tag), rel: key(tag) }
   })
 
-  return linkTags.map(item => (
+  return linkTags.map((item) => (
     <link {...item} />
   ))
 }

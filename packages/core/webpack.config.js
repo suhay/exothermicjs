@@ -99,6 +99,6 @@ module.exports = (env, options) => [
         'process.env.BROWSER': JSON.stringify(true),
       }),
       new webpack.IgnorePlugin(/^esprima$/, /js-yaml/),
-    ].filter(e => e),
+    ].filter((e) => e),
   },
 ]

@@ -3,6 +3,12 @@ import path from 'path'
 
 import { isBrowser } from './components/util'
 
+/**
+ * 
+ * @param {*} options 
+ * 
+ * @returns {Config} { plugins: [], dashboard: "", auth: "", dev: "", live: [] }
+ */
 const configBuilder = (options = {}) => {
   const { stringify } = options
   const def = {
@@ -16,7 +22,7 @@ const configBuilder = (options = {}) => {
   if (isBrowser && window.exothermic) {
     config = window.exothermic.config
   } else if (fs && typeof fs.readFileSync !== `undefined`) {
-    const base = require('@exothermic/core/exothermic.config')
+    const base = require(`@exothermic/core/exothermic.config`)
     const user = fs.existsSync(path.resolve(`exothermic.config.json`)) 
       ? JSON.parse(fs.readFileSync(path.resolve(`exothermic.config.json`), `utf8`)) 
       : {}

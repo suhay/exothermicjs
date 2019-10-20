@@ -16,7 +16,7 @@ const Checkbox = ({
               onChange={() => {
                 if (field.value && field.value.includes(value)) {
                   const nextValue = field.value.filter(
-                    val => val !== value
+                    (val) => val !== value
                   )
                   form.setFieldValue(name, nextValue)
                 } else {

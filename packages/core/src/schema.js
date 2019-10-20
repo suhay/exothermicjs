@@ -36,14 +36,17 @@ const schema = (options = {}) => {
     const conf = configBuilder()
     
     const plugins = isBrowser && window.exothermic
-      ? Object.values(window.exothermic.plugin || []).map(plugin => plugin.Type ? plugin.Type(yaml) : null).filter(plugin => plugin)
+      ? Object.values(window.exothermic.plugin || []).map((plugin) => plugin.Type ? plugin.Type(yaml) : null).filter((plugin) => plugin)
       : (conf.plugins || [])
-        .filter(plug => {
-          try { require.resolve(`${plug.replace(`@exothermic/`, `../../`)}/src`) } 
-          catch { return false }
+        .filter((plug) => {
+          try {
+            require.resolve(`${plug.replace(`@exothermic/`, `../../`)}/src`) 
+          } catch (e) {
+            return false 
+          }
           return true
         })
-        .map(plug => require(`${plug.replace(`@exothermic/`, `../../`)}/src`).Type(yaml))
+        .map((plug) => require(`${plug.replace(`@exothermic/`, `../../`)}/src`).Type(yaml))
 
     if (adds && Object.keys(adds).length > 0) {
       Object.keys(adds).forEach((key) => {
@@ -51,9 +54,9 @@ const schema = (options = {}) => {
       })
       // Override all Types with their addedPlugins replacers
       const addedPlusStandard = { ...Types, ...adds }
-      newSchema = yaml.Schema.create(Object.keys(addedPlusStandard || []).map(key => addedPlusStandard[key]).concat(plugins))
+      newSchema = yaml.Schema.create(Object.keys(addedPlusStandard || []).map((key) => addedPlusStandard[key]).concat(plugins))
     } else {
-      newSchema = yaml.Schema.create(Object.keys(Types || []).map(key => Types[key]).concat(plugins))
+      newSchema = yaml.Schema.create(Object.keys(Types || []).map((key) => Types[key]).concat(plugins))
     }
 
     setGlobal({ schema: newSchema })
@@ -63,4 +66,28 @@ const schema = (options = {}) => {
   return globalSchema
 }
 
-export default schema
+const apply = (data, opts = {}) => {
+  const { loggedIn } = getGlobal()
+
+  let Dashboard = null
+
+  if (loggedIn) {
+    if (isBrowser) {
+      Dashboard = window.exothermic.dashboard && window.exothermic.options.dashboard.trim().length > 0 ? window.exothermic.dashboard[window.exothermic.options.dashboard.trim()] : null
+    } else {
+      Dashboard = require(`./dashboard`)
+    }
+  }
+
+  if (Array.isArray(data)) {
+    return data.map((dat) => yaml.safeLoad(dat, {
+      schema: Dashboard ? Dashboard.schema(opts) : schema(opts),
+    }))
+  }
+
+  return yaml.safeLoad(data, {
+    schema: Dashboard ? Dashboard.schema(opts) : schema(opts),
+  })
+}
+
+export { schema as default, apply }

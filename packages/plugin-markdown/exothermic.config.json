@@ -1,4 +1,4 @@
 {
   "dev": "http://localhost:8081/exothermicjs-plugin-markdown.js",
-  "live": ""
+  "live": "https://unpkg.com/@exothermic/plugin-markdown/dist/exothermicjs-plugin-markdown.js"
 }

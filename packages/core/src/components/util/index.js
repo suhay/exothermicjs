@@ -12,7 +12,7 @@ export const dump = (data) => {
   return `---\n${yaml.dump({
     description,
     tags,
-    page: page.map(part => dumpTag(part)),
+    page: page.map((part) => dumpTag(part)),
   }).replace(/tag: '!(.*)'/g, `!$1`)}`
 }
 
@@ -29,7 +29,7 @@ export const dumpTag = (tag) => {
   }
 
   if (rtn.items) {
-    rtn.items = rtn.items.map(item => item._self ? dumpTag(item) : item)
+    rtn.items = rtn.items.map((item) => item._self ? dumpTag(item) : item)
   }
   if (rtn.content) {
     rtn.content = rtn.content._self ? dumpTag(rtn.content) : rtn.content
@@ -40,7 +40,7 @@ export const dumpTag = (tag) => {
 export const dumpFragment = (tag) => {
   if (tag.items) {
     return `---\n${yaml.dump({
-      items: tag.items.map(item => dumpTag(item)),
+      items: tag.items.map((item) => dumpTag(item)),
     }).replace(/tag: '!(.*)'/g, `!$1`)}`
   }
 

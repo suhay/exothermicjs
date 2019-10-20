@@ -16,7 +16,7 @@ description: 'This is a base ExothermicJS page'
 
 page: []
   
-# Internal tags used for relating content to eachother
+# Internal tags used for relating content to each other
 tags: []
 
 # Single string will load the value as the script's src.

@@ -55,7 +55,7 @@ export default class Editor extends Component {
     } = this.props
     const { value } = this.state
     return (
-      <Fragment>
+      <>
         {editingThis
           && (
           <div>
@@ -83,9 +83,8 @@ export default class Editor extends Component {
             <ReactMarkdown source={value} escapeHtml={false} renderers={{ root: Fragment }} />
             <button type="button" onClick={this.handleEdit}>edit</button>
           </div>
-          )
-        }
-      </Fragment>
+          )}
+      </>
     )
   }
 }

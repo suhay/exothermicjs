@@ -1,5 +1,7 @@
 require(`dotenv`).config()
 
+const fs = require(`fs`)
+
 const express = require(`express`)
 const path = require(`path`)
 const logger = require(`morgan`)
@@ -22,26 +24,34 @@ const indexRouter = require(`./routes/index`)
 const adminRouter = require(`./routes/admin`)
 const apiRouter = require(`./routes/api`)
 
+const configBuilder = require(`@exothermic/core/src/config`).default
+
 const app = express()
 
 delete process.env.BROWSER
 
 app.engine(`exo`, (filePath, options, callback) => {
-  const theseOptions = options || {}
-  theseOptions.pages = theseOptions.pages || app.get(`views`)
-  theseOptions.hydrate = theseOptions.hydrate || false
-  theseOptions.loggedIn = theseOptions.loggedIn || process.env.LOGGED_IN === `true` || false
-  theseOptions.ssrOnly = theseOptions.ssrOnly || process.env.SSR_ONLY === `true` || false
-  const page = theseOptions.get
-    ? get(filePath, theseOptions)
-    : theseOptions.hydrate
-      ? hydrate(filePath, theseOptions)
-      : render(filePath, theseOptions)
+  const opts = options || {}
+  opts.pages = opts.pages || app.get(`views`)
+  opts.hydrate = opts.hydrate || false
+  opts.loggedIn = opts.loggedIn || process.env.LOGGED_IN === `true` || false
+  opts.ssrOnly = opts.ssrOnly || process.env.SSR_ONLY === `true` || false
+  const page = opts.get
+    ? get(filePath, opts)
+    : opts.hydrate
+      ? hydrate(filePath, opts)
+      : render(filePath, opts)
   return callback(null, page)
 })
-app.set(`views`, [`${path.resolve(`./${process.env.PUBLIC}`)}/pages/` || `./public/pages/`, `${path.resolve(`./node_modules/@exothermic/core/templates`)}`])
 
+const defaultViews = [
+  `${process.env.PUBLIC ? path.resolve(`./${process.env.PUBLIC}/pages/`) : `./public/pages/`}`, 
+  `${path.resolve(`./node_modules/@exothermic/core/templates`)}`,
+]
+
+app.set(`views`, defaultViews)
 app.set(`view engine`, `exo`)
+
 app.use(helmet())
 app.use(logger(`dev`))
 app.use(bodyParser.json())
@@ -80,12 +90,41 @@ passport.deserializeUser((user, done) => {
 app.use(passport.initialize())
 app.use(passport.session())
 
-app.use(express.static(`${path.resolve(`./${process.env.PUBLIC}`)}/static` || `./public/static`))
+app.use(express.static(`${process.env.PUBLIC ? path.resolve(`./${process.env.PUBLIC}/static`) : `./public/static`}`))
 app.use(fileUpload())
 
-if (app.get(`env`) === `development`) {
+if (process.env.NODE_ENV === `development`) {
   app.use(`/sockjs-node`, require(`./routes/sockjs-node`))
 }
+
+app.use((req, res, next) => {
+  const { plugins, dashboard, auth: configAuth } = configBuilder()
+
+  const pluginPaths = plugins.reduce((list, value) => {
+    const pluginPath = path.resolve(`./node_modules/${value}/templates`)
+    if (fs.existsSync(pluginPath)) {
+      list.push(pluginPath)
+    }
+    return list
+  }, [])
+
+  if (dashboard && dashboard.length > 0) {
+    const dashboardPath = path.resolve(`./node_modules/${dashboard}/templates`)
+    if (fs.existsSync(dashboardPath)) {
+      pluginPaths.push(dashboardPath)
+    }
+  }
+
+  if (configAuth && configAuth.length > 0) {
+    const authPath = path.resolve(`./node_modules/${configAuth}/templates`)
+    if (fs.existsSync(authPath)) {
+      pluginPaths.push(authPath)
+    }
+  }
+
+  app.set(`views`, [...defaultViews, ...pluginPaths])
+  next()
+})
 
 app.use(`/admin`, adminRouter)
 app.use(`/api`, apiRouter)
@@ -97,7 +136,7 @@ app.use((req, res, next) => {
   next(err)
 })
 
-if (app.get(`env`) === `development`) {
+if (process.env.NODE_ENV === `development`) {
   app.use((err, req, res) => {
     res.status(err.status || 500)
     console.error(err)
