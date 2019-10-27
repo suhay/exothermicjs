@@ -1,7 +1,6 @@
 require(`dotenv`).config()
 
 const fs = require(`fs`)
-
 const express = require(`express`)
 const path = require(`path`)
 const logger = require(`morgan`)
@@ -13,20 +12,91 @@ const bodyParser = require(`body-parser`)
 const cookieParser = require(`cookie-parser`)
 const session = require(`express-session`)
 const MemoryStore = require(`memorystore`)(session)
+const NodeCache = require(`node-cache`)
 
 const { get, hydrate, render } = process.env.NODE_ENV === `production` 
   ? require(`@exothermic/core/dist/server.exothermic`) 
   : require(`@exothermic/core/src/server`)
 const auth = require(`@exothermic/core/src/auth`)
+const configBuilder = require(`@exothermic/core/src/config`).default
 
 const users = require(`./users`)
 const indexRouter = require(`./routes/index`)
 const adminRouter = require(`./routes/admin`)
 const apiRouter = require(`./routes/api`)
 
-const configBuilder = require(`@exothermic/core/src/config`).default
-
 const app = express()
+const cache = new NodeCache({
+  deleteOnExpire: false,
+})
+
+const defaultViews = [
+  `${process.env.PUBLIC ? path.resolve(`./${process.env.PUBLIC}/pages/`) : `./public/pages/`}`, 
+  `${path.resolve(`./node_modules/@exothermic/core/templates`)}`,
+]
+
+const cachePluginPaths = () => {
+  const { plugins, dashboard, auth: configAuth } = configBuilder()
+
+  const pluginPaths = plugins
+    .filter((value) => {
+      const pluginPath = path.resolve(`./node_modules/${value}/templates`)
+      return fs.existsSync(pluginPath)
+    })
+    .map((value) => path.resolve(`./node_modules/${value}/templates`))
+
+  if (dashboard && dashboard.length > 0) {
+    const dashboardPath = path.resolve(`./node_modules/${dashboard}/templates`)
+    if (fs.existsSync(dashboardPath)) {
+      pluginPaths.push(dashboardPath)
+    }
+  }
+
+  if (configAuth && configAuth.length > 0) {
+    const authPath = path.resolve(`./node_modules/${configAuth}/templates`)
+    if (fs.existsSync(authPath)) {
+      pluginPaths.push(authPath)
+    }
+  }
+
+  return pluginPaths
+}
+
+const cachePluginMiddleware = () => {
+  const router = express.Router()
+  const { plugins, dashboard, auth: configAuth } = configBuilder()
+
+  plugins.forEach((value) => {
+    if (fs.existsSync(path.resolve(`./node_modules/${value}/__express.js`))) {
+      require(path.resolve(`./node_modules/${value}/__express`))(router)
+    }
+  })
+
+  if (fs.existsSync(path.resolve(`./node_modules/${dashboard}/__express.js`))) {
+    require(path.resolve(`./node_modules/${dashboard}/__express`))(router)
+  }
+
+  if (fs.existsSync(path.resolve(`./node_modules/${configAuth}/__express.js`))) {
+    require(path.resolve(`./node_modules/${configAuth}/__express`))(router)
+  }
+
+  return router
+}
+
+cache.on(`expired`, (key) => {
+  switch (key) {
+    case `pluginPaths`:
+      console.log(`...rebuilding pluginPaths cache...`)
+      cache.set(key, cachePluginPaths(), 60)
+      break
+    case `pluginMiddleware`:
+      console.log(`...rebuilding pluginMiddleware cache...`)
+      cache.set(key, cachePluginMiddleware(), 60)
+      break
+    default:
+      break
+  }
+})
 
 delete process.env.BROWSER
 
@@ -44,16 +114,11 @@ app.engine(`exo`, (filePath, options, callback) => {
   return callback(null, page)
 })
 
-const defaultViews = [
-  `${process.env.PUBLIC ? path.resolve(`./${process.env.PUBLIC}/pages/`) : `./public/pages/`}`, 
-  `${path.resolve(`./node_modules/@exothermic/core/templates`)}`,
-]
-
 app.set(`views`, defaultViews)
 app.set(`view engine`, `exo`)
 
 app.use(helmet())
-app.use(logger(`dev`))
+app.use(logger(process.env.NODE_ENV === `production` ? `common` : `dev`))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cookieParser())
@@ -97,33 +162,24 @@ if (process.env.NODE_ENV === `development`) {
   app.use(`/sockjs-node`, require(`./routes/sockjs-node`))
 }
 
+cache.set(`pluginPaths`, cachePluginPaths(), 60)
+cache.set(`pluginMiddleware`, cachePluginMiddleware(), 60)
+
 app.use((req, res, next) => {
-  const { plugins, dashboard, auth: configAuth } = configBuilder()
-
-  const pluginPaths = plugins.reduce((list, value) => {
-    const pluginPath = path.resolve(`./node_modules/${value}/templates`)
-    if (fs.existsSync(pluginPath)) {
-      list.push(pluginPath)
-    }
-    return list
-  }, [])
-
-  if (dashboard && dashboard.length > 0) {
-    const dashboardPath = path.resolve(`./node_modules/${dashboard}/templates`)
-    if (fs.existsSync(dashboardPath)) {
-      pluginPaths.push(dashboardPath)
-    }
+  const pluginPaths = cache.get(`pluginPaths`)
+  if (typeof pluginPaths !== `undefined`) {
+    app.set(`views`, [...defaultViews, ...pluginPaths])
   }
-
-  if (configAuth && configAuth.length > 0) {
-    const authPath = path.resolve(`./node_modules/${configAuth}/templates`)
-    if (fs.existsSync(authPath)) {
-      pluginPaths.push(authPath)
-    }
-  }
-
-  app.set(`views`, [...defaultViews, ...pluginPaths])
   next()
+})
+
+app.use((req, res, next) => {
+  const pluginMiddleware = cache.get(`pluginMiddleware`)
+  if (typeof pluginMiddleware !== `undefined`) {
+    pluginMiddleware(req, res, next)
+  } else {
+    next()
+  }
 })
 
 app.use(`/admin`, adminRouter)

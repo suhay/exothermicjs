@@ -1,6 +1,10 @@
 ---
 title: '{{title}}'
 page:
+- !header
+  class: container
+  items:
+  - !get fragments/nav
 - !main
   class: container
   items:

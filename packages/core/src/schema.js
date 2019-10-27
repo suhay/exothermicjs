@@ -36,7 +36,10 @@ const schema = (options = {}) => {
     const conf = configBuilder()
     
     const plugins = isBrowser && window.exothermic
-      ? Object.values(window.exothermic.plugin || []).map((plugin) => plugin.Type ? plugin.Type(yaml) : null).filter((plugin) => plugin)
+      ? Object.values(window.exothermic.plugin || [])
+        .map((plugin) => plugin.Type ? plugin.Type(yaml) : null)
+        .flat()
+        .filter((plugin) => plugin)
       : (conf.plugins || [])
         .filter((plug) => {
           try {
@@ -47,6 +50,7 @@ const schema = (options = {}) => {
           return true
         })
         .map((plug) => require(`${plug.replace(`@exothermic/`, `../../`)}/src`).Type(yaml))
+        .flat()
 
     if (adds && Object.keys(adds).length > 0) {
       Object.keys(adds).forEach((key) => {
@@ -66,6 +70,12 @@ const schema = (options = {}) => {
   return globalSchema
 }
 
+/**
+ * Applies the current Exothermic schema to the template string, or array of template strings, and returns a React Component, or array of Components
+ * @param {string|[string]} data Template string, or array of template strings
+ * @param {{}} opts Options to apply to the template parser
+ * @returns {React.Component|[React.Component]} React Component, or array of Components depending on `data`
+ */
 const apply = (data, opts = {}) => {
   const { loggedIn } = getGlobal()
 

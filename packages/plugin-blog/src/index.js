@@ -1,19 +1,22 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useGlobal } from 'reactn'
 import fs from 'fs'
 import path from 'path'
 import fm from 'front-matter'
+import fetch from 'isomorphic-fetch'
 
 import hydrate from '@exothermic/core/src/hydrate'
 import { apply } from '@exothermic/core/src/schema'
 import content from '@exothermic/core/src/components/util/content'
 
-const Blog = ({ basePath = ``, slug = null }) => {
+import BlogArticle from './article'
+
+const Blog = ({ basePath = `` }) => {
   const [raw] = useGlobal(`raw`)
   const [pagesPath] = useGlobal(`pagesPath`)
 
-  // const [loading, setLoading] = useState(true)
-  const [data, setData] = useState(raw && slug ? raw[slug] : null)
+  const [, setLoading] = useState(true)
+  const [data, setData] = useState(raw && basePath ? raw[basePath] : null)
 
   const ssr = fs && typeof fs.readFileSync === `function`
 
@@ -32,67 +35,51 @@ const Blog = ({ basePath = ``, slug = null }) => {
 
     const markup = hydrate(`_blog-list.exo`, { items: blogArticles }, [path.resolve(`./node_modules/@exothermic/plugin-blog/templates`)])
     setData(apply(markup))
-
-    // fetch(`http://localhost:${process.env.PORT}/load/blog-list.exo`, {
-    //   method: 'POST',
-    //   body: JSON.stringify(blogArticles),
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    // })
-    //   .then((response) => response.text())
-    //   .then((text) => {
-    //     setData(text)
-    //     setLoading(false)
-    //   })
   }
 
-  // useEffect(() => {
-  //   let unmounted = false
-  //   if (!data && loading) {
-  //     fetch(`/load/pages/markdown/${path}.md`)
-  //       .then((response) => response.text())
-  //       .then((text) => {
-  //         if (!unmounted) {
-  //           setData(text)
-  //           setLoading(false)
-  //         }
-  //       })
-  //   }
-  //   return () => {
-  //     unmounted = true      
-  //   }
-  // }, [data, loading])
+  useEffect(() => {
+    fetch(`/load/_blog-list.exo`, {
+      method: `POST`,
+      body: JSON.stringify({}),
+      headers: {
+        'Content-Type': `application/json`,
+      },
+    })
+      .then((response) => response.text())
+      .then((text) => {
+        setData(text)
+        setLoading(false)
+      })
+  }, [data, setLoading])
 
-  if (!slug) {
-    return (
-      <ul>
-        {data && data.map((dat, i) => <li key={i}>{content(dat)}</li>)}
-      </ul>
-    )
-  } // Load the slug
   return (
-    <div>Single post</div>
+    <ul>
+      {data && data.map((dat, i) => <li key={i}>{content(dat)}</li>)}
+    </ul>
   )
 }
 
 export default Blog
 
-export const Type = (yaml) => new yaml.Type(`!blog`, {
-  kind: `scalar`,
-  construct(data) {
-    if (typeof data === `string`) {
+export const Type = (yaml) => [
+  new yaml.Type(`!blog`, {
+    kind: `scalar`,
+    construct(data) {
       return (
         <Blog basePath={data} key={data} />
       )
-    } if (Object.keys(data).length > 0) {
+    },
+    instanceOf: Blog,
+  }),
+  new yaml.Type(`!blog-article`, {
+    kind: `mapping`,
+    construct({ basePath, slug }) {
       return (
-        <Blog {...data} key={data.slug} />
+        <BlogArticle basePath={basePath} slug={slug} key={slug} />
       )
-    }
-    return <></>
-  },
-  instanceOf: Blog,
-})
+    },
+    instanceOf: BlogArticle,
+  }),
+]
 
 export * from '../exothermic.config'

@@ -1,6 +1,8 @@
 const path = require(`path`)
 const webpack = require(`webpack`)
 
+const resolve = require(`./webpack.resolve`)
+
 module.exports = (env, options) => [
   {
     mode: `production`,
@@ -39,6 +41,7 @@ module.exports = (env, options) => [
         use: [`style-loader`, `css-loader`],
       }],
     },
+    resolve,
   },
   {
     target: `web`,
@@ -100,5 +103,6 @@ module.exports = (env, options) => [
       }),
       new webpack.IgnorePlugin(/^esprima$/, /js-yaml/),
     ].filter((e) => e),
+    resolve,
   },
 ]

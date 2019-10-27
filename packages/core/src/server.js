@@ -14,7 +14,13 @@ import Base from './components/base'
 import configBuilder from './config'
 import { apply } from './schema'
 
-export const get = (route, options) => {
+/**
+ * From the given route, returns a tuple of the discovered base and route templates (user defined taking preference).
+ * @param {string} route The page or template route to find
+ * @param {{}} options A collection of options to apply
+ * @returns {[string,string]} [baseTemplate, pageTemplate]
+ */
+export const get = (route, options = {}) => {
   try {
     const [userPages, defaultPages] = options.pages
     const baseTemplate = fs.existsSync(path.resolve(`${userPages}/base.exo`))
@@ -29,9 +35,23 @@ export const get = (route, options) => {
   }
 }
 
-export const template = (route, options, config = {}) => {
+/**
+ * From the given route, returns a collection containing the parsed template, base template, and route template
+ * @param {string} route The page or template route to find
+ * @param {*} options A collection of options to apply
+ * @returns {{result:React.Component, baseTemplate: string, pageTemplate: string}}
+ */
+export const template = (route, options = {}) => {
   try {
-    const [baseTemplate, pageTemplate] = get(route, options, config)
+    let [baseTemplate, pageTemplate] = get(route, options)
+
+    Object.keys(options).forEach((key) => {
+      if (options[key] !== Object(options[key])) {
+        baseTemplate = baseTemplate.replace(`{{${key}}}`, options[key])
+        pageTemplate = pageTemplate.replace(`{{${key}}}`, options[key])
+      }
+    })
+
     const base = yaml.safeLoad(baseTemplate)
     const page = apply(pageTemplate)
 
@@ -49,7 +69,13 @@ export const template = (route, options, config = {}) => {
   }
 }
 
-export const render = (route, options) => {
+/**
+ * Returns a fully formed HTML page
+ * @param {string} route The page or template route to find
+ * @param {{}} options A collection of options to apply
+ * @returns {string} Page HTML
+ */
+export const render = (route, options = {}) => {
   const config = configBuilder()
   const [userPages] = options.pages
   
@@ -67,10 +93,9 @@ export const render = (route, options) => {
   
   const Dashboard = loggedIn ? require(`./dashboard`) : null
   const { result, baseTemplate, pageTemplate } = template(route, options)
-
   const context = {}
-  // eslint-disable-next-line prefer-const
-  let { html, css } = StyleSheetServer 
+
+  const { html, css } = StyleSheetServer 
     ? StyleSheetServer.renderStatic(() => ReactServer.renderToString(loggedIn && Dashboard && Dashboard.set !== false
       ? (
         <StaticRouter location={route} context={context}>
@@ -96,14 +121,7 @@ export const render = (route, options) => {
     <Head data={result} />
   )
 
-  Object.keys(options).forEach((key) => {
-    if (options[key] !== Object(options[key])) {
-      html = html.replace(`{{${key}}}`, options[key])
-    }
-  })
-
   const { raw } = getGlobal()
-  
   const pluginType = process.env.NODE_ENV && process.env.NODE_ENV === `development` ? `dev` : `live`
 
   const footerScripts = `
