@@ -1,0 +1,13 @@
+---
+description: Our blog roll
+page:
+  - !header
+    class: container
+    items:
+      - !get fragments/nav
+  - !main
+    class: container
+    items:
+      - !blog-roll
+        title: '# The blog roll!!'
+        class: row

@@ -1,0 +1,38 @@
+---
+description: And the description.
+tags: []
+page:
+  - !header
+    class: container
+    items:
+      - !get fragments/nav
+  - !main
+    class: container
+    items:
+      # - !blog-roll
+      #   title: '# The blog roll!!'
+      #   class: row
+      - !section
+        title: '# Who'
+        class: row
+        items:
+          - !col
+            content:
+              !markdown index-one
+      - !section
+        title: '# What'
+        items:
+          - !get fragments/portfolio
+      - !section
+        title: '# More What'
+        items:
+          - !get fragments/projects
+  - !footer
+    class: container
+    items:
+      - !section
+        class: row
+        id: exo
+        title: '# Where - End of file!!'
+        items:
+          - !get fragments/about

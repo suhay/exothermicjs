@@ -1,0 +1,17 @@
+---
+title: Test page
+page:
+  - !header
+    class: container
+    items:
+    - !get 'fragments/nav'
+  - !main
+    class: container
+    items:
+    - !section
+      title: '# Test page'
+      class: row
+      items:
+      - !col
+        content: 'weeeee'
+  
