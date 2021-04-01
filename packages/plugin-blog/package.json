@@ -1,6 +1,6 @@
 {
   "name": "@exothermic/plugin-blog",
-  "version": "2.0.0-alpha.1",
+  "version": "2.0.0-beta.0",
   "description": "ExothermicJS Plugin | Blog",
   "repository": {
     "type": "git",
@@ -18,7 +18,6 @@
   ],
   "homepage": "https://github.com/suhay/exothermicjs#readme",
   "license": "MIT",
-  "dependencies": {},
   "devDependencies": {
     "@babel/cli": "^7.12.13",
     "@babel/core": "^7.12.13",
