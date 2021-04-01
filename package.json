@@ -15,7 +15,7 @@
     "clean": "rimraf packages/*/dist",
     "reset": "rimraf packages/*/node_modules && yarn clean && rm -rf node_modules",
     "test": "NODE_ENV=test jest --no-cache",
-    "publish": "npm run publish:version && npm run publish:push",
+    "publish": "yarn publish:version && yarn publish:push",
     "publish:version": "lerna version --no-push --yes",
     "publish:push": "lerna publish from-git --yes",
     "publish:git": "git push --follow-tags",
