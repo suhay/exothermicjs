@@ -13,7 +13,7 @@ export const useConfig = (): Config => {
     const { config: storedConfig } = store
 
     if (storedConfig) {
-      setConfig(config)
+      setConfig(storedConfig)
     } else {
       fetch('/exothermic.config.json')
         .then((resp) => resp.json())

@@ -5,3 +5,5 @@ export const register = {
     BlogRollYamlType,
   },
 }
+
+export { BlogRoll } from './components/blog-roll'

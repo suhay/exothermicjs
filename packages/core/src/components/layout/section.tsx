@@ -11,7 +11,7 @@ export const Section = ({
   items,
   content,
 }: PageFragment) => (
-  <section className={classProps ?? 'row'} id={id}>
+  <section className={classProps ?? ''} id={id}>
     {title && <ReactMarkdown source={title} renderers={{ root: Fragment }} />}
     <Content content={content} />
     {items}

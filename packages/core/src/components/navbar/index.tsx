@@ -19,3 +19,5 @@ export const Navbar = ({ items }: NavbarProps) => (
     </ul>
   </nav>
 )
+
+export { Link } from './link'

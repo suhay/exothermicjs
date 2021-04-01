@@ -9,9 +9,9 @@ page:
   - !main
     class: container
     items:
-      # - !blog-roll
-      #   title: '# The blog roll!!'
-      #   class: row
+      - !blog-roll
+        title: '# The blog roll!!'
+        class: row
       - !section
         title: '# Who'
         class: row

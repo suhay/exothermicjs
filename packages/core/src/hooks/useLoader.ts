@@ -23,14 +23,16 @@ export const useLoader = (route: string): LoaderFile => {
   useEffect(() => {
     setStatus('LOADING')
 
-    const selectedRoute = buildRoute(route, store.config?.path)
+    if (route) {
+      const selectedRoute = buildRoute(route, store.config?.path)
 
-    fetch(selectedRoute)
-      .then((resp) => resp.text())
-      .then((file) => {
-        setData(file)
-        setStatus('LOADED')
-      })
+      fetch(selectedRoute)
+        .then((resp) => resp.text())
+        .then((file) => {
+          setData(file)
+          setStatus('LOADED')
+        })
+    }
   }, [route])
 
   return {

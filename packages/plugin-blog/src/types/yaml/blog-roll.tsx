@@ -1,5 +1,5 @@
-import '@exothermic/core'
-import { guid } from 'components/util/index'
+// @ts-ignore
+import { guid } from '@exothermic/core'
 
 import { BlogRoll } from '../../components/blog-roll'
 

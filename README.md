@@ -6,6 +6,46 @@
 
 Create dynamic page content using YAML and Markdown without lengthy build times.
 
+## Breaking changes from v1 to v2
+
+### 1. SSR is gone, don't ask me to bring it back
+
+This means you will need to have a base `index.html` file in your document root that looks like this:
+
+```html
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>ExothermicJS Page</title>
+</head>
+<body>
+  <div id="__exothermic"></div>
+  <script src="exothermic-core.js"></script>
+</body>
+</html>
+```
+
+### 2. We must now shop some configurations client side
+
+You will need to include an `exothermic.config.json` file in your document root that has this, as a minimum:
+
+```json
+{
+  "path": "/pages"
+}
+```
+
+"path" is the relative path to where all your pages live.
+
+### 3. To lower confusion, templates are now separated from pages
+
+What this mean is you'll need to move your `base.exo` file into its own directory `/templates` off the document root.
+
+### 4. Move everything out of static into the document root
+
+I didn't like it anyway.
+
 ## Installation
 
 ```
@@ -29,8 +69,8 @@ Folder structure
          └── js/
 ```
 
-Place all page templates within the ```public/pages``` directory. the ```fragments``` directory is meant to hold template files that are to be included within a page (not full pages, but fragments of one).
-The package comes with a pre built ```base.exo``` and ```error.exo``` templates. Either of these can be overwritten by adding like named files to your ```pages``` directory, but they are required
+Place all page templates within the `public/pages` directory. the `fragments` directory is meant to hold template files that are to be included within a page (not full pages, but fragments of one).
+The package comes with a pre built `base.exo` and `error.exo` templates. Either of these can be overwritten by adding like named files to your `pages` directory, but they are required
 for the app to work so that's why we included them by default.
 
 Exothermic comes pre-packaged with its own Express server. To start the server, simply run:

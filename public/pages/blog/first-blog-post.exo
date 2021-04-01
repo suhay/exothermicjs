@@ -1,0 +1,15 @@
+---
+page:
+  - !header
+    class: container
+    items:
+      - !get fragments/nav
+  - !main
+    class: container
+    items:
+      - !section
+        class: row
+        items:
+          - !col
+            content:
+              !markdown blog/first-blog-post

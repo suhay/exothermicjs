@@ -5,7 +5,7 @@
       "es6",
       "DOM"
     ],
-    "module": "es6",
+    "module": "commonjs",
     "target": "es5",
     "sourceMap": true,
     "jsx": "react-jsx",
@@ -15,6 +15,7 @@
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": false,
     "esModuleInterop": true,
+    "outDir": "./out",
     "rootDir": "./src",
     "declaration": true,
     "emitDeclarationOnly": true

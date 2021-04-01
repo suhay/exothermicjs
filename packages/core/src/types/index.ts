@@ -4,6 +4,7 @@ type Plugin = {
   resolve: string
   url: string
   loaded: boolean
+  options: any
 }
 
 export type MetaFragment = {

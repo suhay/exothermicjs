@@ -1,7 +1,12 @@
 import { Fragment, ReactNode } from 'react'
 import ReactMarkdown from 'react-markdown'
+import gfm from 'remark-gfm'
 
-export const Content = ({ content }: { content: ReactNode | string }) => {
+type Props = {
+  content: ReactNode | string
+}
+
+export const Content = ({ content }: Props) => {
   if (typeof content === 'string') {
     const options: string[] = []
     let appliedContent = content
@@ -9,7 +14,8 @@ export const Content = ({ content }: { content: ReactNode | string }) => {
       const regex = new RegExp(`{{${key}}}`, 'gi')
       appliedContent = appliedContent.replace(regex, options[key])
     })
-    return <ReactMarkdown source={appliedContent} renderers={{ root: Fragment }} />
+    // eslint-disable-next-line react/no-children-prop
+    return <ReactMarkdown plugins={[gfm]} children={appliedContent} renderers={{ root: Fragment }} />
   }
 
   return <>{content}</>
