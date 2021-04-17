@@ -2,11 +2,11 @@ import { Fragment, ReactNode } from 'react'
 import ReactMarkdown from 'react-markdown'
 import gfm from 'remark-gfm'
 
-type Props = {
+export type ContentProps = {
   content: ReactNode | string
 }
 
-export const Content = ({ content }: Props) => {
+export const Content = ({ content }: ContentProps) => {
   if (typeof content === 'string') {
     const options: string[] = []
     let appliedContent = content

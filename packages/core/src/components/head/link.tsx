@@ -1,4 +1,4 @@
-import { guid } from '../util'
+import { guid } from '../utils'
 
 export const linkTags = (links: any[]) => {
   if (!links.length) {

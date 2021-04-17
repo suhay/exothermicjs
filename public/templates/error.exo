@@ -1,8 +1,0 @@
----
-page:
-  - !header
-    items:
-    - !section
-      id: message
-      content: |
-        {{message}}

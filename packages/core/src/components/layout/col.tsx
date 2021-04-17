@@ -1,9 +1,9 @@
-import { PageFragment } from '../../types'
-import { Content } from '../util/content'
+import { PageFragmentType } from '../../types'
+import { Content } from '../utils/content'
 
 export const Col = ({
   class: classProps, content, items, id,
-}: PageFragment) => {
+}: PageFragmentType) => {
   const classes = classProps?.includes('col') ? classProps : `col ${classProps}`
 
   return (

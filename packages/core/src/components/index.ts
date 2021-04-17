@@ -1,3 +1,3 @@
 export { Base } from './base'
 export * from './navbar'
-export * from './util'
+export * from './utils'

@@ -1,5 +1,5 @@
 import {
-  useLoader, useConfig, useState, useEffect, Link, Content,
+  useLoader, useConfig, Link, Content, useState, useEffect,
 } from '@exothermic/core'
 
 type Props = {
@@ -33,7 +33,7 @@ export const BlogRoll = ({ title }: Props) => {
       <ul>
         {dates.map((date) => (
           <li key={manifest[date].filename}>
-            <Link to={`${pluginPath}/${manifest[date].filename}`}>{manifest[date].title}</Link>
+            <Link to={`/${pluginPath}/${manifest[date].filename}`}>{manifest[date].title}</Link>
           </li>
         ))}
       </ul>

@@ -1,4 +1,4 @@
-import { guid } from '../util'
+import { guid } from '../utils'
 
 export const scriptTags = (scripts: any[]) => {
   if (!scripts.length) {

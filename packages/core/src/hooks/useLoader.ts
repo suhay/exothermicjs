@@ -1,15 +1,16 @@
 import { useContext, useEffect, useState } from 'react'
 
 import { state } from '../contexts/store'
+import { Config } from '../types'
 
-type LoaderFile = {
+export type LoaderFile = {
   data: string;
   status: 'LOADING' | 'LOADED'
 }
 
-const buildRoute = (route: string, pagePath?: string) => {
+const buildRoute = (route: string, config: Config) => {
   if (!route.startsWith('/')) {
-    return `${pagePath ?? '/pages'}/${route}`.replace(/\/\/+/, '/')
+    return `${config.basePath ?? ''}${config.pagePath ?? '/pages'}/${route}`.replace(/\/\/+/, '/')
   }
 
   return route.replace(/\/\/+/, '/')
@@ -24,7 +25,7 @@ export const useLoader = (route: string): LoaderFile => {
     setStatus('LOADING')
 
     if (route) {
-      const selectedRoute = buildRoute(route, store.config?.path)
+      const selectedRoute = buildRoute(route, store.config)
 
       fetch(selectedRoute)
         .then((resp) => resp.text())

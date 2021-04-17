@@ -1,6 +1,7 @@
 ---
 items:
 - !navbar
+  id: top-nav
   items:
   - 'Home': '/'
   - "Nav test": '/test'

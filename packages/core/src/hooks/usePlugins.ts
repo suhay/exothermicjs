@@ -2,20 +2,12 @@ import { useContext, useEffect, useState } from 'react'
 import yaml from 'js-yaml'
 
 import { state } from '../contexts/store'
-import { debug } from '../components/util';
+import { debug } from '../components/utils';
+import { retryPromise } from '../utils'
 
-const retry = (): Promise<void> => new Promise((resolve, reject) => {
-  setTimeout(reject.bind(null), 500);
-})
-
-const load = (resolve) => {
+const load = ({ resolve }) => {
   const loadedPlugin = window[resolve]
-
-  if (loadedPlugin) {
-    return Promise.resolve(loadedPlugin)
-  }
-
-  return Promise.reject()
+  return loadedPlugin ? Promise.resolve(loadedPlugin) : Promise.reject()
 }
 
 export const usePlugins = (route: string) => {
@@ -33,19 +25,9 @@ export const usePlugins = (route: string) => {
 
   useEffect(() => {
     if (store.config && !route.includes('base.exo')) {
-      const reg = store.config?.plugins
+      const reg = (store.config.plugins ?? [])
         ?.filter((plugin) => !store.cache[plugin.resolve])
-        ?.map((plugin) => load(plugin.resolve)
-          .catch(retry)
-          .catch(() => load(plugin.resolve))
-          .catch(retry)
-          .catch(() => load(plugin.resolve))
-          .catch(retry)
-          .catch(() => load(plugin.resolve))
-          .catch(retry)
-          .catch(() => load(plugin.resolve))
-          .catch(retry)
-          .catch(() => load(plugin.resolve))
+        ?.map((plugin) => retryPromise({ fn: load }, { resolve: plugin.resolve })
           .then((loadedPlugin) => {
             dispatch({ type: 'APPEND_CACHE', key: plugin.resolve, value: 'loaded' })
             processPlugin(loadedPlugin)
@@ -63,5 +45,9 @@ export const usePlugins = (route: string) => {
 
   return {
     pluginRegistryLoaded,
+    plugins: {
+      tags: store.pluginTags,
+      routes: store.pluginRoutes,
+    },
   }
 }

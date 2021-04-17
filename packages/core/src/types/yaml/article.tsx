@@ -1,16 +1,17 @@
 import yaml from 'js-yaml'
 
-import { Article } from '../../components/article'
-import { guid } from '../../components/util'
-import { PageFragment } from '..'
+// import { Article } from '../../components/article'
+import { PageFragment as Article } from '../../components/utils/fragment'
+import { guid } from '../../components/utils'
+import { PageFragmentType } from '..'
 
 export const ArticleYamlType = new yaml.Type('!article', {
   kind: 'mapping',
-  resolve(data: PageFragment) {
+  resolve(data: PageFragmentType) {
     return !!data
   },
-  construct(data: PageFragment) {
-    return <Article {...data} key={guid()} />
+  construct(data: PageFragmentType) {
+    return <Article as="article" {...data} key={guid()} />
   },
   instanceOf: Article,
 })

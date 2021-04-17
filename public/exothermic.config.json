@@ -1,5 +1,5 @@
 {
-  "path": "/pages",
+  "pagePath": "/pages",
   "plugins": [
     {
       "resolve": "@exothermic/plugin-blog",

@@ -1,0 +1,7 @@
+---
+page:
+  - !header
+    class: container
+    id: navigation
+    items:
+      - !get fragments/nav

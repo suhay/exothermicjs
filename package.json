@@ -5,7 +5,7 @@
     "tsc": "lerna run tsc --stream",
     "watch": "lerna run watch --stream --parallel",
     "dev": "lerna run clean && lerna run build:dev && run-p watch serve",
-    "serve": "live-server public --wait=1000 --mount=/:packages/core/dist --mount=/:packages/plugin-blog/dist",
+    "serve": "live-server public --wait=1000 --mount=/:packages/core/dist --mount=/:packages/plugin-blog/dist --entry-file=/public/index.html",
     "serve:demo": "live-server demo --wait=1000 --mount=/:packages/core/dist --mount=/:packages/plugin-blog/dist",
     "debug:test": "NODE_ENV=test node --inspect-brk node_modules/.bin/jest --runInBand --no-cache",
     "build": "yarn clean && lerna run build -- --colors --hide-modules",
@@ -25,7 +25,7 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.19.0",
     "@typescript-eslint/parser": "^4.19.0",
-    "eslint": "^5.16.0",
+    "eslint": "^7.22.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-import-resolver-typescript": "^2.4.0",
     "eslint-plugin-import": "^2.22.1",
@@ -33,7 +33,8 @@
     "eslint-plugin-react": "^7.21.5",
     "lerna": "^3.22.1",
     "live-server": "^1.2.1",
-    "npm-run-all": "^4.1.5"
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^3.0.2"
   },
   "workspaces": [
     "packages/*"
@@ -42,7 +43,13 @@
   "version": "2.0.0",
   "resolutions": {
     "**/react": "^17.0.1",
-    "**/react-dom": "^17.0.1"
+    "**/react-dom": "^17.0.1",
+    "**/eslint": "^7.22.0",
+    "**/rimraf": "^3.0.2"
   },
-  "name": "exothermicjs"
+  "name": "exothermicjs",
+  "dependencies": {
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  }
 }

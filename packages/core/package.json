@@ -17,7 +17,7 @@
     "front end"
   ],
   "main": "./dist/exothermic-core.js",
-  "types": "./dist/exothermic__core.d.ts",
+  "types": "./exothermic__core.d.ts",
   "files": [
     "dist"
   ],
@@ -37,7 +37,7 @@
     "@types/js-yaml": "^4.0.0",
     "@types/node": "^14.14.25",
     "@types/react": "^17.0.1",
-    "@types/react-dom": "^17.0.0",
+    "@types/react-dom": "^17.0.1",
     "@types/react-router-dom": "^5.1.7",
     "babel-loader": "^8.2.2",
     "eslint": "^7.22.0",

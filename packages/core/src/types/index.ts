@@ -13,7 +13,7 @@ export type MetaFragment = {
   attrs?: Record<string, string>
 }
 
-export interface PageFragment {
+export interface PageFragmentType {
   class?: string
   id?: string
   items?: ReactNode[]
@@ -21,6 +21,7 @@ export interface PageFragment {
   tags?: string[]
   slug?: string
   title?: string
+  as?: any
 }
 
 export interface HeadFragment {
@@ -31,12 +32,14 @@ export interface HeadFragment {
   title?: string
 }
 
-export interface Template extends PageFragment, HeadFragment {
+export interface Template extends PageFragmentType, HeadFragment {
   page: ReactNode[]
   scripts: string[]
+  templates?: string[]
 }
 
 export type Config = {
-  path: string
+  pagePath: string
+  basePath?: string
   plugins?: Plugin[]
 }

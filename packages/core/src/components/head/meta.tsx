@@ -1,5 +1,5 @@
 import { MetaFragment } from '../../types'
-import { guid } from '../util'
+import { guid } from '../utils'
 
 export const Meta = ({
   name,
@@ -35,11 +35,7 @@ export const Meta = ({
 }
 
 export const metaTags = (tags: object[]) => {
-  if (!tags.length) {
-    return []
-  }
-
-  const metas = tags.reduce<any[]>((acc, tag) => {
+  const metas = (tags || []).reduce<any[]>((acc, tag) => {
     const keys = Object.keys(tag)
 
     if (keys.length > 1 || keys.includes('charSet')) {

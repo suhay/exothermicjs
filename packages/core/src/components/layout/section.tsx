@@ -1,8 +1,8 @@
 import { Fragment } from 'react'
 import ReactMarkdown from 'react-markdown'
 
-import { PageFragment } from '../../types'
-import { Content } from '../util/content'
+import { PageFragmentType } from '../../types'
+import { Content } from '../utils/content'
 
 export const Section = ({
   class: classProps,
@@ -10,7 +10,7 @@ export const Section = ({
   id,
   items,
   content,
-}: PageFragment) => (
+}: PageFragmentType) => (
   <section className={classProps ?? ''} id={id}>
     {title && <ReactMarkdown source={title} renderers={{ root: Fragment }} />}
     <Content content={content} />

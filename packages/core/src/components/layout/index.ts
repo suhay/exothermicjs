@@ -1,5 +1,2 @@
 export { Col } from './col'
-export { Footer } from './footer'
-export { Header } from './header'
-export { Main } from './main'
 export { Section } from './section'

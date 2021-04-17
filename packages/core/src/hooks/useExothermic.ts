@@ -6,43 +6,12 @@ import yaml from 'js-yaml'
 import { Template } from '../types'
 import { state } from '../contexts/store'
 import { usePlugins } from './usePlugins'
-import { debug } from '../components/util'
+import { debug } from '../components/utils'
 import { YamlTypes } from '../types/yaml'
 
 type ExothermicFile = {
-  data: Template;
+  data?: Template
   status: 'LOADING' | 'LOADED'
-}
-
-const buildTemplate = (
-  template: string,
-  schema: yaml.Schema,
-): Template => {
-  try {
-    // @ts-ignore
-    debug(`building template with ${schema.explicit.length}`)
-    return yaml.load(template, {
-      schema,
-    }) as Template
-  } catch (err) {
-    debug(err)
-  }
-
-  return undefined
-}
-
-const buildRoute = (route: string, pagePath?: string) => {
-  const selectedRoute = route.endsWith('/')
-    ? `${route}index`
-    : route
-
-  if (selectedRoute.includes('.exo')) {
-    return `/templates/${selectedRoute}`.replace(/\/\/+/, '/')
-  } if (!selectedRoute.includes('.')) {
-    return `${pagePath ?? '/pages'}/${selectedRoute}.exo`.replace(/\/\/+/, '/')
-  }
-
-  return selectedRoute.replace(/\/\/+/, '/')
 }
 
 export const useExothermic = (route: string): ExothermicFile => {
@@ -59,34 +28,71 @@ export const useExothermic = (route: string): ExothermicFile => {
     }
   })
 
-  useEffect(() => {
+  const getRoute = (fromRoute: string) => {
+    const baselessRoute = fromRoute.replace(store.config.basePath, '')
+    const selectedRoute = baselessRoute.endsWith('/')
+      ? `${baselessRoute}index`
+      : baselessRoute
+
+    if (selectedRoute.endsWith('.exo')) {
+      return `${store.config.basePath ?? ''}/templates/${selectedRoute}`.replace(/\/\/+/, '/')
+    }
+
+    return `${store.config.basePath ?? ''}${store.config.pagePath ?? '/pages'}/${selectedRoute}.exo`.replace(/\/\/+/, '/')
+  }
+
+  const buildTemplate = (
+    templateRoute: string,
+  ): Promise<Template> => new Promise<string>((resolve) => {
+    const selectedRoute = getRoute(templateRoute)
+    debug(`building route: ${selectedRoute}`)
+
+    if (store.cache[selectedRoute]) {
+      debug(`cache hit: ${selectedRoute}`)
+      resolve(store.cache[selectedRoute])
+    }
+
+    debug(`cache miss: ${selectedRoute}`)
     setStatus('LOADING')
-    const { config, schema, cache } = store
+    fetch(selectedRoute)
+      .then((resp) => resp.text())
+      .then((fetchedTemplate) => {
+        dispatch({ type: 'APPEND_CACHE', key: selectedRoute, value: fetchedTemplate })
+        resolve(fetchedTemplate)
+      })
+  })
+    .then((template) => {
+      // @ts-ignore
+      debug(`building template with ${store.schema.explicit.length} registered tags`)
+      const builtTemplate = yaml.load(template, {
+        schema: store.schema,
+      }) as Template
+
+      if (builtTemplate.templates?.length) {
+        return Promise.all(builtTemplate.templates.map((parentTemplate) => buildTemplate(parentTemplate)))
+          .then((builtParentTemplates) => builtParentTemplates.reduce((acc, parent) => ({
+            ...acc,
+            page: [
+              ...parent.page,
+              ...acc.page,
+            ],
+          }), builtTemplate))
+      }
+
+      return Promise.resolve(builtTemplate)
+    })
+
+  useEffect(() => {
+    const { config, schema } = store
 
     if (route && config && schema && pluginRegistryLoaded) {
-      const selectedRoute = buildRoute(route, config?.path)
-      debug(`loading route: ${selectedRoute}`)
-
-      if (cache[selectedRoute]) {
-        debug(`cache hit: ${selectedRoute}`)
-        const cachedData = cache[selectedRoute]
-        const template = buildTemplate(cachedData, schema)
-        setData(template)
-        setStatus('LOADED')
-      } else if (config) {
-        debug(`cache miss: ${selectedRoute}`)
-        fetch(selectedRoute)
-          .then((resp) => resp.text())
-          .then((template) => {
-            dispatch({ type: 'APPEND_CACHE', key: selectedRoute, value: template })
-            return template
-          })
-          .then((template) => {
-            const builtTemplate = buildTemplate(template, schema)
-            setData(builtTemplate)
-            setStatus('LOADED')
-          })
-      }
+      buildTemplate(route)
+        .then((builtTemplate) => {
+          setData(builtTemplate)
+          setStatus('LOADED')
+        })
+    } else {
+      setStatus('LOADING')
     }
   }, [route, store.config, store.schema, pluginRegistryLoaded])
 

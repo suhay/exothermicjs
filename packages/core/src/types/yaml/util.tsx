@@ -1,8 +1,7 @@
 import yaml from 'js-yaml'
 
-import { guid } from '../../components/util'
-import { Get } from '../../components/util/get'
-import { Markdown } from '../../components/util/markdown'
+import { Get } from '../../components/utils/get'
+import { Markdown } from '../../components/utils/markdown'
 
 export const GetYamlType = new yaml.Type('!get', {
   kind: 'scalar',
@@ -11,7 +10,7 @@ export const GetYamlType = new yaml.Type('!get', {
   },
   // eslint-disable-next-line no-undef
   construct(path = '/'): JSX.Element {
-    return <Get path={path} key={guid()} />
+    return <Get path={path} key={path} />
   },
   instanceOf: Get,
 })

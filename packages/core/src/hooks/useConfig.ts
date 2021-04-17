@@ -12,9 +12,7 @@ export const useConfig = (): Config => {
   useEffect(() => {
     const { config: storedConfig } = store
 
-    if (storedConfig) {
-      setConfig(storedConfig)
-    } else {
+    if (!storedConfig) {
       fetch('/exothermic.config.json')
         .then((resp) => resp.json())
         .then((file) => {
@@ -24,5 +22,5 @@ export const useConfig = (): Config => {
     }
   }, [])
 
-  return config
+  return store.config ?? config
 }

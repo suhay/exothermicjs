@@ -18,7 +18,7 @@ export type Store = {
   baseTemplate?: Template
   pageTemplate?: Template
   schema?: yaml.Schema
-  cache: object
+  cache: Record<string, string>
   pluginTags: object
   pluginRoutes: object
 }
