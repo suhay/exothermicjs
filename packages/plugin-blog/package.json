@@ -1,6 +1,6 @@
 {
   "name": "@exothermic/plugin-blog",
-  "version": "2.0.0-beta.1",
+  "version": "2.0.0-beta.2",
   "description": "ExothermicJS Plugin | Blog",
   "repository": {
     "type": "git",
@@ -25,7 +25,7 @@
     "@babel/preset-env": "^7.12.13",
     "@babel/preset-react": "^7.12.13",
     "@babel/preset-typescript": "^7.12.13",
-    "@exothermic/core": "^2.0.0-beta.1",
+    "@exothermic/core": "^2.0.0-beta.2",
     "@types/jest": "^26.0.20",
     "@types/react": "^17.0.1",
     "@types/react-dom": "^17.0.1",
