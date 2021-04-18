@@ -29,7 +29,8 @@ export const useExothermic = (route: string): ExothermicFile => {
   })
 
   const getRoute = (fromRoute: string) => {
-    const baselessRoute = fromRoute.replace(store.config.basePath, '')
+    const cleanup = new RegExp(`${store.config.basePath}|.html`)
+    const baselessRoute = fromRoute.replace(cleanup, '')
     const selectedRoute = baselessRoute.endsWith('/')
       ? `${baselessRoute}index`
       : baselessRoute
