@@ -26,7 +26,7 @@ This means you will need to have a base `index.html` file in your document root 
 </html>
 ```
 
-### 2. We must now shop some configurations client side
+### 2. We must now ship some configurations client side
 
 You will need to include an `exothermic.config.json` file in your document root that has this, as a minimum:
 

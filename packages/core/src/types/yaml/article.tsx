@@ -1,6 +1,5 @@
 import yaml from 'js-yaml'
 
-// import { Article } from '../../components/article'
 import { PageFragment as Article } from '../../components/utils/fragment'
 import { guid } from '../../components/utils'
 import { PageFragmentType } from '..'

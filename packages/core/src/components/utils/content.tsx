@@ -15,7 +15,7 @@ export const Content = ({ content }: ContentProps) => {
       appliedContent = appliedContent.replace(regex, options[key])
     })
     // eslint-disable-next-line react/no-children-prop
-    return <ReactMarkdown plugins={[gfm]} children={appliedContent} renderers={{ root: Fragment }} />
+    return <ReactMarkdown plugins={[gfm]} allowDangerousHtml children={appliedContent} renderers={{ root: Fragment }} />
   }
 
   return <>{content}</>

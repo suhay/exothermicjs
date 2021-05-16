@@ -7,6 +7,7 @@ import {
   MainYamlType,
   HeaderYamlType,
   FooterYamlType,
+  FragmentYamlType,
 } from './layout'
 import { ArticleYamlType } from './article'
 import { GetYamlType, MarkdownYamlType } from './util'
@@ -21,4 +22,5 @@ export const YamlTypes: Record<string, yaml.Type> = {
   ArticleYamlType,
   GetYamlType,
   MarkdownYamlType,
+  FragmentYamlType,
 }

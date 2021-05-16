@@ -1,5 +1,6 @@
 import { Fragment } from 'react'
 import ReactMarkdown from 'react-markdown'
+import gfm from 'remark-gfm'
 
 import { useLoader } from '../../hooks'
 
@@ -19,6 +20,7 @@ export const Markdown = ({ path }: Props) => {
   }
 
   return (
-    <ReactMarkdown source={data} escapeHtml={false} renderers={{ root: Fragment }} />
+    // eslint-disable-next-line react/no-children-prop
+    <ReactMarkdown plugins={[gfm]} allowDangerousHtml children={data} renderers={{ root: Fragment }} />
   )
 }

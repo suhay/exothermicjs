@@ -59,3 +59,14 @@ export const HeaderYamlType = new yaml.Type('!header', {
     return <PageFragment as="header" class="container" {...data} key={id ?? guid()} />
   },
 })
+
+export const FragmentYamlType = new yaml.Type('!fragment', {
+  kind: 'mapping',
+  resolve(data: PageFragmentType) {
+    return !!data
+  },
+  construct(data: PageFragmentType) {
+    const { id } = data
+    return <PageFragment as="div" {...data} key={id ?? guid()} />
+  },
+})
