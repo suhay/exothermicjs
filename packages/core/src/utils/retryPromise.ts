@@ -10,7 +10,7 @@ export const retryPromise = ({
   fn,
   retriesLeft = 5,
   interval = 500,
-}: Props, args: any) => fn(args)
+}: Props, args: any): Promise<any> => fn(args)
   .catch((error) => {
     if (retriesLeft === 0) {
       throw new Error(error)

@@ -1,4 +1,4 @@
-import { useExothermic } from '../../hooks'
+import { useExothermic } from '../../hooks/useExothermic'
 import { Content } from './content'
 // import { Spinner } from './spinner'
 

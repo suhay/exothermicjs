@@ -1,12 +1,13 @@
 import { useContext, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 
-import { useExothermic } from '../hooks'
+import { useExothermic, usePlugins } from '../hooks'
 import { state } from '../contexts/store'
 
 export const Page = () => {
   const location = useLocation()
-  const { data, status } = useExothermic(location.pathname)
+  usePlugins()
+  const { data, status } = useExothermic(location.pathname, true)
   const { store: { pageTemplate: template, baseTemplate: base }, dispatch } = useContext(state)
 
   useEffect(() => {
@@ -19,7 +20,7 @@ export const Page = () => {
     }
   }, [data])
 
-  if (status === 'LOADING' || !template) {
+  if (status === 'LOADING' || (status === 'LOADED' && !template)) {
     return <>Loading...</>
   }
 

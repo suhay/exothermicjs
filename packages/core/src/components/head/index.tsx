@@ -11,28 +11,41 @@ import { HeadFragment } from '../../types'
 export const Head = () => {
   const { store: { baseTemplate: base, pageTemplate: page } } = useContext(state)
   const [headData, setHeadData] = useState<HeadFragment>()
+  const [meta, setMeta] = useState<JSX.Element[]>()
+  const [description, setDescription] = useState<string>('New ExothermicJS page description')
+  const [title, setTitle] = useState<string>('New ExothermicJS Page')
+  const [links, setLinks] = useState<JSX.Element[]>()
+  const [headScripts, setHeadScripts] = useState<JSX.Element[]>()
 
   useEffect(() => {
-    setHeadData({
-      ...base,
-      ...page,
-    })
+    if (page && base) {
+      setHeadData({
+        ...base,
+        ...page,
+      })
+    }
   }, [base, page])
+
+  useEffect(() => {
+    if (headData) {
+      setMeta(metaTags(headData.meta))
+      setDescription(headData.description)
+      setTitle(headData.title)
+      setLinks(linkTags(headData.links))
+      setHeadScripts(scriptTags(headData.headScripts))
+    }
+  }, [headData])
 
   if (!base || !headData) return <></>
 
-  const {
-    meta, description, title, links, headScripts,
-  } = headData
-
   return (
     <Helmet>
-      {metaTags(meta)}
+      {meta}
       <meta name="description" content={description} />
       <meta name="generator" content={`ExothermicJS ${version}`} />
       <title>{title}</title>
-      {linkTags(links)}
-      {scriptTags(headScripts)}
+      {links}
+      {headScripts}
     </Helmet>
   )
 }

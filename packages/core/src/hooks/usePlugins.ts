@@ -10,9 +10,9 @@ const load = ({ resolve }) => {
   return loadedPlugin ? Promise.resolve(loadedPlugin) : Promise.reject()
 }
 
-export const usePlugins = (route: string) => {
+export const usePlugins = () => {
   const { store, dispatch } = useContext(state)
-  const [pluginRegistryLoaded, setPluginRegistryLoaded] = useState(false)
+  const [pluginRegistryLoaded, setPluginRegistryLoaded] = useState(store.pluginRegistryLoaded)
 
   const processPlugin = (loadedPlugin) => {
     if (loadedPlugin.register?.tags) {
@@ -24,7 +24,7 @@ export const usePlugins = (route: string) => {
   }
 
   useEffect(() => {
-    if (store.config && !route.includes('base.exo')) {
+    if (store.config) {
       const reg = (store.config.plugins ?? [])
         ?.filter((plugin) => !store.cache[plugin.resolve])
         ?.map((plugin) => retryPromise({ fn: load }, { resolve: plugin.resolve })
@@ -36,10 +36,9 @@ export const usePlugins = (route: string) => {
 
       Promise.all(reg)
         .then(() => {
+          dispatch({ type: 'SET_PLUGINS_LOADED' })
           setPluginRegistryLoaded(true)
         })
-    } else {
-      setPluginRegistryLoaded(true)
     }
   }, [store.config])
 

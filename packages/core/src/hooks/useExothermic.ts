@@ -5,7 +5,6 @@ import yaml from 'js-yaml'
 
 import { Template } from '../types'
 import { state } from '../contexts/store'
-import { usePlugins } from './usePlugins'
 import { debug } from '../components/utils'
 import { YamlTypes } from '../types/yaml'
 
@@ -14,11 +13,18 @@ type ExothermicFile = {
   status: 'LOADING' | 'LOADED'
 }
 
-export const useExothermic = (route: string): ExothermicFile => {
+export const useExothermic = (route: string, isBaseTemplate?: boolean): ExothermicFile => {
   const { store, dispatch } = useContext(state)
   const [data, setData] = useState<Template>()
   const [status, setStatus] = useState<'LOADING' | 'LOADED'>('LOADING')
-  const { pluginRegistryLoaded } = usePlugins(route)
+  const [currentRoute, setCurrentRoute] = useState(route)
+
+  useEffect(() => {
+    if (currentRoute !== route) {
+      setStatus('LOADING')
+      setCurrentRoute(route)
+    }
+  }, [route])
 
   useEffect(() => {
     if (!store.schema) {
@@ -42,60 +48,67 @@ export const useExothermic = (route: string): ExothermicFile => {
     return `${store.config.basePath ?? ''}${store.config.pagePath ?? '/pages'}/${selectedRoute}.exo`.replace(/\/\/+/, '/')
   }
 
-  const buildTemplate = (
-    templateRoute: string,
-  ): Promise<Template> => new Promise<string>((resolve) => {
-    const selectedRoute = getRoute(templateRoute)
-    debug(`building route: ${selectedRoute}`)
-
+  const checkCache = (selectedRoute: string) => {
     if (store.cache[selectedRoute]) {
       debug(`cache hit: ${selectedRoute}`)
-      resolve(store.cache[selectedRoute])
+      return Promise.resolve(store.cache[selectedRoute])
     }
 
     debug(`cache miss: ${selectedRoute}`)
     setStatus('LOADING')
-    fetch(selectedRoute)
+
+    return fetch(selectedRoute)
       .then((resp) => resp.text())
       .then((fetchedTemplate) => {
         dispatch({ type: 'APPEND_CACHE', key: selectedRoute, value: fetchedTemplate })
-        resolve(fetchedTemplate)
+        return fetchedTemplate
       })
-  })
-    .then((template) => {
-      // @ts-ignore
-      debug(`building template with ${store.schema.explicit.length} registered tags`)
-      const builtTemplate = yaml.load(template, {
-        schema: store.schema,
-      }) as Template
+  }
 
-      if (builtTemplate.templates?.length) {
-        return Promise.all(builtTemplate.templates.map((parentTemplate) => buildTemplate(parentTemplate)))
-          .then((builtParentTemplates) => builtParentTemplates.reduce((acc, parent) => ({
-            ...acc,
-            page: [
-              ...parent.page,
-              ...acc.page,
-            ],
-          }), builtTemplate))
-      }
+  const buildTemplate = (
+    templateRoute: string,
+  ): Promise<Template> => {
+    const selectedRoute = getRoute(templateRoute)
+    debug(`building route: ${selectedRoute}`)
 
-      return Promise.resolve(builtTemplate)
-    })
+    return checkCache(selectedRoute)
+      .then((template) => {
+        // @ts-ignore
+        debug(`building template with ${store.schema.explicit.length} registered tags`)
+        const builtTemplate = yaml.load(template, {
+          schema: store.schema,
+        }) as Template
+
+        if (builtTemplate.templates?.length) {
+          return Promise.all(builtTemplate.templates.map((parentTemplate) => buildTemplate(parentTemplate)))
+            .then((builtParentTemplates) => builtParentTemplates.reduce((acc, parent) => ({
+              ...acc,
+              page: [
+                ...parent.page,
+                ...acc.page,
+              ],
+            }), builtTemplate))
+        }
+
+        return Promise.resolve(builtTemplate)
+      })
+  }
 
   useEffect(() => {
-    const { config, schema } = store
+    const { config, schema, pluginRegistryLoaded } = store
 
-    if (route && config && schema && pluginRegistryLoaded) {
+    if (route && config && schema && (pluginRegistryLoaded || isBaseTemplate) && status === 'LOADING') {
       buildTemplate(route)
-        .then((builtTemplate) => {
+        .then((builtTemplate: Template) => {
           setData(builtTemplate)
+          debug(`LOADED: ${route}`)
           setStatus('LOADED')
         })
-    } else {
-      setStatus('LOADING')
+        .catch((err) => {
+          debug(`error: ${err.message}, trying ${route} again`)
+        })
     }
-  }, [route, store.config, store.schema, pluginRegistryLoaded])
+  }, [route, store.config, store.schema, store.pluginRegistryLoaded, status])
 
   return {
     data,

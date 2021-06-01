@@ -34,7 +34,7 @@ export const Meta = ({
   )
 }
 
-export const metaTags = (tags: object[]) => {
+export const metaTags = (tags: MetaFragment[]) => {
   const metas = (tags || []).reduce<any[]>((acc, tag) => {
     const keys = Object.keys(tag)
 

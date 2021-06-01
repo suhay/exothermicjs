@@ -8,6 +8,4 @@ page:
   - !main
     class: container
     items:
-      - !blog-roll
-        title: '# The blog roll!!'
-        class: row
+      - !get fragments/blog-roll

@@ -12,6 +12,7 @@ export type Action =
   | { type: 'SET_SCHEMA'; schema: yaml.Schema }
   | { type: 'APPEND_CACHE'; key: string; value: string }
   | { type: 'REGISTER_TAG'; key: string; value: yaml.Type }
+  | { type: 'SET_PLUGINS_LOADED' }
 
 export type Store = {
   config?: Config
@@ -21,6 +22,7 @@ export type Store = {
   cache: Record<string, string>
   pluginTags: object
   pluginRoutes: object
+  pluginRegistryLoaded: boolean
 }
 
 export type State = {
@@ -33,6 +35,7 @@ const initialState: State = {
     cache: {},
     pluginTags: {},
     pluginRoutes: {},
+    pluginRegistryLoaded: false,
   },
 }
 
@@ -59,7 +62,6 @@ const StateProvider = ({ children }: Props) => {
       case 'SET_BASE':
         const pluginUrls = (prevState.store.config?.plugins ?? []).map((plugin) => plugin.url)
         const headScripts = (action.baseTemplate.headScripts ?? []).concat(pluginUrls)
-
         return {
           ...prevState,
           store: {
@@ -107,6 +109,14 @@ const StateProvider = ({ children }: Props) => {
               [action.key]: action.value,
             },
             schema: prevState.store.schema?.extend(action.value),
+          },
+        }
+      case 'SET_PLUGINS_LOADED':
+        return {
+          ...prevState,
+          store: {
+            ...prevState.store,
+            pluginRegistryLoaded: true,
           },
         }
       default:

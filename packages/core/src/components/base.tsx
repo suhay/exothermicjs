@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 import { useExothermic, useConfig } from '../hooks'
 import { Page } from './page'
@@ -8,11 +8,18 @@ import { state } from '../contexts/store'
 export const Base = () => {
   const { dispatch } = useContext(state)
   const config = useConfig()
-  const { data: base, status } = useExothermic('base.exo')
+  const { data: base = null, status } = useExothermic('base.exo', true)
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    if (base && config) {
+    if (ready) {
       dispatch({ type: 'SET_BASE', baseTemplate: base })
+    }
+  }, [ready])
+
+  useEffect(() => {
+    if (base && config && !ready) {
+      setReady(true)
     }
   }, [base, config])
 

@@ -1,6 +1,6 @@
 import { guid } from '../utils'
 
-export const scriptTags = (scripts: any[]) => {
+export const scriptTags = (scripts: string[]) => {
   if (!scripts.length) {
     return []
   }

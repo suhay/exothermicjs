@@ -6,7 +6,9 @@ import { guid } from '../../components/utils'
 export const NavbarYamlType = new yaml.Type('!navbar', {
   kind: 'mapping',
   construct(data = {}) {
-    const { id } = data
+    const {
+      id = guid(), class: classProps, listClass, toggler = false,
+    } = data
     const items = data.items.reduce((acc, item) => {
       Object.entries<string>(item)
         .forEach(([label, to]) => acc.push({
@@ -17,7 +19,7 @@ export const NavbarYamlType = new yaml.Type('!navbar', {
       return acc
     }, [])
 
-    return <Navbar items={items} key={id ?? guid()} />
+    return <Navbar items={items} classProps={classProps} listClass={listClass} id={id} key={id} toggler={toggler} />
   },
   instanceOf: Navbar,
 })
