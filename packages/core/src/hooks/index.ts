@@ -1,5 +1,6 @@
-// @ts-ignore
-export * from 'react'
+import React from 'react'
+
+export const { useState, useEffect } = React
 
 export { useConfig } from './useConfig'
 export { useExothermic } from './useExothermic'

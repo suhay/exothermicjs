@@ -1,4 +1,6 @@
-import { DependencyList, Dispatch, EffectCallback, SetStateAction } from 'react'
+import {
+  DependencyList, Dispatch, EffectCallback, SetStateAction,
+} from 'react'
 
 import { LoaderFile } from './src/hooks/useLoader'
 import { LinkProps } from './src/components/navbar/link'
@@ -20,9 +22,14 @@ declare module '@exothermic/core' {
    */
   const useConfig: () => Config
 
+  /**
+   * @version 2.0.0-beta.0
+   */
   const Content: (props: ContentProps) => JSX.Element
 
   const Link: (props: LinkProps) => JSX.Element
+
+  const guid: () => string
 
   function useState<S = undefined>(): [S | undefined, Dispatch<SetStateAction<S | undefined>>]
   function useEffect(effect: EffectCallback, deps?: DependencyList): void;

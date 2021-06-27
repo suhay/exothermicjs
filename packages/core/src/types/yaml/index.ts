@@ -2,15 +2,16 @@ import yaml from 'js-yaml'
 
 import { NavbarYamlType } from './navbar'
 import {
-  SectionYamlType,
-  ColYamlType,
   MainYamlType,
   HeaderYamlType,
   FooterYamlType,
   FragmentYamlType,
 } from './layout'
 import { ArticleYamlType } from './article'
-import { GetYamlType, MarkdownYamlType } from './util'
+import { MarkdownYamlType } from './markdown'
+import { GetYamlType } from './get'
+import { ColYamlType } from './col'
+import { SectionYamlType } from './section'
 
 export const YamlTypes: Record<string, yaml.Type> = {
   NavbarYamlType,

@@ -1,7 +1,10 @@
 import {
-  useLoader, useConfig, Link, Content, useState, useEffect,
+  useLoader, useConfig, Content, useState, useEffect,
 } from '@exothermic/core'
-import { DateTime } from 'luxon'
+
+import {
+  showAbstract, showAuthor, showDate, showImage, showTags, showTitle,
+} from './utils'
 
 type Props = {
   title: string
@@ -37,33 +40,12 @@ export const BlogRoll = ({ title, class: classProps, options = [] }: Props) => {
     return <>Loading...</>
   }
 
-  const showImage = (image, date) => (image ? <img key={`${date}-image`} className="blog-image" src={image.src} alt={image.alt ?? ''} /> : null)
-
-  const showTags = (tags, date) => (tags?.length ? tags.map((tag) => <span className="blog-tag" key={`${date}-${tag}`}>{tag}</span>) : null)
-
-  const showDate = (date) => (date ? <span className="blog-date" key={date}>{DateTime.fromISO(date).toLocaleString(DateTime.DATE_MED)}</span> : null)
-
-  const showTitle = (linkTitle, linkUrl) => (linkTitle && linkUrl ? <Link key={linkUrl} to={linkUrl}>{linkTitle}</Link> : null)
-
-  const showAbstract = (abstract, date) => (abstract ? <p key={`${date}-abstract`} className="blog-abstract">{abstract}</p> : null)
-
-  const showAuthor = (author, date) => (author
-    ? (
-      <div key={`${date}-${author.name}`}>
-        <span className="blog-author-image">{author.image}</span>
-        <span className="blog-author">{author.name}</span>
-        <span className="blog-author-subtitle">{author.subtitle}</span>
-      </div>
-    ) : null)
-
   const article = (date: string) => {
     if (options.length) {
       return options.map((option) => {
         const key = typeof option === 'string' ? option : '';
 
         switch (key) {
-          case 'image':
-            return showImage(manifest[date].image, date)
           case 'tags':
             return showTags(manifest[date].tags, date)
           case 'date':
@@ -89,7 +71,10 @@ export const BlogRoll = ({ title, class: classProps, options = [] }: Props) => {
       <ul>
         {dates.sort((a, b) => parseInt(b, 10) - parseInt(a, 10)).map((date) => (
           <li key={manifest[date].filename}>
-            {article(date)}
+            {options.includes('image') && showImage(manifest[date].image, date)}
+            <div className="article-meta">
+              {article(date)}
+            </div>
           </li>
         ))}
       </ul>

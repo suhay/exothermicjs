@@ -1,0 +1,29 @@
+{
+  "name": "@exothermic/validator",
+  "version": "2.0.0-beta.3",
+  "description": ".exo yaml validator for ExothermicJS",
+  "author": "Matt Suhay <matthew.suhay@gmail.com>",
+  "homepage": "https://github.com/suhay/exothermicjs#readme",
+  "license": "MIT",
+  "main": "lib/validator.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/suhay/exothermicjs.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/suhay/exothermicjs/issues"
+  },
+  "devDependencies": {
+    "yaml-schema-validator": "^1.2.2"
+  }
+}

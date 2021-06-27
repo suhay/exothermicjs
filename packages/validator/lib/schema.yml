@@ -1,0 +1,119 @@
+---
+globalAttributes: &globalAttributes
+  accessKey:
+    type: string
+  class:
+    type: string
+  contenteditable:
+    type: boolean
+  data-*:
+    type: string
+  dir:
+    type: string
+  draggable:
+    type: boolean
+  hidden:
+    type: boolean
+  id:
+    type: string
+  lang:
+    type: string
+  spellcheck:
+    type: string
+  style:
+    type: string
+  tabindex:
+    type: number
+  title:
+    type: string
+  translate:
+    type: boolean
+
+metaAttributes:
+  << : *globalAttributes
+  charSet: 
+    type: string
+  content:
+    type: string
+  httpEquiv:
+    type: string
+  name:
+    type: string
+
+scriptAttributes:
+  << : *globalAttributes
+  async:
+    type: boolean
+  crossorigin:
+    type: string
+    enum:
+      - anonymous
+      - use-credentials
+  defer:
+    type: boolean
+  integrity:
+    type: string
+  nomodule:
+    type: boolean
+  referrerpolicy:
+    type: string
+  src:
+    type: string
+    required: true
+  scripttype:
+    type: string
+
+linkAttributes:
+  << : *globalAttributes
+  crossorigin:
+    type: string
+  href:
+    type: string
+  hreflang:
+    type: string
+  media:
+    type: string
+  referrerpolicy:
+    type: string
+  rel:
+    type: string
+  sizes:
+    type: string
+  mediaType:
+    type: string
+
+title:
+  type: string
+
+meta:
+  - type: metaAttributes
+
+description:
+  type: string
+
+layer:
+  id:
+    type: string
+  class:
+    type: string
+  items:
+    - type: layer
+  content:
+    type: string
+  title:
+    type: string
+
+page:
+  - type: layer
+
+tags:
+  - type: string
+
+scripts:
+  - type: scriptAttributes
+  
+headScripts:
+  - type: scriptAttributes
+
+links:
+  - type: linkAttributes
