@@ -1,4 +1,4 @@
-import luxon, { DateTime } from 'luxon'
+import { DateTime, Duration } from 'luxon'
 import { Link } from '@exothermic/core'
 
 import { BlogAuthor, BlogImage } from '../types'
@@ -6,7 +6,7 @@ import { BlogAuthor, BlogImage } from '../types'
 export const readingTime = (content: string) => {
   const words = content.match(/\S+/g).length
   const ms = (words / 200) * 1000
-  return luxon.Duration.fromMillis(ms)
+  return Duration.fromMillis(ms)
 }
 
 export const showImage = (image: BlogImage, date: string) => (image ? <img key={`${date}-image`} className="blog-image" src={image.src} alt={image.alt ?? ''} /> : null)
