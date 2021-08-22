@@ -1,5 +1,4 @@
 # ExothermicJS
-
 ## YAML-based template engine for React
 
 ![https://travis-ci.org/suhay/exothermicjs.svg?branch=master](https://travis-ci.org/suhay/exothermicjs.svg?branch=master) ![https://img.shields.io/npm/v/@exothermic/core.svg](https://img.shields.io/npm/v/@exothermic/core.svg)
@@ -400,9 +399,9 @@ Renders as:
 ```yaml
 - !navbar
   items:
-	  - "Home": '/'
-	  - "All kinds of links": 'https://example.com'
-	  - "Here's a link": '#on-page-link'
+    - "Home": '/'
+    - "All kinds of links": 'https://example.com'
+    - "Here's a link": '#on-page-link'
 ```
 
 Renders as:
@@ -437,19 +436,19 @@ Renders as:
   title: '# First!'
   class: row
   items:
-	  - !col
-	    content: |
-	      ## Here is a column
-	
-	  - !col
-	    content: |
-	      ## Here is another column
-	
-	      You can add images and tables in here, too.
-	
-	      | Tables        | Are           | Cool  |
-	      | ------------- |:-------------:| -----:|
-	      | col 3 is      | right-aligned | $1600 |
+    - !col
+      content: |
+        ## Here is a column
+
+    - !col
+      content: |
+        ## Here is another column
+
+        You can add images and tables in here, too.
+
+        | Tables        | Are           | Cool  |
+        | ------------- |:-------------:| -----:|
+        | col 3 is      | right-aligned | $1600 |
 ```
 
 Renders as:
