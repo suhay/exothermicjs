@@ -16,8 +16,8 @@ export type Action =
 
 export type Store = {
   config?: Config
-  baseTemplate?: Template
-  pageTemplate?: Template
+  baseTemplate: Template
+  pageTemplate: Template
   schema?: yaml.Schema
   cache: Record<string, string>
   pluginTags: object
@@ -36,6 +36,14 @@ const initialState: State = {
     pluginTags: {},
     pluginRoutes: {},
     pluginRegistryLoaded: false,
+    baseTemplate: {
+      scripts: [],
+      page: [],
+    },
+    pageTemplate: {
+      scripts: [],
+      page: [],
+    },
   },
 }
 
@@ -50,81 +58,57 @@ const { Provider } = state
 
 const StateProvider = ({ children }: Props) => {
   const [reducerState, dispatch] = useReducer<Reducer>((prevState, action) => {
+    const newState = { ...prevState }
     switch (action.type) {
       case 'SET_CONFIG':
-        return {
-          ...prevState,
-          store: {
-            ...prevState.store,
-            config: action.config,
-          },
-        }
+        newState.store.config = action.config
+        break
+
       case 'SET_BASE':
-        const pluginUrls = (prevState.store.config?.plugins ?? []).map((plugin) => plugin.url)
-        const headScripts = (action.baseTemplate.headScripts ?? []).concat(pluginUrls)
-        return {
-          ...prevState,
-          store: {
-            ...prevState.store,
-            baseTemplate: {
-              ...action.baseTemplate,
-              headScripts,
-            },
-          },
-        }
+        const dedupeScripts: object = {};
+
+        (action.baseTemplate.headScripts ?? []).forEach((headScript) => {
+          if (typeof headScript === 'string') dedupeScripts[headScript] = true
+          else if (headScript.src) dedupeScripts[headScript.src] = true
+        });
+
+        (prevState.store.config?.plugins ?? []).forEach((plugin) => {
+          dedupeScripts[plugin.url] = true
+        });
+
+        newState.store.baseTemplate = action.baseTemplate
+        newState.store.baseTemplate.headScripts = Object.keys(dedupeScripts)
+        break
+
       case 'SET_PAGE':
-        return {
-          ...prevState,
-          store: {
-            ...prevState.store,
-            pageTemplate: action.pageTemplate,
-          },
-        }
+        newState.store.pageTemplate = action.pageTemplate
+        break
+
       case 'SET_SCHEMA':
-        return {
-          ...prevState,
-          store: {
-            ...prevState.store,
-            schema: action.schema,
-          },
-        }
+        newState.store.schema = action.schema
+        break
+
       case 'APPEND_CACHE':
-        return {
-          ...prevState,
-          store: {
-            ...prevState.store,
-            cache: {
-              ...prevState.store.cache,
-              [action.key]: action.value,
-            },
-          },
-        }
+        newState.store.cache[action.key] = action.value
+        break
+
       case 'REGISTER_TAG':
-        return {
-          ...prevState,
-          store: {
-            ...prevState.store,
-            pluginTags: {
-              ...prevState.store.pluginTags,
-              [action.key]: action.value,
-            },
-            schema: prevState.store.schema?.extend(action.value),
-          },
-        }
+        newState.store.pluginTags[action.key] = action.value
+        newState.store.schema = prevState.store.schema?.extend(action.value)
+        break
+
       case 'SET_PLUGINS_LOADED':
-        return {
-          ...prevState,
-          store: {
-            ...prevState.store,
-            pluginRegistryLoaded: true,
-          },
-        }
+        newState.store.pluginRegistryLoaded = true
+        break
+
       default:
-        throw new Error()
+        break
     }
+
+    return newState
   }, initialState)
 
   return <Provider value={{ ...reducerState, dispatch }}>{children}</Provider>
-};
+}
 
 export { state, StateProvider }

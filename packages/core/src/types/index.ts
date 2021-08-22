@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { ReactElement, ReactNode } from 'react'
 
 type Plugin = {
   resolve: string
@@ -18,24 +18,24 @@ export interface PageFragmentType {
   id?: string
   items?: ReactNode[]
   content?: string | ReactNode
-  tags?: string[]
-  slug?: string
   title?: string
   as?: any
 }
 
 export interface HeadFragment {
   description?: string
-  headScripts?: string[]
+  headScripts?: any[]
   links?: string[]
   meta?: MetaFragment[]
   title?: string
 }
 
 export interface Template extends PageFragmentType, HeadFragment {
-  page: ReactNode[]
-  scripts: string[]
-  templates?: string[]
+  page?: ReactNode[]
+  $main?: ReactNode[]
+  scripts?: string[]
+  $top?: ReactElement
+  $bottom?: ReactElement
 }
 
 export type Config = {

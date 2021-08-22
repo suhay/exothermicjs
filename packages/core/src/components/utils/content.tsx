@@ -8,14 +8,8 @@ export type ContentProps = {
 
 export const Content = ({ content }: ContentProps) => {
   if (typeof content === 'string') {
-    const options: string[] = []
-    let appliedContent = content
-    Object.keys(options || []).forEach((key) => {
-      const regex = new RegExp(`{{${key}}}`, 'gi')
-      appliedContent = appliedContent.replace(regex, options[key])
-    })
     // eslint-disable-next-line react/no-children-prop
-    return <ReactMarkdown plugins={[gfm]} allowDangerousHtml children={appliedContent} renderers={{ root: Fragment }} />
+    return <ReactMarkdown plugins={[gfm]} allowDangerousHtml children={content} renderers={{ root: Fragment }} />
   }
 
   return <>{content}</>

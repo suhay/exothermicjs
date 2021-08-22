@@ -1,5 +1,5 @@
 import { useExothermic } from '../../hooks/useExothermic'
-import { Content } from './content'
+import { PageFragment } from './fragment'
 // import { Spinner } from './spinner'
 
 type Props = {
@@ -18,9 +18,6 @@ export const Get = ({ path }: Props) => {
   }
 
   return (
-    <div className="get-loaded">
-      <Content content={data.content} />
-      {data.items}
-    </div>
+    <PageFragment {...data} class="get-loaded" />
   )
 }

@@ -20,19 +20,19 @@ export const useExothermic = (route: string, isBaseTemplate?: boolean): Exotherm
   const [currentRoute, setCurrentRoute] = useState(route)
 
   useEffect(() => {
+    if (!store.schema) {
+      const types: yaml.Type[] = (Object.keys(YamlTypes) || []).map((key) => YamlTypes[key])
+      const schema = yaml.DEFAULT_SCHEMA.extend(types)
+      dispatch({ type: 'SET_SCHEMA', schema })
+    }
+  }, [])
+
+  useEffect(() => {
     if (currentRoute !== route) {
       setStatus('LOADING')
       setCurrentRoute(route)
     }
   }, [route])
-
-  useEffect(() => {
-    if (!store.schema) {
-      const types: yaml.Type[] = (Object.keys(YamlTypes) || []).map((key) => YamlTypes[key])
-      const builtSchema = yaml.DEFAULT_SCHEMA.extend(types)
-      dispatch({ type: 'SET_SCHEMA', schema: builtSchema })
-    }
-  })
 
   const getRoute = (fromRoute: string) => {
     const cleanup = new RegExp(`${store.config.basePath}|.html`)
@@ -75,22 +75,12 @@ export const useExothermic = (route: string, isBaseTemplate?: boolean): Exotherm
       .then((template) => {
         // @ts-ignore
         debug(`building template with ${store.schema.explicit.length} registered tags`)
+
         const builtTemplate = yaml.load(template, {
           schema: store.schema,
         }) as Template
 
-        if (builtTemplate.templates?.length) {
-          return Promise.all(builtTemplate.templates.map((parentTemplate) => buildTemplate(parentTemplate)))
-            .then((builtParentTemplates) => builtParentTemplates.reduce((acc, parent) => ({
-              ...acc,
-              page: [
-                ...parent.page,
-                ...acc.page,
-              ],
-            }), builtTemplate))
-        }
-
-        return Promise.resolve(builtTemplate)
+        return builtTemplate
       })
   }
 

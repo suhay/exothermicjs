@@ -1,4 +1,6 @@
-import { useContext, useEffect } from 'react'
+import {
+  ReactElement, useContext, useEffect, useState,
+} from 'react'
 import { useLocation } from 'react-router-dom'
 
 import { useExothermic, usePlugins } from '../hooks'
@@ -7,30 +9,42 @@ import { state } from '../contexts/store'
 export const Page = () => {
   const location = useLocation()
   usePlugins()
-  const { data, status } = useExothermic(location.pathname, true)
-  const { store: { pageTemplate: template, baseTemplate: base }, dispatch } = useContext(state)
+  const { data, status } = useExothermic(location.pathname)
+  const { dispatch } = useContext(state)
+
+  const [top, setTop] = useState<ReactElement>(null)
+  const [bottom, setBottom] = useState<ReactElement>(null)
 
   useEffect(() => {
     if (data) {
-      const pageTemplate = {
-        ...base,
-        ...data,
+      if (top?.key !== data.$top?.key) {
+        setTop(data.$top)
       }
-      dispatch({ type: 'SET_PAGE', pageTemplate })
+      if (bottom?.key !== data.$bottom?.key) {
+        setBottom(data.$bottom)
+      }
+
+      dispatch({ type: 'SET_PAGE', pageTemplate: data })
     }
   }, [data])
 
-  if (status === 'LOADING' || (status === 'LOADED' && !template)) {
-    return <>Loading...</>
-  }
+  const main = () => {
+    if (status === 'LOADING') {
+      return <>Loading...</>
+    }
 
-  if (!data) {
-    return <p>Page not found!</p>
+    if (status === 'LOADED' && !data) {
+      return <p>Page not found!</p>
+    }
+
+    return data.$main ?? data.page
   }
 
   return (
     <>
-      {template.page}
+      {top}
+      {main()}
+      {bottom}
     </>
   )
 }
