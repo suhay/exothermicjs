@@ -1,0 +1,47 @@
+---
+title: 'New ExothermicJS Page' # Title of the page, will be used to create URL if not slug is supplied
+slug: '' # optional, used for URL creation URL
+
+# Meta data objects.
+## A single key value pair will set the key as the value for 'name='
+## and the value will be used as the value for 'content='.
+## Multiple key value pairs will follow the key=value pattern. 'charSet' is the exception. It will always
+## display as <meta charSet="value" /> when added to the list as '- charSet: UTF-8'
+meta:
+  - httpEquiv: 'X-UA-Compatible'
+    content: 'IE=edge'
+  - charSet: 'UTF-8'
+  - viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no'
+  
+# meta description of page, content will be used if left blank
+description: 'This is a base ExothermicJS page'
+
+page: []
+  
+# Internal tags used for relating content to each other
+tags: []
+
+# Single string will load the value as the script's src.
+#  - 'https://example.com/script.js'
+#
+# Adding 'async' or 'defer' to the scripts will output the attribute
+#  - 'https://example.com/script.js'
+#    - async
+#    - defer
+
+scripts: []
+#<script defer src="https://use.fontawesome.com/releases/v5.0.11/js/fontawesome.js" integrity="sha384-KPnpIFJjPHLMZMALe0U04jClDmqlLhkBM6ZEkFvs9AiWRYwaDXPhn2D5lr8sypQ+" crossorigin="anonymous"></script>
+headScripts:
+  - src: "https://use.fontawesome.com/releases/v5.0.11/js/regular.js"
+    integrity: "sha384-2QoApbhY+hgclcsY4wzuUdSbQKSltCquJjUHPHplBQU1eOwSgajdR289I4O7m+Vs"
+    crossOrigin: "anonymous"
+    defer: defer
+links:
+  # Single string will load the value as href
+  - 'https://fonts.googleapis.com/css?family=Montserrat:200,300,400,700,900'
+  # For complex links, the key is used as the attribute name and the value is its value
+  # <link key="value" />
+  - href: 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' 
+    integrity: "sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossOrigin: "anonymous"
+  - '/css/style.css'

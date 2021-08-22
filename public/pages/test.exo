@@ -1,0 +1,14 @@
+---
+title: Test page
+templates: ['page.exo']
+page:
+  - !main
+    class: container
+    items:
+    - !section
+      title: '# Test page'
+      class: row
+      items:
+      - !col
+        content: 'weeeee'
+  

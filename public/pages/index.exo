@@ -1,0 +1,33 @@
+---
+description: And the description.
+tags: []
+templates: ['page.exo']
+page:
+  - !main
+    class: container
+    items:
+      - !get fragments/blog-roll
+      - !section
+        title: '# Who'
+        class: row
+        items:
+          - !col
+            content:
+              !markdown index-one
+      - !section
+        title: '# What'
+        items:
+          - !get fragments/portfolio
+      - !section
+        title: '# More What'
+        items:
+          - !get fragments/projects
+  - !footer
+    class: container
+    items:
+      - !section
+        class: row
+        id: exo
+        title: '# Where - End of file!!'
+        items:
+          - !get fragments/about

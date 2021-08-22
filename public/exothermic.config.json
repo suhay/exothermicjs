@@ -1,0 +1,12 @@
+{
+  "pagePath": "/pages",
+  "plugins": [
+    {
+      "resolve": "@exothermic/plugin-blog",
+      "url": "plugin-blog.js",
+      "options": {
+        "path": "blog"
+      }
+    }
+  ]
+}

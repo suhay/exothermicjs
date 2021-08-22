@@ -1,0 +1,11 @@
+---
+description: Our blog roll
+page:
+  - !header
+    class: container
+    items:
+      - !get fragments/nav
+  - !main
+    class: container
+    items:
+      - !get fragments/blog-roll

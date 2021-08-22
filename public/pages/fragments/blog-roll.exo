@@ -1,0 +1,12 @@
+---
+items:
+  - !blog-roll
+    title: '# The blog roll!!'
+    class: row
+    options:
+      - image
+      - tags
+      - date
+      - title
+      - abstract
+      - author

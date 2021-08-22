@@ -16,3 +16,5 @@ dist/
 ssr/
 stats.json
 token.json
+out/
+demo/
