@@ -25,5 +25,9 @@
   },
   "devDependencies": {
     "yaml-schema-validator": "^1.2.2"
-  }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "6b3769ec1d91b79060e70161354545aab9225a4c"
 }

@@ -62,7 +62,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "c508453b987b03b0b560522791e5610df9642e58",
+  "gitHead": "6b3769ec1d91b79060e70161354545aab9225a4c",
   "dependencies": {
     "luxon": "^1.27.0"
   }
