@@ -1,6 +1,6 @@
 {
   "name": "@exothermic/validator",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": ".exo yaml validator for ExothermicJS",
   "author": "Matt Suhay <matthew.suhay@gmail.com>",
   "homepage": "https://github.com/suhay/exothermicjs#readme",
