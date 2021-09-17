@@ -60,9 +60,13 @@ export const useExothermic = (route: string, isBaseTemplate?: boolean): Exotherm
     return fetch(selectedRoute)
       .then((resp) => resp.text())
       .then((fetchedTemplate) => {
+        if (!fetchedTemplate.startsWith('---')) {
+          throw new Error('no template found with given name')
+        }
         dispatch({ type: 'APPEND_CACHE', key: selectedRoute, value: fetchedTemplate })
         return fetchedTemplate
       })
+      .catch(() => '$main: []')
   }
 
   const buildTemplate = (
