@@ -3,7 +3,7 @@
 
 ![https://www.npmjs.com/package/@exothermic/core](https://img.shields.io/npm/v/@exothermic/core.svg)
 
----s
+---
 
 ## YAML-based, what kind of engine?
 
