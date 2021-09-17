@@ -1,6 +1,6 @@
 import { guid } from '../utils'
 
-export const linkTags = (links: any[]) => {
+export const linkTags = (links: any[] = []) => {
   if (!links.length) {
     return []
   }

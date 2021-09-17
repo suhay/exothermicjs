@@ -19,6 +19,13 @@ export const useConfig = (): Config => {
           setConfig(file)
           dispatch({ type: 'SET_CONFIG', config: file })
         })
+        .catch(() => {
+          const defaultConfig = {
+            pagePath: '/pages',
+          } as Config
+          setConfig(defaultConfig)
+          dispatch({ type: 'SET_CONFIG', config: defaultConfig })
+        })
     }
   }, [])
 
