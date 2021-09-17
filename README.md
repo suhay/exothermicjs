@@ -1,7 +1,7 @@
 # ExothermicJS
 ## YAML-based template engine for React
 
-![https://www.npmjs.com/package/@exothermic/core](https://img.shields.io/npm/v/@exothermic/core.svg)
+[![https://www.npmjs.com/package/@exothermic/core](https://img.shields.io/npm/v/@exothermic/core.svg)](https://www.npmjs.com/package/@exothermic/core)
 
 ---
 
