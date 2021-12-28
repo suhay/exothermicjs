@@ -1,14 +1,12 @@
-import {
-  ReactElement, useContext, useEffect, useState,
-} from 'react'
+import { ReactElement, useContext, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 
-import { useExothermic, usePlugins } from '../hooks'
+import { useExothermic } from '../hooks'
 import { state } from '../contexts/store'
+import { Loading } from './utils/loading'
 
 export const Page = () => {
   const location = useLocation()
-  usePlugins()
   const { data, status } = useExothermic(location.pathname)
   const { dispatch } = useContext(state)
 
@@ -30,7 +28,7 @@ export const Page = () => {
 
   const main = () => {
     if (status === 'LOADING') {
-      return <>Loading...</>
+      return <Loading />
     }
 
     if (status === 'LOADED' && !data) {

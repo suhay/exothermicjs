@@ -1,7 +1,7 @@
 import { guid } from '../utils'
 
 export const scriptTags = (scripts: string[]) => {
-  if (!scripts.length) {
+  if (!scripts?.length) {
     return []
   }
   const tags = []
@@ -12,7 +12,8 @@ export const scriptTags = (scripts: string[]) => {
       scriptBody.push('')
     } else {
       const keys = Object.keys(tag)
-      if (keys.length > 1) { // Not just a key and value
+      if (keys.length > 1) {
+        // Not just a key and value
         const script = {}
         for (let i = 0; i < keys.length; i += 1) {
           script[keys[i]] = tag[keys[i]]
@@ -27,6 +28,8 @@ export const scriptTags = (scripts: string[]) => {
   })
 
   return tags.map((item, i) => (
-    <script key={`scriptTag-${guid()}`} {...item}>{scriptBody[i]}</script>
+    <script key={`scriptTag-${guid()}`} {...item}>
+      {scriptBody[i]}
+    </script>
   ))
 }

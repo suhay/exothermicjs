@@ -13,10 +13,7 @@
     "clean": "rimraf packages/*/dist",
     "reset": "rimraf packages/*/node_modules && yarn clean && rm -rf node_modules",
     "test": "NODE_ENV=test jest --no-cache",
-    "publish": "yarn build && yarn publish:version",
-    "publish:version": "lerna version",
-    "publish:git": "git push --follow-tags",
-    "publish:push": "lerna publish from-git --yes",
+    "publish:push": "yarn build && lerna publish from-git --yes",
     "publish:dry-run": "lerna version --no-git-tag-version --no-push",
     "lint": "eslint ./"
   },
