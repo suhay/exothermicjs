@@ -18,5 +18,6 @@ module.exports = merge(common, {
   },
   externals: {
     '@exothermic/core': '@exothermic/core',
+    react: 'React',
   },
 });

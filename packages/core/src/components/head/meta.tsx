@@ -1,11 +1,7 @@
 import { MetaFragment } from '../../types'
 import { guid } from '../utils'
 
-export const Meta = ({
-  name,
-  content,
-  attrs,
-}: MetaFragment) => {
+export const Meta = ({ name, content, attrs }: MetaFragment) => {
   if (name && content) {
     return <meta name={name} content={content} />
   }
@@ -29,9 +25,7 @@ export const Meta = ({
     return <meta {...meta} />
   }
 
-  return (
-    <></>
-  )
+  return <></>
 }
 
 export const metaTags = (tags: MetaFragment[]) => {
@@ -53,7 +47,5 @@ export const metaTags = (tags: MetaFragment[]) => {
     return acc
   }, [])
 
-  return metas.map((item) => (
-    <meta key={`metaTag-${guid()}`} {...item} />
-  ))
+  return metas.map((item) => <meta key={`metaTag-${guid()}`} {...item} />)
 }

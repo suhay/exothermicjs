@@ -4,7 +4,7 @@ import { state } from '../contexts/store'
 import { Config } from '../types'
 
 export type LoaderFile = {
-  data: string;
+  data: string
   status: 'LOADING' | 'LOADED'
 }
 

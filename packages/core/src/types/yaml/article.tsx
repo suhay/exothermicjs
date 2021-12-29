@@ -10,7 +10,7 @@ export const ArticleYamlType = new yaml.Type('!article', {
     return !!data
   },
   construct(data: PageFragmentType) {
-    return <Article as="article" {...data} key={guid()} />
+    return <Article as='article' {...data} key={guid()} />
   },
   instanceOf: Article,
 })

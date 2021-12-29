@@ -1,7 +1,7 @@
 import { guid } from '../utils'
 
 export const linkTags = (links: any[] = []) => {
-  if (!links.length) {
+  if (!links?.length) {
     return []
   }
 
@@ -24,7 +24,5 @@ export const linkTags = (links: any[] = []) => {
     return acc
   }, [])
 
-  return tags.map((item) => (
-    <link key={`linkTag-${guid()}`} {...item} />
-  ))
+  return tags.map((item) => <link key={`linkTag-${guid()}`} {...item} />)
 }

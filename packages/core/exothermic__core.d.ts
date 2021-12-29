@@ -1,7 +1,3 @@
-import {
-  DependencyList, Dispatch, EffectCallback, SetStateAction,
-} from 'react'
-
 import { LoaderFile } from './src/hooks/useLoader'
 import { LinkProps } from './src/components/navbar/link'
 import { Config } from './src/types'
@@ -30,7 +26,4 @@ declare module '@exothermic/core' {
   const Link: (props: LinkProps) => JSX.Element
 
   const guid: () => string
-
-  function useState<S = undefined>(): [S | undefined, Dispatch<SetStateAction<S | undefined>>]
-  function useEffect(effect: EffectCallback, deps?: DependencyList): void;
 }
