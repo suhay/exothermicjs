@@ -10,21 +10,13 @@ import { Loading } from './utils/loading'
 const initialResource = bootstrap()
 
 const BaseContainer = ({ resource }: { resource: BootStrap }) => {
-  const config = resource.config.load()
-  useConfig(config)
-
+  useConfig(resource.config.load())
   const { dispatch } = useContext(state)
-  const { data: base = null, status } = useExothermic('base.exo', true)
-
-  // useEffect(() => {
-  //   if (base && config) {
-  //     dispatch({ type: 'SET_BASE', baseTemplate: base })
-  //   }
-  // }, [base, config])
+  const { data: base = null, status } = useExothermic('base.exo')
 
   useEffect(() => {
     if (base) {
-      dispatch({ type: 'SET_BASE', baseTemplate: base })
+      dispatch({ type: 'SET_BASE', template: base })
     }
   }, [base])
 

@@ -17,7 +17,9 @@ export const PageFragment = <T extends ElementType>({
   content,
   as,
 }: PageFragmentType & PageFragmentProps<T>) => {
-  const { store: { pageTemplate: page } } = useContext(state)
+  const {
+    store: { pageTemplate: page },
+  } = useContext(state)
   const Component = as ?? 'div'
 
   return (
@@ -28,7 +30,6 @@ export const PageFragment = <T extends ElementType>({
         if (typeof item === 'string' && item.startsWith('$')) {
           return page[item] ?? item
         }
-
         return item
       })}
     </Component>

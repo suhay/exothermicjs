@@ -1,10 +1,7 @@
-import {
-  useLoader, useConfig, Content, useState, useEffect,
-} from '@exothermic/core'
+import { useState, useEffect } from 'react'
+import { useLoader, useConfig, Content } from '@exothermic/core'
 
-import {
-  showAbstract, showAuthor, showDate, showImage, showTags, showTitle,
-} from './utils'
+import { showAbstract, showAuthor, showDate, showImage, showTags, showTitle } from './utils'
 
 type Props = {
   title: string
@@ -43,7 +40,7 @@ export const BlogRoll = ({ title, class: classProps, options = [] }: Props) => {
   const article = (date: string) => {
     if (options.length) {
       return options.map((option) => {
-        const key = typeof option === 'string' ? option : '';
+        const key = typeof option === 'string' ? option : ''
 
         switch (key) {
           case 'tags':
@@ -69,14 +66,14 @@ export const BlogRoll = ({ title, class: classProps, options = [] }: Props) => {
     <section className={classProps ?? ''}>
       <Content content={title} />
       <ul>
-        {dates.sort((a, b) => parseInt(b, 10) - parseInt(a, 10)).map((date) => (
-          <li key={manifest[date].filename}>
-            {options.includes('image') && showImage(manifest[date].image, date)}
-            <div className="article-meta">
-              {article(date)}
-            </div>
-          </li>
-        ))}
+        {dates
+          .sort((a, b) => parseInt(b, 10) - parseInt(a, 10))
+          .map((date) => (
+            <li key={manifest[date].filename}>
+              {options.includes('image') && showImage(manifest[date].image, date)}
+              <div className='article-meta'>{article(date)}</div>
+            </li>
+          ))}
       </ul>
     </section>
   )

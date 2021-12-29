@@ -1,31 +1,89 @@
-import {
-  useContext, useEffect, useState,
-} from 'react'
+import { useContext, useEffect, useState } from 'react'
 import yaml from 'js-yaml'
 
-import { Template } from '../types'
+import { Config, Template } from '../types'
 import { state } from '../contexts/store'
 import { debug } from '../components/utils'
-import { YamlTypes } from '../types/yaml'
+import { useSchema } from './useSchema'
+import { useConfig } from '.'
 
 type ExothermicFile = {
   data?: Template
   status: 'LOADING' | 'LOADED'
+  dat?: {
+    load: () => Template
+  }
+}
+
+type BuiltTemplate = {
+  selectedRoute: string
+  builtTemplate: Template
+  rawTemplate: string
+}
+
+const getRoute = (fromRoute: string, config: Config) => {
+  const cleanup = new RegExp(`${config.basePath}|.html`)
+  const baselessRoute = fromRoute.replace(cleanup, '')
+  const selectedRoute = baselessRoute.endsWith('/') ? `${baselessRoute}index` : baselessRoute
+
+  if (selectedRoute.endsWith('.exo')) {
+    return `${config.basePath ?? ''}/templates/${selectedRoute}`.replace(/\/\/+/, '/')
+  }
+
+  return `${config.basePath ?? ''}${config.pagePath ?? '/pages'}/${selectedRoute}.exo`.replace(
+    /\/\/+/,
+    '/',
+  )
+}
+
+const checkCache = (selectedRoute: string, cache: Record<string, string>) => {
+  if (cache[selectedRoute]) {
+    debug(`cache hit: ${selectedRoute}`)
+    return Promise.resolve(cache[selectedRoute])
+  }
+
+  debug(`cache miss: ${selectedRoute}`)
+
+  return fetch(selectedRoute)
+    .then((resp) => resp.text())
+    .then((fetchedTemplate) => {
+      if (!fetchedTemplate.startsWith('---')) {
+        throw new Error('no template found with given name')
+      }
+      return fetchedTemplate
+    })
+    .catch(() => '$main: []')
+}
+
+const buildTemplate = (
+  templateRoute: string,
+  config: Config,
+  schema: yaml.Schema,
+  cache: Record<string, string>,
+): Promise<BuiltTemplate> => {
+  const selectedRoute = getRoute(templateRoute, config)
+  debug(`building route: ${selectedRoute}`)
+
+  return checkCache(selectedRoute, cache).then((template) => {
+    // @ts-ignore
+    debug(`building template with ${schema.explicit.length} registered tags`)
+
+    const builtTemplate = yaml.load(template, {
+      schema,
+    }) as Template
+
+    return { selectedRoute, builtTemplate, rawTemplate: template }
+  })
 }
 
 export const useExothermic = (route: string, isBaseTemplate?: boolean): ExothermicFile => {
+  isBaseTemplate = isBaseTemplate ?? route === 'base.exo'
   const { store, dispatch } = useContext(state)
   const [data, setData] = useState<Template>()
   const [status, setStatus] = useState<'LOADING' | 'LOADED'>('LOADING')
   const [currentRoute, setCurrentRoute] = useState(route)
-
-  useEffect(() => {
-    if (!store.schema) {
-      const types: yaml.Type[] = (Object.keys(YamlTypes) || []).map((key) => YamlTypes[key])
-      const schema = yaml.DEFAULT_SCHEMA.extend(types)
-      dispatch({ type: 'SET_SCHEMA', schema })
-    }
-  }, [])
+  const schema = useSchema()
+  const config = useConfig()
 
   useEffect(() => {
     if (currentRoute !== route) {
@@ -34,66 +92,19 @@ export const useExothermic = (route: string, isBaseTemplate?: boolean): Exotherm
     }
   }, [route])
 
-  const getRoute = (fromRoute: string) => {
-    const cleanup = new RegExp(`${store.config.basePath}|.html`)
-    const baselessRoute = fromRoute.replace(cleanup, '')
-    const selectedRoute = baselessRoute.endsWith('/')
-      ? `${baselessRoute}index`
-      : baselessRoute
-
-    if (selectedRoute.endsWith('.exo')) {
-      return `${store.config.basePath ?? ''}/templates/${selectedRoute}`.replace(/\/\/+/, '/')
-    }
-
-    return `${store.config.basePath ?? ''}${store.config.pagePath ?? '/pages'}/${selectedRoute}.exo`.replace(/\/\/+/, '/')
-  }
-
-  const checkCache = (selectedRoute: string) => {
-    if (store.cache[selectedRoute]) {
-      debug(`cache hit: ${selectedRoute}`)
-      return Promise.resolve(store.cache[selectedRoute])
-    }
-
-    debug(`cache miss: ${selectedRoute}`)
-    setStatus('LOADING')
-
-    return fetch(selectedRoute)
-      .then((resp) => resp.text())
-      .then((fetchedTemplate) => {
-        if (!fetchedTemplate.startsWith('---')) {
-          throw new Error('no template found with given name')
-        }
-        dispatch({ type: 'APPEND_CACHE', key: selectedRoute, value: fetchedTemplate })
-        return fetchedTemplate
-      })
-      .catch(() => '$main: []')
-  }
-
-  const buildTemplate = (
-    templateRoute: string,
-  ): Promise<Template> => {
-    const selectedRoute = getRoute(templateRoute)
-    debug(`building route: ${selectedRoute}`)
-
-    return checkCache(selectedRoute)
-      .then((template) => {
-        // @ts-ignore
-        debug(`building template with ${store.schema.explicit.length} registered tags`)
-
-        const builtTemplate = yaml.load(template, {
-          schema: store.schema,
-        }) as Template
-
-        return builtTemplate
-      })
-  }
-
   useEffect(() => {
-    const { config, schema, pluginRegistryLoaded } = store
+    const { pluginRegistryLoaded } = store
 
-    if (route && config && schema && (pluginRegistryLoaded || isBaseTemplate) && status === 'LOADING') {
-      buildTemplate(route)
-        .then((builtTemplate: Template) => {
+    if (
+      route &&
+      config &&
+      schema &&
+      (pluginRegistryLoaded || isBaseTemplate) &&
+      status === 'LOADING'
+    ) {
+      buildTemplate(route, config, schema, store.cache)
+        .then(({ builtTemplate, rawTemplate, selectedRoute }) => {
+          dispatch({ type: 'APPEND_CACHE', key: selectedRoute, value: rawTemplate })
           setData(builtTemplate)
           debug(`LOADED: ${route}`)
           setStatus('LOADED')
@@ -102,7 +113,7 @@ export const useExothermic = (route: string, isBaseTemplate?: boolean): Exotherm
           debug(`error: ${err.message}, trying ${route} again`)
         })
     }
-  }, [route, store.config, store.schema, store.pluginRegistryLoaded, status])
+  }, [route, config, schema, store.pluginRegistryLoaded, status])
 
   return {
     data,

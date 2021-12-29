@@ -9,7 +9,9 @@ import { state } from '../../contexts/store'
 import { HeadFragment } from '../../types'
 
 export const Head = () => {
-  const { store: { baseTemplate: base, pageTemplate: page } } = useContext(state)
+  const {
+    store: { baseTemplate: base, pageTemplate: page },
+  } = useContext(state)
   const [headData, setHeadData] = useState<HeadFragment>()
   const [meta, setMeta] = useState<JSX.Element[]>()
   const [description, setDescription] = useState<string>('New ExothermicJS page description')
@@ -41,8 +43,8 @@ export const Head = () => {
   return (
     <Helmet>
       {meta}
-      <meta name="description" content={description} />
-      <meta name="generator" content={`ExothermicJS ${version}`} />
+      <meta name='description' content={description} />
+      <meta name='generator' content={`ExothermicJS ${version}`} />
       <title>{title}</title>
       {links}
       {headScripts}

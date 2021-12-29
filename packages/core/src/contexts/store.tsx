@@ -1,14 +1,12 @@
-import {
-  createContext, Dispatch, ReactNode, useReducer,
-} from 'react'
+import { createContext, Dispatch, ReactNode, useReducer } from 'react'
 import yaml from 'js-yaml'
 
 import { Config, Template } from '../types'
 
 export type Action =
   | { type: 'SET_CONFIG'; config: Config }
-  | { type: 'SET_BASE'; baseTemplate: Template }
-  | { type: 'SET_PAGE'; pageTemplate: Template }
+  | { type: 'SET_BASE'; template: Template }
+  | { type: 'SET_PAGE'; template: Template }
   | { type: 'SET_SCHEMA'; schema: yaml.Schema }
   | { type: 'APPEND_CACHE'; key: string; value: string }
   | { type: 'REGISTER_TAG'; key: string; value: yaml.Type }
@@ -65,23 +63,26 @@ const StateProvider = ({ children }: Props) => {
         break
 
       case 'SET_BASE':
-        const dedupeScripts: object = {};
+        const dedupeScripts: Map<string, boolean> = new Map()
 
-        (action.baseTemplate.headScripts ?? []).forEach((headScript) => {
-          if (typeof headScript === 'string') dedupeScripts[headScript] = true
-          else if (headScript.src) dedupeScripts[headScript.src] = true
-        });
+        action.template.headScripts?.forEach((headScript) => {
+          if (typeof headScript === 'string') {
+            dedupeScripts.set(headScript, true)
+          } else if (headScript.src) {
+            dedupeScripts.set(headScript.src, true)
+          }
+        })
 
-        (prevState.store.config?.plugins ?? []).forEach((plugin) => {
-          dedupeScripts[plugin.url] = true
-        });
+        prevState.store.config?.plugins?.forEach((plugin) => {
+          dedupeScripts.set(plugin.url, true)
+        })
 
-        newState.store.baseTemplate = action.baseTemplate
-        newState.store.baseTemplate.headScripts = Object.keys(dedupeScripts)
+        newState.store.baseTemplate = action.template
+        newState.store.baseTemplate.headScripts = Array.from(dedupeScripts.keys())
         break
 
       case 'SET_PAGE':
-        newState.store.pageTemplate = action.pageTemplate
+        newState.store.pageTemplate = action.template
         break
 
       case 'SET_SCHEMA':

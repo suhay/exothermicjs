@@ -3,6 +3,7 @@ import ReactMarkdown from 'react-markdown'
 import gfm from 'remark-gfm'
 
 import { useLoader } from '../../hooks'
+import { Loading } from './loading'
 
 type Props = {
   path: string
@@ -12,7 +13,7 @@ export const Markdown = ({ path }: Props) => {
   const { data, status } = useLoader(`markdown/${path}.md`)
 
   if (status === 'LOADING') {
-    return <>Loading...</>
+    return <Loading type='shimmer' />
   }
 
   if (!data) {
@@ -20,7 +21,12 @@ export const Markdown = ({ path }: Props) => {
   }
 
   return (
-    // eslint-disable-next-line react/no-children-prop
-    <ReactMarkdown plugins={[gfm]} allowDangerousHtml children={data} renderers={{ root: Fragment }} />
+    <ReactMarkdown
+      plugins={[gfm]}
+      allowDangerousHtml
+      // eslint-disable-next-line react/no-children-prop
+      children={data}
+      renderers={{ root: Fragment }}
+    />
   )
 }

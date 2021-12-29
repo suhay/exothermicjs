@@ -1,10 +1,14 @@
-import {
-  useLoader, useConfig, useState, useEffect,
-} from '@exothermic/core'
+import { useState, useEffect } from 'react'
+import { useLoader, useConfig } from '@exothermic/core'
 
 import {
   readingTime,
-  showAbstract, showAuthor, showDate, showImage, showTags, showTitle,
+  showAbstract,
+  showAuthor,
+  showDate,
+  showImage,
+  showTags,
+  showTitle,
 } from './utils'
 import { MarkdownProgress } from './blog-markdown-progress'
 import { BlogManifest } from '../types'
@@ -45,7 +49,7 @@ export const BlogArticle = ({ class: classProps, options = [] }: Props) => {
   const article = (date: string) => {
     if (options.length) {
       return options.map((option) => {
-        const key = typeof option === 'string' ? option : '';
+        const key = typeof option === 'string' ? option : ''
 
         switch (key) {
           case 'tags':
@@ -73,11 +77,7 @@ export const BlogArticle = ({ class: classProps, options = [] }: Props) => {
     return showTitle(manifest[date].title)
   }
 
-  return (
-    <article className={classProps ?? ''}>
-      {article('0')}
-    </article>
-  )
+  return <article className={classProps ?? ''}>{article('0')}</article>
 }
 
 // <p class="text-center"><span class="blog-tag">The Exothermic Project</span><span class="blog-author">Matt Suhay</span><span class="blog-date">Jun 1, 2021</span></p>

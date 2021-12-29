@@ -1,17 +1,18 @@
 import { ReactElement, useContext, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 
-import { useExothermic } from '../hooks'
+import { useExothermic, usePlugins } from '../hooks'
 import { state } from '../contexts/store'
 import { Loading } from './utils/loading'
 
 export const Page = () => {
   const location = useLocation()
+  usePlugins()
   const { data, status } = useExothermic(location.pathname)
   const { dispatch } = useContext(state)
 
-  const [top, setTop] = useState<ReactElement>(null)
-  const [bottom, setBottom] = useState<ReactElement>(null)
+  const [top, setTop] = useState<ReactElement>()
+  const [bottom, setBottom] = useState<ReactElement>()
 
   useEffect(() => {
     if (data) {
@@ -22,7 +23,7 @@ export const Page = () => {
         setBottom(data.$bottom)
       }
 
-      dispatch({ type: 'SET_PAGE', pageTemplate: data })
+      dispatch({ type: 'SET_PAGE', template: data })
     }
   }, [data])
 

@@ -35,16 +35,16 @@
     "packages/*"
   ],
   "private": true,
-  "version": "2.0.0",
+  "version": "2.0.2",
   "resolutions": {
-    "**/react": "^17.0.1",
-    "**/react-dom": "^17.0.1",
+    "**/react": "^17.0.2",
+    "**/react-dom": "^17.0.2",
     "**/eslint": "^7.22.0",
     "**/rimraf": "^3.0.2"
   },
   "name": "exothermicjs",
   "dependencies": {
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   }
 }

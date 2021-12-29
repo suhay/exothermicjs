@@ -52,7 +52,10 @@
     "no-confusing-arrow": "off",
     "jsx-quotes": "off",
     "react/jsx-indent": "off",
-    "indent": "off"
+    "indent": "off",
+    "function-paren-newline": "off",
+    "operator-linebreak": "off",
+    "func-call-spacing": "off"
   },
   "globals": {
     "JSX": "readonly"

@@ -7,4 +7,13 @@ export const debug = (msg: string) => {
   }
 }
 
+export const error = (err: any) => {
+  // eslint-disable-next-line no-console
+  console.error(err)
+}
+
 export { Content } from './content'
+export { PageFragment as Fragment } from './fragment'
+export { Get } from './get'
+export { Loading } from './loading'
+export { Markdown } from './markdown'

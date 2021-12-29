@@ -22,4 +22,18 @@ module.exports = merge(common, {
     },
     path: path.resolve(__dirname, 'dist'),
   },
+  module: {
+    rules: [
+      {
+        test: require.resolve('react'),
+        loader: 'expose-loader',
+        options: {
+          exposes: {
+            globalName: 'React',
+            override: true,
+          },
+        },
+      },
+    ],
+  },
 })
