@@ -1,7 +1,7 @@
 import { MetaFragment } from '../../types'
 import { guid } from '../utils'
 
-export const Meta = ({ name, content, attrs }: MetaFragment) => {
+export function Meta({ name, content, attrs }: MetaFragment) {
   if (name && content) {
     return <meta name={name} content={content} />
   }
@@ -25,10 +25,10 @@ export const Meta = ({ name, content, attrs }: MetaFragment) => {
     return <meta {...meta} />
   }
 
-  return <></>
+  return null
 }
 
-export const metaTags = (tags: MetaFragment[]) => {
+export const metaTags = (tags?: MetaFragment[]) => {
   const metas = (tags || []).reduce<any[]>((acc, tag) => {
     const keys = Object.keys(tag)
 

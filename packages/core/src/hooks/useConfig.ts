@@ -1,10 +1,10 @@
 import { useContext, useEffect, useState } from 'react'
 
-import { state } from '../contexts/store'
+import { StateContext } from '../contexts/store'
 import { Config } from '../types'
 
-export const useConfig = (initialConfig?: Config): Config => {
-  const { store, dispatch } = useContext(state)
+export const useConfig = (initialConfig?: Config): Config | undefined => {
+  const { store, dispatch } = useContext(StateContext)
   const [config, setConfig] = useState<Config>()
 
   useEffect(() => {
@@ -13,20 +13,26 @@ export const useConfig = (initialConfig?: Config): Config => {
     if (!storedConfig) {
       if (initialConfig) {
         setConfig(initialConfig)
-        dispatch({ type: 'SET_CONFIG', config: initialConfig })
+        if (dispatch) {
+          dispatch({ type: 'SET_CONFIG', config: initialConfig })
+        }
       } else {
         fetch('/exothermic.config.json')
           .then((resp) => resp.json())
           .then((file) => {
             setConfig(file)
-            dispatch({ type: 'SET_CONFIG', config: file })
+            if (dispatch) {
+              dispatch({ type: 'SET_CONFIG', config: file })
+            }
           })
           .catch(() => {
             const defaultConfig = {
               pagePath: '/pages',
             } as Config
             setConfig(defaultConfig)
-            dispatch({ type: 'SET_CONFIG', config: defaultConfig })
+            if (dispatch) {
+              dispatch({ type: 'SET_CONFIG', config: defaultConfig })
+            }
           })
       }
     }

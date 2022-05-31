@@ -1,8 +1,8 @@
 ---
 description: And the description.
 tags: []
-templates: ['page.exo']
-page:
+$top: !get fragments/nav
+$main:
   - !main
     class: container
     items:
@@ -12,8 +12,7 @@ page:
         class: row
         items:
           - !col
-            content:
-              !markdown index-one
+            content: !markdown index-one
       - !section
         title: '# What'
         items:
@@ -22,12 +21,4 @@ page:
         title: '# More What'
         items:
           - !get fragments/projects
-  - !footer
-    class: container
-    items:
-      - !section
-        class: row
-        id: exo
-        title: '# Where - End of file!!'
-        items:
-          - !get fragments/about
+$bottom: !get fragments/footer

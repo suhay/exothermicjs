@@ -7,10 +7,12 @@ export type NavItemProps = {
   id?: string
 }
 
-export const NavItem = ({ to, label, size, id }: NavItemProps) => (
-  <li role='none'>
-    <Link to={to} aria-setsize={size} aria-posinset={id + 1} role='menuitem'>
-      {label}
-    </Link>
-  </li>
-)
+export function NavItem({ to, label, size, id }: NavItemProps) {
+  return (
+    <li role='none'>
+      <Link to={to} aria-setsize={size} aria-posinset={parseInt(id ?? '0') + 1} role='menuitem'>
+        {label}
+      </Link>
+    </li>
+  )
+}

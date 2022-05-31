@@ -1,9 +1,10 @@
 ---
-page:
+$top:
   - !header
     class: container
     items:
       - !get fragments/nav
+$main:
   - !main
     class: container
     items:
@@ -11,5 +12,4 @@ page:
         class: row
         items:
           - !col
-            content:
-              !markdown blog/first-blog-post
+            content: !markdown blog/first-blog-post

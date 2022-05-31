@@ -1,0 +1,9 @@
+---
+title: Introspection Dashboard
+secure: !appwrite-secure /dashboard
+$top: !get fragments/nav
+$main:
+  - !main
+    items:
+      - !appwrite
+        api:

@@ -2,14 +2,53 @@ import { ReactElement, useContext, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 
 import { useExothermic, usePlugins } from '../hooks'
-import { state } from '../contexts/store'
+import { StateContext } from '../contexts/store'
 import { Loading } from './utils/loading'
+import { LoadingState, Template } from '../types'
+import { UserContext } from '../contexts/user'
 
-export const Page = () => {
+function Main({ status, data }: { status: LoadingState; data?: Template }) {
+  const { user } = useContext(UserContext)
+
+  useEffect(() => {
+    if (data) {
+      if (data.secure) {
+        user.isAuthenticated()
+      }
+    }
+  }, [data])
+
+  if (status === 'LOADING') {
+    return <Loading />
+  }
+
+  if (status === 'LOADED' && !data) {
+    return <p>Page not found!</p>
+  }
+
+  if (!data) {
+    return <p>Page not found!</p>
+  }
+
+  const { $main, page, secure } = data
+
+  if (secure && !user.data) {
+    return secure
+  }
+
+  return (
+    <>
+      {user.data && secure}
+      {$main ?? page}
+    </>
+  )
+}
+
+export function Page() {
   const location = useLocation()
   usePlugins()
   const { data, status } = useExothermic(location.pathname)
-  const { dispatch } = useContext(state)
+  const { dispatch } = useContext(StateContext)
 
   const [top, setTop] = useState<ReactElement>()
   const [bottom, setBottom] = useState<ReactElement>()
@@ -23,26 +62,16 @@ export const Page = () => {
         setBottom(data.$bottom)
       }
 
-      dispatch({ type: 'SET_PAGE', template: data })
+      if (dispatch) {
+        dispatch({ type: 'SET_PAGE', template: data })
+      }
     }
   }, [data])
-
-  const main = () => {
-    if (status === 'LOADING') {
-      return <Loading />
-    }
-
-    if (status === 'LOADED' && !data) {
-      return <p>Page not found!</p>
-    }
-
-    return data.$main ?? data.page
-  }
 
   return (
     <>
       {top}
-      {main()}
+      <Main status={status} data={data} />
       {bottom}
     </>
   )

@@ -7,7 +7,7 @@ export type ContentProps = {
   content: ReactNode | string
 }
 
-const LinkRenderer = (props: any) => {
+function LinkRenderer(props: any) {
   const { href, children }: { href: string; children: any } = props
   if (href.startsWith('/')) {
     return <Link to={href}>{children}</Link>
@@ -15,7 +15,7 @@ const LinkRenderer = (props: any) => {
   return <a href={href}>{children}</a>
 }
 
-export const Content = ({ content }: ContentProps) => {
+export function Content({ content }: ContentProps) {
   if (typeof content === 'string') {
     return (
       <ReactMarkdown
@@ -31,5 +31,6 @@ export const Content = ({ content }: ContentProps) => {
     )
   }
 
+  // eslint-disable-next-line react/jsx-no-useless-fragment
   return <>{content}</>
 }

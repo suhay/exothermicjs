@@ -1,10 +1,11 @@
 ---
 items:
-- !navbar
-  id: top-nav
-  items:
-  - 'Home': '/'
-  - "Nav test": '/test'
-  - "Nav test 2 - 404": '/test/more'
-  - "Fragment test": '#exo'
-  - "Blog": '/blog/'
+  - !navbar
+    id: top-nav
+    items:
+      - 'Home': '/'
+      - 'Nav test': '/test'
+      - 'Nav test 2 - 404': '/test/more'
+      - 'Fragment test': '#exo'
+      - 'Blog': '/blog/'
+      - 'Dashboard': '/dashboard'

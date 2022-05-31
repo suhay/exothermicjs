@@ -1,21 +1,29 @@
-import ReactDom from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 
 import { Base } from './components'
 import { StateProvider } from './contexts/store'
+import { PluginProvider } from './contexts/plugin'
+import { UserProvider } from './contexts/user'
 
-const rootNode = document.getElementById('__exothermic')
+const container = document.getElementById('__exothermic')
 
-ReactDom.render(
+const root = createRoot(container!) // createRoot(container!) if you use TypeScript
+root.render(
   <StateProvider>
-    <BrowserRouter>
-      <Base />
-    </BrowserRouter>
+    <UserProvider>
+      <PluginProvider>
+        <BrowserRouter>
+          <Base />
+        </BrowserRouter>
+      </PluginProvider>
+    </UserProvider>
   </StateProvider>,
-  rootNode,
 )
 
 export * from './components'
-export * from './contexts/store'
+export { StateContext, StateProvider } from './contexts/store'
+export { UserContext, UserProvider } from './contexts/user'
+export { PluginContext, PluginProvider } from './contexts/plugin'
 export * from './hooks'
 export * from './types'

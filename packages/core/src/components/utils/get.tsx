@@ -6,7 +6,7 @@ type Props = {
   path: string
 }
 
-export const Get = ({ path }: Props) => {
+export function Get({ path }: Props) {
   const { data, status } = useExothermic(path)
 
   if (status === 'LOADING') {
@@ -14,7 +14,7 @@ export const Get = ({ path }: Props) => {
   }
 
   if (!data) {
-    return <></>
+    return null
   }
 
   return <PageFragment {...data} class='get-loaded' />

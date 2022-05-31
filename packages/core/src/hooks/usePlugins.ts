@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react'
 import yaml from 'js-yaml'
 
-import { state } from '../contexts/store'
+import { StateContext } from '../contexts/store'
 import { debug, error } from '../components/utils'
 import { retryPromise } from '../utils'
 
@@ -10,17 +10,24 @@ const load = ({ resolve }) => {
   return loadedPlugin ? Promise.resolve(loadedPlugin) : Promise.reject()
 }
 
-const processPlugin = (loadedPlugin: {
-  register: { tags: Record<string, (jsYaml: any) => yaml.Type> }
-}) => {
+type LoadedPlugin = {
+  register: {
+    tags: Record<string, (jsYaml: any) => yaml.Type>
+  }
+}
+
+const processPlugin = (loadedPlugin: LoadedPlugin) => {
   if (loadedPlugin.register?.tags) {
-    return loadedPlugin.register?.tags as Record<string, (jsYaml: any) => yaml.Type>
+    return loadedPlugin.register?.tags as Record<
+      string,
+      (jsYaml: any, explicitName?: string) => yaml.Type
+    >
   }
   return null
 }
 
 export const usePlugins = () => {
-  const { store, dispatch } = useContext(state)
+  const { store, dispatch } = useContext(StateContext)
   const [pluginRegistryLoaded, setPluginRegistryLoaded] = useState(store.pluginRegistryLoaded)
 
   useEffect(() => {
@@ -28,14 +35,26 @@ export const usePlugins = () => {
       const reg = (store.config.plugins ?? [])
         ?.filter((plugin) => !store.cache[plugin.resolve])
         ?.map((plugin) =>
-          retryPromise({ fn: load }, { resolve: plugin.resolve })
+          retryPromise<LoadedPlugin>({ fn: load }, { resolve: plugin.resolve })
             .then((loadedPlugin) => {
-              dispatch({ type: 'APPEND_CACHE', key: plugin.resolve, value: 'loaded' })
+              if (dispatch) {
+                dispatch({ type: 'APPEND_CACHE', key: plugin.resolve, value: 'loaded' })
+              }
               const yamlTypes = processPlugin(loadedPlugin)
 
               if (yamlTypes) {
                 Object.keys(yamlTypes).forEach((key) => {
-                  dispatch({ type: 'REGISTER_TAG', key, value: yamlTypes[key](yaml) })
+                  if (plugin.exclude?.includes(key)) {
+                    return
+                  }
+                  const registeredTagName = plugin.nameMap?.[key] ?? key
+                  if (dispatch) {
+                    dispatch({
+                      type: 'REGISTER_TAG',
+                      key: registeredTagName,
+                      value: yamlTypes[key](yaml, registeredTagName),
+                    })
+                  }
                 })
               }
             })
@@ -46,7 +65,9 @@ export const usePlugins = () => {
         )
 
       Promise.all(reg).then(() => {
-        dispatch({ type: 'SET_PLUGINS_LOADED' })
+        if (dispatch) {
+          dispatch({ type: 'SET_PLUGINS_LOADED' })
+        }
         setPluginRegistryLoaded(true)
       })
     }

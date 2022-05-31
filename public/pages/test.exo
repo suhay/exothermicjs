@@ -1,14 +1,13 @@
 ---
 title: Test page
-templates: ['page.exo']
-page:
+$top: !get fragments/nav
+$main:
   - !main
     class: container
     items:
-    - !section
-      title: '# Test page'
-      class: row
-      items:
-      - !col
-        content: 'weeeee'
-  
+      - !section
+        title: '# Test page'
+        class: row
+        items:
+          - !col
+            content: 'weeeee'

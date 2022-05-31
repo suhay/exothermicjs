@@ -3,23 +3,23 @@ import ReactMarkdown from 'react-markdown'
 
 import { PageFragmentType } from '../../types'
 import { Content } from './content'
-import { state } from '../../contexts/store'
+import { StateContext } from '../../contexts/store'
 
 interface PageFragmentProps<T> {
   as?: T
 }
 
-export const PageFragment = <T extends ElementType>({
+export function PageFragment<T extends ElementType>({
   id,
   title,
   items = [],
   class: classes,
   content,
   as,
-}: PageFragmentType & PageFragmentProps<T>) => {
+}: PageFragmentType & PageFragmentProps<T>) {
   const {
     store: { pageTemplate: page },
-  } = useContext(state)
+  } = useContext(StateContext)
   const Component = as ?? 'div'
 
   return (

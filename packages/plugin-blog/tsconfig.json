@@ -1,27 +1,12 @@
 {
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "lib": [
-      "es5",
-      "es6",
-      "DOM"
-    ],
-    "module": "commonjs",
-    "target": "es5",
-    "sourceMap": true,
-    "jsx": "react-jsx",
-    "skipLibCheck": true,
-    "moduleResolution": "node",
-    "forceConsistentCasingInFileNames": true,
-    "allowSyntheticDefaultImports": true,
-    "noImplicitAny": false,
-    "esModuleInterop": true,
     "outDir": "./out",
     "rootDir": "./src",
-    "declaration": true,
-    "emitDeclarationOnly": true
+    "baseUrl": ".",
   },
   "include": [
-    "./src/index.tsx"
+    "./src/**/*",
   ],
   "exclude": [
     "node_modules",

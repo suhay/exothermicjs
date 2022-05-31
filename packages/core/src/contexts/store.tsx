@@ -3,7 +3,7 @@ import yaml from 'js-yaml'
 
 import { Config, Template } from '../types'
 
-export type Action =
+type Action =
   | { type: 'SET_CONFIG'; config: Config }
   | { type: 'SET_BASE'; template: Template }
   | { type: 'SET_PAGE'; template: Template }
@@ -12,7 +12,7 @@ export type Action =
   | { type: 'REGISTER_TAG'; key: string; value: yaml.Type }
   | { type: 'SET_PLUGINS_LOADED' }
 
-export type Store = {
+type Store = {
   config?: Config
   baseTemplate: Template
   pageTemplate: Template
@@ -23,7 +23,7 @@ export type Store = {
   pluginRegistryLoaded: boolean
 }
 
-export type State = {
+type State = {
   store: Store
   dispatch?: Dispatch<Action>
 }
@@ -54,7 +54,7 @@ type Reducer = (prevState: State, action: Action) => State
 const state = createContext(initialState)
 const { Provider } = state
 
-const StateProvider = ({ children }: Props) => {
+function StateProvider({ children }: Props) {
   const [reducerState, dispatch] = useReducer<Reducer>((prevState, action) => {
     const newState = { ...prevState }
     switch (action.type) {
@@ -112,4 +112,4 @@ const StateProvider = ({ children }: Props) => {
   return <Provider value={{ ...reducerState, dispatch }}>{children}</Provider>
 }
 
-export { state, StateProvider }
+export { state as StateContext, StateProvider }

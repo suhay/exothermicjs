@@ -9,7 +9,7 @@ type Props = {
   path: string
 }
 
-export const Markdown = ({ path }: Props) => {
+export function Markdown({ path }: Props) {
   const { data, status } = useLoader(`markdown/${path}.md`)
 
   if (status === 'LOADING') {
@@ -17,7 +17,7 @@ export const Markdown = ({ path }: Props) => {
   }
 
   if (!data) {
-    return <></>
+    return null
   }
 
   return (

@@ -3,14 +3,14 @@ import { wrapPromise } from './suspendablePromise'
 
 export type BootStrap = {
   config: {
-    load: () => Config
+    load: () => Config | undefined
   }
 }
 
 const fetchConfig = () =>
   fetch('/exothermic.config.json')
     .then((resp) => resp.json())
-    .then((file) => file as Config)
+    .then((file: Config) => file)
     .catch(
       () =>
         ({

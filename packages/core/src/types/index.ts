@@ -1,10 +1,12 @@
 import { ReactElement, ReactNode } from 'react'
 
-type Plugin = {
+export type Plugin = {
   resolve: string
   url: string
   loaded: boolean
-  options: any
+  options?: Record<string, string>
+  exclude?: string[]
+  nameMap?: Record<string, string>
 }
 
 export type MetaFragment = {
@@ -36,10 +38,22 @@ export interface Template extends PageFragmentType, HeadFragment {
   scripts?: string[]
   $top?: ReactElement
   $bottom?: ReactElement
+  secure?: ReactElement
 }
 
 export type Config = {
   pagePath: string
   basePath?: string
   plugins?: Plugin[]
+}
+
+export type LoadingState = 'LOADING' | 'LOADED' | 'ERROR'
+
+export type UserContextType = {
+  isAuthenticated: () => boolean
+  data: Record<string, string | number>
+}
+
+export type PluginContextType = {
+  plugins: Record<string, any>
 }

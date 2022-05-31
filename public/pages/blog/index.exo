@@ -1,10 +1,11 @@
 ---
 description: Our blog roll
-page:
+$top:
   - !header
     class: container
     items:
       - !get fragments/nav
+$main:
   - !main
     class: container
     items:

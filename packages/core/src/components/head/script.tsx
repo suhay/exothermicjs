@@ -1,11 +1,11 @@
 import { guid } from '../utils'
 
-export const scriptTags = (scripts: string[]) => {
+export const scriptTags = (scripts?: string[]) => {
   if (!scripts?.length) {
     return []
   }
-  const tags = []
-  const scriptBody = []
+  const tags: any[] = []
+  const scriptBody: string[] = []
   scripts.forEach((tag) => {
     if (typeof tag === 'string') {
       tags.push({ src: tag })

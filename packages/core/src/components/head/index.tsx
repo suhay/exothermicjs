@@ -5,13 +5,13 @@ import { metaTags } from './meta'
 import { linkTags } from './link'
 import { scriptTags } from './script'
 import version from '../../version'
-import { state } from '../../contexts/store'
+import { StateContext } from '../../contexts/store'
 import { HeadFragment } from '../../types'
 
-export const Head = () => {
+export function Head() {
   const {
     store: { baseTemplate: base, pageTemplate: page },
-  } = useContext(state)
+  } = useContext(StateContext)
   const [headData, setHeadData] = useState<HeadFragment>()
   const [meta, setMeta] = useState<JSX.Element[]>()
   const [description, setDescription] = useState<string>('New ExothermicJS page description')
@@ -29,16 +29,16 @@ export const Head = () => {
   }, [base, page])
 
   useEffect(() => {
-    if (headData) {
+    if (headData != null) {
       setMeta(metaTags(headData.meta))
-      setDescription(headData.description)
-      setTitle(headData.title)
+      setDescription(headData.description ?? '')
+      setTitle(headData.title ?? '')
       setLinks(linkTags(headData.links))
       setHeadScripts(scriptTags(headData.headScripts))
     }
   }, [headData])
 
-  if (!base || !headData) return <></>
+  if (!base || !headData) return null
 
   return (
     <Helmet>

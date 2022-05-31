@@ -6,10 +6,10 @@ type Props = {
   interval?: number
 }
 
-export const retryPromise = (
+export const retryPromise = <T>(
   { fn, retriesLeft = 5, interval = 500 }: Props,
   args: any,
-): Promise<any> =>
+): Promise<T> =>
   fn(args).catch(() => {
     if (retriesLeft === 0) {
       throw new Error('error loading plugin')

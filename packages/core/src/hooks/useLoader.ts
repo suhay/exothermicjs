@@ -1,11 +1,11 @@
 import { useContext, useEffect, useState } from 'react'
 
-import { state } from '../contexts/store'
-import { Config } from '../types'
+import { StateContext } from '../contexts/store'
+import { Config, LoadingState } from '../types'
 
 export type LoaderFile = {
   data: string
-  status: 'LOADING' | 'LOADED'
+  status: LoadingState
 }
 
 const buildRoute = (route: string, config: Config) => {
@@ -16,15 +16,15 @@ const buildRoute = (route: string, config: Config) => {
   return route.replace(/\/\/+/, '/')
 }
 
-export const useLoader = (route: string): LoaderFile => {
-  const { store } = useContext(state)
-  const [data, setData] = useState<string>()
-  const [status, setStatus] = useState<'LOADING' | 'LOADED'>('LOADING')
+export const useLoader = (route?: string): LoaderFile => {
+  const { store } = useContext(StateContext)
+  const [data, setData] = useState<string>('')
+  const [status, setStatus] = useState<LoadingState>('LOADING')
 
   useEffect(() => {
     setStatus('LOADING')
 
-    if (route) {
+    if (route && store.config) {
       const selectedRoute = buildRoute(route, store.config)
 
       fetch(selectedRoute)

@@ -1,15 +1,15 @@
 import { useContext, useEffect, useState } from 'react'
 import yaml from 'js-yaml'
 
-import { Config, Template } from '../types'
-import { state } from '../contexts/store'
+import { Config, LoadingState, Template } from '../types'
+import { StateContext } from '../contexts/store'
 import { debug } from '../components/utils'
 import { useSchema } from './useSchema'
 import { useConfig } from '.'
 
 type ExothermicFile = {
   data?: Template
-  status: 'LOADING' | 'LOADED'
+  status: LoadingState
   dat?: {
     load: () => Template
   }
@@ -78,9 +78,9 @@ const buildTemplate = (
 
 export const useExothermic = (route: string, isBaseTemplate?: boolean): ExothermicFile => {
   isBaseTemplate = isBaseTemplate ?? route === 'base.exo'
-  const { store, dispatch } = useContext(state)
+  const { store, dispatch } = useContext(StateContext)
   const [data, setData] = useState<Template>()
-  const [status, setStatus] = useState<'LOADING' | 'LOADED'>('LOADING')
+  const [status, setStatus] = useState<LoadingState>('LOADING')
   const [currentRoute, setCurrentRoute] = useState(route)
   const schema = useSchema()
   const config = useConfig()
@@ -104,7 +104,9 @@ export const useExothermic = (route: string, isBaseTemplate?: boolean): Exotherm
     ) {
       buildTemplate(route, config, schema, store.cache)
         .then(({ builtTemplate, rawTemplate, selectedRoute }) => {
-          dispatch({ type: 'APPEND_CACHE', key: selectedRoute, value: rawTemplate })
+          if (dispatch) {
+            dispatch({ type: 'APPEND_CACHE', key: selectedRoute, value: rawTemplate })
+          }
           setData(builtTemplate)
           debug(`LOADED: ${route}`)
           setStatus('LOADED')

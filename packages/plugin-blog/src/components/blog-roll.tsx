@@ -9,7 +9,7 @@ type Props = {
   options?: any[]
 }
 
-export const BlogRoll = ({ title, class: classProps, options = [] }: Props) => {
+export function BlogRoll({ title, class: classProps, options = [] }: Props) {
   const config = useConfig()
   const [manifestPath, setManifestPath] = useState<string>()
   const { data, status } = useLoader(manifestPath)
@@ -19,9 +19,9 @@ export const BlogRoll = ({ title, class: classProps, options = [] }: Props) => {
 
   useEffect(() => {
     if (config) {
-      const plugin = config.plugins.find((plug) => plug.resolve === '@exothermic/plugin-blog')
-      setManifestPath(`${plugin.options.path}/_manifest.json`)
-      setPluginPath(plugin.options.path)
+      const plugin = config.plugins?.find((plug) => plug.resolve === '@exothermic/plugin-blog')
+      setManifestPath(`${plugin?.options?.path}/_manifest.json`)
+      setPluginPath(plugin?.options?.path)
     }
   }, [config])
 
@@ -67,7 +67,7 @@ export const BlogRoll = ({ title, class: classProps, options = [] }: Props) => {
       <Content content={title} />
       <ul>
         {dates
-          .sort((a, b) => parseInt(b, 10) - parseInt(a, 10))
+          ?.sort((a, b) => parseInt(b, 10) - parseInt(a, 10))
           .map((date) => (
             <li key={manifest[date].filename}>
               {options.includes('image') && showImage(manifest[date].image, date)}

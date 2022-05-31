@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useLoader, useConfig } from '@exothermic/core'
+import { useLoader, useConfig, Loading } from '@exothermic/core'
 
 import {
   readingTime,
@@ -18,7 +18,48 @@ type Props = {
   options?: any[]
 }
 
-export const BlogArticle = ({ class: classProps, options = [] }: Props) => {
+type ArticleProps = {
+  date?: string
+  options?: any[]
+  manifest: BlogManifest
+}
+
+function Article({ date, options, manifest }: ArticleProps): JSX.Element {
+  if (options?.length && date) {
+    return (
+      <>
+        {options.map((option) => {
+          const key = typeof option === 'string' ? option : ''
+
+          switch (key) {
+            case 'tags':
+              return showTags(manifest[date].tags, date)
+            case 'date':
+              return showDate(date)
+            case 'title':
+              return showTitle(manifest[date].title)
+            case 'abstract':
+              return showAbstract(manifest[date].abstract, date)
+            case 'author':
+              return showAuthor(manifest[date].author, date)
+            case 'readingLength':
+              return readingTime('')
+            case 'readingProgress':
+              return <MarkdownProgress />
+            case 'image':
+              return showImage(manifest[date].image, date)
+            default:
+              return null
+          }
+        })}
+      </>
+    )
+  }
+
+  return showTitle(manifest[date ?? ''].title)
+}
+
+export function BlogArticle({ class: classProps, options = [] }: Props) {
   const config = useConfig()
   const [manifestPath, setManifestPath] = useState<string>()
   const { data, status } = useLoader(manifestPath)
@@ -28,8 +69,8 @@ export const BlogArticle = ({ class: classProps, options = [] }: Props) => {
 
   useEffect(() => {
     if (config) {
-      const plugin = config.plugins.find((plug) => plug.resolve === '@exothermic/plugin-blog')
-      setManifestPath(`${plugin.options.path}/_manifest.json`)
+      const plugin = config.plugins?.find((plug) => plug.resolve === '@exothermic/plugin-blog')
+      setManifestPath(`${plugin?.options?.path}/_manifest.json`)
       // setPluginPath(plugin.options.path)
     }
   }, [config])
@@ -43,44 +84,16 @@ export const BlogArticle = ({ class: classProps, options = [] }: Props) => {
   }, [data])
 
   if (status === 'LOADING') {
-    return <>Loading...</>
+    return <Loading />
   }
 
-  const article = (date: string) => {
-    if (options.length) {
-      return options.map((option) => {
-        const key = typeof option === 'string' ? option : ''
-
-        switch (key) {
-          case 'tags':
-            return showTags(manifest[date].tags, date)
-          case 'date':
-            return showDate(date)
-          case 'title':
-            return showTitle(manifest[date].title)
-          case 'abstract':
-            return showAbstract(manifest[date].abstract, date)
-          case 'author':
-            return showAuthor(manifest[date].author, date)
-          case 'readingLength':
-            return readingTime('')
-          case 'readingProgress':
-            return <MarkdownProgress />
-          case 'image':
-            return showImage(manifest[date].image, date)
-          default:
-            return null
-        }
-      })
-    }
-
-    return showTitle(manifest[date].title)
+  if (!manifest) {
+    return <>No article found!</>
   }
 
-  return <article className={classProps ?? ''}>{article('0')}</article>
+  return (
+    <article className={classProps ?? ''}>
+      <Article manifest={manifest} options={options} />
+    </article>
+  )
 }
-
-// <p class="text-center"><span class="blog-tag">The Exothermic Project</span><span class="blog-author">Matt Suhay</span><span class="blog-date">Jun 1, 2021</span></p>
-
-// ![An overstuffed office filled with books and papers](https://images-suhay.sfo3.cdn.digitaloceanspaces.com/samet-kurtkus-HKFgPPPLdyI-unsplash.jpg)
-// <figcaption>Photo by <a href="https://unsplash.com/@sametkurtkus?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Samet Kurtkus</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a></figcaption>

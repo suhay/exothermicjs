@@ -4,8 +4,8 @@ type Props = {
   startAt?: number
 }
 
-export const MarkdownProgress = ({ startAt = 0 }: Props) => {
-  const [scrollPosition, setScrollPosition] = useState<number>()
+export function MarkdownProgress({ startAt = 0 }: Props) {
+  const [scrollPosition, setScrollPosition] = useState<number>(0)
 
   const handleScroll = () => {
     const position = window.pageYOffset
@@ -21,6 +21,7 @@ export const MarkdownProgress = ({ startAt = 0 }: Props) => {
   }, [])
 
   return (
+    // eslint-disable-next-line react/jsx-no-useless-fragment
     <>
       {scrollPosition >= startAt && (
         <progress id='file' max='100' value={scrollPosition}>{`${scrollPosition}%`}</progress>
