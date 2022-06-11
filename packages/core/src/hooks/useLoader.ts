@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 
-import { StateContext } from '../contexts/store'
+import { StateContext } from '~/contexts/store'
 import { Config, LoadingState } from '../types'
 
 export type LoaderFile = {

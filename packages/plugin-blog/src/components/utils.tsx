@@ -1,7 +1,7 @@
 import { DateTime, Duration } from 'luxon'
 import { Link } from '@exothermic/core'
 
-import { BlogAuthor, BlogImage } from '../types'
+import { BlogAuthor, BlogImage } from '~/types'
 
 export const readingTime = (content: string) => {
   const words = content.match(/\S+/g)?.length ?? 0

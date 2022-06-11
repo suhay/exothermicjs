@@ -1,22 +1,8 @@
-const path = require('path')
 const { merge } = require('webpack-merge')
 
 const common = require('../../webpack.common.js')
+const config = require('./webpack.config.js')
 
-module.exports = merge(common, {
+module.exports = merge(common, config, {
   mode: 'development',
-  entry: {
-    'plugin-appwrite': './src/index.tsx',
-  },
-  output: {
-    library: {
-      name: '@exothermic/plugin-appwrite',
-      type: 'umd',
-    },
-    path: path.resolve(__dirname, 'dist'),
-  },
-  externals: {
-    '@exothermic/core': '@exothermic/core',
-    react: 'React',
-  },
 })

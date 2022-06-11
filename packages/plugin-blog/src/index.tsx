@@ -6,4 +6,4 @@ export const register = {
   },
 }
 
-export { BlogRoll } from './components/blog-roll'
+export { BlogRoll } from './components/BlogRoll'

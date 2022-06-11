@@ -1,11 +1,12 @@
 import { ReactElement, useContext, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 
-import { useExothermic, usePlugins } from '../hooks'
-import { StateContext } from '../contexts/store'
-import { Loading } from './utils/loading'
+import { StateContext } from '~/contexts/store'
+import { UserContext } from '~/contexts/user'
+import { useExothermic } from '~/hooks/useExothermic'
+import { usePlugins } from '~/hooks/usePlugins'
 import { LoadingState, Template } from '../types'
-import { UserContext } from '../contexts/user'
+import { Loading } from './utils/Loading'
 
 function Main({ status, data }: { status: LoadingState; data?: Template }) {
   const { user } = useContext(UserContext)

@@ -1,6 +1,6 @@
-import { useExothermic } from '../../hooks/useExothermic'
-import { PageFragment } from './fragment'
-import { Loading } from './loading'
+import { useExothermic } from '~/hooks/useExothermic'
+import { PageFragment } from './PageFragment'
+import { Loading } from './Loading'
 
 type Props = {
   path: string

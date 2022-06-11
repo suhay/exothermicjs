@@ -1,6 +1,6 @@
 import { guid } from '@exothermic/core'
 
-import { BlogRoll } from '../../components/blog-roll'
+import { BlogRoll } from '../../components/BlogRoll'
 
 export const BlogRollYamlType = (yaml: any) =>
   new yaml.Type('!blog-roll', {

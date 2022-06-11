@@ -1,7 +1,7 @@
 import { guid } from '@exothermic/core'
-import { AppwriteApiType } from '..'
 
-import { AppwriteWrapper } from '../../components/api-wrapper'
+import { AppwriteApiType } from '..'
+import { AppwriteWrapper } from '~/components/AppwriteWrapper'
 
 export const AppwriteSecureYamlType = (yaml: any, explicitName?: string) =>
   new yaml.Type(`!${explicitName ?? 'appwrite-secure'}`, {

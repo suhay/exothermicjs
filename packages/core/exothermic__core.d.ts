@@ -1,10 +1,9 @@
-import { LoaderFile } from './src/hooks/useLoader'
-import { LinkProps } from './src/components/navbar/link'
-import { Config } from './src/types'
-import { ContentProps } from './src/components/utils/content'
-import { Loading } from './src/components/utils/loading'
-import { UserState } from './src/contexts/user'
+import { ContentProps } from '~/components/content/Content'
+import { LinkProps } from './src/components/navbar/Link'
 import { PluginState } from './src/contexts/plugin'
+import { UserState } from './src/contexts/user'
+import { LoaderFile } from './src/hooks/useLoader'
+import { Config } from './src/types'
 
 declare module '@exothermic/core' {
   /**

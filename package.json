@@ -1,18 +1,18 @@
 {
   "scripts": {
-    "dev": "yarn workspaces foreach --topological-dev run clean; yarn workspaces foreach --topological-dev run build:dev && run-p watch serve",
-    "watch": "yarn workspaces foreach --topological-dev run watch",
+    "watch": "nx run-many --target=watch --all",
+    "dev": "nx run-many --target=clean --all; run-p watch serve",
     "serve": "live-server public --host=localhost --wait=1000 --mount=/:packages/core/dist --mount=/:packages/plugin-blog/dist --mount=/:packages/plugin-appwrite/dist --entry-file=index.html",
     "serve:demo": "live-server demo --wait=1000 --mount=/:packages/core/dist --mount=/:packages/plugin-blog/dist --mount=/:packages/plugin-appwrite/dist",
     "debug:test": "NODE_ENV=test node --inspect-brk node_modules/.bin/jest --runInBand --no-cache",
-    "build": "yarn lint && yarn workspaces foreach --topological-dev run build",
-    "clean": "rimraf packages/*/dist; rimraf packages/*/out",
+    "build": "nx run-many --target=build --all",
+    "clean": "nx run-many --target=clean --all",
     "reset": "rimraf packages/*/node_modules; yarn clean; rm -rf node_modules",
     "test": "NODE_ENV=test jest --no-cache",
     "publish:push": "yarn build && lerna version && lerna publish from-package",
     "publish:dry-run": "lerna version --no-git-tag-version --no-push",
     "lint": "eslint ./",
-    "compile": "tsc --build"
+    "compile": "nx run-many --target=build --all"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.26.0",
@@ -26,6 +26,7 @@
     "eslint-plugin-react-hooks": "^4.5.0",
     "live-server": "^1.2.2",
     "npm-run-all": "^4.1.5",
+    "nx": "14.2.4",
     "rimraf": "^3.0.2"
   },
   "workspaces": [

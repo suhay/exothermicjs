@@ -1,8 +1,9 @@
-import { useContext, useState } from 'react'
-import { useForm, SubmitHandler } from 'react-hook-form'
-import { UserContext, PluginContext } from '@exothermic/core'
+import { UserContext } from '@exothermic/core'
+import { useContext, useEffect, useState } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
 
-import { SignUp } from './signup'
+import { useAppwrite } from '~/hooks/useAppwrite'
+import { SignUp } from './SignUp'
 
 type Inputs = {
   email: string
@@ -10,22 +11,32 @@ type Inputs = {
 }
 
 export function Login() {
-  const { state: pluginState } = useContext(PluginContext)
-  const { appwrite } = pluginState.plugins
   const { dispatch } = useContext(UserContext)
 
   const [isSigningUp, setIsSigningUp] = useState(false)
   const { register, handleSubmit } = useForm<Inputs>()
+  const appwrite = useAppwrite()
 
-  const login: SubmitHandler<Inputs> = ({ email, password }) => {
-    appwrite.account
-      .createSession(email, password)
-      .then(() => appwrite.account.get())
-      .then((loggedInUser) => {
-        if (dispatch) {
-          dispatch({ type: 'SET_USER', user: loggedInUser })
-        }
-      })
+  const loginWithSession = async () => {
+    const loggedInUser = await appwrite.getAccount()
+    if (dispatch && loggedInUser) {
+      dispatch({ type: 'SET_USER', user: loggedInUser })
+    }
+  }
+
+  useEffect(() => {
+    loginWithSession()
+  }, [])
+
+  const login: SubmitHandler<Inputs> = async ({ email, password }) => {
+    const session = await appwrite.createSession(email, password)
+
+    if (session) {
+      const loggedInUser = await appwrite.getAccount()
+      if (dispatch && loggedInUser) {
+        dispatch({ type: 'SET_USER', user: loggedInUser })
+      }
+    }
   }
 
   return isSigningUp ? (

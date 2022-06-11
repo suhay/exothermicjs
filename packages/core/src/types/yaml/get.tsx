@@ -1,6 +1,6 @@
 import yaml from 'js-yaml'
 
-import { Get } from '../../components/utils/get'
+import { Get } from '~/components/utils/Get'
 
 export const GetYamlType = new yaml.Type('!get', {
   kind: 'scalar',

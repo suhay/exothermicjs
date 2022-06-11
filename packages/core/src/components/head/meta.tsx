@@ -1,5 +1,5 @@
 import { MetaFragment } from '../../types'
-import { guid } from '../utils'
+import { guid } from '~/utils/guid'
 
 export function Meta({ name, content, attrs }: MetaFragment) {
   if (name && content) {

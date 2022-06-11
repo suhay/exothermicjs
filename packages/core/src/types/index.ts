@@ -22,9 +22,10 @@ export interface PageFragmentType {
   content?: string | ReactNode
   title?: string
   as?: any
+  template?: string
 }
 
-export interface HeadFragment {
+export interface HeadFragmentType {
   description?: string
   headScripts?: any[]
   links?: string[]
@@ -32,7 +33,7 @@ export interface HeadFragment {
   title?: string
 }
 
-export interface Template extends PageFragmentType, HeadFragment {
+export interface Template extends PageFragmentType, HeadFragmentType {
   page?: ReactNode[]
   $main?: ReactNode[]
   scripts?: string[]

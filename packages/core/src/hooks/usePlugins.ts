@@ -2,8 +2,8 @@ import { useContext, useEffect, useState } from 'react'
 import yaml from 'js-yaml'
 
 import { StateContext } from '../contexts/store'
-import { debug, error } from '../components/utils'
-import { retryPromise } from '../utils'
+import { debug, error } from '~/utils/logger'
+import { retryPromise } from '~/utils/retryPromise'
 
 const load = ({ resolve }) => {
   const loadedPlugin = window[resolve]

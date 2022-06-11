@@ -3,16 +3,17 @@
   "compilerOptions": {
     "outDir": "./out",
     "rootDir": "./src",
-    "baseUrl": ".",
+    "baseUrl": "./",
+    "paths": {
+      "~/*": ["./src/*", "../core/src/*"]
+    }
   },
   "include": [
-    "./src/**/*",
+    "src",
   ],
-  "exclude": [
-    "node_modules",
-    "build",
-    "dist",
-    "out",
-    "tests"
+  "references": [
+    {
+      "path": "../core"
+    }
   ]
 }

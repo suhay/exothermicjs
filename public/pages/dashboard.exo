@@ -6,4 +6,11 @@ $main:
   - !main
     items:
       - !appwrite
-        api:
+        api: database
+        action: list
+        collection: 629577d16230f8150474
+        items:
+          - !foreach
+            items:
+              - !fragment
+                template: '[{{ prompt }}](/entry/?id={{ $id }}) - {{ date }}'

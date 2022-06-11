@@ -2,7 +2,7 @@ import { ReactNode } from 'react'
 import { NavLink } from 'react-router-dom'
 import { HashLink } from 'react-router-hash-link'
 
-import { useConfig } from '../../hooks'
+import { useConfig } from '~/hooks/useConfig'
 
 export type LinkProps = {
   to: string

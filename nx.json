@@ -1,0 +1,31 @@
+{
+  "extends": "nx/presets/npm.json",
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "nx/tasks-runners/default",
+      "options": {
+        "cacheableOperations": [
+          "clean",
+          "test",
+          "test:coverage",
+          "compile",
+          "watch",
+          "build",
+          "build:json",
+          "build:dev"
+        ]
+      }
+    }
+  },
+  "targetDependencies": {
+    "build": [
+      {
+        "target": "build",
+        "projects": "dependencies"
+      }
+    ]
+  },
+  "affected": {
+    "defaultBase": "main"
+  }
+}

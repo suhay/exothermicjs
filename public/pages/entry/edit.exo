@@ -1,0 +1,13 @@
+---
+title: Introspection Edit Journal Entry
+secure: !appwrite-secure /dashboard
+$top: !get fragments/nav
+$main:
+  - !main
+    items:
+      - !appwrite
+        api: database
+        action: update
+        collection: 629577d16230f8150474
+#       items:
+#         - !rich-text-editor body

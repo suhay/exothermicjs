@@ -1,11 +1,12 @@
 import { Suspense, useContext, useEffect, useState } from 'react'
 
-import { useExothermic, useConfig } from '../hooks'
-import { BootStrap, bootstrap } from '../utils/bootstrap'
-import { Page } from './page'
-import { Head } from './head'
-import { StateContext } from '../contexts/store'
-import { Loading } from './utils/loading'
+import { StateContext } from '~/contexts/store'
+import { useExothermic } from '~/hooks/useExothermic'
+import { useConfig } from '~/hooks/useConfig'
+import { BootStrap, bootstrap } from '~/utils/bootstrap'
+import { Head } from './head/Head'
+import { Page } from './Page'
+import { Loading } from './utils/Loading'
 
 const initialResource = bootstrap()
 

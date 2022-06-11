@@ -1,6 +1,8 @@
+import { UserContext } from '@exothermic/core'
 import { Dispatch, SetStateAction, useContext } from 'react'
-import { useForm, SubmitHandler } from 'react-hook-form'
-import { UserContext, PluginContext } from '@exothermic/core'
+import { SubmitHandler, useForm } from 'react-hook-form'
+
+import { useAppwrite } from '~/hooks/useAppwrite'
 
 type Inputs = {
   name: string
@@ -9,17 +11,17 @@ type Inputs = {
 }
 
 export function SignUp({ setIsSigningUp }: { setIsSigningUp: Dispatch<SetStateAction<boolean>> }) {
-  const { state: pluginState } = useContext(PluginContext)
-  const { appwrite } = pluginState.plugins
   const { dispatch } = useContext(UserContext)
-
   const { register, handleSubmit } = useForm<Inputs>()
+  const appwrite = useAppwrite()
 
   const signup: SubmitHandler<Inputs> = async ({ email, password, name }) => {
-    const newUser = await appwrite.account.create('unique()', email, password, name)
-    await appwrite.account.createSession(email, password)
-    if (dispatch) {
-      dispatch({ type: 'SET_USER', user: newUser })
+    const newUser = await appwrite.createAccount('unique()', email, password, name)
+    if (newUser) {
+      const session = await appwrite.createSession(email, password)
+      if (dispatch && session) {
+        dispatch({ type: 'SET_USER', user: newUser })
+      }
     }
   }
 

@@ -1,8 +1,8 @@
 import yaml from 'js-yaml'
 
-import { guid } from '../../components/utils'
+import { guid } from '~/utils/guid'
 import { PageFragmentType } from '..'
-import { PageFragment } from '../../components/utils/fragment'
+import { PageFragment } from '~/components/utils/PageFragment'
 
 export const MainYamlType = new yaml.Type('!main', {
   kind: 'mapping',
@@ -11,6 +11,6 @@ export const MainYamlType = new yaml.Type('!main', {
   },
   construct(data: PageFragmentType) {
     const { id } = data
-    return <PageFragment as="main" {...data} key={id ?? guid()} />
+    return <PageFragment as='main' {...data} key={id ?? guid()} />
   },
 })

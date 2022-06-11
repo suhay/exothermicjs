@@ -11,6 +11,8 @@ type Action =
   | { type: 'APPEND_CACHE'; key: string; value: string }
   | { type: 'REGISTER_TAG'; key: string; value: yaml.Type }
   | { type: 'SET_PLUGINS_LOADED' }
+  | { type: 'SET_TITLE'; title: string }
+  | { type: 'SET_DESCRIPTION'; description: string }
 
 type Store = {
   config?: Config
@@ -56,7 +58,7 @@ const { Provider } = state
 
 function StateProvider({ children }: Props) {
   const [reducerState, dispatch] = useReducer<Reducer>((prevState, action) => {
-    const newState = { ...prevState }
+    const newState = { ...prevState } as State
     switch (action.type) {
       case 'SET_CONFIG':
         newState.store.config = action.config
@@ -79,6 +81,14 @@ function StateProvider({ children }: Props) {
 
         newState.store.baseTemplate = action.template
         newState.store.baseTemplate.headScripts = Array.from(dedupeScripts.keys())
+        break
+
+      case 'SET_TITLE':
+        newState.store.pageTemplate.title = action.title
+        break
+
+      case 'SET_DESCRIPTION':
+        newState.store.pageTemplate.description = action.description
         break
 
       case 'SET_PAGE':

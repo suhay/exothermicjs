@@ -3,14 +3,14 @@
   "plugins": [
     {
       "resolve": "@exothermic/plugin-blog",
-      "url": "plugin-blog.js",
+      "url": "/plugin-blog.js",
       "options": {
         "path": "blog"
       }
     },
     {
       "resolve": "@exothermic/plugin-appwrite",
-      "url": "plugin-appwrite.js",
+      "url": "/plugin-appwrite.js",
       "options": {
         "theme": "material",
         "project": "627843df706739e67ea5",

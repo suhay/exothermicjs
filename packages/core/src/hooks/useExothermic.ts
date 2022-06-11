@@ -1,11 +1,12 @@
-import { useContext, useEffect, useState } from 'react'
 import yaml from 'js-yaml'
+import { useContext, useEffect, useState } from 'react'
+// import { useMatch } from 'react-router-dom'
 
-import { Config, LoadingState, Template } from '../types'
+import { useConfig } from './useConfig'
+import { debug } from '~/utils/logger'
 import { StateContext } from '../contexts/store'
-import { debug } from '../components/utils'
+import { Config, LoadingState, Template } from '../types'
 import { useSchema } from './useSchema'
-import { useConfig } from '.'
 
 type ExothermicFile = {
   data?: Template
@@ -22,6 +23,7 @@ type BuiltTemplate = {
 }
 
 const getRoute = (fromRoute: string, config: Config) => {
+  // const match = useMatch(fromRoute)
   const cleanup = new RegExp(`${config.basePath}|.html`)
   const baselessRoute = fromRoute.replace(cleanup, '')
   const selectedRoute = baselessRoute.endsWith('/') ? `${baselessRoute}index` : baselessRoute
