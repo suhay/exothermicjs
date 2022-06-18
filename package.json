@@ -9,9 +9,7 @@
     "clean": "nx run-many --target=clean --all",
     "reset": "rimraf packages/*/node_modules; yarn clean; rm -rf node_modules",
     "test": "NODE_ENV=test jest --no-cache",
-    "publish:push": "yarn build && lerna version && lerna publish from-package",
-    "publish:dry-run": "lerna version --no-git-tag-version --no-push",
-    "lint": "eslint ./",
+    "lint": "eslint ./packages/core/src/*",
     "compile": "nx run-many --target=build --all"
   },
   "devDependencies": {
@@ -40,5 +38,18 @@
     "react-dom": "^18.1.0"
   },
   "packageManager": "yarn@3.2.1",
-  "sideEffects": false
+  "sideEffects": false,
+  "nx": {
+    "targets": {
+      "dev": {
+        "executor": "nx:run-commands",
+        "options": {
+          "commands": [
+            "yarn watch",
+            "yarn serve"
+          ]
+        }
+      }
+    }
+  }
 }

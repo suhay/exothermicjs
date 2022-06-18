@@ -48,11 +48,25 @@ export function AppwriteWrapper(props: AppwrieApiWrapper) {
     return <Loading />
   }
 
-  switch (props.api) {
+  const { api, action } = props
+
+  switch (api) {
     case 'account':
-      return <Account action={props.action} redirect={props.redirect} />
+      const { redirect } = props
+      return <Account action={action} redirect={redirect} />
     case 'database':
-      return <Database collection={props.collection} action={props.action} items={props.items} />
+      const { editable, collection, items, randomize, control, setValue } = props
+      return (
+        <Database
+          collection={collection}
+          action={action}
+          items={items}
+          editable={editable}
+          randomize={randomize}
+          control={control}
+          setValue={setValue}
+        />
+      )
     default:
       return null
   }

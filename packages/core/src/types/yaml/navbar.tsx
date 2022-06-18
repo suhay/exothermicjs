@@ -1,17 +1,18 @@
 import yaml from 'js-yaml'
 
-import { Navbar } from '~/components/navbar/Navbar'
+import { Navbar, NavbarProps } from '~/components/navbar/Navbar'
+import { NavItemProps } from '~/components/navbar/NavItem'
 import { guid } from '~/utils/guid'
 
 export const NavbarYamlType = new yaml.Type('!navbar', {
   kind: 'mapping',
-  construct(data = {}) {
-    const { id = guid(), class: classProps, listClass, toggler = false } = data
-    const items = data.items.reduce((acc, item) => {
-      Object.entries<string>(item).forEach(([label, to]) =>
+  construct(data: NavbarProps & { class?: string } = { id: guid() }) {
+    const { id, class: classProps, listClass, toggler = false } = data
+    const items = data.items?.reduce((acc: NavItemProps[], item) => {
+      Object.entries(item).forEach(([label, to]) =>
         acc.push({
           label,
-          to,
+          to: to.toString(),
         }),
       )
 

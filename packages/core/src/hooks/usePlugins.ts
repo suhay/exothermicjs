@@ -1,11 +1,14 @@
-import { useContext, useEffect, useState } from 'react'
 import yaml from 'js-yaml'
+import { useEffect, useState } from 'react'
+import create from 'zustand'
 
-import { StateContext } from '../contexts/store'
-import { debug, error } from '~/utils/logger'
+import * as logger from '~/utils/logger'
 import { retryPromise } from '~/utils/retryPromise'
+import { useCache } from './useCache'
+import { useConfig } from './useConfig'
+import { useSchema } from './useSchema'
 
-const load = ({ resolve }) => {
+const load = ({ resolve }: { resolve: string }) => {
   const loadedPlugin = window[resolve]
   return loadedPlugin ? Promise.resolve(loadedPlugin) : Promise.reject()
 }
@@ -26,20 +29,46 @@ const processPlugin = (loadedPlugin: LoadedPlugin) => {
   return null
 }
 
+type PluginHook = {
+  pluginRegistryLoaded: boolean
+  setPluginRegistryLoaded: (pluginRegistryLoaded: boolean) => void
+  tags: Record<string, yaml.Type>
+  addTag: (key: string, val: yaml.Type) => void
+  routes: Record<string, string>
+}
+
+const useStore = create<PluginHook>((set, get) => ({
+  pluginRegistryLoaded: false,
+  setPluginRegistryLoaded: (pluginRegistryLoaded: boolean) => set({ pluginRegistryLoaded }),
+  tags: {},
+  addTag: (key: string, val: yaml.Type) => {
+    const { tags } = get()
+    const newTags = { ...tags }
+    newTags[key] = val
+    set({ tags: newTags })
+  },
+  routes: {},
+}))
+
 export const usePlugins = () => {
-  const { store, dispatch } = useContext(StateContext)
-  const [pluginRegistryLoaded, setPluginRegistryLoaded] = useState(store.pluginRegistryLoaded)
+  const config = useConfig()
+  const extendSchema = useSchema((state) => state.extendSchema)
+  const loaded = useStore((state) => state.pluginRegistryLoaded)
+  const setLoaded = useStore((state) => state.setPluginRegistryLoaded)
+  const tags = useStore((state) => state.tags)
+  const addTag = useStore((state) => state.addTag)
+  const routes = useStore((state) => state.routes)
+  const [pluginRegistryLoaded, setPluginRegistryLoaded] = useState(loaded)
+  const cache = useCache()
 
   useEffect(() => {
-    if (store.config) {
-      const reg = (store.config.plugins ?? [])
-        ?.filter((plugin) => !store.cache[plugin.resolve])
+    if (config.pagePath !== '') {
+      const reg = (config.plugins ?? [])
+        ?.filter((plugin) => !cache.get(plugin.resolve))
         ?.map((plugin) =>
           retryPromise<LoadedPlugin>({ fn: load }, { resolve: plugin.resolve })
             .then((loadedPlugin) => {
-              if (dispatch) {
-                dispatch({ type: 'APPEND_CACHE', key: plugin.resolve, value: 'loaded' })
-              }
+              cache.set(plugin.resolve, 'loaded')
               const yamlTypes = processPlugin(loadedPlugin)
 
               if (yamlTypes) {
@@ -48,36 +77,32 @@ export const usePlugins = () => {
                     return
                   }
                   const registeredTagName = plugin.nameMap?.[key] ?? key
-                  if (dispatch) {
-                    dispatch({
-                      type: 'REGISTER_TAG',
-                      key: registeredTagName,
-                      value: yamlTypes[key](yaml, registeredTagName),
-                    })
-                  }
+                  const newType = yamlTypes[key](yaml, registeredTagName)
+                  addTag(registeredTagName, newType)
+                  extendSchema(newType)
                 })
               }
             })
             .catch((err) => {
-              debug('plugin failed to load')
-              error(err)
+              logger.debug('plugin failed to load')
+              logger.error(err)
             }),
         )
 
-      Promise.all(reg).then(() => {
-        if (dispatch) {
-          dispatch({ type: 'SET_PLUGINS_LOADED' })
-        }
-        setPluginRegistryLoaded(true)
-      })
+      Promise.all(reg)
+        .then(() => {
+          setLoaded(true)
+          setPluginRegistryLoaded(true)
+        })
+        .catch((err) => logger.error(err))
     }
-  }, [store.config])
+  }, [config])
 
   return {
     pluginRegistryLoaded,
     plugins: {
-      tags: store.pluginTags,
-      routes: store.pluginRoutes,
+      tags,
+      routes,
     },
   }
 }

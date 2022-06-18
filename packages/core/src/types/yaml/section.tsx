@@ -1,8 +1,8 @@
 import yaml from 'js-yaml'
 
+import { PageFragment } from '~/components/utils/PageFragment'
 import { guid } from '~/utils/guid'
 import { PageFragmentType } from '..'
-import { PageFragment } from '~/components/utils/PageFragment'
 
 export const SectionYamlType = new yaml.Type('!section', {
   kind: 'mapping',

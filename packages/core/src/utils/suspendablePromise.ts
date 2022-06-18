@@ -3,6 +3,7 @@ import { LoadingState } from '../types'
 export const wrapPromise = <T>(promise: Promise<T>) => {
   let status: LoadingState = 'LOADING'
   let result: T
+  let error: any
   const suspender = promise.then(
     (r: T) => {
       status = 'LOADED'
@@ -10,7 +11,7 @@ export const wrapPromise = <T>(promise: Promise<T>) => {
     },
     (e: any) => {
       status = 'ERROR'
-      result = e
+      error = e
     },
   )
   return {
@@ -20,7 +21,7 @@ export const wrapPromise = <T>(promise: Promise<T>) => {
       } else if (status === 'ERROR') {
         throw result
       } else if (status === 'LOADED') {
-        return result
+        return error
       }
       return undefined
     },

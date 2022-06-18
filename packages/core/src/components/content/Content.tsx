@@ -1,7 +1,7 @@
-import { Fragment, ReactNode } from 'react'
+import { Fragment, ReactNode, useCallback } from 'react'
 import ReactMarkdown from 'react-markdown'
 import gfm from 'remark-gfm'
-
+import { DateTime } from 'luxon'
 import { Link } from '~/components/navbar/Link'
 
 export type ContentProps = {
@@ -17,25 +17,32 @@ function LinkRenderer(props: any) {
 }
 
 export function applyTemplate(template: string, data: Record<string, any>) {
+  if (!template) return null
+
   let content = template
   Object.entries(data).forEach(([key, val]) => {
-    const reg = `{{\\s*${key.replace('$', '\\$')}\\s*}}`
-    const exp = new RegExp(reg, 'g')
-    content = content.replace(exp, val)
+    const reg = `({{\\s*${key.replace('$', '\\$')}(?:\\s|\\|.*?)*}})`
+    const exp = new RegExp(reg)
+    const expg = new RegExp(reg, 'g')
+    const grp = content.match(exp)
+    let replaceVal = val
+
+    if (grp?.length) {
+      const parts = grp[0].replace(/{{|}}/g, '').split('|')
+      if (parts.length === 3) {
+        switch (parts[1].trim()) {
+          case 'dateTime':
+            replaceVal = DateTime.fromISO(replaceVal).toFormat(parts[2].trim())
+            break
+          default:
+            break
+        }
+      }
+    }
+    content = content.replace(expg, replaceVal)
   })
 
   return content
-}
-
-export function ContentTransform({
-  template,
-  data,
-}: {
-  template: string
-  data: Record<string, any>
-}) {
-  const content = applyTemplate(template, data)
-  return <Content content={content} />
 }
 
 export function Content({ content }: ContentProps) {
@@ -56,4 +63,15 @@ export function Content({ content }: ContentProps) {
 
   // eslint-disable-next-line react/jsx-no-useless-fragment
   return <>{content}</>
+}
+
+export function ContentTransform({
+  template,
+  data,
+}: {
+  template: string
+  data: Record<string, any>
+}) {
+  const content = useCallback(() => applyTemplate(template, data) ?? '', [template, data])
+  return <Content content={content()} />
 }

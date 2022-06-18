@@ -9,6 +9,7 @@ $main:
         api: database
         action: get
         collection: 629577d16230f8150474
+        editable: true
         items:
           - !head
             title: '{{ prompt }}'

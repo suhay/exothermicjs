@@ -24,7 +24,7 @@
     "@types/react": "^18.0.9",
     "@types/react-dom": "^18.0.5",
     "@types/react-router-dom": "^5.3.3",
-    "eslint": "^8.16.0",
+    "luxon": "^1.27.0",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-router-dom": "^6.3.0",
@@ -54,8 +54,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "8e22e9d8915b6b2d8158f9ef388d9b1c09e9a49f",
-  "dependencies": {
-    "luxon": "^1.27.0"
-  }
+  "gitHead": "8e22e9d8915b6b2d8158f9ef388d9b1c09e9a49f"
 }

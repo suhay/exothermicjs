@@ -3,3 +3,7 @@ demo/*
 **/node_modules/*
 public/*
 **/out/*
+**.d.ts
+tsconfig.*
+webpack.*
+wdyr.ts

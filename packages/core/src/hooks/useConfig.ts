@@ -1,42 +1,21 @@
-import { useContext, useEffect, useState } from 'react'
+import create from 'zustand'
 
-import { StateContext } from '~/contexts/store'
-import { Config } from '../types'
+import { Config, Plugin } from '../types'
 
-export const useConfig = (initialConfig?: Config): Config | undefined => {
-  const { store, dispatch } = useContext(StateContext)
-  const [config, setConfig] = useState<Config>()
+export const useConfig = create<Config>((set) => ({
+  pagePath: '',
+  setPagePath: (path: string) => set({ pagePath: path }),
+  basePath: undefined,
+  setBasePath: (path: string) => set({ basePath: path }),
+  plugins: undefined,
+  setPlugins: (plugins: Plugin[]) => set({ plugins }),
+}))
 
-  useEffect(() => {
-    const { config: storedConfig } = store
-
-    if (!storedConfig) {
-      if (initialConfig) {
-        setConfig(initialConfig)
-        if (dispatch) {
-          dispatch({ type: 'SET_CONFIG', config: initialConfig })
-        }
-      } else {
-        fetch('/exothermic.config.json')
-          .then((resp) => resp.json())
-          .then((file) => {
-            setConfig(file)
-            if (dispatch) {
-              dispatch({ type: 'SET_CONFIG', config: file })
-            }
-          })
-          .catch(() => {
-            const defaultConfig = {
-              pagePath: '/pages',
-            } as Config
-            setConfig(defaultConfig)
-            if (dispatch) {
-              dispatch({ type: 'SET_CONFIG', config: defaultConfig })
-            }
-          })
-      }
-    }
-  }, [])
-
-  return store.config ?? config
-}
+fetch('/exothermic.config.json')
+  .then((resp) => resp.json())
+  .then((file: Config) => {
+    useConfig.setState(file)
+  })
+  .catch(() => {
+    useConfig.setState({ pagePath: '/pages' })
+  })

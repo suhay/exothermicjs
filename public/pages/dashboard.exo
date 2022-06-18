@@ -13,4 +13,4 @@ $main:
           - !foreach
             items:
               - !fragment
-                template: '[{{ prompt }}](/entry/?id={{ $id }}) - {{ date }}'
+                template: '[{{ prompt }}](/entry/?id={{ $id }}) - {{ date | dateTime | DD }}'

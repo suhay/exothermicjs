@@ -1,11 +1,11 @@
 import { NavItemProps, NavItem } from './NavItem'
 
-type NavbarProps = {
-  items: NavItemProps[]
+export type NavbarProps = {
+  items?: NavItemProps[]
   classProps?: string
   listClass?: string
   id: string
-  toggler: boolean
+  toggler?: boolean
 }
 
 export function Navbar({ items, classProps, listClass, id, toggler }: NavbarProps) {
@@ -26,7 +26,7 @@ export function Navbar({ items, classProps, listClass, id, toggler }: NavbarProp
         )}
         <div className='navbar-collapse collapse' id={id}>
           <ul role='menubar' className={listClass}>
-            {items.map((item) => (
+            {items?.map((item) => (
               <NavItem to={item.to} label={item.label} key={item.to} size={items.length} />
             ))}
           </ul>

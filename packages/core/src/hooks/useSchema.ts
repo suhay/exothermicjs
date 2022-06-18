@@ -1,23 +1,21 @@
-import { useContext, useEffect, useState } from 'react'
 import yaml from 'js-yaml'
+import create from 'zustand'
 
 import { YamlTypes } from '../types/yaml'
-import { StateContext } from '../contexts/store'
 
-export const useSchema = (): yaml.Schema => {
-  const { store, dispatch } = useContext(StateContext)
-  const [yamlSchema, setSchema] = useState<yaml.Schema>()
-
-  useEffect(() => {
-    if (!store.schema) {
-      const types: yaml.Type[] = (Object.keys(YamlTypes) || []).map((key) => YamlTypes[key])
-      const schema = yaml.DEFAULT_SCHEMA.extend(types)
-      setSchema(schema)
-      if (dispatch) {
-        dispatch({ type: 'SET_SCHEMA', schema })
-      }
-    }
-  }, [])
-
-  return store.schema ?? yamlSchema ?? yaml.DEFAULT_SCHEMA
+type SchemaHook = {
+  schema: yaml.Schema
+  extendSchema: (schema: yaml.Type) => void
 }
+
+export const useSchema = create<SchemaHook>((set, get) => ({
+  schema: yaml.DEFAULT_SCHEMA,
+  extendSchema: (schema: yaml.Type) => {
+    const newSchema = get().schema.extend(schema)
+    set({ schema: newSchema })
+  },
+}))
+
+const types: yaml.Type[] = (Object.keys(YamlTypes) || []).map((key) => YamlTypes[key])
+const schema = yaml.DEFAULT_SCHEMA.extend(types)
+useSchema.setState({ schema })

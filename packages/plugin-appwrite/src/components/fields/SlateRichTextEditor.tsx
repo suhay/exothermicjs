@@ -1,16 +1,18 @@
-import Code from '@mui/icons-material/Code'
-import FormatAlignCenter from '@mui/icons-material/FormatAlignCenter'
-import FormatAlignJustify from '@mui/icons-material/FormatAlignJustify'
-import FormatAlignLeft from '@mui/icons-material/FormatAlignLeft'
-import FormatAlignRight from '@mui/icons-material/FormatAlignRight'
-import FormatBoldIcon from '@mui/icons-material/FormatBold'
-import FormatItalic from '@mui/icons-material/FormatItalic'
-import FormatListBulleted from '@mui/icons-material/FormatListBulleted'
-import FormatListNumbered from '@mui/icons-material/FormatListNumbered'
-import FormatQuote from '@mui/icons-material/FormatQuote'
-import FormatUnderlined from '@mui/icons-material/FormatUnderlined'
-import LooksOne from '@mui/icons-material/LooksOne'
-import LooksTwo from '@mui/icons-material/LooksTwo'
+import {
+  Code,
+  FormatAlignCenter,
+  FormatAlignJustify,
+  FormatAlignLeft,
+  FormatAlignRight,
+  FormatBold,
+  FormatItalic,
+  FormatListBulleted,
+  FormatListNumbered,
+  FormatQuote,
+  FormatUnderlined,
+  LooksOne,
+  LooksTwo,
+} from '@mui/icons-material'
 import { Button, Icon, IconButton, Toolbar } from '@mui/material'
 import isHotkey from 'is-hotkey'
 import { useCallback, useMemo } from 'react'
@@ -35,13 +37,14 @@ const HOTKEYS = {
 const LIST_TYPES = ['numbered-list', 'bulleted-list']
 const TEXT_ALIGN_TYPES = ['left', 'center', 'right', 'justify']
 
-export const SlateRichTextEditor = ({
-  value,
-  setValue,
-}: {
-  value: string
-  setValue: React.Dispatch<React.SetStateAction<string>>
-}) => {
+type Props = {
+  value?: string | null
+  label?: string
+  name: string
+  onChange?: (value: string | null, keyboardInputValue?: string | undefined) => void
+}
+
+export const SlateRichTextEditor = ({ value, onChange: setValue = () => {} }: Props) => {
   const renderElement = useCallback((props) => <Element {...props} />, [])
   const renderLeaf = useCallback((props) => <Leaf {...props} />, [])
   const editor = useMemo(() => withHistory(withReact(createEditor())), [])
@@ -81,7 +84,16 @@ export const SlateRichTextEditor = ({
     return val.map(serializer).join('\n')
   }
 
-  const deserialize = (val: string): Descendant[] => {
+  const deserialize = (val?: string | null): Descendant[] => {
+    if (val == null) {
+      return [
+        {
+          type: 'paragraph',
+          children: [{ text: 'Begin...' }],
+        },
+      ]
+    }
+
     return val.split('\n').map((line) => {
       return {
         children: [{ text: line }],
@@ -89,7 +101,7 @@ export const SlateRichTextEditor = ({
     })
   }
 
-  const initialValue: Descendant[] = deserialize(value) || ''
+  const initialValue: Descendant[] = deserialize(value)
 
   const onChange = (val: Descendant[]) => {
     const isAstChange = editor.operations.some((op) => 'set_selection' !== op.type)
@@ -103,7 +115,7 @@ export const SlateRichTextEditor = ({
   return (
     <Slate editor={editor} value={initialValue} onChange={onChange}>
       <Toolbar>
-        <MarkButton format='bold' icon={<FormatBoldIcon />} />
+        <MarkButton format='bold' icon={<FormatBold />} />
         <MarkButton format='italic' icon={<FormatItalic />} />
         <MarkButton format='underline' icon={<FormatUnderlined />} />
         <MarkButton format='code' icon={<Code />} />

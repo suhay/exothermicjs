@@ -9,5 +9,12 @@ $main:
         api: database
         action: update
         collection: 629577d16230f8150474
-#       items:
-#         - !rich-text-editor body
+        items:
+          - !fragment
+            template: '## {{ prompt }}'
+          - !rich-text-editor
+            name: body
+            label: Journal entry
+          - !date-picker
+            name: date
+            label: Entry date

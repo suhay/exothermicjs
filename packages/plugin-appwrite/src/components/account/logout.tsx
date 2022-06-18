@@ -1,4 +1,5 @@
 import { UserContext } from '@exothermic/core'
+import { Button } from '@mui/material'
 import { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -17,9 +18,5 @@ export function Logout({ redirect }: { redirect?: string }) {
     navigate(redirect ?? '/')
   }
 
-  return (
-    <button type='button' onClick={logout}>
-      Logout
-    </button>
-  )
+  return <Button onClick={logout}>Logout</Button>
 }

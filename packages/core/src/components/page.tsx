@@ -1,10 +1,11 @@
 import { ReactElement, useContext, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 
-import { StateContext } from '~/contexts/store'
 import { UserContext } from '~/contexts/user'
 import { useExothermic } from '~/hooks/useExothermic'
+import { usePageTemplate } from '~/hooks/usePageTemplate'
 import { usePlugins } from '~/hooks/usePlugins'
+import * as logger from '~/utils/logger'
 import { LoadingState, Template } from '../types'
 import { Loading } from './utils/Loading'
 
@@ -12,12 +13,10 @@ function Main({ status, data }: { status: LoadingState; data?: Template }) {
   const { user } = useContext(UserContext)
 
   useEffect(() => {
-    if (data) {
-      if (data.secure) {
-        user.isAuthenticated()
-      }
+    if (data?.secure) {
+      user.isAuthenticated().catch((err) => logger.error(err))
     }
-  }, [data])
+  }, [data, user])
 
   if (status === 'LOADING') {
     return <Loading />
@@ -49,7 +48,7 @@ export function Page() {
   const location = useLocation()
   usePlugins()
   const { data, status } = useExothermic(location.pathname)
-  const { dispatch } = useContext(StateContext)
+  const setPageTemplate = usePageTemplate((state) => state.setPageTemplate)
 
   const [top, setTop] = useState<ReactElement>()
   const [bottom, setBottom] = useState<ReactElement>()
@@ -63,9 +62,7 @@ export function Page() {
         setBottom(data.$bottom)
       }
 
-      if (dispatch) {
-        dispatch({ type: 'SET_PAGE', template: data })
-      }
+      setPageTemplate(data)
     }
   }, [data])
 

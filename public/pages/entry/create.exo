@@ -1,0 +1,29 @@
+---
+title: Introspection New Journal Entry
+secure: !appwrite-secure /dashboard
+$top: !get fragments/nav
+$main:
+  - !main
+    items:
+      - !appwrite
+        api: database
+        action: create
+        collection: 629577d16230f8150474
+        items:
+          - !appwrite
+            api: database
+            action: list
+            collection: 627844322a34e729ef1e
+            randomize: true
+            items:
+              - !text-field
+                name: prompt
+                label: Prompt
+                InputProps:
+                  readOnly: true
+          - !rich-text-editor
+            name: body
+            label: Journal entry
+          - !date-picker
+            name: date
+            label: Entry date

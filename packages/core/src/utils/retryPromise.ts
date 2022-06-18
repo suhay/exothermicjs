@@ -16,6 +16,6 @@ export const retryPromise = <T>(
     }
     return wait(interval).then(() => {
       retriesLeft -= 1
-      return retryPromise({ fn, retriesLeft, interval }, args)
+      return retryPromise<T>({ fn, retriesLeft, interval }, args)
     })
   })

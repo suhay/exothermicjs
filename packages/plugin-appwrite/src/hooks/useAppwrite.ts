@@ -2,6 +2,17 @@ import { PluginContext } from '@exothermic/core'
 import { Appwrite, Models } from 'appwrite'
 import { useContext, useState } from 'react'
 
+type ListDocuments = {
+  collectionId: string
+  queries?: string[]
+  limit?: number
+  offset?: number
+  cursor?: string
+  cursorDirection?: string
+  orderAttributes?: string[]
+  orderTypes?: string[]
+}
+
 type AppwriteApiHook = {
   getAccount: () => Promise<Models.User<Models.Preferences>> | undefined
   createSession: (email: string, password: string) => Promise<Models.Session> | undefined
@@ -12,16 +23,16 @@ type AppwriteApiHook = {
     password: string,
     name?: string,
   ) => Promise<Models.User<Models.Preferences>> | undefined
-  listDocuments: (
-    collectionId: string,
-    queries?: string[],
-    limit?: number,
-    offset?: number,
-    cursor?: string,
-    cursorDirection?: string,
-    orderAttributes?: string[],
-    orderTypes?: string[],
-  ) => Promise<Models.DocumentList<Models.Document>> | undefined
+  listDocuments: ({
+    collectionId,
+    queries,
+    limit,
+    offset,
+    cursor,
+    cursorDirection,
+    orderAttributes,
+    orderTypes,
+  }: ListDocuments) => Promise<Models.DocumentList<Models.Document>> | undefined
   getDocument: (collectionId: string, documentId: string) => Promise<Models.Document> | undefined
   updateDocument: (
     collectionId: string,
@@ -30,6 +41,8 @@ type AppwriteApiHook = {
     read?: string[],
     write?: string[],
   ) => Promise<Models.Document> | undefined
+  createDocument: (collectionId: string, data: object) => Promise<Models.Document> | undefined
+  deleteDocument: (collectionId: string, documentId: string) => Promise<{}> | undefined
 }
 
 export const useAppwrite = (): AppwriteApiHook => {
@@ -66,16 +79,16 @@ export const useAppwrite = (): AppwriteApiHook => {
     }
   }
 
-  const listDocuments = (
-    collectionId: string,
-    queries?: string[],
-    limit?: number,
-    offset?: number,
-    cursor?: string,
-    cursorDirection?: string,
-    orderAttributes?: string[],
-    orderTypes?: string[],
-  ) => {
+  const listDocuments = ({
+    collectionId,
+    queries,
+    limit,
+    offset,
+    cursor,
+    cursorDirection,
+    orderAttributes,
+    orderTypes,
+  }: ListDocuments) => {
     if (!loading) {
       setLoading(true)
       return appwrite.database
@@ -117,6 +130,24 @@ export const useAppwrite = (): AppwriteApiHook => {
     }
   }
 
+  const createDocument = (collectionId: string, data: object) => {
+    if (!loading) {
+      setLoading(true)
+      return appwrite.database
+        .createDocument(collectionId, 'unique()', data)
+        .finally(() => setLoading(false))
+    }
+  }
+
+  const deleteDocument = (collectionId: string, documentId: string) => {
+    if (!loading) {
+      setLoading(true)
+      return appwrite.database
+        .deleteDocument(collectionId, documentId)
+        .finally(() => setLoading(false))
+    }
+  }
+
   return {
     getAccount,
     listDocuments,
@@ -125,5 +156,7 @@ export const useAppwrite = (): AppwriteApiHook => {
     createAccount,
     getDocument,
     updateDocument,
+    createDocument,
+    deleteDocument,
   }
 }
