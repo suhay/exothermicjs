@@ -5,12 +5,27 @@ import { useCallback, useContext, useEffect, useState } from 'react'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 
 import { useAppwrite } from '~/hooks/useAppwrite'
-import { AppwrieApiDatabase } from '~/types'
+import { AppwrieApiDatabase } from '../../types'
+
+function ActionButton({
+  editable,
+  isAuthor,
+  action,
+}: {
+  editable: boolean
+  isAuthor: boolean
+  action: () => void
+}) {
+  if (editable && isAuthor) {
+    return <Button onClick={action}>Edit</Button>
+  }
+  return null
+}
 
 export function GetDocument({
   collection,
   items,
-  editable,
+  editable = false,
 }: Omit<AppwrieApiDatabase, 'api' | 'action'>) {
   const { user } = useContext(UserContext)
   const [document, setDocument] = useState<Models.Document>()
@@ -20,38 +35,36 @@ export function GetDocument({
   const navigate = useNavigate()
   const location = useLocation()
 
-  useEffect(() => {
-    if (document) return
-    appwrite.getDocument(collection, query.get('id') ?? '')?.then((doc) => {
-      const userData = user.data as Models.User<Models.Preferences>
+  const load = useCallback(async () => {
+    const doc = await appwrite.getDocument(collection, query.get('id') ?? '')
+    if (doc) {
+      const userData = user.data as unknown as Models.User<Models.Preferences>
       if (doc.$write.includes(`user:${userData.$id}`)) {
         setIsAuthor(true)
       }
       setDocument(doc)
-    })
+    }
+  }, [appwrite, collection, query, user.data])
+
+  useEffect(() => {
+    if (document) return
+    load().catch(() => null)
   }, [])
 
   const onEdit = useCallback(() => {
     navigate(`${location.pathname}edit?id=${query.get('id') ?? ''}`)
-  }, [location, query])
+  }, [location.pathname, navigate, query])
 
   if (!document) {
     return <Loading />
   }
 
-  const ActionButton = () => {
-    if (editable && isAuthor) {
-      return <Button onClick={onEdit}>Edit</Button>
-    }
-    return null
-  }
-
   return (
     <>
-      <ActionButton />
-      {items?.map((item, i) => {
-        return <item.type {...item.props} data={document} key={`item-${i}-${document.$id}`} />
-      })}
+      <ActionButton editable={editable} isAuthor={isAuthor} action={onEdit} />
+      {items?.map((item, i) => (
+        <item.type {...item.props} data={document} key={`item-${i}-${document.$id}`} />
+      ))}
     </>
   )
 }

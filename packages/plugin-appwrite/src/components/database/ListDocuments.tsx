@@ -1,122 +1,190 @@
 import { Loading, UserContext } from '@exothermic/core'
-import { Button } from '@mui/material'
+import { Delete, Replay } from '@mui/icons-material'
+import { Button, IconButton, Pagination, Stack } from '@mui/material'
 import { Models } from 'appwrite'
 import { useCallback, useContext, useEffect, useState } from 'react'
 import { Controller } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
+import { Context } from '~/contexts/user'
 import { useAppwrite } from '~/hooks/useAppwrite'
-import { AppwrieApiDatabase } from '~/types'
+import { AppwrieApiDatabase } from '../../types'
+import { ConfirmationDialog } from '../dialogs/ConfirmationDialog'
+
+const LIMIT = 10
+
+function ActionButton({
+  doc,
+  user,
+  randomize,
+  action,
+}: {
+  doc?: Models.Document
+  user: Context
+  randomize: boolean
+  action: (...args) => void
+}) {
+  const userData = user.data as unknown as Models.User<Models.Preferences>
+
+  if (randomize) {
+    return (
+      <IconButton aria-label='next selection' onClick={() => action()}>
+        <Replay />
+      </IconButton>
+    )
+  }
+
+  if (doc?.$write?.includes(`user:${userData.$id}`)) {
+    return (
+      <IconButton color='error' aria-label='delete' onClick={() => action(doc.$id)}>
+        <Delete />
+      </IconButton>
+    )
+  }
+  return null
+}
 
 export function ListDocuments({
   collection,
   items,
-  randomize,
+  randomize = false,
   control,
   setValue,
+  allowNew = true,
 }: Omit<AppwrieApiDatabase, 'api' | 'action'>) {
   const { user } = useContext(UserContext)
   const [documents, setDocuments] = useState<Models.DocumentList<Models.Document>>()
   const appwrite = useAppwrite()
   const navigate = useNavigate()
+  const [offset, setOffset] = useState(0)
+  const [openDelete, setOpenDelete] = useState(false)
+  const [idToDelete, setIdToDelete] = useState('')
 
-  const deleteDocument = (id: string) => {
-    appwrite.deleteDocument(collection, id)
+  const handleChange = (_: React.ChangeEvent<unknown>, value: number) => {
+    setOffset(value * LIMIT - LIMIT)
+  }
+
+  const deleteDocument = useCallback(
+    async (id: string) => {
+      if (!openDelete) {
+        setIdToDelete(id)
+        setOpenDelete(true)
+        return
+      }
+
+      await appwrite.deleteDocument(collection, id)
+    },
+    [openDelete, appwrite, collection],
+  )
+
+  const onCloseDelete = () => {
+    setOpenDelete(false)
   }
 
   const reroll = useCallback(
-    (range?: number) => {
+    async (range?: number) => {
       const randomPick = range
         ? Math.floor(Math.random() * range)
-        : Math.floor(Math.random() * (documents?.total ?? 1))
-      appwrite
-        .listDocuments({ collectionId: collection, limit: 1, offset: randomPick })
-        ?.then((docs) => setDocuments(docs))
+        : Math.floor(Math.random() * (documents?.total ?? 2))
+      const docs = await appwrite.listDocuments({
+        collectionId: collection,
+        limit: 1,
+        offset: randomPick,
+      })
+
+      if (docs) {
+        setDocuments(docs)
+      }
     },
-    [setDocuments, collection],
+    [setDocuments, collection, documents, appwrite],
   )
 
-  const reload = useCallback(() => {
-    appwrite.listDocuments({ collectionId: collection, limit: 10 })?.then((docs) => {
-      setDocuments(docs)
-    })
-  }, [collection, setDocuments])
-
-  useEffect(() => {
-    appwrite.listDocuments({ collectionId: collection, limit: 10 })?.then((docs) => {
+  const reload = useCallback(async () => {
+    const docs = await appwrite.listDocuments({ collectionId: collection, limit: LIMIT, offset })
+    if (docs) {
       if (randomize) {
-        reroll(docs.total)
+        await reroll(docs.total)
         return
       }
       setDocuments(docs)
-    })
-  }, [collection, randomize])
+    }
+  }, [appwrite, collection, offset, randomize, reroll])
+
+  const onConfirmDelete = useCallback(async () => {
+    await deleteDocument(idToDelete)
+    setIdToDelete('')
+    setOpenDelete(false)
+    await reload()
+  }, [deleteDocument, idToDelete, reload])
+
+  useEffect(() => {
+    reload().catch(() => null)
+  }, [])
 
   if (!documents) {
     return <Loading />
   }
 
-  const ActionButton = ({ doc }: { doc?: any }) => {
-    const userData = user.data as Models.User<Models.Preferences>
-
-    if (randomize) {
-      return <Button onClick={() => reroll()}>Next</Button>
-    } else if (doc?.$write?.includes(`user:${userData.$id}`)) {
-      return (
-        <Button
-          onClick={async () => {
-            await deleteDocument(doc.$id)
-            reload()
-          }}
-        >
-          Delete
-        </Button>
-      )
-    }
-    return null
-  }
-
   return (
     <>
-      <Button onClick={() => navigate('/entry/create')}>New entry</Button>
+      {allowNew && <Button onClick={() => navigate('/entry/create')}>Add</Button>}
       <ul>
-        {documents.documents.map((doc) => {
-          return (
-            <li key={doc.$id}>
-              {items?.map((item, i) => {
-                if (item.props.name && control) {
-                  return (
-                    <Controller
-                      name={item.props.name}
-                      control={control}
-                      defaultValue={doc[item.props.name]}
-                      render={({ field: { onChange } }) => (
-                        <item.type
-                          {...item.props}
-                          onChange={onChange}
-                          value={doc[item.props.name]}
-                          setValue={setValue}
-                        />
-                      )}
-                      key={`${item.type}-${item.props.name}`}
-                    />
-                  )
-                }
+        {documents.documents.map((doc) => (
+          <li key={doc.$id}>
+            {items?.map((item, i) => {
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+              const { name } = item.props
+              if (name && typeof name === 'string' && control) {
                 return (
-                  <item.type
-                    {...item.props}
-                    data={doc}
-                    key={`${item.type}-${i}-${doc.$id}`}
+                  <Controller
+                    name={name}
                     control={control}
-                    setValue={setValue}
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                    defaultValue={doc[name]}
+                    render={({ field: { onChange } }) => (
+                      <item.type
+                        {...item.props}
+                        onChange={onChange}
+                        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                        value={doc[name]}
+                        setValue={setValue}
+                      />
+                    )}
+                    key={`${item.type.toString()}-${name}`}
                   />
                 )
-              })}
-              <ActionButton doc={doc} />
-            </li>
-          )
-        })}
+              }
+              return (
+                <item.type
+                  {...item.props}
+                  data={doc}
+                  key={`${item.type.toString()}-${i}-${doc.$id}`}
+                  control={control}
+                  setValue={setValue}
+                />
+              )
+            })}
+            <ActionButton
+              doc={doc}
+              user={user}
+              randomize={randomize}
+              action={randomize ? reroll : deleteDocument}
+            />
+          </li>
+        ))}
+        {documents.documents.length === 0 && <span>Nothing to show!</span>}
       </ul>
+      {!randomize && documents.total > LIMIT && (
+        <Stack spacing={2}>
+          <Pagination count={Math.ceil(documents.total / LIMIT)} onChange={handleChange} />
+        </Stack>
+      )}
+      <ConfirmationDialog
+        open={openDelete}
+        onClose={onCloseDelete}
+        onOk={onConfirmDelete}
+        title='Are you sure you want to delete this?'
+      />
     </>
   )
 }

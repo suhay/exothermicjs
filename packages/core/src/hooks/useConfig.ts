@@ -1,5 +1,6 @@
 import create from 'zustand'
 
+import * as logger from '~/utils/logger'
 import { Config, Plugin } from '../types'
 
 export const useConfig = create<Config>((set) => ({
@@ -16,6 +17,7 @@ fetch('/exothermic.config.json')
   .then((file: Config) => {
     useConfig.setState(file)
   })
-  .catch(() => {
+  .catch((err) => {
+    logger.error(err)
     useConfig.setState({ pagePath: '/pages' })
   })

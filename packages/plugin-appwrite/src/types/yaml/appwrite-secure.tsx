@@ -1,23 +1,14 @@
 import { guid } from '@exothermic/core'
+import yaml from 'js-yaml'
 
-import { AppwriteApiType } from '..'
 import { AppwriteWrapper } from '~/components/AppwriteWrapper'
+import { AppwrieApiAccount, AppwriteApiType } from '..'
 
-export const AppwriteSecureYamlType = (yaml: any, explicitName?: string) =>
+export const AppwriteSecureYamlType = (_yaml: unknown, explicitName?: string) =>
   new yaml.Type(`!${explicitName ?? 'appwrite-secure'}`, {
-    kind: 'scalar',
-    resolve(path: string) {
-      return path !== null
-    },
-    construct(redirect: string = '/') {
-      return (
-        <AppwriteWrapper
-          key={guid()}
-          api={AppwriteApiType.ACCOUNT}
-          action='login'
-          redirect={redirect}
-        />
-      )
+    kind: 'mapping',
+    construct(data: AppwrieApiAccount) {
+      return <AppwriteWrapper key={guid()} {...data} api={AppwriteApiType.ACCOUNT} action='login' />
     },
     instanceOf: AppwriteWrapper,
   })

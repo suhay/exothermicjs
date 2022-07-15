@@ -29,7 +29,9 @@ function PluginProvider({ children }: Props) {
     const newState = { ...prevState }
     switch (action.type) {
       case 'ADD_PLUGIN':
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const [key, val] = Object.entries(action.plugin)[0]
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         newState.state.plugins[key] = val
         break
 

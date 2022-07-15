@@ -1,4 +1,4 @@
-import { AppwrieApiDatabase } from '~/types'
+import { AppwrieApiDatabase } from '../../types'
 import { CreateDocument } from './CreateDocument'
 import { GetDocument } from './GetDocument'
 import { ListDocuments } from './ListDocuments'
@@ -12,6 +12,7 @@ export function Database({
   randomize,
   control,
   setValue,
+  allowNew,
 }: Omit<AppwrieApiDatabase, 'api'>) {
   switch (action) {
     case 'list':
@@ -22,6 +23,7 @@ export function Database({
           randomize={randomize}
           control={control}
           setValue={setValue}
+          allowNew={allowNew}
         />
       )
     case 'get':

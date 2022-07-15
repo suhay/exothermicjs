@@ -7,20 +7,20 @@ export function Foreach({
   data = {},
   items = [],
 }: {
-  data?: Record<string, any>
+  data?: Record<string, string>
   items: ReactElement<PageFragmentType>[]
 }) {
   return (
     <>
       {items.map((item, i) => {
-        const { props } = item
-        if (props.template == null) {
+        const { template } = item.props
+        if (template == null) {
           return null
         }
 
         return (
-          <item.type key={i} {...props}>
-            <ContentTransform key={`transform-${i}`} data={data} template={props.template} />
+          <item.type key={i} {...item.props}>
+            <ContentTransform key={`transform-${i}`} data={data} template={template} />
           </item.type>
         )
       })}

@@ -1,22 +1,22 @@
+import { DateTime } from 'luxon'
 import { Fragment, ReactNode, useCallback } from 'react'
 import ReactMarkdown from 'react-markdown'
 import gfm from 'remark-gfm'
-import { DateTime } from 'luxon'
+
 import { Link } from '~/components/navbar/Link'
 
 export type ContentProps = {
-  content: ReactNode | string
+  content: ReactNode
 }
 
-function LinkRenderer(props: any) {
-  const { href, children }: { href: string; children: any } = props
+function LinkRenderer({ href, children }: { href: string; children: ReactNode }) {
   if (href.startsWith('/')) {
     return <Link to={href}>{children}</Link>
   }
   return <a href={href}>{children}</a>
 }
 
-export function applyTemplate(template: string, data: Record<string, any>) {
+export function applyTemplate(template: string, data: Record<string, string>) {
   if (!template) return null
 
   let content = template
@@ -70,7 +70,7 @@ export function ContentTransform({
   data,
 }: {
   template: string
-  data: Record<string, any>
+  data: Record<string, string>
 }) {
   const content = useCallback(() => applyTemplate(template, data) ?? '', [template, data])
   return <Content content={content()} />

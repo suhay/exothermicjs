@@ -1,36 +1,23 @@
-import { Loading, PluginContext, useConfig, UserContext } from '@exothermic/core'
-import { Appwrite } from 'appwrite'
-import { useContext, useEffect, useMemo, useState } from 'react'
+import { Loading, UserContext } from '@exothermic/core'
+import { useContext, useEffect, useState } from 'react'
 
-import { AppwrieApiWrapper } from '~/types'
+import { useAppwrite } from '~/hooks/useAppwrite'
+import { AppwrieApiWrapper } from '../types'
 import { Account } from './account/Account'
 import { Database } from './database/Database'
 
 export function AppwriteWrapper(props: AppwrieApiWrapper) {
-  const config = useConfig()
-  const plugin = useMemo(
-    () => config.plugins?.find((plug) => plug.resolve === '@exothermic/plugin-appwrite'),
-    [config],
-  )
-  const { dispatch, state: pluginState } = useContext(PluginContext)
+  const appwrite = useAppwrite()
   const { dispatch: dispatchUser } = useContext(UserContext)
   const [ready, setReady] = useState(false)
 
   useEffect(() => {
-    if (!pluginState.plugins.appwrite) {
-      const appwrite = new Appwrite()
-      const { project, endpoint } = plugin?.options ?? {}
-      appwrite.setEndpoint(endpoint).setProject(project)
-
-      if (dispatch) {
-        dispatch({ type: 'ADD_PLUGIN', plugin: { appwrite } })
-      }
-
+    if (appwrite && !ready) {
       if (dispatchUser) {
         dispatchUser({
           type: 'SET_AUTH',
           isAuthenticated: async () => {
-            const user = await appwrite.account.get()
+            const user = await appwrite.getAccount()
             if (user) {
               dispatchUser({ type: 'SET_USER', user })
               return true
@@ -39,10 +26,9 @@ export function AppwriteWrapper(props: AppwrieApiWrapper) {
           },
         })
       }
+      setReady(true)
     }
-
-    setReady(true)
-  }, [])
+  }, [appwrite, dispatchUser, ready])
 
   if (!ready) {
     return <Loading />
@@ -52,10 +38,10 @@ export function AppwriteWrapper(props: AppwrieApiWrapper) {
 
   switch (api) {
     case 'account':
-      const { redirect } = props
-      return <Account action={action} redirect={redirect} />
+      const { logout, login } = props
+      return <Account action={action} logout={logout} login={login} />
     case 'database':
-      const { editable, collection, items, randomize, control, setValue } = props
+      const { editable, collection, items, randomize, control, setValue, allowNew } = props
       return (
         <Database
           collection={collection}
@@ -65,6 +51,7 @@ export function AppwriteWrapper(props: AppwrieApiWrapper) {
           randomize={randomize}
           control={control}
           setValue={setValue}
+          allowNew={allowNew}
         />
       )
     default:

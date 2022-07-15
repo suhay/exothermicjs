@@ -14,7 +14,8 @@ module.exports = {
   externals: {
     '@exothermic/core': '@exothermic/core',
     react: 'React',
-    'react-router-dom': 'react-router-dom'
+    'react-router-dom': 'react-router-dom',
+    'js-yaml': 'js-yaml'
   },
   resolve: {
     alias: {

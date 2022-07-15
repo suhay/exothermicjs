@@ -7,7 +7,7 @@ export function HeadFragment({
   title,
   description,
 }: {
-  data?: any
+  data?: Record<string, string>
   title?: string
   description?: string
 }) {

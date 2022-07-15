@@ -9,7 +9,7 @@
     "clean": "nx run-many --target=clean --all",
     "reset": "rimraf packages/*/node_modules; yarn clean; rm -rf node_modules",
     "test": "NODE_ENV=test jest --no-cache",
-    "lint": "eslint ./packages/core/src/*",
+    "lint": "eslint ./packages/*/src/*",
     "compile": "nx run-many --target=build --all"
   },
   "devDependencies": {

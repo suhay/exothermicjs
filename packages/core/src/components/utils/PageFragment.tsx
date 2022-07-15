@@ -1,15 +1,14 @@
-import { ElementType, Fragment } from 'react'
+import { ElementType, Fragment, ReactNode } from 'react'
 import ReactMarkdown from 'react-markdown'
 
 import { Content, ContentTransform } from '~/components/content/Content'
 import { usePageTemplate } from '~/hooks/usePageTemplate'
 import { PageFragmentType } from '../../types'
 
-interface PageFragmentProps<T> {
+interface PageFragmentProps<T extends ElementType> {
   as?: T
-  children?: any
-  template?: string
-  data?: Record<string, any>
+  children?: ReactNode[]
+  data?: Record<string, string>
 }
 
 export function PageFragment<T extends ElementType>({
@@ -32,6 +31,7 @@ export function PageFragment<T extends ElementType>({
       {content && <Content content={content} />}
       {items.map((item) => {
         if (typeof item === 'string' && item.startsWith('$')) {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-return
           return page[item] ?? item
         }
         return item

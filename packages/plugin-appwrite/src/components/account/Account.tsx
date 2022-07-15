@@ -1,18 +1,21 @@
 import { UserContext } from '@exothermic/core'
 import { useContext } from 'react'
 
+import { AppwrieApiAccount } from '../../types'
+import { AccountButton } from './AccountButton'
 import { Login } from './Login'
-import { Logout } from './Logout'
 
-export function Account({ action, redirect }: { action: string; redirect?: string }) {
-  const { user: userState } = useContext(UserContext)
+export function Account({ action, logout, login }: Omit<AppwrieApiAccount, 'api'>) {
+  const { user } = useContext(UserContext)
 
   switch (action) {
     case 'login':
-      if (userState.data) {
-        return <Logout redirect={redirect} />
+      if (user.data) {
+        return null
       }
       return <Login />
+    case 'button':
+      return <AccountButton logout={logout} login={login} />
     default:
       return null
   }

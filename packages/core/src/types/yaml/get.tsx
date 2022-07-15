@@ -7,7 +7,7 @@ export const GetYamlType = new yaml.Type('!get', {
   resolve(path: string) {
     return path !== null
   },
-  construct(path = '/') {
+  construct(path: string) {
     return <Get path={path} key={path} />
   },
   instanceOf: Get,

@@ -1,7 +1,7 @@
 import { DateTime, Duration } from 'luxon'
 import { Link } from '@exothermic/core'
 
-import { BlogAuthor, BlogImage } from '~/types'
+import { BlogAuthor, BlogImage } from '../types'
 
 export const readingTime = (content: string) => {
   const words = content.match(/\S+/g)?.length ?? 0
@@ -9,12 +9,12 @@ export const readingTime = (content: string) => {
   return Duration.fromMillis(ms)
 }
 
-export const showImage = (image?: BlogImage, date: string = '') =>
+export const showImage = (image?: BlogImage, date = '') =>
   image ? (
     <img key={`${date}-image`} className='blog-image' src={image.src} alt={image.alt ?? ''} />
   ) : null
 
-export const showTags = (tags?: string[], date: string = '') =>
+export const showTags = (tags?: string[], date = '') =>
   tags?.length
     ? tags.map((tag) => (
         <span className='blog-tag' key={`${date}-${tag}`}>
@@ -41,7 +41,7 @@ export const showTitle = (linkTitle: string, linkUrl?: string) =>
 
 export const showAbstract = (abstract?: string, date?: string) =>
   abstract ? (
-    <p key={`${date}-abstract`} className='blog-abstract'>
+    <p key={`${date ?? ''}-abstract`} className='blog-abstract'>
       {abstract}
     </p>
   ) : null

@@ -7,7 +7,8 @@ export const MarkdownYamlType = new yaml.Type('!markdown', {
   resolve(path: string) {
     return path !== null
   },
-  construct(path = '/') {
+  // eslint-disable-next-line @typescript-eslint/no-inferrable-types
+  construct(path: string = '/') {
     return <Markdown path={path} key={path} />
   },
   instanceOf: Markdown,

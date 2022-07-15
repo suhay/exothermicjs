@@ -23,6 +23,15 @@ module.exports = {
           },
         },
       },
+      {
+        test: require.resolve('js-yaml'),
+        loader: 'expose-loader',
+        options: {
+          exposes: [
+            'js-yaml.Type|Type'
+          ]
+        },
+      },
     ],
   },
   resolve: {

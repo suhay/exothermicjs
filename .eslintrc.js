@@ -76,7 +76,12 @@ module.exports = {
     "func-call-spacing": "off",
     "no-shadow": "off",
     "@typescript-eslint/no-shadow": "error",
-    "import/no-webpack-loader-syntax": "off"
+    "import/no-webpack-loader-syntax": "off",
+    "import/no-unresolved": "off",
+    "react/no-array-index-key": "off",
+    "@typescript-eslint/no-misused-promises": "off",
+    "react/jsx-no-useless-fragment": "warn",
+    "react/jsx-wrap-multilines": ["error", {"declaration": false, "assignment": false}],
   },
   globals: {
     JSX: "readonly"

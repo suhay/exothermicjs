@@ -1,14 +1,17 @@
-const wait = (interval: number) => new Promise<void>((resolve) => setTimeout(resolve, interval))
+const wait = (interval: number) =>
+  new Promise<void>((resolve) => {
+    setTimeout(resolve, interval)
+  })
 
-type Props = {
-  fn: (args: any) => Promise<any>
+type Props<TArgs, T> = {
+  fn: (args: TArgs) => Promise<T>
   retriesLeft?: number
   interval?: number
 }
 
-export const retryPromise = <T>(
-  { fn, retriesLeft = 5, interval = 500 }: Props,
-  args: any,
+export const retryPromise = <TArgs, T>(
+  { fn, retriesLeft = 5, interval = 500 }: Props<TArgs, T>,
+  args: TArgs,
 ): Promise<T> =>
   fn(args).catch(() => {
     if (retriesLeft === 0) {
@@ -16,6 +19,6 @@ export const retryPromise = <T>(
     }
     return wait(interval).then(() => {
       retriesLeft -= 1
-      return retryPromise<T>({ fn, retriesLeft, interval }, args)
+      return retryPromise<TArgs, T>({ fn, retriesLeft, interval }, args)
     })
   })

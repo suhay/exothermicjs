@@ -3,12 +3,12 @@ import create from 'zustand'
 type Entry = {
   ttl: number
   now: number
-  value: any
+  value: string
 }
 
 export type Cache = {
-  get: (key: string) => any | null
-  set: (key: string, value: any, ttl?: number) => void
+  get: (key: string) => string | null
+  set: (key: string, value: string, ttl?: number) => void
   cache: Record<string, string>
 }
 
@@ -18,7 +18,7 @@ export const useCache = create<Cache>((setItem, getItem) => ({
       return getItem().cache[key]
     }
 
-    const entry: Entry = JSON.parse(localStorage.getItem(key) || '0')
+    const entry = JSON.parse(localStorage.getItem(key) || '0') as Entry
     if (!entry) return null
 
     if (entry.ttl && entry.ttl + entry.now < Date.now()) {
@@ -28,7 +28,7 @@ export const useCache = create<Cache>((setItem, getItem) => ({
 
     return entry.value
   },
-  set: (key: string, value: any, ttl?: number) => {
+  set: (key: string, value: string, ttl?: number) => {
     if (!ttl) {
       const { cache } = getItem()
       cache[key] = value

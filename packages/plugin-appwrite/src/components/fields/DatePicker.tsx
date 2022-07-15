@@ -6,33 +6,41 @@ import { DateTime } from 'luxon'
 import { useEffect } from 'react'
 import { FieldValues, UseFormSetValue } from 'react-hook-form'
 
-type Props = {
+export type Props = {
   value?: string | null
   label?: string
   name: string
+  class?: string
   onChange?: (value: string | null, keyboardInputValue?: string | undefined) => void
   setValue: UseFormSetValue<FieldValues>
 }
 
-export function DatePicker({ name, value, label, onChange = () => {}, setValue }: Props) {
+export function DatePicker({
+  name,
+  value,
+  label,
+  onChange = () => null,
+  setValue,
+  class: classes,
+}: Props) {
   useEffect(() => {
     if (!value) {
       setValue(name, DateTime.now().toISO())
     }
-  }, [])
+  }, [name, setValue, value])
   return (
     <LocalizationProvider dateAdapter={AdapterLuxon}>
       <MuiDatePicker
         label={label ?? 'Date picker'}
         value={value}
-        onChange={(value: string | DateTime | null, keyboardInputValue?: string | undefined) => {
-          if (value instanceof DateTime) {
-            onChange(value.toISO(), keyboardInputValue)
+        onChange={(val: string | DateTime | null, keyboardInputValue?: string | undefined) => {
+          if (val instanceof DateTime) {
+            onChange(val.toISO(), keyboardInputValue)
           } else {
-            onChange(value, keyboardInputValue)
+            onChange(val, keyboardInputValue)
           }
         }}
-        renderInput={(params) => <TextField {...params} />}
+        renderInput={(params) => <TextField {...params} className={classes} />}
       />
     </LocalizationProvider>
   )

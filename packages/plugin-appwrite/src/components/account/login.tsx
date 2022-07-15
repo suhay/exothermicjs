@@ -1,6 +1,7 @@
-import { UserContext } from '@exothermic/core'
-import { useContext, useEffect, useState } from 'react'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { Loading, UserContext } from '@exothermic/core'
+import { Button, TextField } from '@mui/material'
+import { useContext, useEffect, useState, useCallback } from 'react'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 
 import { useAppwrite } from '~/hooks/useAppwrite'
 import { SignUp } from './SignUp'
@@ -14,44 +15,91 @@ export function Login() {
   const { dispatch } = useContext(UserContext)
 
   const [isSigningUp, setIsSigningUp] = useState(false)
-  const { register, handleSubmit } = useForm<Inputs>()
+  const [badUser, setBadUser] = useState(false)
+  const [loadingForm, setLoadingForm] = useState(true)
+  const { handleSubmit, control, formState } = useForm<Inputs>()
   const appwrite = useAppwrite()
 
-  const loginWithSession = async () => {
-    const loggedInUser = await appwrite.getAccount()
+  const loginWithSession = useCallback(async () => {
+    const loggedInUser = await appwrite.getAccount()?.catch(() => null)
     if (dispatch && loggedInUser) {
       dispatch({ type: 'SET_USER', user: loggedInUser })
     }
-  }
+    setLoadingForm(false)
+  }, [appwrite, dispatch])
 
   useEffect(() => {
-    loginWithSession()
+    loginWithSession().catch(() => null)
   }, [])
 
-  const login: SubmitHandler<Inputs> = async ({ email, password }) => {
-    const session = await appwrite.createSession(email, password)
+  const login: SubmitHandler<Inputs> = useCallback(
+    async ({ email, password }) => {
+      setBadUser(false)
+      const session = await appwrite.createSession(email, password)?.catch(() => {
+        setBadUser(true)
+      })
 
-    if (session) {
-      const loggedInUser = await appwrite.getAccount()
-      if (dispatch && loggedInUser) {
-        dispatch({ type: 'SET_USER', user: loggedInUser })
+      if (session) {
+        const loggedInUser = await appwrite.getAccount()?.catch(() => {
+          setBadUser(true)
+        })
+        if (dispatch && loggedInUser) {
+          dispatch({ type: 'SET_USER', user: loggedInUser })
+        }
       }
-    }
+    },
+    [appwrite, dispatch],
+  )
+
+  if (isSigningUp) {
+    return <SignUp setIsSigningUp={setIsSigningUp} />
   }
 
-  return isSigningUp ? (
-    <SignUp setIsSigningUp={setIsSigningUp} />
+  const content = loadingForm ? (
+    <Loading />
   ) : (
-    <section>
-      <h3>Login</h3>
-      <button type='button' onClick={() => setIsSigningUp(true)}>
-        New here? Sign up!
-      </button>
-      <form onSubmit={handleSubmit(login)}>
-        <input type='email' {...register('email', { required: true })} />
-        <input type='password' {...register('password', { required: true })} />
-        <input type='submit' />
+    <>
+      <form>
+        <Controller
+          name='email'
+          control={control}
+          defaultValue=''
+          render={({ field: { onChange, value } }) => (
+            <TextField label='Email' onChange={onChange} value={value} required type='email' />
+          )}
+        />
+        <Controller
+          name='password'
+          control={control}
+          defaultValue=''
+          render={({ field: { onChange, value } }) => (
+            <TextField
+              label='Password'
+              onChange={onChange}
+              value={value}
+              required
+              type='password'
+            />
+          )}
+        />
+        <Button onClick={handleSubmit(login)} variant='contained' disabled={formState.isSubmitting}>
+          Login
+        </Button>
       </form>
-    </section>
+      <span>
+        Don&apos;t have an account?&nbsp;
+        <Button onClick={() => setIsSigningUp(true)} variant='text'>
+          Sign up!
+        </Button>
+      </span>
+    </>
+  )
+
+  return (
+    <div className='login-form'>
+      <h1>Login</h1>
+      {badUser && <span className='error'>Invalid Username or Password</span>}
+      {content}
+    </div>
   )
 }

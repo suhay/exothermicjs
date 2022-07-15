@@ -15,6 +15,7 @@ $main:
             action: list
             collection: 627844322a34e729ef1e
             randomize: true
+            allowNew: false
             items:
               - !text-field
                 name: prompt

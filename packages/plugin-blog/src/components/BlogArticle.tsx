@@ -1,6 +1,8 @@
-import { useState, useEffect } from 'react'
-import { useLoader, useConfig, Loading } from '@exothermic/core'
+import { Loading, useConfig, useLoader } from '@exothermic/core'
+import { useEffect, useState } from 'react'
 
+import { BlogManifest } from '../types'
+import { MarkdownProgress } from './MarkdownProgress'
 import {
   readingTime,
   showAbstract,
@@ -10,8 +12,6 @@ import {
   showTags,
   showTitle,
 } from './utils'
-import { MarkdownProgress } from './MarkdownProgress'
-import { BlogManifest } from '~/types'
 
 type Props = {
   class?: string
@@ -70,7 +70,7 @@ export function BlogArticle({ class: classProps, options = [] }: Props) {
   useEffect(() => {
     if (config) {
       const plugin = config.plugins?.find((plug) => plug.resolve === '@exothermic/plugin-blog')
-      setManifestPath(`${plugin?.options?.path}/_manifest.json`)
+      setManifestPath(`${plugin?.options?.path ?? ''}/_manifest.json`)
       // setPluginPath(plugin.options.path)
     }
   }, [config])

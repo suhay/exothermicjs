@@ -1,12 +1,12 @@
 import { createContext, Dispatch, ReactNode, useReducer } from 'react'
 
 type Action =
-  | { type: 'SET_USER'; user: Record<string, any> | null }
+  | { type: 'SET_USER'; user: Record<string, string | number | boolean | any> | null }
   | { type: 'SET_AUTH'; isAuthenticated: () => Promise<boolean> }
 
-type Context = {
+export type Context = {
   isAuthenticated: () => Promise<boolean>
-  data: Record<string, any> | null
+  data: Record<string, string | number | boolean | any> | null
 }
 
 export type UserState = {

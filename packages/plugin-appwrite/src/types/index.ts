@@ -24,24 +24,43 @@ export type AppwrieApiDatabase = {
   items?: ReactElement[]
   randomize?: boolean
   setValue?: UseFormSetValue<FieldValues>
+  allowNew?: boolean
 }
 
 export type AppwrieApiAccount = {
-  action: 'login'
+  action: 'login' | 'button'
   api: AppwriteApiType.ACCOUNT
-  redirect?: string
+  logout?: string
+  login?: string
 }
 
 export type AppwrieApiWrapper = AppwrieApiDatabase | AppwrieApiAccount
 
-type CustomElement = { type: 'paragraph' | 'block-quote'; children: CustomText[]; align?: any }
-type CustomText = {
-  bold?: boolean
-  code?: boolean
-  italic?: boolean
-  text: string
-  underline?: boolean
-}
+export type CustomElementType =
+  | 'paragraph'
+  | 'block-quote'
+  | 'bulleted-list'
+  | 'heading-one'
+  | 'heading-two'
+  | 'list-item'
+  | 'numbered-list'
+
+type CustomText =
+  | {
+      bold?: boolean
+      code?: boolean
+      italic?: boolean
+      text: string
+      underline?: boolean
+    }
+  | null
+  | string
+
+export type TextAlign = 'left' | 'center' | 'right' | 'justify'
+
+export type CustomElement = { type: CustomElementType; children: CustomText[]; align?: TextAlign }
+
+export type CustomFormat = 'bold' | 'italic' | 'underline' | 'code'
 
 declare module 'slate' {
   interface CustomTypes {

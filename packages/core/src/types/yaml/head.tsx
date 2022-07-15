@@ -7,7 +7,7 @@ export const HeadYamlType = new yaml.Type('!head', {
   resolve(data) {
     return !!data
   },
-  construct({ title, description }) {
+  construct({ title, description }: { title: string; description: string }) {
     return <HeadFragment title={title} description={description} />
   },
   instanceOf: HeadFragment,

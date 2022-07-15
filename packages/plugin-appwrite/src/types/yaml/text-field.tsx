@@ -1,12 +1,14 @@
-import { TextField } from '~/components/fields/TextField'
+import yaml from 'js-yaml'
 
-export const TextFieldYamlType = (yaml: any, explicitName?: string) =>
+import { Props, TextField } from '~/components/fields/TextField'
+
+export const TextFieldYamlType = (_yaml: unknown, explicitName?: string) =>
   new yaml.Type(`!${explicitName ?? 'text-field'}`, {
     kind: 'mapping',
-    resolve(data: any) {
+    resolve(data: Props) {
       return !!data
     },
-    construct(data: any) {
+    construct(data: Props) {
       return <TextField key={data.name} {...data} />
     },
     instanceOf: TextField,

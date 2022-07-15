@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
 
 import { useBaseTemplate } from '~/hooks/useBaseTemplate'
 import { usePageTemplate } from '~/hooks/usePageTemplate'
 import version from '~/version'
 import { HeadFragmentType } from '../../types'
-import { linkTags } from './LinkTag'
+import { linkTags } from './Link'
 import { metaTags } from './Meta'
 import { scriptTags } from './Script'
 
@@ -13,11 +13,11 @@ export function Head() {
   const base = useBaseTemplate((state) => state.baseTemplate)
   const page = usePageTemplate((state) => state.pageTemplate)
   const [headData, setHeadData] = useState<HeadFragmentType>()
-  const [meta, setMeta] = useState<JSX.Element[]>()
+  const [meta, setMeta] = useState<ReactNode[]>()
   const [description, setDescription] = useState<string>('New ExothermicJS page description')
   const [title, setTitle] = useState<string>('New ExothermicJS Page')
-  const [links, setLinks] = useState<JSX.Element[]>()
-  const [headScripts, setHeadScripts] = useState<JSX.Element[]>()
+  const [links, setLinks] = useState<ReactNode[]>()
+  const [headScripts, setHeadScripts] = useState<ReactNode[]>()
 
   useEffect(() => {
     if (page && base) {

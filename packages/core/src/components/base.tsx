@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 
 import { useBaseTemplate } from '~/hooks/useBaseTemplate'
 import { useExothermic } from '~/hooks/useExothermic'
-import { useConfig } from '..'
+import { useConfig } from '../hooks/useConfig'
 import { Head } from './head/Head'
 import { Page } from './Page'
 import { Loading } from './utils/Loading'
@@ -30,4 +30,4 @@ export function Base() {
   )
 }
 
-Base.whyDidYouRender = true
+// Base.whyDidYouRender = true

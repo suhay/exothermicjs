@@ -11,6 +11,7 @@ import { Loading } from './utils/Loading'
 
 function Main({ status, data }: { status: LoadingState; data?: Template }) {
   const { user } = useContext(UserContext)
+  const location = useLocation()
 
   useEffect(() => {
     if (data?.secure) {
@@ -33,15 +34,10 @@ function Main({ status, data }: { status: LoadingState; data?: Template }) {
   const { $main, page, secure } = data
 
   if (secure && !user.data) {
-    return secure
+    return <div className={`secure-page_${location.pathname.replaceAll('/', '_')}`}>{secure}</div>
   }
 
-  return (
-    <>
-      {user.data && secure}
-      {$main ?? page}
-    </>
-  )
+  return <>{$main ?? page}</>
 }
 
 export function Page() {
@@ -64,13 +60,13 @@ export function Page() {
 
       setPageTemplate(data)
     }
-  }, [data])
+  }, [bottom?.key, data, setPageTemplate, top?.key])
 
   return (
-    <>
+    <div className={`page_${location.pathname.replaceAll('/', '_')}`}>
       {top}
       <Main status={status} data={data} />
       {bottom}
-    </>
+    </div>
   )
 }

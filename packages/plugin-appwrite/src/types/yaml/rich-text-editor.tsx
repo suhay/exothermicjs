@@ -1,12 +1,14 @@
-import { SlateRichTextEditor } from '~/components/fields/SlateRichTextEditor'
+import yaml from 'js-yaml'
 
-export const RichTextEditorYamlType = (yaml: any, explicitName?: string) =>
+import { Props, SlateRichTextEditor } from '~/components/fields/SlateRichTextEditor'
+
+export const RichTextEditorYamlType = (_yaml: unknown, explicitName?: string) =>
   new yaml.Type(`!${explicitName ?? 'rich-text-editor'}`, {
     kind: 'mapping',
-    resolve(data: any) {
+    resolve(data: Props) {
       return !!data
     },
-    construct(data: any) {
+    construct(data: Props) {
       return <SlateRichTextEditor key={data.name} name={data.name} label={data.label} />
     },
     instanceOf: SlateRichTextEditor,

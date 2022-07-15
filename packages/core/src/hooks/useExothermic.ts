@@ -1,8 +1,9 @@
 import yaml from 'js-yaml'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useTransition } from 'react'
 // import { useMatch } from 'react-router-dom'
 
 import * as logger from '~/utils/logger'
+import { SuspendablePromise, suspenseify } from '~/utils/suspendablePromise'
 import { Config, LoadingState, Template } from '../types'
 import { useCache, Cache } from './useCache'
 import { useConfig } from './useConfig'
@@ -62,7 +63,7 @@ const checkCache = (selectedRoute: string, cache: Cache) => {
     })
 }
 
-const buildTemplate = (
+const buildTemplate = async (
   templateRoute: string,
   config: Config,
   schema: yaml.Schema,
@@ -71,16 +72,65 @@ const buildTemplate = (
   const selectedRoute = getRoute(templateRoute, config)
   logger.debug(`building route: ${selectedRoute}`)
 
-  return checkCache(selectedRoute, cache).then((template) => {
-    // @ts-expect-error Property 'explicit' does not exist on type 'Schema'.
-    logger.debug(`building template with ${schema.explicit.length} registered tags`)
+  const template = await checkCache(selectedRoute, cache)
+  const builtTemplate = yaml.load(template, {
+    schema,
+  }) as Template
 
-    const builtTemplate = yaml.load(template, {
-      schema,
-    }) as Template
+  return Promise.resolve<BuiltTemplate>({ selectedRoute, builtTemplate, rawTemplate: template })
+}
 
-    return { selectedRoute, builtTemplate, rawTemplate: template }
-  })
+export const useExothermicWithSuspense = (route: string): SuspendablePromise<Template> => {
+  const usingBaseTemplate = route === 'base.exo'
+  const [ready, setReady] = useState(false)
+  const [currentRoute, setCurrentRoute] = useState<string>()
+  const schema = useSchema((state) => state.schema)
+  const config = useConfig()
+  const plugins = usePlugins()
+  const cache = useCache()
+
+  const [data, setData] = useState<SuspendablePromise<Template>>({ load: () => null })
+  const [, startTransition] = useTransition()
+
+  useEffect(() => {
+    if (config.pagePath !== '' && schema && (plugins.pluginRegistryLoaded || usingBaseTemplate)) {
+      setReady(true)
+    }
+  }, [config.pagePath, plugins.pluginRegistryLoaded, schema, usingBaseTemplate])
+
+  useEffect(() => {
+    if (currentRoute !== route) {
+      setCurrentRoute(route)
+    }
+  }, [currentRoute, route])
+
+  useEffect(() => {
+    if (!ready) return
+
+    startTransition(() =>
+      setData(
+        suspenseify<Template>(
+          buildTemplate(route, config, schema, cache)
+            .then(({ builtTemplate, rawTemplate, selectedRoute }) => {
+              if (rawTemplate !== '$main: []') {
+                cache.set(selectedRoute, rawTemplate, 30000)
+              }
+              return new Promise<Template>((resolve) => {
+                setTimeout(() => {
+                  resolve(builtTemplate)
+                }, 500)
+              })
+            })
+            .catch((err: Error) => {
+              logger.debug(`error: ${err.message}, trying ${route} again`)
+              return {}
+            }),
+        ),
+      ),
+    )
+  }, [ready, currentRoute, route, config, schema, cache])
+
+  return data
 }
 
 export const useExothermic = (route: string): ExothermicFile => {
@@ -99,14 +149,14 @@ export const useExothermic = (route: string): ExothermicFile => {
     if (config.pagePath !== '' && schema && (plugins.pluginRegistryLoaded || usingBaseTemplate)) {
       setReady(true)
     }
-  }, [route, config, schema, plugins.pluginRegistryLoaded])
+  }, [route, config, schema, plugins.pluginRegistryLoaded, usingBaseTemplate])
 
   useEffect(() => {
     if (currentRoute !== route) {
       setStatus('LOADING')
       setCurrentRoute(route)
     }
-  }, [route])
+  }, [currentRoute, route])
 
   useEffect(() => {
     if (!ready) return
@@ -120,10 +170,10 @@ export const useExothermic = (route: string): ExothermicFile => {
         logger.debug(`LOADED: ${route}`)
         setStatus('LOADED')
       })
-      .catch((err) => {
+      .catch((err: Error) => {
         logger.debug(`error: ${err.message}, trying ${route} again`)
       })
-  }, [ready, currentRoute])
+  }, [ready, currentRoute, route, config, schema, cache])
 
   return {
     data,

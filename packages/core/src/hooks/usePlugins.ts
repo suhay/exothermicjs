@@ -8,7 +8,10 @@ import { useCache } from './useCache'
 import { useConfig } from './useConfig'
 import { useSchema } from './useSchema'
 
-const load = ({ resolve }: { resolve: string }) => {
+type LoadArgs = { resolve: string }
+
+const load = ({ resolve }: LoadArgs) => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const loadedPlugin = window[resolve]
   return loadedPlugin ? Promise.resolve(loadedPlugin) : Promise.reject()
 }
@@ -66,7 +69,7 @@ export const usePlugins = () => {
       const reg = (config.plugins ?? [])
         ?.filter((plugin) => !cache.get(plugin.resolve))
         ?.map((plugin) =>
-          retryPromise<LoadedPlugin>({ fn: load }, { resolve: plugin.resolve })
+          retryPromise<LoadArgs, LoadedPlugin>({ fn: load }, { resolve: plugin.resolve })
             .then((loadedPlugin) => {
               cache.set(plugin.resolve, 'loaded')
               const yamlTypes = processPlugin(loadedPlugin)
@@ -96,7 +99,7 @@ export const usePlugins = () => {
         })
         .catch((err) => logger.error(err))
     }
-  }, [config])
+  }, [addTag, cache, config, extendSchema, setLoaded])
 
   return {
     pluginRegistryLoaded,
