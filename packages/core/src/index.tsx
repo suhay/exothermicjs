@@ -1,4 +1,4 @@
-import './wdyr'
+// import './wdyr'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 // @ts-expect-error Cannot find module 'expose-loader?exposes=react-router-dom!react-router-dom' or its corresponding type declarations.

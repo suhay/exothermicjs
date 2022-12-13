@@ -1,0 +1,21 @@
+---
+items:
+  - !fragment
+    class: text-center
+    as: p
+    items:
+      - !fragment
+        as: span
+        template: <span class="blog-author">{{ author.name }}</span><span class="blog-date">{{ date }}</span>
+  - !fragment
+    template: '# {{ title }}'
+  - !fragment
+    template: img
+  - !fragment
+    content: '{{ content }}'
+# <p class="text-center"><span class="blog-author">Matt Suhay</span><span class="blog-date">Aug 17, 2021</span></p>
+
+# # Imposter Syndrome: What's Among Us
+
+# ![A dinner table set for two people](https://images-suhay.sfo3.cdn.digitaloceanspaces.com/0_KCpCBGVJyp6hz_6q.jpg)
+# <figcaption>Photo by <a href="https://unsplash.com/@brookelark">Brooke Lark</a> on <a href="https://unsplash.com/">Unsplash</a></figcaption>

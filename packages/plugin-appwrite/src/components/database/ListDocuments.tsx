@@ -1,14 +1,20 @@
-import { Loading, UserContext } from '@exothermic/core'
-import { Delete, Replay } from '@mui/icons-material'
-import { Button, IconButton, Pagination, Stack } from '@mui/material'
-import { Models } from 'appwrite'
 import { useCallback, useContext, useEffect, useState } from 'react'
+
+import { Loading, UserContext } from '@exothermic/core'
+import Delete from '@mui/icons-material/Delete'
+import Replay from '@mui/icons-material/Replay'
+import { Box } from '@mui/material'
+import Button from '@mui/material/Button'
+import IconButton from '@mui/material/IconButton'
+import Pagination from '@mui/material/Pagination'
+import Stack from '@mui/material/Stack'
+import { Models, Permission, Query, Role } from 'appwrite'
 import { Controller } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
 import { Context } from '~/contexts/user'
 import { useAppwrite } from '~/hooks/useAppwrite'
-import { AppwrieApiDatabase } from '../../types'
+import { AppwriteApiDatabase } from '../../types'
 import { ConfirmationDialog } from '../dialogs/ConfirmationDialog'
 
 const LIMIT = 10
@@ -24,7 +30,7 @@ function ActionButton({
   randomize: boolean
   action: (...args) => void
 }) {
-  const userData = user.data as unknown as Models.User<Models.Preferences>
+  const userData = user.data as unknown as Models.Account<Models.Preferences>
 
   if (randomize) {
     return (
@@ -34,7 +40,8 @@ function ActionButton({
     )
   }
 
-  if (doc?.$write?.includes(`user:${userData.$id}`)) {
+  const perm = Permission.write(Role.user(userData.$id))
+  if (doc?.$permissions?.includes(perm)) {
     return (
       <IconButton color='error' aria-label='delete' onClick={() => action(doc.$id)}>
         <Delete />
@@ -51,7 +58,7 @@ export function ListDocuments({
   control,
   setValue,
   allowNew = true,
-}: Omit<AppwrieApiDatabase, 'api' | 'action'>) {
+}: Omit<AppwriteApiDatabase, 'api' | 'action'>) {
   const { user } = useContext(UserContext)
   const [documents, setDocuments] = useState<Models.DocumentList<Models.Document>>()
   const appwrite = useAppwrite()
@@ -88,8 +95,7 @@ export function ListDocuments({
         : Math.floor(Math.random() * (documents?.total ?? 2))
       const docs = await appwrite.listDocuments({
         collectionId: collection,
-        limit: 1,
-        offset: randomPick,
+        queries: [Query.limit(1), Query.offset(randomPick)],
       })
 
       if (docs) {
@@ -100,7 +106,10 @@ export function ListDocuments({
   )
 
   const reload = useCallback(async () => {
-    const docs = await appwrite.listDocuments({ collectionId: collection, limit: LIMIT, offset })
+    const docs = await appwrite.listDocuments({
+      collectionId: collection,
+      queries: [Query.limit(LIMIT), Query.offset(offset)],
+    })
     if (docs) {
       if (randomize) {
         await reroll(docs.total)
@@ -119,7 +128,7 @@ export function ListDocuments({
 
   useEffect(() => {
     reload().catch(() => null)
-  }, [])
+  }, []) // <--- Do not change, it will cause an infinite loop
 
   if (!documents) {
     return <Loading />
@@ -132,20 +141,17 @@ export function ListDocuments({
         {documents.documents.map((doc) => (
           <li key={doc.$id}>
             {items?.map((item, i) => {
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
               const { name } = item.props
               if (name && typeof name === 'string' && control) {
                 return (
                   <Controller
                     name={name}
                     control={control}
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                     defaultValue={doc[name]}
                     render={({ field: { onChange } }) => (
                       <item.type
                         {...item.props}
                         onChange={onChange}
-                        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                         value={doc[name]}
                         setValue={setValue}
                       />
@@ -164,12 +170,14 @@ export function ListDocuments({
                 />
               )
             })}
-            <ActionButton
-              doc={doc}
-              user={user}
-              randomize={randomize}
-              action={randomize ? reroll : deleteDocument}
-            />
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <ActionButton
+                doc={doc}
+                user={user}
+                randomize={randomize}
+                action={randomize ? reroll : deleteDocument}
+              />
+            </Box>
           </li>
         ))}
         {documents.documents.length === 0 && <span>Nothing to show!</span>}

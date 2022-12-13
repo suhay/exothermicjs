@@ -1,11 +1,12 @@
-import { UserContext } from '@exothermic/core'
 import { useContext } from 'react'
 
-import { AppwrieApiAccount } from '../../types'
+import { UserContext } from '@exothermic/core'
+
+import { AppwriteApiAccount } from '../../types'
 import { AccountButton } from './AccountButton'
 import { Login } from './Login'
 
-export function Account({ action, logout, login }: Omit<AppwrieApiAccount, 'api'>) {
+export function Account({ action, logout, login }: Omit<AppwriteApiAccount, 'api'>) {
   const { user } = useContext(UserContext)
 
   switch (action) {

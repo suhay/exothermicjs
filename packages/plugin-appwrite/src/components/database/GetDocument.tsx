@@ -1,11 +1,12 @@
-import { Loading, UserContext } from '@exothermic/core'
-import { Button } from '@mui/material'
-import { Models } from 'appwrite'
 import { useCallback, useContext, useEffect, useState } from 'react'
+
+import { Loading, UserContext } from '@exothermic/core'
+import Button from '@mui/material/Button'
+import { Models, Permission, Role } from 'appwrite'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 
 import { useAppwrite } from '~/hooks/useAppwrite'
-import { AppwrieApiDatabase } from '../../types'
+import { AppwriteApiDatabase } from '../../types'
 
 function ActionButton({
   editable,
@@ -26,7 +27,7 @@ export function GetDocument({
   collection,
   items,
   editable = false,
-}: Omit<AppwrieApiDatabase, 'api' | 'action'>) {
+}: Omit<AppwriteApiDatabase, 'api' | 'action'>) {
   const { user } = useContext(UserContext)
   const [document, setDocument] = useState<Models.Document>()
   const [isAuthor, setIsAuthor] = useState(false)
@@ -38,8 +39,10 @@ export function GetDocument({
   const load = useCallback(async () => {
     const doc = await appwrite.getDocument(collection, query.get('id') ?? '')
     if (doc) {
-      const userData = user.data as unknown as Models.User<Models.Preferences>
-      if (doc.$write.includes(`user:${userData.$id}`)) {
+      const userData = user.data as Models.Account<Models.Preferences>
+      const perm = Permission.write(Role.user(userData.$id))
+
+      if (doc.$permissions.includes(perm)) {
         setIsAuthor(true)
       }
       setDocument(doc)
@@ -49,7 +52,7 @@ export function GetDocument({
   useEffect(() => {
     if (document) return
     load().catch(() => null)
-  }, [])
+  }, [document, load])
 
   const onEdit = useCallback(() => {
     navigate(`${location.pathname}edit?id=${query.get('id') ?? ''}`)

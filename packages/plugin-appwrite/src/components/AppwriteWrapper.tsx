@@ -1,12 +1,13 @@
-import { Loading, UserContext } from '@exothermic/core'
 import { useContext, useEffect, useState } from 'react'
 
+import { Loading, UserContext } from '@exothermic/core'
+
 import { useAppwrite } from '~/hooks/useAppwrite'
-import { AppwrieApiWrapper } from '../types'
+import { AppwriteApiWrapper } from '../types'
 import { Account } from './account/Account'
 import { Database } from './database/Database'
 
-export function AppwriteWrapper(props: AppwrieApiWrapper) {
+export function AppwriteWrapper(props: AppwriteApiWrapper) {
   const appwrite = useAppwrite()
   const { dispatch: dispatchUser } = useContext(UserContext)
   const [ready, setReady] = useState(false)

@@ -1,11 +1,16 @@
-import { Button } from '@mui/material'
-import { useCallback, useState } from 'react'
+import { useCallback, useContext, useState } from 'react'
+
+import { UserContext } from '@exothermic/core'
+import Button from '@mui/material/Button'
+import { Models, Permission, Role } from 'appwrite'
 import { Controller, useForm } from 'react-hook-form'
 
 import { useAppwrite } from '~/hooks/useAppwrite'
-import { AppwrieApiDatabase } from '../../types'
+import { AppwriteApiDatabase } from '../../types'
 
-export function CreateDocument({ collection, items }: Omit<AppwrieApiDatabase, 'api' | 'action'>) {
+export function CreateDocument({ collection, items }: Omit<AppwriteApiDatabase, 'api' | 'action'>) {
+  const context = useContext(UserContext)
+  const user = context.user.data as Models.Account<Models.Preferences>
   const { handleSubmit, control, setValue } = useForm()
   const appwrite = useAppwrite()
   const [documentId, setDocumentId] = useState<string>()
@@ -16,19 +21,21 @@ export function CreateDocument({ collection, items }: Omit<AppwrieApiDatabase, '
         await appwrite.updateDocument(collection, documentId, data)
         return
       }
-      const doc = await appwrite.createDocument(collection, data)
+      const doc = await appwrite.createDocument(collection, data, [
+        Permission.write(Role.user(user.$id)),
+        Permission.read(Role.user(user.$id)),
+      ])
       if (doc?.$id) {
         setDocumentId(doc.$id)
       }
     },
-    [appwrite, collection, documentId],
+    [appwrite, collection, documentId, user.$id],
   )
 
   return (
     <form>
       <Button onClick={handleSubmit(save)}>Save</Button>
       {items?.map((item, i) => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const { name } = item.props
         if (name && typeof name === 'string') {
           return (
@@ -36,7 +43,6 @@ export function CreateDocument({ collection, items }: Omit<AppwrieApiDatabase, '
               name={name}
               control={control}
               render={({ field: { onChange, value } }) => (
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                 <item.type {...item.props} onChange={onChange} value={value} setValue={setValue} />
               )}
               key={`${name}-${i}`}

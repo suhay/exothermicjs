@@ -1,6 +1,7 @@
-import { UserContext } from '@exothermic/core'
-import { Button } from '@mui/material'
 import { useCallback, useContext } from 'react'
+
+import { UserContext } from '@exothermic/core'
+import Button from '@mui/material/Button'
 import { useNavigate } from 'react-router-dom'
 
 import { useAppwrite } from '~/hooks/useAppwrite'

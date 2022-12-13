@@ -9,7 +9,7 @@
     }
   },
   "include": [
-    "src",
+    "src", "../lib-slate/src/types/yaml/rich-text-editor.tsx", "../lib-slate/src/SlateRichTextEditor",
   ],
   "references": [
     {

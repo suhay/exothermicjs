@@ -1,4 +1,4 @@
-import { AppwrieApiDatabase } from '../../types'
+import { AppwriteApiDatabase } from '../../types'
 import { CreateDocument } from './CreateDocument'
 import { GetDocument } from './GetDocument'
 import { ListDocuments } from './ListDocuments'
@@ -13,7 +13,7 @@ export function Database({
   control,
   setValue,
   allowNew,
-}: Omit<AppwrieApiDatabase, 'api'>) {
+}: Omit<AppwriteApiDatabase, 'api'>) {
   switch (action) {
     case 'list':
       return (

@@ -1,6 +1,7 @@
-import { UserContext } from '@exothermic/core'
-import { Button } from '@mui/material'
 import { useContext } from 'react'
+
+import { UserContext } from '@exothermic/core'
+import Button from '@mui/material/Button'
 import { useNavigate } from 'react-router-dom'
 
 import { Logout } from './Logout'

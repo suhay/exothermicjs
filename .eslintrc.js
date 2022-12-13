@@ -82,6 +82,9 @@ module.exports = {
     "@typescript-eslint/no-misused-promises": "off",
     "react/jsx-no-useless-fragment": "warn",
     "react/jsx-wrap-multilines": ["error", {"declaration": false, "assignment": false}],
+    "@typescript-eslint/no-unsafe-call": "off",
+    "@typescript-eslint/no-unsafe-member-access": "off",
+    "@typescript-eslint/no-unsafe-assignment": "off"
   },
   globals: {
     JSX: "readonly"

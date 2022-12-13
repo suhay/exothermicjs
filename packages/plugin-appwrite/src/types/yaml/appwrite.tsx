@@ -2,15 +2,15 @@ import { guid } from '@exothermic/core'
 import yaml from 'js-yaml'
 
 import { AppwriteWrapper } from '~/components/AppwriteWrapper'
-import { AppwrieApiWrapper } from '..'
+import { AppwriteApiWrapper } from '..'
 
 export const AppwriteYamlType = (_yaml: any, explicitName?: string) =>
   new yaml.Type(`!${explicitName ?? 'appwrite'}`, {
     kind: 'mapping',
-    resolve(data: AppwrieApiWrapper) {
+    resolve(data: AppwriteApiWrapper) {
       return !!data
     },
-    construct(data: AppwrieApiWrapper) {
+    construct(data: AppwriteApiWrapper) {
       return <AppwriteWrapper key={guid()} {...data} />
     },
     instanceOf: AppwriteWrapper,

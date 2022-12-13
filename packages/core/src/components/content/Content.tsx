@@ -16,12 +16,12 @@ function LinkRenderer({ href, children }: { href: string; children: ReactNode })
   return <a href={href}>{children}</a>
 }
 
-export function applyTemplate(template: string, data: Record<string, string>) {
+export function applyTemplate(template: string, data: Record<string, string | object>) {
   if (!template) return null
 
   let content = template
   Object.entries(data).forEach(([key, val]) => {
-    const reg = `({{\\s*${key.replace('$', '\\$')}(?:\\s|\\|.*?)*}})`
+    const reg = `({{\\s*${key.replace('$', '\\$')}.*?}})`
     const exp = new RegExp(reg)
     const expg = new RegExp(reg, 'g')
     const grp = content.match(exp)
@@ -29,20 +29,38 @@ export function applyTemplate(template: string, data: Record<string, string>) {
 
     if (grp?.length) {
       const parts = grp[0].replace(/{{|}}/g, '').split('|')
-      if (parts.length === 3) {
+      if (typeof replaceVal !== 'string' && parts[0].includes('.')) {
+        const keyParts = parts[0].split('.')
+        for (let i = 1; i < keyParts.length; i += 1) {
+          if (replaceVal[keyParts[i].trim()]) {
+            replaceVal = replaceVal[keyParts[i].trim()]
+          } else {
+            replaceVal = ''
+          }
+          if (typeof replaceVal === 'string') {
+            break
+          }
+        }
+      }
+
+      if (parts.length >= 3) {
         switch (parts[1].trim()) {
           case 'dateTime':
-            replaceVal = DateTime.fromISO(replaceVal).toFormat(parts[2].trim())
+            if (typeof replaceVal === 'string') {
+              replaceVal = DateTime.fromISO(replaceVal).toFormat(parts[2].trim())
+            }
             break
           default:
             break
         }
       }
     }
-    content = content.replace(expg, replaceVal)
+    if (typeof replaceVal === 'string') {
+      content = content.replace(expg, replaceVal)
+    }
   })
 
-  return content
+  return content.replace(/\s*{{.*?}}/g, '')
 }
 
 export function Content({ content }: ContentProps) {

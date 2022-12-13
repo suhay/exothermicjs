@@ -3,6 +3,14 @@ items:
   - !blog-roll
     title: '# The blog roll!!'
     class: row
+    items:
+      - !foreach
+        items:
+          - !fragment
+            template: '[{{ title }}](/blog/{{ filename }}) - {{ date | dateTime | LLL dd, yyyy }}'
+          - !fragment
+            template: '{{ author.name }}'
+
     options:
       - image
       - tags

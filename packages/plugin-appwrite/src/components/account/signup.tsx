@@ -1,6 +1,8 @@
-import { UserContext } from '@exothermic/core'
-import { Button, TextField } from '@mui/material'
 import { Dispatch, SetStateAction, useContext, useCallback } from 'react'
+
+import { UserContext } from '@exothermic/core'
+import Button from '@mui/material/Button'
+import TextField from '@mui/material/TextField'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 
 import { useAppwrite } from '~/hooks/useAppwrite'
@@ -18,7 +20,7 @@ export function SignUp({ setIsSigningUp }: { setIsSigningUp: Dispatch<SetStateAc
 
   const signUp: SubmitHandler<Inputs> = useCallback(
     async ({ email, password, name }) => {
-      const newUser = await appwrite.createAccount('unique()', email, password, name)
+      const newUser = await appwrite.createAccount(email, password, name)
       if (newUser) {
         const session = await appwrite.createSession(email, password)
         if (dispatch && session) {
