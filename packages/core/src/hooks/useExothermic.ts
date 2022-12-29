@@ -40,8 +40,8 @@ const getRoute = (fromRoute: string, config: Config) => {
   )
 }
 
-const checkCache = (selectedRoute: string, cache: Cache) => {
-  const cachedItem = cache.get(selectedRoute)
+const checkCache = async (selectedRoute: string, cache: Cache) => {
+  const cachedItem = await cache.get(selectedRoute)
   if (cachedItem) {
     logger.debug(`cache hit: ${selectedRoute}`)
     return Promise.resolve(cachedItem)
@@ -159,7 +159,7 @@ export const useExothermic = (route: string): ExothermicFile => {
   }, [currentRoute, route])
 
   useEffect(() => {
-    if (!ready) return
+    if (!ready || status !== 'LOADING') return
 
     buildTemplate(route, config, schema, cache)
       .then(({ builtTemplate, rawTemplate, selectedRoute }) => {
@@ -172,8 +172,9 @@ export const useExothermic = (route: string): ExothermicFile => {
       })
       .catch((err: Error) => {
         logger.debug(`error: ${err.message}, trying ${route} again`)
+        setStatus('ERROR')
       })
-  }, [ready, currentRoute, route, config, schema, cache])
+  }, [ready, currentRoute, route, config, schema, cache, status])
 
   return {
     data,

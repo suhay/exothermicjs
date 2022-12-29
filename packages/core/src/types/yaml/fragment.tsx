@@ -11,7 +11,7 @@ export const FragmentYamlType = new yaml.Type('!fragment', {
   },
   construct(data: PageFragmentType) {
     const { id } = data
-    return <PageFragment as='div' {...data} key={id ?? guid()} />
+    return <PageFragment {...data} key={id ?? guid()} />
   },
   instanceOf: PageFragment,
 })

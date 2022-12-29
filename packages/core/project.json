@@ -1,0 +1,20 @@
+{
+  "name": "core",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "prefix": "@exothermic",
+  "sourceRoot": "packages/core/src",
+  "projectType": "application",
+  "generators": {},
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
+      "options": {
+        "jestConfig": "packages/core/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

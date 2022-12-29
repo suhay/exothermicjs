@@ -18,13 +18,21 @@ export function UpdateDocument({ collection, items }: Omit<AppwriteApiDatabase, 
 
   const save = useCallback(
     async (data: Record<string, string>) => {
+      if (!collection) {
+        return
+      }
       await appwrite.updateDocument(collection, documentId, data)
     },
     [appwrite, collection, documentId],
   )
 
   useEffect(() => {
-    if (document) return
+    if (document) {
+      return
+    }
+    if (!collection) {
+      return
+    }
     const id = query.get('id') ?? ''
     setDocumentId(id)
     appwrite
@@ -41,7 +49,6 @@ export function UpdateDocument({ collection, items }: Omit<AppwriteApiDatabase, 
 
   return (
     <form>
-      <Button onClick={handleSubmit(save)}>Save</Button>
       {items?.map((item, i) => {
         const { name } = item.props
         if (name && typeof name === 'string') {
@@ -58,7 +65,7 @@ export function UpdateDocument({ collection, items }: Omit<AppwriteApiDatabase, 
                   setValue={setValue}
                 />
               )}
-              key={`${name}-${i}-${document.$id}`}
+              key={`${name}-${String(i)}-${document.$id}`}
             />
           )
         }
@@ -66,11 +73,12 @@ export function UpdateDocument({ collection, items }: Omit<AppwriteApiDatabase, 
           <item.type
             {...item.props}
             data={document}
-            key={`${item.type.toString()}-${i}-${document.$id}`}
+            key={`${String(item.type)}-${String(i)}-${document.$id}`}
             setValue={setValue}
           />
         )
       })}
+      <Button onClick={handleSubmit(save)}>Save</Button>
     </form>
   )
 }

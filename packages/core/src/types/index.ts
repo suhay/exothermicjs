@@ -1,4 +1,4 @@
-import { ElementType, ReactElement, ReactNode } from 'react'
+import { ReactElement, ReactNode } from 'react'
 
 export type Plugin = {
   resolve: string
@@ -21,7 +21,7 @@ export interface PageFragmentType {
   items?: ReactNode[]
   content?: string | ReactNode
   title?: string
-  as?: ElementType
+  as?: string
   template?: string
 }
 
@@ -59,4 +59,19 @@ export type UserContextType = {
 
 export type PluginContextType = {
   plugins: Record<string, any>
+}
+
+export interface DBPlugin {
+  action: 'create' | 'list' | 'update' | 'delete' | 'get'
+  collection: string
+  options?: Record<string, string | boolean | number>
+  items?: ReactElement[]
+}
+
+export type LocalStore = {
+  get: <T>(key: string) => Promise<T> | undefined
+  add: (val: unknown, key?: string) => Promise<string | null> | undefined
+  del: (key: string) => Promise<void> | undefined
+  put: (val: unknown, key?: string) => Promise<string | null> | undefined
+  getAll: (query: Record<string, string>) => Promise<any[] | null>
 }

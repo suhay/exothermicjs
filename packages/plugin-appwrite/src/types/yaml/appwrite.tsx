@@ -4,7 +4,7 @@ import yaml from 'js-yaml'
 import { AppwriteWrapper } from '~/components/AppwriteWrapper'
 import { AppwriteApiWrapper } from '..'
 
-export const AppwriteYamlType = (_yaml: any, explicitName?: string) =>
+export const AppwriteYamlType = (_yaml: unknown, explicitName?: string) =>
   new yaml.Type(`!${explicitName ?? 'appwrite'}`, {
     kind: 'mapping',
     resolve(data: AppwriteApiWrapper) {

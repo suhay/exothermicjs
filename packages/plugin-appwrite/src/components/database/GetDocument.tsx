@@ -26,8 +26,9 @@ function ActionButton({
 export function GetDocument({
   collection,
   items,
-  editable = false,
+  options,
 }: Omit<AppwriteApiDatabase, 'api' | 'action'>) {
+  const { editable = false } = options ?? {}
   const { user } = useContext(UserContext)
   const [document, setDocument] = useState<Models.Document>()
   const [isAuthor, setIsAuthor] = useState(false)
@@ -37,6 +38,9 @@ export function GetDocument({
   const location = useLocation()
 
   const load = useCallback(async () => {
+    if (!collection) {
+      return
+    }
     const doc = await appwrite.getDocument(collection, query.get('id') ?? '')
     if (doc) {
       const userData = user.data as Models.Account<Models.Preferences>
@@ -64,9 +68,9 @@ export function GetDocument({
 
   return (
     <>
-      <ActionButton editable={editable} isAuthor={isAuthor} action={onEdit} />
+      <ActionButton editable={!!editable} isAuthor={isAuthor} action={onEdit} />
       {items?.map((item, i) => (
-        <item.type {...item.props} data={document} key={`item-${i}-${document.$id}`} />
+        <item.type {...item.props} data={document} key={`item-${String(i)}-${document.$id}`} />
       ))}
     </>
   )

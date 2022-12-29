@@ -2,7 +2,7 @@ import yaml from 'js-yaml'
 
 import { DatePicker, Props } from '~/components/fields/DatePicker'
 
-export const DatePickerYamlType = (_yaml: any, explicitName?: string) =>
+export const DatePickerYamlType = (_yaml: unknown, explicitName?: string) =>
   new yaml.Type(`!${explicitName ?? 'date-picker'}`, {
     kind: 'mapping',
     resolve(data: any) {

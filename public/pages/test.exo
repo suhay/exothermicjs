@@ -11,3 +11,10 @@ $main:
         items:
           - !col
             content: 'weeeee'
+      - !section
+        class: row
+        items:
+          - !col
+            data:
+              content: awesome
+            template: "This is {{ content }}, isn't it? {{ none }} should do what?"

@@ -1,9 +1,5 @@
 ---
-$top:
-  - !header
-    class: container
-    items:
-      - !get fragments/nav
+$top: !get fragments/nav
 $main:
   - !main
     class: container

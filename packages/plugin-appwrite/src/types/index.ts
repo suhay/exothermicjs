@@ -1,5 +1,12 @@
-import { ReactElement } from 'react'
+import { DBPlugin } from '@exothermic/core'
 import { Control, FieldValues, UseFormSetValue } from 'react-hook-form'
+
+export type AppwritePluginOptions = {
+  project: string
+  endpoint: string
+  database: string
+  collections: Record<string, string>
+}
 
 export enum AppwriteApiType {
   ACCOUNT = 'account',
@@ -13,21 +20,19 @@ export enum AppwriteApiType {
   USER = 'user',
 }
 
-export type AppwriteApiDatabase = {
+type AppwriteApiDatabaseOptions = 'editable' | 'randomize' | 'allowNew'
+
+export type AppwriteApiDatabase = DBPlugin & {
   api: AppwriteApiType.DATABASE
-  action: 'list' | 'get' | 'update' | 'create'
   collection: string
   control?: Control<FieldValues, any>
-  editable?: boolean
-  items?: ReactElement[]
-  randomize?: boolean
   setValue?: UseFormSetValue<FieldValues>
-  allowNew?: boolean
+  options?: Record<AppwriteApiDatabaseOptions, string | number | boolean>
 }
 
 export type AppwriteApiAccount = {
-  action: 'login' | 'button'
   api: AppwriteApiType.ACCOUNT
+  action: 'login' | 'button'
   logout?: string
   login?: string
 }

@@ -12,7 +12,7 @@ items:
   - !fragment
     template: img
   - !fragment
-    content: '{{ content }}'
+    template: '{{ content }}'
 # <p class="text-center"><span class="blog-author">Matt Suhay</span><span class="blog-date">Aug 17, 2021</span></p>
 
 # # Imposter Syndrome: What's Among Us

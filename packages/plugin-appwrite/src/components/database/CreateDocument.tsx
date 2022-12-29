@@ -17,6 +17,9 @@ export function CreateDocument({ collection, items }: Omit<AppwriteApiDatabase, 
 
   const save = useCallback(
     async (data: Record<string, string>) => {
+      if (!collection) {
+        return
+      }
       if (documentId) {
         await appwrite.updateDocument(collection, documentId, data)
         return
@@ -34,7 +37,6 @@ export function CreateDocument({ collection, items }: Omit<AppwriteApiDatabase, 
 
   return (
     <form>
-      <Button onClick={handleSubmit(save)}>Save</Button>
       {items?.map((item, i) => {
         const { name } = item.props
         if (name && typeof name === 'string') {
@@ -45,19 +47,20 @@ export function CreateDocument({ collection, items }: Omit<AppwriteApiDatabase, 
               render={({ field: { onChange, value } }) => (
                 <item.type {...item.props} onChange={onChange} value={value} setValue={setValue} />
               )}
-              key={`${name}-${i}`}
+              key={`${name}-${String(i)}`}
             />
           )
         }
         return (
           <item.type
             {...item.props}
-            key={`${item.type.toString()}-${i}`}
+            key={`${String(item.type)}-${String(i)}`}
             control={control}
             setValue={setValue}
           />
         )
       })}
+      <Button onClick={handleSubmit(save)}>Save</Button>
     </form>
   )
 }

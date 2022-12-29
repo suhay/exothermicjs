@@ -8,7 +8,7 @@ $main:
       - !appwrite
         api: database
         action: update
-        collection: 629577d16230f8150474
+        collection: entries
         items:
           - !fragment
             template: '## {{ prompt }}'

@@ -54,11 +54,12 @@ function ActionButton({
 export function ListDocuments({
   collection,
   items,
-  randomize = false,
   control,
   setValue,
-  allowNew = true,
+  options,
 }: Omit<AppwriteApiDatabase, 'api' | 'action'>) {
+  const { randomize = false, allowNew = true } = options ?? {}
+
   const { user } = useContext(UserContext)
   const [documents, setDocuments] = useState<Models.DocumentList<Models.Document>>()
   const appwrite = useAppwrite()
@@ -90,11 +91,14 @@ export function ListDocuments({
 
   const reroll = useCallback(
     async (range?: number) => {
+      if (!collection) {
+        return
+      }
       const randomPick = range
         ? Math.floor(Math.random() * range)
         : Math.floor(Math.random() * (documents?.total ?? 2))
       const docs = await appwrite.listDocuments({
-        collectionId: collection,
+        collection,
         queries: [Query.limit(1), Query.offset(randomPick)],
       })
 
@@ -106,8 +110,11 @@ export function ListDocuments({
   )
 
   const reload = useCallback(async () => {
+    if (!collection) {
+      return
+    }
     const docs = await appwrite.listDocuments({
-      collectionId: collection,
+      collection,
       queries: [Query.limit(LIMIT), Query.offset(offset)],
     })
     if (docs) {
@@ -152,11 +159,11 @@ export function ListDocuments({
                       <item.type
                         {...item.props}
                         onChange={onChange}
-                        value={doc[name]}
+                        defaultValue={doc[name]}
                         setValue={setValue}
                       />
                     )}
-                    key={`${item.type.toString()}-${name}`}
+                    key={`${String(item.type)}-${name}`}
                   />
                 )
               }
@@ -164,7 +171,7 @@ export function ListDocuments({
                 <item.type
                   {...item.props}
                   data={doc}
-                  key={`${item.type.toString()}-${i}-${doc.$id}`}
+                  key={`${String(item.type)}-${String(i)}-${doc.$id}`}
                   control={control}
                   setValue={setValue}
                 />
@@ -174,7 +181,7 @@ export function ListDocuments({
               <ActionButton
                 doc={doc}
                 user={user}
-                randomize={randomize}
+                randomize={!!randomize}
                 action={randomize ? reroll : deleteDocument}
               />
             </Box>

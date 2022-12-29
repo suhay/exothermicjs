@@ -5,7 +5,8 @@
     "rootDir": "./src",
     "baseUrl": "./",
     "paths": {
-      "~/*": ["./src/*", "../core/src/*"]
+      "~/*": ["./src/*", "../core/src/*"],
+      "@exothermic/core": ["../core/src"]
     },
   },
   "include": [

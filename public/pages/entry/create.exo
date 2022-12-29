@@ -5,17 +5,15 @@ $top: !get fragments/nav
 $main:
   - !main
     items:
-      - !appwrite
-        api: database
+      - !db
         action: create
-        collection: 629577d16230f8150474
+        collection: entries
         items:
-          - !appwrite
-            api: database
+          - !db
             action: list
-            collection: 627844322a34e729ef1e
-            randomize: true
-            allowNew: false
+            collection: prompts
+            options:
+              randomize: true
             items:
               - !text-field
                 name: prompt

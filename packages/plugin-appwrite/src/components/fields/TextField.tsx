@@ -1,26 +1,21 @@
 import { ChangeEvent, useCallback, useEffect } from 'react'
 
-import MuiTextField from '@mui/material/TextField'
+import MuiTextField, { TextFieldProps } from '@mui/material/TextField'
 import { FieldValues, UseFormSetValue } from 'react-hook-form'
 
 export type Props = {
-  value?: string | null
-  label?: string
-  name: string
   onChange?: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
-  variant?: 'filled' | 'outlined' | 'standard'
-  InputProps?: any
   setValue: UseFormSetValue<FieldValues>
-}
+  class?: string
+} & TextFieldProps
 
 export function TextField({
-  variant = 'outlined',
-  name,
+  name = 'test-field',
   value,
-  label,
   onChange = () => null,
-  InputProps,
   setValue,
+  class: classes,
+  ...rest
 }: Props) {
   useEffect(() => {
     if (value) {
@@ -36,15 +31,5 @@ export function TextField({
     [name, onChange, setValue],
   )
 
-  return (
-    <MuiTextField
-      id={name}
-      label={label}
-      variant={variant}
-      value={value}
-      onChange={handleChange}
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      InputProps={InputProps}
-    />
-  )
+  return <MuiTextField {...rest} className={classes} id={name} onChange={handleChange} />
 }

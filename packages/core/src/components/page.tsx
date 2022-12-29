@@ -1,4 +1,5 @@
 import { ReactElement, useContext, useEffect, useState } from 'react'
+
 import { useLocation } from 'react-router-dom'
 
 import { UserContext } from '~/contexts/user'
@@ -34,10 +35,19 @@ function Main({ status, data }: { status: LoadingState; data?: Template }) {
   const { $main, page, secure } = data
 
   if (secure && !user.data) {
-    return <div className={`secure-page_${location.pathname.replaceAll('/', '_')}`}>{secure}</div>
+    return (
+      <div className={`secure-page_${location.pathname.replace(/\/$/, '').replaceAll('/', '_')}`}>
+        {secure}
+      </div>
+    )
   }
 
-  return <>{$main ?? page}</>
+  return (
+    <>
+      {$main ?? page}
+      <span />
+    </>
+  )
 }
 
 export function Page() {
@@ -62,8 +72,12 @@ export function Page() {
     }
   }, [bottom?.key, data, setPageTemplate, top?.key])
 
+  if (status === 'ERROR') {
+    return <section>Page not found.</section>
+  }
+
   return (
-    <div className={`page_${location.pathname.replaceAll('/', '_')}`}>
+    <div className={`page page_${location.pathname.replace(/\/$/, '').replaceAll('/', '_')}`}>
       {top}
       <Main status={status} data={data} />
       {bottom}

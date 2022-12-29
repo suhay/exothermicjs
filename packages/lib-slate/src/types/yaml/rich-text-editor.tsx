@@ -9,7 +9,14 @@ export const RichTextEditorYamlType = (_yaml: unknown, explicitName?: string) =>
       return !!data
     },
     construct(data: Props) {
-      return <SlateRichTextEditor key={data.name} name={data.name} label={data.label} />
+      return (
+        <SlateRichTextEditor
+          key={data.name}
+          name={data.name}
+          label={data.label}
+          class={data.class}
+        />
+      )
     },
     instanceOf: SlateRichTextEditor,
   })

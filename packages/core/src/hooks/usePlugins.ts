@@ -11,14 +11,13 @@ import { useSchema } from './useSchema'
 type LoadArgs = { resolve: string }
 
 const load = ({ resolve }: LoadArgs) => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const loadedPlugin = window[resolve]
   return loadedPlugin ? Promise.resolve(loadedPlugin) : Promise.reject()
 }
 
 type LoadedPlugin = {
   register: {
-    tags: Record<string, (jsYaml: any) => yaml.Type>
+    tags: Record<string, (jsYaml: unknown) => yaml.Type>
   }
 }
 
@@ -26,7 +25,7 @@ const processPlugin = (loadedPlugin: LoadedPlugin) => {
   if (loadedPlugin.register?.tags) {
     return loadedPlugin.register?.tags as Record<
       string,
-      (jsYaml: any, explicitName?: string) => yaml.Type
+      (jsYaml: unknown, explicitName?: string) => yaml.Type
     >
   }
   return null
@@ -53,7 +52,15 @@ const useStore = create<PluginHook>((set, get) => ({
   routes: {},
 }))
 
-export const usePlugins = () => {
+type PluginRegistry = {
+  pluginRegistryLoaded: boolean
+  plugins: {
+    tags: Record<string, yaml.Type>
+    routes: Record<string, string>
+  }
+}
+
+export const usePlugins = (): PluginRegistry => {
   const config = useConfig()
   const extendSchema = useSchema((state) => state.extendSchema)
   const loaded = useStore((state) => state.pluginRegistryLoaded)
@@ -65,40 +72,47 @@ export const usePlugins = () => {
   const cache = useCache()
 
   useEffect(() => {
-    if (config.pagePath !== '') {
-      const reg = (config.plugins ?? [])
-        ?.filter((plugin) => !cache.get(plugin.resolve))
-        ?.map((plugin) =>
-          retryPromise<LoadArgs, LoadedPlugin>({ fn: load }, { resolve: plugin.resolve })
-            .then((loadedPlugin) => {
-              cache.set(plugin.resolve, 'loaded')
-              const yamlTypes = processPlugin(loadedPlugin)
+    if (config.pagePath === '') {
+      return
+    }
 
-              if (yamlTypes) {
-                Object.keys(yamlTypes).forEach((key) => {
-                  if (plugin.exclude?.includes(key)) {
-                    return
-                  }
-                  const registeredTagName = plugin.nameMap?.[key] ?? key
-                  const newType = yamlTypes[key](yaml, registeredTagName)
-                  addTag(registeredTagName, newType)
-                  extendSchema(newType)
-                })
-              }
-            })
-            .catch((err) => {
-              logger.debug('plugin failed to load')
-              logger.error(err)
-            }),
+    const plugins = (config.plugins ?? []).map(async (plugin) => {
+      const resolve = await cache.get(plugin.resolve)
+
+      if (resolve == null) {
+        const loadedPlugin = await retryPromise<LoadArgs, LoadedPlugin>(
+          { fn: load },
+          { resolve: plugin.resolve },
         )
 
-      Promise.all(reg)
-        .then(() => {
-          setLoaded(true)
-          setPluginRegistryLoaded(true)
-        })
-        .catch((err) => logger.error(err))
-    }
+        cache.set(plugin.resolve, 'loaded')
+        const yamlTypes = processPlugin(loadedPlugin)
+
+        if (yamlTypes) {
+          Object.keys(yamlTypes).forEach((key) => {
+            if (plugin.exclude?.includes(key)) {
+              return
+            }
+            const registeredTagName = plugin.nameMap?.[key] ?? key
+            const newType = yamlTypes[key](yaml, registeredTagName)
+
+            if (tags[registeredTagName] != null) {
+              logger.warn(`There are currently multiple tags registered for: ${registeredTagName}`)
+            }
+
+            addTag(registeredTagName, newType)
+            extendSchema(newType)
+          })
+        }
+      }
+    })
+
+    Promise.all(plugins)
+      .then(() => {
+        setLoaded(true)
+        setPluginRegistryLoaded(true)
+      })
+      .catch((err) => logger.error(err))
   }, [addTag, cache, config, extendSchema, setLoaded])
 
   return {

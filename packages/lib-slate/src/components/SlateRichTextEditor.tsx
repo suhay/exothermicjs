@@ -25,9 +25,14 @@ export type Props = {
   label?: string
   name: string
   onChange?: (value: string | null, keyboardInputValue?: string | undefined) => void
+  class?: string
 }
 
-export function SlateRichTextEditor({ value, onChange: setValue = () => null }: Props) {
+export function SlateRichTextEditor({
+  value,
+  onChange: setValue = () => null,
+  class: classes,
+}: Props) {
   const renderElement = useCallback((props: RenderElementProps) => <Element {...props} />, [])
   const renderLeaf = useCallback((props: RenderLeafProps) => <Leaf {...props} />, [])
   const editor = useMemo(() => withShortcuts(withHistory(withReact(createEditor()))), [])
@@ -53,6 +58,7 @@ export function SlateRichTextEditor({ value, onChange: setValue = () => null }: 
         sx={{
           border: 0,
         }}
+        className={classes}
       >
         <Editable
           renderElement={renderElement}

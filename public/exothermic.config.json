@@ -12,9 +12,13 @@
       "resolve": "@exothermic/plugin-appwrite",
       "url": "/plugin-appwrite.js",
       "options": {
-        "theme": "material",
         "project": "627843df706739e67ea5",
-        "endpoint": "https://introspection.suhay.dev/v1"
+        "endpoint": "https://introspection.suhay.dev/v1",
+        "database": "6394d330110e3d2f66aa",
+        "collections": {
+          "entries": "6394d5845ffe44498b11",
+          "prompts": "6394d3e9e4137a1b53a0"
+        }
       },
       "exclude": [
         "aTagName"

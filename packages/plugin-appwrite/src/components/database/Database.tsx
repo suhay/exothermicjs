@@ -8,11 +8,9 @@ export function Database({
   action,
   collection,
   items,
-  editable,
-  randomize,
   control,
   setValue,
-  allowNew,
+  options,
 }: Omit<AppwriteApiDatabase, 'api'>) {
   switch (action) {
     case 'list':
@@ -20,18 +18,17 @@ export function Database({
         <ListDocuments
           collection={collection}
           items={items}
-          randomize={randomize}
           control={control}
           setValue={setValue}
-          allowNew={allowNew}
+          options={options}
         />
       )
     case 'get':
-      return <GetDocument collection={collection} items={items} editable={editable} />
+      return <GetDocument collection={collection} items={items} options={options} />
     case 'update':
-      return <UpdateDocument collection={collection} items={items} />
+      return <UpdateDocument collection={collection} items={items} options={options} />
     case 'create':
-      return <CreateDocument collection={collection} items={items} />
+      return <CreateDocument collection={collection} items={items} options={options} />
     default:
       return null
   }

@@ -7,3 +7,7 @@ public/*
 tsconfig.*
 webpack.*
 wdyr.ts
+.eslintrc.js
+live-server.js
+**/webpack.*.js
+**/jest.preset.js

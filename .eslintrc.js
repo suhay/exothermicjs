@@ -13,13 +13,15 @@ module.exports = {
   parser: "@typescript-eslint/parser",
   parserOptions: {
     ecmaFeatures: {
-      jsx: true
+      jsx: true,
+      module: true
     },
-    ecmaVersion: 12,
+    ecmaVersion: 13,
     sourceType: "module",
     project: "./packages/*/tsconfig.json",
-    tsconfigRootDir: __dirname
+    tsconfigRootDir: __dirname,
   },
+  ignorePatterns: ["**/webpack.*.js", "**/jest.config.ts"],
   plugins: [
     "react",
     "@typescript-eslint",
@@ -84,9 +86,19 @@ module.exports = {
     "react/jsx-wrap-multilines": ["error", {"declaration": false, "assignment": false}],
     "@typescript-eslint/no-unsafe-call": "off",
     "@typescript-eslint/no-unsafe-member-access": "off",
-    "@typescript-eslint/no-unsafe-assignment": "off"
+    "@typescript-eslint/no-unsafe-assignment": "off",
+    "@typescript-eslint/no-unsafe-return": "off"
   },
   globals: {
     JSX: "readonly"
-  }
+  },
+  overrides: [
+    {
+      files: ["*.test.ts", "*.test.tsx", "*.test.js", "*.test.jsx"],
+      env: {
+        jest: true
+      },
+      rules: {}
+    }
+  ]
 }

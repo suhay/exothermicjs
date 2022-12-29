@@ -1,4 +1,7 @@
+import { openDB } from 'idb'
 import create from 'zustand'
+
+import * as logger from '~/utils/logger'
 
 type Entry = {
   ttl: number
@@ -6,23 +9,42 @@ type Entry = {
   value: string
 }
 
+const localDb = openDB<Entry>('ExothermicJS Cache', 1, {
+  upgrade(db, oldVersion) {
+    const migrationV1 = () => {
+      if (!db.objectStoreNames.contains('cache')) {
+        db.createObjectStore('cache', { keyPath: 'id' })
+      }
+    }
+
+    switch (oldVersion) {
+      case 0:
+        migrationV1()
+        break
+      default:
+        logger.error('unable to upgrade cache')
+    }
+  },
+})
+
 export type Cache = {
-  get: (key: string) => string | null
+  get: (key: string) => Promise<string | null>
   set: (key: string, value: string, ttl?: number) => void
   cache: Record<string, string>
 }
 
 export const useCache = create<Cache>((setItem, getItem) => ({
-  get: (key: string) => {
+  get: async (key: string) => {
     if (getItem().cache[key]) {
       return getItem().cache[key]
     }
 
-    const entry = JSON.parse(localStorage.getItem(key) || '0') as Entry
+    const entry: Entry = await localDb.then((db) => db.get('cache', key)).catch(() => null)
+
     if (!entry) return null
 
     if (entry.ttl && entry.ttl + entry.now < Date.now()) {
-      localStorage.removeItem(key)
+      localDb.then((db) => db.delete('cache', key)).catch(() => null)
       return null
     }
 
@@ -36,14 +58,16 @@ export const useCache = create<Cache>((setItem, getItem) => ({
       return
     }
 
-    localStorage.setItem(
-      key,
-      JSON.stringify({
-        ttl,
-        now: Date.now(),
-        value,
-      }),
-    )
+    localDb
+      .then((db) =>
+        db.put('cache', {
+          id: key,
+          ttl,
+          now: Date.now(),
+          value,
+        }),
+      )
+      .catch((err) => logger.error(err))
   },
   cache: {},
 }))

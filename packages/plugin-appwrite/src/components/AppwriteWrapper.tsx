@@ -42,17 +42,15 @@ export function AppwriteWrapper(props: AppwriteApiWrapper) {
       const { logout, login } = props
       return <Account action={action} logout={logout} login={login} />
     case 'database':
-      const { editable, collection, items, randomize, control, setValue, allowNew } = props
+      const { collection, items, control, setValue, options } = props
       return (
         <Database
           collection={collection}
           action={action}
           items={items}
-          editable={editable}
-          randomize={randomize}
+          options={options}
           control={control}
           setValue={setValue}
-          allowNew={allowNew}
         />
       )
     default:

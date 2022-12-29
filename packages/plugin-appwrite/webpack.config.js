@@ -2,7 +2,7 @@ const path = require('path')
 
 module.exports = {
   entry: {
-    'plugin-appwrite': './src/index.tsx',
+    'plugin-appwrite': './src/index.ts',
   },
   output: {
     library: {

@@ -1,6 +1,8 @@
-export const guid = () => `_${Math.random().toString(36).substring(2, 11)}`
+export function guid() {
+  return `_${Math.random().toString(36).substring(2, 11)}`
+}
 
-export const hexGuid = (input: string, limit = 8) => {
+export function hexGuid(input: string, limit = 8) {
   let result = ''
   for (let i = 0; i < input.length; i += 1) {
     const hex = input.charCodeAt(i).toString(16)
