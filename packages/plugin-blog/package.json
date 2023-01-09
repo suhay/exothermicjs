@@ -64,6 +64,6 @@
   },
   "gitHead": "8e22e9d8915b6b2d8158f9ef388d9b1c09e9a49f",
   "dependencies": {
-    "luxon": "^1.27.0"
+    "luxon": "^2.5.2"
   }
 }
