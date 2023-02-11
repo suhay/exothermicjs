@@ -1,23 +1,33 @@
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 import Paper from '@mui/material/Paper'
+import { EditListPlugin } from '@productboard/slate-edit-list'
 import isHotkey from 'is-hotkey'
-import { createEditor, Descendant } from 'slate'
+import markdown from 'remark-parse'
+import remarkSlate, { serialize } from 'remark-slate'
+import { BaseEditor, createEditor, Descendant } from 'slate'
 import { withHistory } from 'slate-history'
-import { Editable, RenderElementProps, RenderLeafProps, Slate, withReact } from 'slate-react'
+import {
+  Editable,
+  ReactEditor,
+  RenderElementProps,
+  RenderLeafProps,
+  Slate,
+  withReact,
+} from 'slate-react'
+import { unified } from 'unified'
 
 import { EditorToolbar } from './EditorToolbar'
 import { Element } from './Element'
 import { Leaf } from './Leaf'
 import { toggleMark } from './MarkButton'
-import { deserialize, serialize } from './serializers'
 import { withShortcuts } from './withShortcuts'
 
 const HOTKEYS = {
   'mod+b': 'bold',
   'mod+i': 'italic',
-  'mod+u': 'underline',
   'mod+`': 'code',
+  'mod+s': 'strikethrough',
 }
 
 export type Props = {
@@ -28,30 +38,58 @@ export type Props = {
   class?: string
 }
 
+const [withEditList, onKeyDown] = EditListPlugin()
+
 export function SlateRichTextEditor({
-  value,
-  onChange: setValue = () => null,
+  value: initialValue,
+  onChange = () => null,
   class: classes,
 }: Props) {
   const renderElement = useCallback((props: RenderElementProps) => <Element {...props} />, [])
   const renderLeaf = useCallback((props: RenderLeafProps) => <Leaf {...props} />, [])
-  const editor = useMemo(() => withShortcuts(withHistory(withReact(createEditor()))), [])
 
-  const initialValue: Descendant[] = deserialize(value)
+  const editor = useMemo(
+    () =>
+      withEditList(withShortcuts(withHistory(withReact(createEditor())))) as BaseEditor &
+        ReactEditor,
+    [],
+  )
 
-  const onChange = useCallback(
-    (val: Descendant[]) => {
-      const isAstChange = editor.operations.some((op) => op.type !== 'set_selection')
-      if (isAstChange) {
-        const content = serialize(val)
-        setValue(content)
-      }
+  const deserializedInitialValue = useMemo(
+    () =>
+      unified()
+        .use(markdown)
+        .use(remarkSlate)
+        .processSync(initialValue ?? '').result as Descendant[],
+    [],
+  )
+
+  const [value, setValue] = useState<Descendant[]>(
+    deserializedInitialValue?.length > 0
+      ? deserializedInitialValue
+      : [
+          {
+            type: 'paragraph',
+            children: [
+              {
+                text: '',
+              },
+            ],
+          },
+        ],
+  )
+
+  const handleChange = useCallback(
+    (nextValue: Descendant[]) => {
+      setValue(nextValue)
+      const content = nextValue.map((val) => serialize(val)).join('\n')
+      onChange(content)
     },
-    [editor.operations, setValue],
+    [onChange],
   )
 
   return (
-    <Slate editor={editor} value={initialValue} onChange={onChange}>
+    <Slate editor={editor} value={value} onChange={handleChange}>
       <EditorToolbar />
       <Paper
         elevation={0}
@@ -74,6 +112,8 @@ export function SlateRichTextEditor({
                 toggleMark(editor, mark)
               }
             })
+
+            onKeyDown(editor)(event)
           }}
         />
       </Paper>

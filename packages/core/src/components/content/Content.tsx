@@ -1,5 +1,6 @@
+import { ReactNode, useMemo, Fragment } from 'react'
+
 import { DateTime } from 'luxon'
-import { Fragment, ReactNode, useCallback } from 'react'
 import ReactMarkdown from 'react-markdown'
 import gfm from 'remark-gfm'
 
@@ -7,28 +8,45 @@ import { Link } from '~/components/navbar/Link'
 
 export type ContentProps = {
   content: ReactNode
+  as?: string
 }
 
-function LinkRenderer({ href, children }: { href: string; children: ReactNode }) {
+export function LinkRenderer({ href, children }: { href: string; children: ReactNode }) {
   if (href.startsWith('/')) {
     return <Link to={href}>{children}</Link>
   }
   return <a href={href}>{children}</a>
 }
 
-export function applyTemplate(template: string, data: Record<string, string | object>) {
-  if (!template) return null
+export function applyTemplate(template: string, data: Record<string, ReactNode>): ReactNode {
+  if (!template) {
+    return null
+  }
 
   let content = template
+  let exoContent: ReactNode = null
+
   Object.entries(data).forEach(([key, val]) => {
+    if (val == null) {
+      return
+    }
+
     const reg = `({{\\s*${key.replace('$', '\\$')}.*?}})`
     const exp = new RegExp(reg)
     const expg = new RegExp(reg, 'g')
-    const grp = content.match(exp)
+    const templatePartsToReplace = content.match(exp)
     let replaceVal = val
 
-    if (grp?.length) {
-      const parts = grp[0].replace(/{{|}}/g, '').split('|')
+    if (templatePartsToReplace && templatePartsToReplace.length > 0) {
+      // Remove the template marks {{ }} and split any filters applied to it
+      const parts = templatePartsToReplace[0].replace(/{{|}}/g, '').split('|')
+
+      if (typeof val === 'object' && 'type' in val) {
+        exoContent = val
+        return
+      }
+
+      // We are given an object dot path (some.thing.id)
       if (typeof replaceVal !== 'string' && parts[0].includes('.')) {
         const keyParts = parts[0].split('.')
         for (let i = 1; i < keyParts.length; i += 1) {
@@ -55,41 +73,54 @@ export function applyTemplate(template: string, data: Record<string, string | ob
         }
       }
     }
+
     if (typeof replaceVal === 'string') {
       content = content.replace(expg, replaceVal)
     }
   })
 
+  if (exoContent) {
+    return exoContent
+  }
+
   return content.replace(/\s*{{.*?}}/g, '')
 }
 
-export function Content({ content }: ContentProps) {
+export function Content({ content, as }: ContentProps) {
   if (typeof content === 'string') {
     return (
       <ReactMarkdown
-        plugins={[gfm]}
-        allowDangerousHtml
-        // eslint-disable-next-line react/no-children-prop
-        children={content}
-        renderers={{
-          root: Fragment,
-          link: LinkRenderer,
+        remarkPlugins={[gfm]}
+        components={{
+          // eslint-disable-next-line react/no-unstable-nested-components
+          a: ({ href, children }) => <LinkRenderer href={href ?? '#'}>{children}</LinkRenderer>,
+          // eslint-disable-next-line react/no-unstable-nested-components
+          link: ({ href, children }) => <LinkRenderer href={href ?? '#'}>{children}</LinkRenderer>,
+          p: as === 'div' || as == null ? 'p' : Fragment,
         }}
-      />
+      >
+        {content}
+      </ReactMarkdown>
     )
   }
 
-  // eslint-disable-next-line react/jsx-no-useless-fragment
-  return <>{content}</>
+  return (
+    <>
+      {content}
+      <span />
+    </>
+  )
 }
 
 export function ContentTransform({
   template,
   data,
+  as,
 }: {
   template: string
-  data: Record<string, string>
+  data: Record<string, ReactNode>
+  as?: string
 }) {
-  const content = useCallback(() => applyTemplate(template, data) ?? '', [template, data])
-  return <Content content={content()} />
+  const content = useMemo(() => applyTemplate(template, data) ?? '', [template, data])
+  return <Content content={content} as={as} />
 }

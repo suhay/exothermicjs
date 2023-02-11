@@ -26,8 +26,8 @@ export function Leaf({
       children = <em>{children}</em>
     }
 
-    if (leaf.underline) {
-      children = <ins>{children}</ins>
+    if (leaf.strikeThrough) {
+      children = <del>{children}</del>
     }
   }
 

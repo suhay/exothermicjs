@@ -21,7 +21,7 @@ export interface PageFragmentType {
   items?: ReactNode[]
   content?: string | ReactNode
   title?: string
-  as?: string
+  as?: React.ElementType
   template?: string
 }
 

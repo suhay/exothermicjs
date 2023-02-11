@@ -25,7 +25,8 @@ export function CreateDocument({ collection, items }: Omit<AppwriteApiDatabase, 
         return
       }
       const doc = await appwrite.createDocument(collection, data, [
-        Permission.write(Role.user(user.$id)),
+        Permission.update(Role.user(user.$id)),
+        Permission.delete(Role.user(user.$id)),
         Permission.read(Role.user(user.$id)),
       ])
       if (doc?.$id) {

@@ -24,6 +24,9 @@
       "core": [
         "packages/core/src"
       ],
+      "lib-material": [
+        "packages/lib-material/src"
+      ],
       "lib-slate": [
         "packages/lib-slate/src"
       ],

@@ -40,7 +40,7 @@ function ActionButton({
     )
   }
 
-  const perm = Permission.write(Role.user(userData.$id))
+  const perm = Permission.delete(Role.user(userData.$id))
   if (doc?.$permissions?.includes(perm)) {
     return (
       <IconButton color='error' aria-label='delete' onClick={() => action(doc.$id)}>

@@ -1,5 +1,6 @@
+import { useEffect, useMemo, useState } from 'react'
+
 import yaml from 'js-yaml'
-import { useEffect, useState } from 'react'
 import create from 'zustand'
 
 import * as logger from '~/utils/logger'
@@ -45,6 +46,11 @@ const useStore = create<PluginHook>((set, get) => ({
   tags: {},
   addTag: (key: string, val: yaml.Type) => {
     const { tags } = get()
+    if (tags[key] != null) {
+      logger.warn(`There are currently multiple tags registered for: ${key}`)
+      return
+    }
+
     const newTags = { ...tags }
     newTags[key] = val
     set({ tags: newTags })
@@ -60,6 +66,11 @@ type PluginRegistry = {
   }
 }
 
+export const registerPlugin = (plugin) => {
+  console.log('registering')
+  console.log(plugin)
+}
+
 export const usePlugins = (): PluginRegistry => {
   const config = useConfig()
   const extendSchema = useSchema((state) => state.extendSchema)
@@ -71,49 +82,56 @@ export const usePlugins = (): PluginRegistry => {
   const [pluginRegistryLoaded, setPluginRegistryLoaded] = useState(loaded)
   const cache = useCache()
 
+  const plugins = useMemo(
+    () =>
+      (config.plugins ?? []).map(async (plugin) => {
+        const resolve = await cache.get(plugin.resolve)
+
+        if (resolve == null) {
+          const loadedPlugin = await retryPromise<LoadArgs, LoadedPlugin>(
+            {
+              fn: load,
+              onOutOfRetries: () => {
+                throw new Error(`Failed to load ${plugin.resolve}`)
+              },
+            },
+            { resolve: plugin.resolve },
+          )
+
+          cache.set(plugin.resolve, 'loaded')
+          const yamlTypes = processPlugin(loadedPlugin)
+
+          if (yamlTypes) {
+            Object.keys(yamlTypes).forEach((key) => {
+              if (plugin.exclude?.includes(key)) {
+                return
+              }
+              const registeredTagName = plugin.nameMap?.[key] ?? key
+              const newType = yamlTypes[key](yaml, registeredTagName)
+
+              addTag(registeredTagName, newType)
+              extendSchema(newType)
+            })
+          }
+        }
+      }),
+    [addTag, cache, config.plugins, extendSchema],
+  )
+
   useEffect(() => {
     if (config.pagePath === '') {
       return
     }
 
-    const plugins = (config.plugins ?? []).map(async (plugin) => {
-      const resolve = await cache.get(plugin.resolve)
-
-      if (resolve == null) {
-        const loadedPlugin = await retryPromise<LoadArgs, LoadedPlugin>(
-          { fn: load },
-          { resolve: plugin.resolve },
-        )
-
-        cache.set(plugin.resolve, 'loaded')
-        const yamlTypes = processPlugin(loadedPlugin)
-
-        if (yamlTypes) {
-          Object.keys(yamlTypes).forEach((key) => {
-            if (plugin.exclude?.includes(key)) {
-              return
-            }
-            const registeredTagName = plugin.nameMap?.[key] ?? key
-            const newType = yamlTypes[key](yaml, registeredTagName)
-
-            if (tags[registeredTagName] != null) {
-              logger.warn(`There are currently multiple tags registered for: ${registeredTagName}`)
-            }
-
-            addTag(registeredTagName, newType)
-            extendSchema(newType)
-          })
-        }
-      }
-    })
-
-    Promise.all(plugins)
+    Promise.allSettled(plugins)
       .then(() => {
         setLoaded(true)
         setPluginRegistryLoaded(true)
       })
-      .catch((err) => logger.error(err))
-  }, [addTag, cache, config, extendSchema, setLoaded])
+      .catch((err) => {
+        logger.error(err)
+      })
+  }, [config.pagePath, plugins, setLoaded])
 
   return {
     pluginRegistryLoaded,

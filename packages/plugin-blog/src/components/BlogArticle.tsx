@@ -29,9 +29,13 @@ export function BlogArticle({ class: classProps, template, content, date }: Prop
     if (rawManifest) {
       const man = JSON.parse(rawManifest) as BlogManifest
       setManifest(man)
-      setArticle(man[date])
+      setArticle({
+        ...man[date],
+        content: content ?? '',
+        date,
+      })
     }
-  }, [date, rawManifest])
+  }, [content, date, rawManifest])
 
   if (status === 'LOADING') {
     return <Loading />
@@ -43,7 +47,6 @@ export function BlogArticle({ class: classProps, template, content, date }: Prop
 
   const component = cloneElement(template, {
     data: article,
-    content,
   })
 
   return <article className={classProps ?? ''}>{component}</article>

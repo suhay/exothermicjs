@@ -7,6 +7,7 @@ var params = {
 	wait: 1000,
 	mount: [
     ['/', 'packages/core/dist'],
+    ['/', 'packages/lib-material/dist'],
     ['/', 'packages/lib-slate/dist'],
     ['/', 'packages/plugin-appwrite/dist'],
     ['/', 'packages/plugin-blog/dist'],

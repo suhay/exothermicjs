@@ -1,4 +1,4 @@
-import { Fragment, ReactNode } from 'react'
+import { ReactNode } from 'react'
 import ReactMarkdown from 'react-markdown'
 
 import { Content, ContentTransform } from '~/components/content/Content'
@@ -16,28 +16,30 @@ export function PageFragment({
   items = [],
   class: classes,
   content,
-  as,
+  as: As = 'div',
   template,
   children,
   data,
 }: PageFragmentType & PageFragmentProps) {
   const page = usePageTemplate((state) => state.pageTemplate)
-  const Component = as ?? 'div'
 
   return (
-    // @ts-expect-error JSX element type 'Component' does not have any construct or call signatures.
-    <Component className={classes} id={id}>
-      {!!title && <ReactMarkdown source={title} renderers={{ root: Fragment }} />}
+    <As className={classes} id={id}>
+      {!!title && <ReactMarkdown>{title}</ReactMarkdown>}
       {!!content && <Content content={content} />}
-      {items.map((item) => {
+      {items.map((item, i) => {
         if (typeof item === 'string' && item.startsWith('$')) {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-return
           return page[item] ?? item
+        }
+        if (item && typeof item === 'object' && 'type' in item) {
+          return <item.type {...item.props} data={data} key={`item-${String(i)}}`} />
         }
         return item
       })}
-      {!!template && !!data && <ContentTransform template={template} data={data} />}
+      {!!template && !!data && (
+        <ContentTransform template={template} data={data} as={As.toString()} />
+      )}
       {children}
-    </Component>
+    </As>
   )
 }

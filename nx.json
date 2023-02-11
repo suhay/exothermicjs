@@ -36,37 +36,9 @@
     "analytics": false
   },
   "targetDefaults": {
-    "clean": {
-      "dependsOn": [
-        "^clean"
-      ]
-    },
-    "build:dev": {
-      "dependsOn": [
-        "^build:dev"
-      ],
-      "outputs": [
-        "{projectRoot}/dist"
-      ]
-    },
     "build": {
       "dependsOn": [
         "^build"
-      ],
-      "outputs": [
-        "{projectRoot}/dist"
-      ]
-    },
-    "compile": {
-      "outputs": [
-        "{projectRoot}/out"
-      ]
-    },
-    "test": {
-      "inputs": [
-        "default",
-        "^default",
-        "{workspaceRoot}/jest.preset.js"
       ]
     }
   }

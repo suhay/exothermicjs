@@ -4,7 +4,7 @@ import ToggleButton from '@mui/material/ToggleButton'
 import { BaseEditor, Editor } from 'slate'
 import { ReactEditor, useSlate } from 'slate-react'
 
-import { CustomFormat } from '../types'
+import { Format } from '../types'
 
 const isMarkActive = (editor: BaseEditor & ReactEditor, format: string | number) => {
   const marks = Editor.marks(editor)
@@ -21,7 +21,7 @@ export const toggleMark = (editor: BaseEditor & ReactEditor, format: string) => 
   }
 }
 
-export function MarkButton({ format, icon }: { format: CustomFormat; icon: ReactNode }) {
+export function MarkButton({ format, icon }: { format: Format; icon: ReactNode }) {
   const editor = useSlate()
   return (
     <ToggleButton

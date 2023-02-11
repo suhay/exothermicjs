@@ -1,1 +1,4 @@
-{}
+{
+  "name": "plugin-appwrite",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json"
+}

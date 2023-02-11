@@ -1,26 +1,33 @@
-import { Editor, Range, Element as SlateElement, BaseEditor, Transforms, Point } from 'slate'
+import { BlockType } from 'remark-slate'
+import { BaseEditor, Editor, Element as SlateElement, Point, Range, Transforms } from 'slate'
 import { ReactEditor } from 'slate-react'
 
 const SHORTCUTS = {
-  '*': 'list-item',
-  '-': 'list-item',
-  '+': 'list-item',
-  '>': 'block-quote',
-  '#': 'heading-one',
-  '##': 'heading-two',
-  '###': 'heading-three',
-  '####': 'heading-four',
-  '#####': 'heading-five',
-  '######': 'heading-six',
+  '*': 'list_item',
+  '-': 'list_item',
+  '+': 'list_item',
+  '1.': 'list_item',
+  '>': 'block_quote',
+  '#': 'heading_one',
+  '##': 'heading_two',
+  '###': 'heading_three',
+  '####': 'heading_four',
+  '#####': 'heading_five',
+  '######': 'heading_six',
 }
 
 export const withShortcuts = (editor: BaseEditor & ReactEditor) => {
   const { deleteBackward, insertText } = editor
 
-  editor.insertText = (text: string) => {
+  editor.insertText = (text) => {
     const { selection } = editor
 
-    if (text.endsWith(' ') && selection && Range.isCollapsed(selection)) {
+    if (
+      selection &&
+      selection.anchor.offset <= 7 &&
+      text.endsWith(' ') &&
+      Range.isCollapsed(selection)
+    ) {
       const { anchor } = selection
       const block = Editor.above(editor, {
         match: (n) => Editor.isBlock(editor, n),
@@ -32,10 +39,29 @@ export const withShortcuts = (editor: BaseEditor & ReactEditor) => {
       const type = SHORTCUTS[beforeText]
 
       if (type) {
-        Transforms.select(editor, range)
+        Transforms.select(editor, range) // selects the shortcut mark
 
         if (!Range.isCollapsed(range)) {
-          Transforms.delete(editor)
+          Transforms.delete(editor) // deletes the shortcut mark
+        }
+
+        if (type === 'list_item') {
+          const list: BlockType = {
+            type: beforeText === '1.' ? 'ol_list' : 'ul_list',
+            children: [
+              {
+                type: 'list_item',
+                children: [],
+              },
+            ],
+          }
+
+          Transforms.wrapNodes(editor, list, {
+            match: (n) =>
+              !Editor.isEditor(n) && SlateElement.isElement(n) && n.type === 'paragraph',
+          })
+
+          return
         }
 
         const newProperties: Partial<SlateElement> = {
@@ -44,17 +70,6 @@ export const withShortcuts = (editor: BaseEditor & ReactEditor) => {
         Transforms.setNodes<SlateElement>(editor, newProperties, {
           match: (n) => Editor.isBlock(editor, n),
         })
-
-        if (type === 'list-item') {
-          const list: SlateElement = {
-            type: 'bulleted-list',
-            children: [],
-          }
-          Transforms.wrapNodes(editor, list, {
-            match: (n) =>
-              !Editor.isEditor(n) && SlateElement.isElement(n) && n.type === 'list-item',
-          })
-        }
 
         return
       }
@@ -86,10 +101,10 @@ export const withShortcuts = (editor: BaseEditor & ReactEditor) => {
           }
           Transforms.setNodes(editor, newProperties)
 
-          if (block.type === 'list-item') {
+          if (block.type === 'list_item') {
             Transforms.unwrapNodes(editor, {
               match: (n) =>
-                !Editor.isEditor(n) && SlateElement.isElement(n) && n.type === 'bulleted-list',
+                !Editor.isEditor(n) && SlateElement.isElement(n) && n.type === 'ul_list',
               split: true,
             })
           }

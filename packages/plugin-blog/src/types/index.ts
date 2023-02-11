@@ -1,3 +1,5 @@
+import { ReactNode } from 'react'
+
 export type BlogAuthor = {
   name: string
   image: string
@@ -22,6 +24,8 @@ export type BlogArticle = {
   tags?: string[]
   author: BlogAuthor
   image?: BlogImage
+  content?: ReactNode
+  date?: string
 }
 
 export type BlogManifest = {
