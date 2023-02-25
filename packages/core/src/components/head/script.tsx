@@ -3,7 +3,11 @@ import { ReactNode } from 'react'
 import { hexGuid } from '~/utils/guid'
 
 export const scriptTags = (scripts?: Array<string | Record<string, string>>) => {
-  if (!scripts?.length) {
+  if (!scripts) {
+    return []
+  }
+
+  if (scripts.length === 0) {
     return []
   }
 

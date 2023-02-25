@@ -3,7 +3,11 @@ import { ReactNode } from 'react'
 import { hexGuid } from '~/utils/guid'
 
 export const linkTags = (links?: Array<string | Record<string, string>>) => {
-  if (!links?.length) {
+  if (!links) {
+    return []
+  }
+
+  if (links.length === 0) {
     return []
   }
 

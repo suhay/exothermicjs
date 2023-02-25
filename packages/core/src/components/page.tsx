@@ -53,6 +53,7 @@ function Main({ status, data }: { status: LoadingState; data?: Template }) {
 export function Page() {
   const location = useLocation()
   usePlugins()
+
   const { data, status } = useExothermic(location.pathname)
   const setPageTemplate = usePageTemplate((state) => state.setPageTemplate)
 

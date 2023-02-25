@@ -15,6 +15,7 @@ type Inputs = {
 
 export function SignUp({ setIsSigningUp }: { setIsSigningUp: Dispatch<SetStateAction<boolean>> }) {
   const { dispatch } = useContext(UserContext)
+
   const { control, handleSubmit } = useForm<Inputs>()
   const appwrite = useAppwrite()
 

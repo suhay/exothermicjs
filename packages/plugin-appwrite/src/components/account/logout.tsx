@@ -8,6 +8,7 @@ import { useAppwrite } from '~/hooks/useAppwrite'
 
 export function Logout({ redirect }: { redirect?: string }) {
   const { dispatch: dispatchUser } = useContext(UserContext)
+
   const navigate = useNavigate()
   const appwrite = useAppwrite()
 

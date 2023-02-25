@@ -18,7 +18,7 @@ export function LinkRenderer({ href, children }: { href: string; children: React
   return <a href={href}>{children}</a>
 }
 
-export function applyTemplate(template: string, data: Record<string, ReactNode>): ReactNode {
+export function applyTemplate(template: string, data: Record<string, ReactNode>) {
   if (!template) {
     return null
   }

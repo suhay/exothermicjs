@@ -12,6 +12,7 @@ export type Props = {
 
 export function Get({ path, content, data: dataProp }: Props) {
   const exothermicTemplate = useExothermicWithSuspense(path)
+
   const data = exothermicTemplate.load()
 
   return (
