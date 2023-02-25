@@ -1,9 +1,9 @@
 import { BlogRollYamlType } from './types/yaml/blog-roll'
+import { BlogArticleYamlType } from './types/yaml/blog-article'
 
 export const register = {
   tags: {
-    BlogRollYamlType,
+    'blog-roll': BlogRollYamlType,
+    'blog-article': BlogArticleYamlType,
   },
 }
-
-export { BlogRoll } from './components/blog-roll'

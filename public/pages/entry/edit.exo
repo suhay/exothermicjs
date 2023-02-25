@@ -1,0 +1,20 @@
+---
+title: Introspection Edit Journal Entry
+secure: !appwrite-secure /dashboard
+$top: !get fragments/nav
+$main:
+  - !main
+    items:
+      - !appwrite
+        api: database
+        action: update
+        collection: entries
+        items:
+          - !fragment
+            template: '## {{ prompt }}'
+          - !rich-text-editor
+            name: body
+            label: Journal entry
+          - !date-picker
+            name: date
+            label: Entry date

@@ -1,9 +1,11 @@
 {
-  "20210313": {
+  "2021-03-13": {
     "filename": "first-blog-post",
     "title": "What I learned from 15 years of Content Management Systems",
     "abstract": "",
-    "tags": ["The Exothermic Project"],
+    "tags": [
+      "The Exothermic Project"
+    ],
     "author": {
       "name": "Matt Suhay",
       "image": "",

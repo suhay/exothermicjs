@@ -1,14 +1,20 @@
 ---
 title: Test page
-templates: ['page.exo']
-page:
+$top: !get fragments/nav
+$main:
   - !main
     class: container
     items:
-    - !section
-      title: '# Test page'
-      class: row
-      items:
-      - !col
-        content: 'weeeee'
-  
+      - !section
+        title: '# Test page'
+        class: row
+        items:
+          - !col
+            content: 'weeeee'
+      - !section
+        class: row
+        items:
+          - !col
+            data:
+              content: awesome
+            template: "This is {{ content }}, isn't it? {{ none }} should do what?"

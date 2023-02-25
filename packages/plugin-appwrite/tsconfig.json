@@ -1,0 +1,23 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./out",
+    "rootDir": "./src",
+    "baseUrl": "./",
+    "paths": {
+      "~/*": ["./src/*", "../core/src/*"],
+      "@exothermic/core": ["../core/src"]
+    }
+  },
+  "include": [
+    "src",
+  ],
+  "exclude": [
+    "webpack.config.js"
+  ],
+  "references": [
+    {
+      "path": "../core"
+    }
+  ]
+}

@@ -1,11 +1,12 @@
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
-import { state } from '../contexts/store'
-import { Config } from '../types'
+import * as logger from '~/utils/logger'
+import { Config, LoadingState } from '../types'
+import { useConfig } from './useConfig'
 
 export type LoaderFile = {
   data: string
-  status: 'LOADING' | 'LOADED'
+  status: LoadingState
 }
 
 const buildRoute = (route: string, config: Config) => {
@@ -16,16 +17,16 @@ const buildRoute = (route: string, config: Config) => {
   return route.replace(/\/\/+/, '/')
 }
 
-export const useLoader = (route: string): LoaderFile => {
-  const { store } = useContext(state)
-  const [data, setData] = useState<string>()
-  const [status, setStatus] = useState<'LOADING' | 'LOADED'>('LOADING')
+export const useLoader = (route?: string): LoaderFile => {
+  const config = useConfig()
+  const [data, setData] = useState<string>('')
+  const [status, setStatus] = useState<LoadingState>('LOADING')
 
   useEffect(() => {
     setStatus('LOADING')
 
-    if (route) {
-      const selectedRoute = buildRoute(route, store.config)
+    if (route && config.pagePath !== '') {
+      const selectedRoute = buildRoute(route, config)
 
       fetch(selectedRoute)
         .then((resp) => resp.text())
@@ -33,8 +34,11 @@ export const useLoader = (route: string): LoaderFile => {
           setData(file)
           setStatus('LOADED')
         })
+        .catch((err) => {
+          logger.error(err)
+        })
     }
-  }, [route])
+  }, [route, config])
 
   return {
     data,

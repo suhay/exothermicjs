@@ -1,35 +1,25 @@
-import { guid } from '../utils'
+import { ReactNode } from 'react'
 
-export const scriptTags = (scripts: string[]) => {
+import { hexGuid } from '~/utils/guid'
+
+export const scriptTags = (scripts?: Array<string | Record<string, string>>) => {
   if (!scripts?.length) {
     return []
   }
-  const tags = []
-  const scriptBody = []
-  scripts.forEach((tag) => {
+
+  return scripts.reduce<ReactNode[]>((acc, tag) => {
     if (typeof tag === 'string') {
-      tags.push({ src: tag })
-      scriptBody.push('')
+      acc.push(<script key={tag} src={tag} />)
     } else {
       const keys = Object.keys(tag)
+      const key = keys[0]
+
       if (keys.length > 1) {
-        // Not just a key and value
-        const script = {}
-        for (let i = 0; i < keys.length; i += 1) {
-          script[keys[i]] = tag[keys[i]]
-        }
-        tags.push(script)
-        scriptBody.push('')
+        acc.push(<script key={hexGuid(`${key}${tag[key]}`)} {...tag} />)
       } else {
-        tags.push({ src: tag[keys[0]] })
-        scriptBody.push('')
+        acc.push(<script key={hexGuid(key)} src={key} />)
       }
     }
-  })
-
-  return tags.map((item, i) => (
-    <script key={`scriptTag-${guid()}`} {...item}>
-      {scriptBody[i]}
-    </script>
-  ))
+    return acc
+  }, [])
 }

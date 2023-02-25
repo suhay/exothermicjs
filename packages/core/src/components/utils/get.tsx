@@ -1,21 +1,27 @@
-import { useExothermic } from '../../hooks/useExothermic'
-import { PageFragment } from './fragment'
-import { Loading } from './loading'
+import { ReactNode, Suspense } from 'react'
 
-type Props = {
+import { useExothermicWithSuspense } from '~/hooks/useExothermic'
+import { PageFragment } from './PageFragment'
+import { Loading } from './Loading'
+
+export type Props = {
   path: string
+  content?: ReactNode
+  data?: Record<string, string>
 }
 
-export const Get = ({ path }: Props) => {
-  const { data, status } = useExothermic(path)
+export function Get({ path, content, data: dataProp }: Props) {
+  const exothermicTemplate = useExothermicWithSuspense(path)
+  const data = exothermicTemplate.load()
 
-  if (status === 'LOADING') {
-    return <Loading type='shimmer' />
-  }
-
-  if (!data) {
-    return <></>
-  }
-
-  return <PageFragment {...data} class='get-loaded' />
+  return (
+    <Suspense fallback={<Loading />}>
+      <PageFragment
+        {...data}
+        content={content}
+        data={dataProp}
+        class={`get-loaded get__${path.replaceAll('/', '-')}`}
+      />
+    </Suspense>
+  )
 }

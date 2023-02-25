@@ -1,25 +1,29 @@
 import yaml from 'js-yaml'
 
-import { NavbarYamlType } from './navbar'
-import { FragmentYamlType } from './fragment'
 import { ArticleYamlType } from './article'
-import { MarkdownYamlType } from './markdown'
-import { GetYamlType } from './get'
 import { ColYamlType } from './col'
-import { SectionYamlType } from './section'
 import { FooterYamlType } from './footer'
-import { MainYamlType } from './main'
+import { ForeachYamlType } from './foreach'
+import { FragmentYamlType } from './fragment'
+import { GetYamlType } from './get'
+import { HeadYamlType } from './head'
 import { HeaderYamlType } from './header'
+import { MainYamlType } from './main'
+import { MarkdownYamlType } from './markdown'
+import { NavbarYamlType } from './navbar'
+import { SectionYamlType } from './section'
 
 export const YamlTypes: Record<string, yaml.Type> = {
+  ArticleYamlType,
+  ColYamlType,
+  FooterYamlType,
+  ForeachYamlType,
+  FragmentYamlType,
+  GetYamlType,
+  HeadYamlType,
+  HeaderYamlType,
+  MainYamlType,
+  MarkdownYamlType,
   NavbarYamlType,
   SectionYamlType,
-  ColYamlType,
-  MainYamlType,
-  HeaderYamlType,
-  FooterYamlType,
-  ArticleYamlType,
-  GetYamlType,
-  MarkdownYamlType,
-  FragmentYamlType,
 }

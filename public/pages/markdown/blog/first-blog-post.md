@@ -1,3 +1,3 @@
-# A long way coming
+## A long way coming
 
 And here's the article

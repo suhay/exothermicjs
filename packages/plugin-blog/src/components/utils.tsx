@@ -4,17 +4,17 @@ import { Link } from '@exothermic/core'
 import { BlogAuthor, BlogImage } from '../types'
 
 export const readingTime = (content: string) => {
-  const words = content.match(/\S+/g).length
+  const words = content.match(/\S+/g)?.length ?? 0
   const ms = (words / 200) * 1000
   return Duration.fromMillis(ms)
 }
 
-export const showImage = (image: BlogImage, date: string) =>
+export const showImage = (image?: BlogImage, date = '') =>
   image ? (
     <img key={`${date}-image`} className='blog-image' src={image.src} alt={image.alt ?? ''} />
   ) : null
 
-export const showTags = (tags: string[], date: string) =>
+export const showTags = (tags?: string[], date = '') =>
   tags?.length
     ? tags.map((tag) => (
         <span className='blog-tag' key={`${date}-${tag}`}>
@@ -23,7 +23,7 @@ export const showTags = (tags: string[], date: string) =>
       ))
     : null
 
-export const showDate = (date: string) =>
+export const showDate = (date?: string) =>
   date ? (
     <span className='blog-date' key={date}>
       {DateTime.fromISO(date).toLocaleString(DateTime.DATE_MED)}
@@ -39,9 +39,9 @@ export const showTitle = (linkTitle: string, linkUrl?: string) =>
     <h1 key='article-title'>{linkTitle}</h1>
   )
 
-export const showAbstract = (abstract: string, date: string) =>
+export const showAbstract = (abstract?: string, date?: string) =>
   abstract ? (
-    <p key={`${date}-abstract`} className='blog-abstract'>
+    <p key={`${date ?? ''}-abstract`} className='blog-abstract'>
       {abstract}
     </p>
   ) : null

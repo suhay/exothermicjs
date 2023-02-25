@@ -1,0 +1,8 @@
+{
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "eslint.workingDirectories": [
+    "./packages/core",
+    "./packages/plugin-appwrite",
+    "./packages/plugin-blog",
+  ]
+}

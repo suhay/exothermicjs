@@ -10,6 +10,6 @@ export const LayerYamlType = new yaml.Type('!layer', {
     return !!data
   },
   construct() {
-    return <></>
+    return null
   },
 })

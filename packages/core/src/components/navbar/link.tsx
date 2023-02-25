@@ -1,8 +1,8 @@
-import { ReactNode } from 'react'
+import { ReactNode, useMemo } from 'react'
 import { NavLink } from 'react-router-dom'
-import { NavHashLink } from 'react-router-hash-link'
+import { HashLink } from 'react-router-hash-link'
 
-import { useConfig } from '../../hooks'
+import { useConfig } from '~/hooks/useConfig'
 
 export type LinkProps = {
   to: string
@@ -10,19 +10,22 @@ export type LinkProps = {
   children?: ReactNode
 }
 
-export const Link = ({ to, children, role }: LinkProps) => {
+export function Link({ to, children, role }: LinkProps) {
   const config = useConfig()
 
-  const navLink =
-    to.startsWith('#') || to.startsWith('#', 1) ? (
-      <NavHashLink smooth activeClassName='selected' to={to} role={role}>
-        {children}
-      </NavHashLink>
-    ) : (
-      <NavLink exact activeClassName='selected' to={`${config.basePath ?? ''}${to}`} role={role}>
-        {children}
-      </NavLink>
-    )
+  const navLink = useMemo(
+    () =>
+      to.startsWith('#') || to.startsWith('#', 1) ? (
+        <HashLink smooth to={to} role={role}>
+          {children}
+        </HashLink>
+      ) : (
+        <NavLink to={`${config.basePath ?? ''}${to}`} role={role}>
+          {children}
+        </NavLink>
+      ),
+    [to, role, children, config.basePath],
+  )
 
-  return <>{navLink}</>
+  return navLink
 }

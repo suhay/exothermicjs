@@ -3,3 +3,11 @@ demo/*
 **/node_modules/*
 public/*
 **/out/*
+**.d.ts
+tsconfig.*
+webpack.*
+wdyr.ts
+.eslintrc.js
+live-server.js
+**/webpack.*.js
+**/jest.preset.js

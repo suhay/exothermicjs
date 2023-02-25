@@ -1,15 +1,18 @@
-import { useContext, useEffect, useState } from 'react'
 import yaml from 'js-yaml'
+import { useEffect, useState, useTransition } from 'react'
+// import { useMatch } from 'react-router-dom'
 
-import { Config, Template } from '../types'
-import { state } from '../contexts/store'
-import { debug } from '../components/utils'
+import * as logger from '~/utils/logger'
+import { SuspendablePromise, suspenseify } from '~/utils/suspendablePromise'
+import { Config, LoadingState, Template } from '../types'
+import { useCache, Cache } from './useCache'
+import { useConfig } from './useConfig'
+import { usePlugins } from './usePlugins'
 import { useSchema } from './useSchema'
-import { useConfig } from '.'
 
 type ExothermicFile = {
   data?: Template
-  status: 'LOADING' | 'LOADED'
+  status: LoadingState
   dat?: {
     load: () => Template
   }
@@ -22,7 +25,8 @@ type BuiltTemplate = {
 }
 
 const getRoute = (fromRoute: string, config: Config) => {
-  const cleanup = new RegExp(`${config.basePath}|.html`)
+  // const match = useMatch(fromRoute)
+  const cleanup = new RegExp(`${config.basePath ?? ''}|.html`)
   const baselessRoute = fromRoute.replace(cleanup, '')
   const selectedRoute = baselessRoute.endsWith('/') ? `${baselessRoute}index` : baselessRoute
 
@@ -36,13 +40,14 @@ const getRoute = (fromRoute: string, config: Config) => {
   )
 }
 
-const checkCache = (selectedRoute: string, cache: Record<string, string>) => {
-  if (cache[selectedRoute]) {
-    debug(`cache hit: ${selectedRoute}`)
-    return Promise.resolve(cache[selectedRoute])
+const checkCache = async (selectedRoute: string, cache: Cache) => {
+  const cachedItem = await cache.get(selectedRoute)
+  if (cachedItem) {
+    logger.debug(`cache hit: ${selectedRoute}`)
+    return Promise.resolve(cachedItem)
   }
 
-  debug(`cache miss: ${selectedRoute}`)
+  logger.debug(`cache miss: ${selectedRoute}`)
 
   return fetch(selectedRoute)
     .then((resp) => resp.text())
@@ -52,68 +57,124 @@ const checkCache = (selectedRoute: string, cache: Record<string, string>) => {
       }
       return fetchedTemplate
     })
-    .catch(() => '$main: []')
+    .catch((err) => {
+      logger.error(err)
+      return '$main: []'
+    })
 }
 
-const buildTemplate = (
+const buildTemplate = async (
   templateRoute: string,
   config: Config,
   schema: yaml.Schema,
-  cache: Record<string, string>,
+  cache: Cache,
 ): Promise<BuiltTemplate> => {
   const selectedRoute = getRoute(templateRoute, config)
-  debug(`building route: ${selectedRoute}`)
+  logger.debug(`building route: ${selectedRoute}`)
 
-  return checkCache(selectedRoute, cache).then((template) => {
-    // @ts-ignore
-    debug(`building template with ${schema.explicit.length} registered tags`)
+  const template = await checkCache(selectedRoute, cache)
+  const builtTemplate = yaml.load(template, {
+    schema,
+  }) as Template
 
-    const builtTemplate = yaml.load(template, {
-      schema,
-    }) as Template
-
-    return { selectedRoute, builtTemplate, rawTemplate: template }
-  })
+  return Promise.resolve<BuiltTemplate>({ selectedRoute, builtTemplate, rawTemplate: template })
 }
 
-export const useExothermic = (route: string, isBaseTemplate?: boolean): ExothermicFile => {
-  isBaseTemplate = isBaseTemplate ?? route === 'base.exo'
-  const { store, dispatch } = useContext(state)
-  const [data, setData] = useState<Template>()
-  const [status, setStatus] = useState<'LOADING' | 'LOADED'>('LOADING')
-  const [currentRoute, setCurrentRoute] = useState(route)
-  const schema = useSchema()
+export const useExothermicWithSuspense = (route: string): SuspendablePromise<Template> => {
+  const usingBaseTemplate = route === 'base.exo'
+  const [ready, setReady] = useState(false)
+  const [currentRoute, setCurrentRoute] = useState<string>()
+  const schema = useSchema((state) => state.schema)
   const config = useConfig()
+  const plugins = usePlugins()
+  const cache = useCache()
+
+  const [data, setData] = useState<SuspendablePromise<Template>>({ load: () => null })
+  const [, startTransition] = useTransition()
+
+  useEffect(() => {
+    if (config.pagePath !== '' && schema && (plugins.pluginRegistryLoaded || usingBaseTemplate)) {
+      setReady(true)
+    }
+  }, [config.pagePath, plugins.pluginRegistryLoaded, schema, usingBaseTemplate])
+
+  useEffect(() => {
+    if (currentRoute !== route) {
+      setCurrentRoute(route)
+    }
+  }, [currentRoute, route])
+
+  useEffect(() => {
+    if (!ready) return
+
+    startTransition(() =>
+      setData(
+        suspenseify<Template>(
+          buildTemplate(route, config, schema, cache)
+            .then(({ builtTemplate, rawTemplate, selectedRoute }) => {
+              if (rawTemplate !== '$main: []') {
+                cache.set(selectedRoute, rawTemplate, 30000)
+              }
+              return new Promise<Template>((resolve) => {
+                setTimeout(() => {
+                  resolve(builtTemplate)
+                }, 500)
+              })
+            })
+            .catch((err: Error) => {
+              logger.debug(`error: ${err.message}, trying ${route} again`)
+              return {}
+            }),
+        ),
+      ),
+    )
+  }, [ready, currentRoute, route, config, schema, cache])
+
+  return data
+}
+
+export const useExothermic = (route: string): ExothermicFile => {
+  const usingBaseTemplate = route === 'base.exo'
+  const [ready, setReady] = useState(false)
+  const [currentRoute, setCurrentRoute] = useState<string>()
+  const schema = useSchema((state) => state.schema)
+  const config = useConfig()
+  const plugins = usePlugins()
+  const cache = useCache()
+
+  const [data, setData] = useState<Template>()
+  const [status, setStatus] = useState<LoadingState>('LOADING')
+
+  useEffect(() => {
+    if (config.pagePath !== '' && schema && (plugins.pluginRegistryLoaded || usingBaseTemplate)) {
+      setReady(true)
+    }
+  }, [route, config, schema, plugins.pluginRegistryLoaded, usingBaseTemplate])
 
   useEffect(() => {
     if (currentRoute !== route) {
       setStatus('LOADING')
       setCurrentRoute(route)
     }
-  }, [route])
+  }, [currentRoute, route])
 
   useEffect(() => {
-    const { pluginRegistryLoaded } = store
+    if (!ready || status !== 'LOADING') return
 
-    if (
-      route &&
-      config &&
-      schema &&
-      (pluginRegistryLoaded || isBaseTemplate) &&
-      status === 'LOADING'
-    ) {
-      buildTemplate(route, config, schema, store.cache)
-        .then(({ builtTemplate, rawTemplate, selectedRoute }) => {
-          dispatch({ type: 'APPEND_CACHE', key: selectedRoute, value: rawTemplate })
-          setData(builtTemplate)
-          debug(`LOADED: ${route}`)
-          setStatus('LOADED')
-        })
-        .catch((err) => {
-          debug(`error: ${err.message}, trying ${route} again`)
-        })
-    }
-  }, [route, config, schema, store.pluginRegistryLoaded, status])
+    buildTemplate(route, config, schema, cache)
+      .then(({ builtTemplate, rawTemplate, selectedRoute }) => {
+        if (rawTemplate !== '$main: []') {
+          cache.set(selectedRoute, rawTemplate, 30000)
+        }
+        setData(builtTemplate)
+        logger.debug(`LOADED: ${route}`)
+        setStatus('LOADED')
+      })
+      .catch((err: Error) => {
+        logger.debug(`error: ${err.message}, trying ${route} again`)
+        setStatus('ERROR')
+      })
+  }, [ready, currentRoute, route, config, schema, cache, status])
 
   return {
     data,

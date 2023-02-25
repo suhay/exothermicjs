@@ -1,14 +1,21 @@
-export const wrapPromise = <T>(promise: Promise<T>) => {
-  let status: 'LOADING' | 'ERROR' | 'LOADED' = 'LOADING'
+import { LoadingState } from '../types'
+
+export type SuspendablePromise<T> = {
+  load: () => T | undefined | null
+}
+
+export const suspenseify = <T>(promise: Promise<T>): SuspendablePromise<T> => {
+  let status: LoadingState = 'LOADING'
   let result: T
+  let error: Error
   const suspender = promise.then(
     (r: T) => {
       status = 'LOADED'
       result = r
     },
-    (e: any) => {
+    (e: Error) => {
       status = 'ERROR'
-      result = e
+      error = e
     },
   )
   return {
@@ -16,11 +23,11 @@ export const wrapPromise = <T>(promise: Promise<T>) => {
       if (status === 'LOADING') {
         throw suspender
       } else if (status === 'ERROR') {
-        throw result
+        throw error
       } else if (status === 'LOADED') {
         return result
       }
-      return null
+      return undefined
     },
   }
 }

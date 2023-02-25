@@ -1,15 +1,13 @@
 ---
-page:
-  - !header
-    class: container
-    items:
-      - !get fragments/nav
+$top: !get fragments/nav
+$main:
   - !main
     class: container
     items:
       - !section
         class: row
         items:
-          - !col
-            content:
-              !markdown blog/first-blog-post
+          - !blog-article
+            template: !get fragments/blog-article
+            content: !markdown blog/first-blog-post
+            date: '2021-03-13'

@@ -1,24 +1,22 @@
-import { Suspense, useContext, useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
-import { useExothermic, useConfig } from '../hooks'
-import { BootStrap, bootstrap } from '../utils/bootstrap'
-import { Page } from './page'
-import { Head } from './head'
-import { state } from '../contexts/store'
-import { Loading } from './utils/loading'
+import { useBaseTemplate } from '~/hooks/useBaseTemplate'
+import { useExothermic } from '~/hooks/useExothermic'
+import { useConfig } from '../hooks/useConfig'
+import { Head } from './head/Head'
+import { Page } from './Page'
+import { Loading } from './utils/Loading'
 
-const initialResource = bootstrap()
-
-const BaseContainer = ({ resource }: { resource: BootStrap }) => {
-  useConfig(resource.config.load())
-  const { dispatch } = useContext(state)
+export function Base() {
+  const setBaseTemplate = useBaseTemplate((state) => state.setBaseTemplate)
+  const config = useConfig()
   const { data: base = null, status } = useExothermic('base.exo')
 
   useEffect(() => {
     if (base) {
-      dispatch({ type: 'SET_BASE', template: base })
+      setBaseTemplate(base, config)
     }
-  }, [base])
+  }, [base, setBaseTemplate, config])
 
   if (status === 'LOADING') {
     return <Loading />
@@ -32,11 +30,4 @@ const BaseContainer = ({ resource }: { resource: BootStrap }) => {
   )
 }
 
-export const Base = () => {
-  const [resource] = useState(initialResource)
-  return (
-    <Suspense fallback={<Loading />}>
-      <BaseContainer resource={resource} />
-    </Suspense>
-  )
-}
+// Base.whyDidYouRender = true

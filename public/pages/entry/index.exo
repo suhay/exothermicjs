@@ -1,0 +1,19 @@
+---
+title: Introspection Journal Entry
+secure: !appwrite-secure /dashboard
+$top: !get fragments/nav
+$main:
+  - !main
+    items:
+      - !appwrite
+        api: database
+        action: get
+        collection: entries
+        editable: true
+        items:
+          - !head
+            title: '{{ prompt }}'
+          - !fragment
+            template: |
+              ## {{ prompt }}
+              {{ body }}

@@ -1,7 +1,9 @@
-import { MetaFragment } from '../../types'
-import { guid } from '../utils'
+import { ReactNode } from 'react'
 
-export const Meta = ({ name, content, attrs }: MetaFragment) => {
+import { hexGuid } from '~/utils/guid'
+import { MetaFragment } from '../../types'
+
+export function Meta({ name, content, attrs }: MetaFragment) {
   if (name && content) {
     return <meta name={name} content={content} />
   }
@@ -25,27 +27,20 @@ export const Meta = ({ name, content, attrs }: MetaFragment) => {
     return <meta {...meta} />
   }
 
-  return <></>
+  return null
 }
 
-export const metaTags = (tags: MetaFragment[]) => {
-  const metas = (tags || []).reduce<any[]>((acc, tag) => {
+export const metaTags = (tags?: MetaFragment[]) =>
+  (tags || []).reduce<ReactNode[]>((acc, tag) => {
+    const recordTag = tag as Record<string, string>
     const keys = Object.keys(tag)
+    const key = keys[0]
 
     if (keys.length > 1 || keys.includes('charSet')) {
-      const meta = {}
-
-      keys.forEach((key) => {
-        meta[key] = tag[key]
-      })
-
-      acc.push(meta)
+      acc.push(<meta key={hexGuid(`${key}${recordTag[key]}`)} {...recordTag} />)
     } else {
-      acc.push({ name: keys[0], content: tag[keys[0]] })
+      acc.push(<meta key={hexGuid(key)} name={key} content={recordTag[key]} />)
     }
 
     return acc
   }, [])
-
-  return metas.map((item) => <meta key={`metaTag-${guid()}`} {...item} />)
-}

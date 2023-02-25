@@ -1,0 +1,45 @@
+{
+  "extends": "nx/presets/npm.json",
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "nx/tasks-runners/default",
+      "options": {
+        "cacheableOperations": [
+          "test",
+          "test:coverage",
+          "build",
+          "build:dev",
+          "compile"
+        ],
+        "accessToken": "M2RiNjYxMzctNTc5NS00Y2Y1LTllNmUtMWNmNzhiODE3M2M5fHJlYWQtd3JpdGU="
+      }
+    }
+  },
+  "targetDependencies": {
+    "build": [
+      {
+        "target": "build",
+        "projects": "dependencies"
+      }
+    ]
+  },
+  "affected": {
+    "defaultBase": "main"
+  },
+  "defaultProject": "core",
+  "cli": {
+    "warnings": {
+      "versionMismatch": false
+    },
+    "packageManager": "yarn",
+    "analytics": false
+  },
+  "targetDefaults": {
+    "build": {
+      "dependsOn": [
+        "^build"
+      ]
+    }
+  }
+}
