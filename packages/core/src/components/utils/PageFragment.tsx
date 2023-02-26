@@ -26,7 +26,7 @@ export function PageFragment({
   return (
     <As className={classes} id={id}>
       {!!title && <ReactMarkdown>{title}</ReactMarkdown>}
-      {!!content && <Content content={content} />}
+      {!!content && <Content content={content} as={As.toString()} />}
       {items.map((item, i) => {
         if (typeof item === 'string' && item.startsWith('$')) {
           return page[item] ?? item

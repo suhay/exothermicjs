@@ -1,5 +1,6 @@
 import ReactMarkdown from 'react-markdown'
 import gfm from 'remark-gfm'
+import rehypeRaw from 'rehype-raw'
 
 import { Loading } from '~/components/utils/Loading'
 import { useLoader } from '~/hooks/useLoader'
@@ -23,6 +24,7 @@ export function Markdown({ path }: Props) {
   return (
     <ReactMarkdown
       remarkPlugins={[gfm]}
+      rehypePlugins={[rehypeRaw]}
       components={{
         // eslint-disable-next-line react/no-unstable-nested-components
         a: ({ href, children }) => <LinkRenderer href={href ?? '#'}>{children}</LinkRenderer>,

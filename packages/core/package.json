@@ -1,6 +1,6 @@
 {
   "name": "@exothermic/core",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "description": "ExothermicJS | Yaml based template engine for Node.js",
   "repository": {
     "type": "git",
@@ -45,6 +45,7 @@
     "react-router-dom": "^6.4.5",
     "react-router-hash-link": "^2.4.3",
     "react-test-renderer": "^18.2.0",
+    "rehype-raw": "^6.1.1",
     "remark-gfm": "^3.0.1",
     "rimraf": "^3.0.2",
     "ts-jest": "^29.0.3",

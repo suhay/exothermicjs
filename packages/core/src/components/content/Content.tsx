@@ -3,6 +3,7 @@ import { ReactNode, useMemo, Fragment } from 'react'
 import { DateTime } from 'luxon'
 import ReactMarkdown from 'react-markdown'
 import gfm from 'remark-gfm'
+import rehypeRaw from 'rehype-raw'
 
 import { Link } from '~/components/navbar/Link'
 
@@ -91,6 +92,7 @@ export function Content({ content, as }: ContentProps) {
     return (
       <ReactMarkdown
         remarkPlugins={[gfm]}
+        rehypePlugins={[rehypeRaw]}
         components={{
           // eslint-disable-next-line react/no-unstable-nested-components
           a: ({ href, children }) => <LinkRenderer href={href ?? '#'}>{children}</LinkRenderer>,
