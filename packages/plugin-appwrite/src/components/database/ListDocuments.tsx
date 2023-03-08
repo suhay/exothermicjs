@@ -14,10 +14,8 @@ import { useNavigate } from 'react-router-dom'
 
 import { Context } from '~/contexts/user'
 import { useAppwrite } from '~/hooks/useAppwrite'
-import { AppwriteApiDatabase } from '../../types'
+import { AppwriteApiDatabase, AppwriteApiDatabaseOptions } from '../../types'
 import { ConfirmationDialog } from '../dialogs/ConfirmationDialog'
-
-const LIMIT = 10
 
 function ActionButton({
   doc,
@@ -58,7 +56,11 @@ export function ListDocuments({
   setValue,
   options,
 }: Omit<AppwriteApiDatabase, 'api' | 'action'>) {
-  const { randomize = false, allowNew = true } = options ?? {}
+  const {
+    randomize = false,
+    allowNew = true,
+    limit = 10,
+  }: AppwriteApiDatabaseOptions = options ?? {}
 
   const { user } = useContext(UserContext)
   const [documents, setDocuments] = useState<Models.DocumentList<Models.Document>>()
@@ -69,7 +71,7 @@ export function ListDocuments({
   const [idToDelete, setIdToDelete] = useState('')
 
   const handleChange = (_: React.ChangeEvent<unknown>, value: number) => {
-    setOffset(value * LIMIT - LIMIT)
+    setOffset(value * limit - limit)
   }
 
   const deleteDocument = useCallback(
@@ -115,7 +117,7 @@ export function ListDocuments({
     }
     const docs = await appwrite.listDocuments({
       collection,
-      queries: [Query.limit(LIMIT), Query.offset(offset)],
+      queries: [Query.limit(limit), Query.offset(offset)],
     })
     if (docs) {
       if (randomize) {
@@ -124,7 +126,7 @@ export function ListDocuments({
       }
       setDocuments(docs)
     }
-  }, [appwrite, collection, offset, randomize, reroll])
+  }, [appwrite, collection, offset, randomize, reroll, limit])
 
   const onConfirmDelete = useCallback(async () => {
     await deleteDocument(idToDelete)
@@ -189,9 +191,9 @@ export function ListDocuments({
         ))}
         {documents.documents.length === 0 && <span>Nothing to show!</span>}
       </ul>
-      {!randomize && documents.total > LIMIT && (
+      {!randomize && documents.total > limit && (
         <Stack spacing={2}>
-          <Pagination count={Math.ceil(documents.total / LIMIT)} onChange={handleChange} />
+          <Pagination count={Math.ceil(documents.total / limit)} onChange={handleChange} />
         </Stack>
       )}
       <ConfirmationDialog

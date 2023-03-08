@@ -20,14 +20,18 @@ export enum AppwriteApiType {
   USER = 'user',
 }
 
-type AppwriteApiDatabaseOptions = 'editable' | 'randomize' | 'allowNew'
+export type AppwriteApiDatabaseOptions = {
+  editable?: boolean
+  randomize?: boolean
+  allowNew?: boolean
+  limit?: number
+}
 
 export type AppwriteApiDatabase = DBPlugin & {
   api: AppwriteApiType.DATABASE
   collection: string
   control?: Control<FieldValues, any>
   setValue?: UseFormSetValue<FieldValues>
-  options?: Record<AppwriteApiDatabaseOptions, string | number | boolean>
 }
 
 export type AppwriteApiAccount = {

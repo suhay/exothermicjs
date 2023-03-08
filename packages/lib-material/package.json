@@ -47,7 +47,7 @@
     "compile": "tsc --build"
   },
   "peerDependencies": {
-    "@exothermic/core": "^2.1.1",
+    "@exothermic/core": "^2.2.1",
     "react": "^18.1.0",
     "react-dom": "^18.1.0"
   },
