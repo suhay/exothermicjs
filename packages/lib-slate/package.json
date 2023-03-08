@@ -19,6 +19,7 @@
   "license": "MIT",
   "devDependencies": {
     "@emotion/css": "^11.10.5",
+    "@exothermic/core": "^2.2.1",
     "@mui/icons-material": "^5.11.0",
     "@mui/material": "^5.11.0",
     "@productboard/slate-edit-list": "^0.21.5",
