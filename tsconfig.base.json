@@ -33,13 +33,5 @@
     "types": ["node", "jest"],
     "useUnknownInCatchVariables": false
   },
-  "exclude": [
-    "node_modules",
-    "build",
-    "**/*/dist",
-    "**/*/out",
-    "**/webpack.*",
-    "src/**/*.d.ts",
-    "**/*/scripts"
-  ]
+  "exclude": ["node_modules", "build", "**/*/dist", "**/*/out", "**/webpack.*", "src/**/*.d.ts"]
 }

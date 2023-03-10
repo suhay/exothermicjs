@@ -57,4 +57,25 @@ describe('applyTemplate', () => {
 
     expect(result).toEqual('Date: Jan 1, 2023')
   })
+
+  it('applies ReactNodes where needed', () => {
+    const data = {
+      author: {
+        name: 'Test Person',
+      },
+      content: {
+        $$typeof: 'Symbol(react.element)',
+        props: {},
+        type: () => null,
+      },
+    }
+
+    const authorResult = applyTemplate('{{ author.name }}', data)
+
+    expect(authorResult).toEqual('Test Person')
+
+    const contentResult = applyTemplate('{{ content }}', data)
+
+    expect(contentResult).toEqual(data.content)
+  })
 })

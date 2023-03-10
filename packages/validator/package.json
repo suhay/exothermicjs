@@ -24,7 +24,7 @@
     "url": "https://github.com/suhay/exothermicjs/issues"
   },
   "devDependencies": {
-    "yaml-schema-validator": "^1.2.2"
+    "yaml-schema-validator": "^1.2.3"
   },
   "publishConfig": {
     "access": "public"

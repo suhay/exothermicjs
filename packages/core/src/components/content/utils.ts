@@ -16,23 +16,20 @@ export function applyTemplate(
   let exoContent: ReactNode = null
 
   Object.entries(data).forEach(([key, val]) => {
-    if (val == null || exoContent != null) {
+    if (val == null) {
       return
     }
 
     const combinedKey = prevKey ? `${prevKey}.${key}` : key
 
     if (typeof val === 'object') {
-      if (isValidElement(val)) {
-        exoContent = val
-        return
-      }
       if (isFragment(val)) {
         return
       }
-
-      const newContent = applyTemplate(template, val as Record<string, object>, combinedKey)
-      content = newContent ?? content
+      if (!isValidElement(val)) {
+        const newContent = applyTemplate(content, val as Record<string, object>, combinedKey)
+        content = newContent ?? content
+      }
     }
 
     const reg = `{{\\s*${combinedKey.replace('$', '\\$')}(?!\\.)[ |]+.*?}}`
@@ -42,7 +39,14 @@ export function applyTemplate(
     let replaceVal = val
 
     if (templatePartsToReplace?.length) {
+      console.log(templatePartsToReplace)
+      console.log(replaceVal)
       const parts = templatePartsToReplace[0].replace(/{{|}}/g, '').split('|')
+
+      if (isValidElement(val)) {
+        exoContent = val
+        return
+      }
 
       if (parts.length >= 3) {
         switch (parts[1].trim()) {
@@ -56,14 +60,16 @@ export function applyTemplate(
         }
       }
     }
+    console.log(content)
     if (typeof replaceVal === 'string') {
       content = content.replace(expg, replaceVal)
     }
+    console.log(content)
   })
 
   if (exoContent) {
     return exoContent
   }
 
-  return prevKey != null ? content.replace(/\s*{{.*?}}/g, '') : content
+  return prevKey == null ? content.replace(/\s*{{.*?}}/g, '') : content
 }
