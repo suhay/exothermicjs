@@ -1,6 +1,6 @@
 {
   "name": "@exothermic/core",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "ExothermicJS | Yaml based template engine for Node.js",
   "repository": {
     "type": "git",
@@ -63,7 +63,8 @@
     "watch": "webpack --watch --config webpack.dev.js",
     "build": "yarn compile && webpack --config webpack.prod.js",
     "build:dev": "yarn compile && webpack --config webpack.dev.js",
-    "compile": "tsc --build"
+    "compile": "tsc --build",
+    "version:up": "node scripts/versionUp.js"
   },
   "peerDependencies": {
     "react": "^18.1.0",

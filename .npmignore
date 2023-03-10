@@ -18,3 +18,5 @@ setupTests.js
 __mocks__
 .npmrc
 stats.json
+scripts
+__tests__

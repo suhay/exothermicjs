@@ -11,3 +11,4 @@ wdyr.ts
 live-server.js
 **/webpack.*.js
 **/jest.preset.js
+**/scripts/*

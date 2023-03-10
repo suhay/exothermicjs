@@ -12,30 +12,17 @@
     "incremental": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
-    "lib": [
-      "dom",
-      "ESNext"
-    ],
+    "lib": ["dom", "ESNext"],
     "module": "commonjs",
     "moduleResolution": "node",
     "noEmit": false,
     "noImplicitAny": false,
     "paths": {
-      "core": [
-        "packages/core/src"
-      ],
-      "lib-material": [
-        "packages/lib-material/src"
-      ],
-      "lib-slate": [
-        "packages/lib-slate/src"
-      ],
-      "plugin-appwrite": [
-        "packages/plugin-appwrite/src"
-      ],
-      "plugin-blog": [
-        "packages/plugin-blog/src"
-      ]
+      "core": ["packages/core/src"],
+      "lib-material": ["packages/lib-material/src"],
+      "lib-slate": ["packages/lib-slate/src"],
+      "plugin-appwrite": ["packages/plugin-appwrite/src"],
+      "plugin-blog": ["packages/plugin-blog/src"]
     },
     "resolveJsonModule": true,
     "skipLibCheck": true,
@@ -43,9 +30,7 @@
     "strict": true,
     "strictNullChecks": true,
     "target": "ES2022",
-    "types": [
-      "node", "jest"
-    ],
+    "types": ["node", "jest"],
     "useUnknownInCatchVariables": false
   },
   "exclude": [
@@ -54,6 +39,7 @@
     "**/*/dist",
     "**/*/out",
     "**/webpack.*",
-    "src/**/*.d.ts"
+    "src/**/*.d.ts",
+    "**/*/scripts"
   ]
 }

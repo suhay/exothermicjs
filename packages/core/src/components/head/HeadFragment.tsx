@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet'
 
-import { applyTemplate } from '~/components/content/Content'
+import { applyTemplate } from '~/components/content/utils'
 
 export function HeadFragment({
   data,
