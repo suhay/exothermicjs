@@ -39,8 +39,6 @@ export function applyTemplate(
     let replaceVal = val
 
     if (templatePartsToReplace?.length) {
-      console.log(templatePartsToReplace)
-      console.log(replaceVal)
       const parts = templatePartsToReplace[0].replace(/{{|}}/g, '').split('|')
 
       if (isValidElement(val)) {
@@ -60,11 +58,9 @@ export function applyTemplate(
         }
       }
     }
-    console.log(content)
     if (typeof replaceVal === 'string') {
       content = content.replace(expg, replaceVal)
     }
-    console.log(content)
   })
 
   if (exoContent) {

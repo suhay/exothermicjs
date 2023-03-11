@@ -1,3 +1,4 @@
+import { createElement } from 'react'
 import { applyTemplate } from '../utils'
 
 describe('applyTemplate', () => {
@@ -50,6 +51,27 @@ describe('applyTemplate', () => {
     )
   })
 
+  it('applies a shallow, complicated template', () => {
+    const result = applyTemplate(
+      'Photo by [{{ image.creditUrl }}]({{ image.credit }}) on [{{ image.siteUrl }}]({{ image.site }})',
+      {
+        image: {
+          src: 'image.jpg',
+          src2: 'image2.jpg',
+          alt: 'A grilled, cheese sandwich',
+          credit: 'Person Dude',
+          creditUrl: 'https://unsplash.com/@random',
+          site: 'Unsplash',
+          siteUrl: 'https://unsplash.com/',
+        },
+      },
+    )
+
+    expect(result).toEqual(
+      'Photo by [https://unsplash.com/@random](Person Dude) on [https://unsplash.com/](Unsplash)',
+    )
+  })
+
   it('applies a dateTime filter', () => {
     const result = applyTemplate('Date: {{ date | dateTime | MMM d, yyyy }}', {
       date: '2023-01-01',
@@ -63,11 +85,7 @@ describe('applyTemplate', () => {
       author: {
         name: 'Test Person',
       },
-      content: {
-        $$typeof: 'Symbol(react.element)',
-        props: {},
-        type: () => null,
-      },
+      content: createElement('p'),
     }
 
     const authorResult = applyTemplate('{{ author.name }}', data)
