@@ -6,18 +6,18 @@
     "baseUrl": "./",
     "paths": {
       "~/*": ["./src/*", "../core/src/*"],
-      "@exothermic/core": ["../core/src"]
+      "@exothermic/core": ["../core/src"],
+      "@exothermic/lib-material": ["../lib-material/src"]
     }
   },
-  "include": [
-    "src",
-  ],
-  "exclude": [
-    "webpack.config.js"
-  ],
+  "include": ["src"],
+  "exclude": ["webpack.config.js"],
   "references": [
     {
       "path": "../core"
+    },
+    {
+      "path": "../lib-material"
     }
   ]
 }

@@ -1,12 +1,11 @@
-import { useCallback, useContext, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
-import { Loading, UserContext } from '@exothermic/core'
+import { Loading, useState as useExoState } from '@exothermic/core'
 import Edit from '@mui/icons-material/Edit'
 import IconButton from '@mui/material/IconButton'
 import { Models, Permission, Role } from 'appwrite'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 
-import { Context } from '~/contexts/user'
 import { useAppwrite } from '~/hooks/useAppwrite'
 import { AppwriteApiDatabase } from '../../types'
 
@@ -17,7 +16,7 @@ function ActionButton({
   action,
 }: {
   doc?: Models.Document
-  user: Context
+  user: any
   editable: boolean
   action: (...args) => void
 }) {
@@ -25,7 +24,7 @@ function ActionButton({
     return null
   }
 
-  const userData = user.data as unknown as Models.Account<Models.Preferences>
+  const userData = user as Models.Account<Models.Preferences>
   const perm = Permission.update(Role.user(userData.$id))
   if (doc?.$permissions?.includes(perm)) {
     return (
@@ -43,7 +42,7 @@ export function GetDocument({
   options,
 }: Omit<AppwriteApiDatabase, 'api' | 'action'>) {
   const { editable = false } = options ?? {}
-  const { user } = useContext(UserContext)
+  const state = useExoState((exoState) => exoState.state)
   const [document, setDocument] = useState<Models.Document>()
   const [query] = useSearchParams()
   const appwrite = useAppwrite()
@@ -75,7 +74,7 @@ export function GetDocument({
 
   return (
     <>
-      <ActionButton doc={document} editable={!!editable} user={user} action={onEdit} />
+      <ActionButton doc={document} editable={!!editable} user={state.user} action={onEdit} />
       {items?.map((item, i) => (
         <item.type {...item.props} data={document} key={`item-${String(i)}-${document.$id}`} />
       ))}

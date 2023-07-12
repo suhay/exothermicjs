@@ -21,4 +21,22 @@ $main:
         title: '# More What'
         items:
           - !get fragments/projects
+      - !state
+        if:
+          - test: true
+        then:
+          - !fragment
+            content: Test is true
+        else:
+          - !fragment
+            content: Test is false
+      - !state
+        if:
+          - health: true
+        then:
+          - !fragment
+            content: Site is online
+        else:
+          - !fragment
+            content: Site is offline
 $bottom: !get fragments/footer

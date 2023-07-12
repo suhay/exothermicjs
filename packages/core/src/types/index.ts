@@ -1,4 +1,5 @@
 import { ReactElement, ReactNode } from 'react'
+import { PageFragmentType } from '~/components/utils/PageFragment.types'
 
 export type Plugin = {
   resolve: string
@@ -13,16 +14,6 @@ export type MetaFragment = {
   name?: string
   content?: string
   attrs?: Record<string, string>
-}
-
-export interface PageFragmentType {
-  class?: string
-  id?: string
-  items?: ReactNode[]
-  content?: string | ReactNode
-  title?: string
-  as?: React.ElementType
-  template?: string
 }
 
 export interface HeadFragmentType {
@@ -48,14 +39,15 @@ export type Config = {
   pagePath: string
   basePath?: string
   plugins?: Plugin[]
+  initialState?: Record<string, string | boolean | number | null>
 }
 
 export type LoadingState = 'LOADING' | 'LOADED' | 'ERROR'
 
-export type UserContextType = {
-  isAuthenticated: () => boolean
-  data: Record<string, string | number>
-}
+// export type UserContextType = {
+//   isAuthenticated: () => boolean
+//   data: Record<string, string | number>
+// }
 
 export type PluginContextType = {
   plugins: Record<string, any>

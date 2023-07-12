@@ -1,5 +1,8 @@
 {
   "pagePath": "/pages",
+  "initialState": {
+    "health": true
+  },
   "plugins": [
     {
       "resolve": "@exothermic/plugin-blog",

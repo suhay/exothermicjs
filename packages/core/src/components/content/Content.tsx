@@ -38,12 +38,7 @@ export function Content({ content, as }: ContentProps) {
     )
   }
 
-  return (
-    <>
-      {content}
-      <span />
-    </>
-  )
+  return <>{content}</>
 }
 
 export function ContentTransform({

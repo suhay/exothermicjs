@@ -1,6 +1,6 @@
-import { useContext, useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 
-import { Loading, UserContext } from '@exothermic/core'
+import { Loading, useState as useExoState } from '@exothermic/core'
 import Button from '@mui/material/Button'
 
 import { useAppwrite } from '~/hooks/useAppwrite'
@@ -8,7 +8,7 @@ import { SignUp } from '../SignUp'
 import { EmailPasswordForm } from './EmailPasswordForm'
 
 export function Login() {
-  const { dispatch } = useContext(UserContext)
+  const setState = useExoState((exoState) => exoState.setState)
 
   const isUsingEmailPassword = true
   // const isUsingMagicUrl = true
@@ -20,11 +20,9 @@ export function Login() {
 
   const loginWithSession = useCallback(async () => {
     const loggedInUser = await appwrite.getAccount()?.catch(() => null)
-    if (dispatch && loggedInUser) {
-      dispatch({ type: 'SET_USER', user: loggedInUser })
-    }
+    setState('user', loggedInUser)
     setLoadingForm(false)
-  }, [appwrite, dispatch])
+  }, [appwrite, setState])
 
   useEffect(() => {
     loginWithSession().catch(() => null)

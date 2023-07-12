@@ -1,8 +1,8 @@
 import yaml from 'js-yaml'
 
 import { PageFragment } from '~/components/utils/PageFragment'
+import { PageFragmentType } from '~/components/utils/PageFragment.types'
 import { guid } from '~/utils/guid'
-import { PageFragmentType } from '..'
 
 export const FooterYamlType = new yaml.Type('!footer', {
   kind: 'mapping',

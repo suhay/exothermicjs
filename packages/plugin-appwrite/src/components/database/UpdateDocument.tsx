@@ -11,10 +11,17 @@ import { AppwriteApiDatabase } from '../../types'
 
 export function UpdateDocument({ collection, items }: Omit<AppwriteApiDatabase, 'api' | 'action'>) {
   const { handleSubmit, control, setValue } = useForm()
-  const [document, setDocument] = useState<Models.Document>()
+  const [document, setDocument] = useState<Models.Document | null>()
   const [documentId, setDocumentId] = useState<string>('')
   const appwrite = useAppwrite()
   const [query] = useSearchParams()
+  const [isLocal, setIsLocal] = useState(false)
+
+  const sync = useCallback(async () => {
+    if (documentId) {
+      await appwrite.syncDocumentById(documentId)
+    }
+  }, [appwrite, documentId])
 
   const save = useCallback(
     async (data: Record<string, string>) => {
@@ -37,8 +44,9 @@ export function UpdateDocument({ collection, items }: Omit<AppwriteApiDatabase, 
     setDocumentId(id)
     appwrite
       .getDocument(collection, id)
-      ?.then((docs) => {
-        setDocument(docs)
+      ?.then((doc) => {
+        setDocument(doc)
+        setIsLocal(doc?.isLocal ?? false)
       })
       .catch(() => null)
   }, [appwrite, collection, document, query])
@@ -79,6 +87,7 @@ export function UpdateDocument({ collection, items }: Omit<AppwriteApiDatabase, 
         )
       })}
       <Button onClick={handleSubmit(save)}>Save</Button>
+      {isLocal && <Button onClick={sync}>Sync</Button>}
     </form>
   )
 }

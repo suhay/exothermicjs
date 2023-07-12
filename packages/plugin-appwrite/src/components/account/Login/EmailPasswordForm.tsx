@@ -1,13 +1,16 @@
-import { useCallback, useContext } from 'react'
+import { useCallback, lazy } from 'react'
 
-import { UserContext } from '@exothermic/core'
-import TextField from '@mui/material/TextField'
-import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import { useState } from '@exothermic/core'
 import Button from '@mui/material/Button'
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 
 import { useAppwrite } from '~/hooks/useAppwrite'
 
-type Inputs = {
+const TextFieldController = lazy(
+  () => import('@exothermic/lib-material/src/components/inputs/TextFieldController'),
+)
+
+type Inputs = FieldValues & {
   email: string
   password: string
 }
@@ -17,12 +20,13 @@ export function EmailPasswordForm({
 }: {
   setBadUser: React.Dispatch<React.SetStateAction<boolean>>
 }) {
-  const { handleSubmit, control, formState } = useForm<Inputs>()
+  const { handleSubmit, control, formState } = useForm<FieldValues>()
   const appwrite = useAppwrite()
-  const { dispatch } = useContext(UserContext)
+  const setState = useState((exoState) => exoState.setState)
 
-  const login: SubmitHandler<Inputs> = useCallback(
-    async ({ email, password }) => {
+  const login: SubmitHandler<FieldValues> = useCallback(
+    async (values) => {
+      const { email, password } = values as Inputs
       setBadUser(false)
       const session = await appwrite.createSession(email, password)?.catch(() => {
         setBadUser(true)
@@ -32,32 +36,38 @@ export function EmailPasswordForm({
         const loggedInUser = await appwrite.getAccount()?.catch(() => {
           setBadUser(true)
         })
-        if (dispatch && loggedInUser) {
-          dispatch({ type: 'SET_USER', user: loggedInUser })
-        }
+        setState('user', loggedInUser)
       }
     },
-    [appwrite, dispatch, setBadUser],
+    [appwrite, setState, setBadUser],
   )
 
   return (
     <form>
-      <Controller
+      <TextFieldController name='email' type='email' control={control} required label='Email' />
+      <TextFieldController
+        name='password'
+        type='password'
+        control={control}
+        required
+        label='Password'
+      />
+      {/* <Controller
         name='email'
         control={control}
         defaultValue=''
         render={({ field: { onChange, value } }) => (
           <TextField label='Email' onChange={onChange} value={value} required type='email' />
         )}
-      />
-      <Controller
+      /> */}
+      {/* <Controller
         name='password'
         control={control}
         defaultValue=''
         render={({ field: { onChange, value } }) => (
           <TextField label='Password' onChange={onChange} value={value} required type='password' />
         )}
-      />
+      /> */}
       <Button onClick={handleSubmit(login)} variant='contained' disabled={formState.isSubmitting}>
         Login
       </Button>

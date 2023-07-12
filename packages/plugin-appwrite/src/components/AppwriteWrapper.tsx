@@ -1,48 +1,45 @@
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
-import { Loading, UserContext } from '@exothermic/core'
+import { Loading, useState as useExoState } from '@exothermic/core'
 
 import { useAppwrite } from '~/hooks/useAppwrite'
-import { AppwriteApiWrapper } from '../types'
+import { AppwriteApiType, AppwriteApiWrapper } from '../types'
 import { Account } from './account/Account'
 import { Database } from './database/Database'
 
 export function AppwriteWrapper(props: AppwriteApiWrapper) {
   const appwrite = useAppwrite()
-  const { dispatch: dispatchUser } = useContext(UserContext)
+  const setState = useExoState((exoState) => exoState.setState)
   const [ready, setReady] = useState(false)
 
   useEffect(() => {
     if (appwrite && !ready) {
-      if (dispatchUser) {
-        dispatchUser({
-          type: 'SET_AUTH',
-          isAuthenticated: async () => {
-            const user = await appwrite.getAccount()
-            if (user) {
-              dispatchUser({ type: 'SET_USER', user })
-              return true
-            }
-            return false
-          },
-        })
-      }
+      setState('isAuthenticated', async () => {
+        const user = await appwrite.getAccount()
+        if (user) {
+          setState('user', user)
+          return true
+        }
+        return false
+      })
       setReady(true)
     }
-  }, [appwrite, dispatchUser, ready])
+  }, [appwrite, ready, setState])
 
   if (!ready) {
     return <Loading />
   }
 
-  const { api, action } = props
+  if ('api' in props) {
+    const { api } = props
 
-  switch (api) {
-    case 'account':
-      const { logout, login } = props
+    if (api === AppwriteApiType.ACCOUNT) {
+      const { logout, login, action } = props
       return <Account action={action} logout={logout} login={login} />
-    case 'database':
-      const { collection, items, control, setValue, options } = props
+    }
+
+    if (api === AppwriteApiType.DATABASE) {
+      const { collection, items, control, setValue, options, action } = props
       return (
         <Database
           collection={collection}
@@ -53,7 +50,13 @@ export function AppwriteWrapper(props: AppwriteApiWrapper) {
           setValue={setValue}
         />
       )
-    default:
-      return null
+    }
   }
+
+  if ('children' in props) {
+    const { children } = props
+    return children
+  }
+
+  return null
 }
