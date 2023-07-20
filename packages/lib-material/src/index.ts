@@ -9,3 +9,5 @@ export const register = {
     'text-field': TextFieldYamlType,
   },
 }
+
+export { default as TextFieldController } from '~/components/inputs/TextFieldController'

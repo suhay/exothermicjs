@@ -1,24 +1,24 @@
-import { ReactElement, useContext, useEffect, useState } from 'react'
+import { ReactElement, useEffect, useState } from 'react'
 
 import { useLocation } from 'react-router-dom'
 
-import { UserContext } from '~/contexts/user'
 import { useExothermic } from '~/hooks/useExothermic'
 import { usePageTemplate } from '~/hooks/usePageTemplate'
 import { usePlugins } from '~/hooks/usePlugins'
+import { useState as useExoState } from '~/hooks/useState'
 import * as logger from '~/utils/logger'
 import { LoadingState, Template } from '../types'
 import { Loading } from './utils/Loading'
 
 function Main({ status, data }: { status: LoadingState; data?: Template }) {
-  const { user } = useContext(UserContext)
+  const state = useExoState((exoState) => exoState.state)
   const location = useLocation()
 
   useEffect(() => {
-    if (data?.secure) {
-      user.isAuthenticated().catch((err) => logger.error(err))
+    if (data?.secure && typeof state.isAuthenticated === 'function') {
+      state.isAuthenticated().catch((err) => logger.error(err))
     }
-  }, [data, user])
+  }, [data, state.isAuthenticated])
 
   if (status === 'LOADING') {
     return <Loading />
@@ -34,7 +34,7 @@ function Main({ status, data }: { status: LoadingState; data?: Template }) {
 
   const { $main, page, secure } = data
 
-  if (secure && !user.data) {
+  if (!!secure && state.user == null) {
     return (
       <div className={`secure-page_${location.pathname.replace(/\/$/, '').replaceAll('/', '_')}`}>
         {secure}

@@ -4,5 +4,7 @@
     "./packages/core",
     "./packages/plugin-appwrite",
     "./packages/plugin-blog",
+    "./packages/lib-material",
+    "./packages/lib-slate"
   ]
 }

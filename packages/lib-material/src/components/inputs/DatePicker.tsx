@@ -11,7 +11,7 @@ import { FieldValues, UseFormSetValue } from 'react-hook-form'
 export type Props = {
   name: string
   class?: string
-  setValue: UseFormSetValue<FieldValues>
+  setValue?: UseFormSetValue<FieldValues>
 } & DatePickerProps<string, string>
 
 export function DatePicker({
@@ -23,10 +23,11 @@ export function DatePicker({
   class: classes,
 }: Props) {
   useEffect(() => {
-    if (!value) {
+    if (!value && setValue) {
       setValue(name, DateTime.now().toISO())
     }
   }, [name, setValue, value])
+
   return (
     <LocalizationProvider dateAdapter={AdapterLuxon}>
       <MuiDatePicker

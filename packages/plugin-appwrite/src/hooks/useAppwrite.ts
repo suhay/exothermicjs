@@ -57,6 +57,45 @@ class AppwriteSDK {
     return this.account.updateEmail(email, password)
   }
 
+  updateName(name: string) {
+    return this.account.updateName(name)
+  }
+
+  updatePassword(password: string, oldPassword: string) {
+    return this.account.updatePassword(password, oldPassword)
+  }
+
+  updatePrefs(prefs: object) {
+    return this.account.updatePrefs(prefs)
+  }
+
+  updatePhone(phone: string, password: string) {
+    return this.account.updatePhone(phone, password)
+  }
+
+  async updateAccount(account: Models.Account<Models.Preferences>, data: any) {
+    const parts: Promise<Models.Account<Models.Preferences>>[] = []
+
+    if (data.email && data.password && account.email !== data.email) {
+      parts.push(this.updateEmail(data.email as string, data.password as string))
+    }
+    if (data.name && account.name !== data.name) {
+      parts.push(this.updateName(data.name as string))
+    }
+    if (data.newPassword && data.password) {
+      parts.push(this.updatePassword(data.newPassword as string, data.password as string))
+    }
+    if (data.phone && data.password && account.phone !== data.phone) {
+      parts.push(this.updatePhone(data.phone as string, data.password as string))
+    }
+
+    return Promise.all(parts)
+      .then((val) => val[0])
+      .catch(() => {
+        throw new Error('error updating account')
+      })
+  }
+
   createSession(email: string, password: string) {
     return this.account.createEmailSession(email, password)
   }
@@ -87,92 +126,161 @@ class AppwriteSDK {
     }))
   }
 
-  listDocuments({
+  async listDocuments({
     collection,
     queries,
-  }: ListDocuments): Promise<Models.DocumentList<Models.Document>> {
+  }: ListDocuments): Promise<Models.DocumentList<Models.Document> & { hasLocal?: boolean }> {
     const collectionId = this.collections[collection]
-    return this.databases
-      .listDocuments(this.database, collectionId, queries)
-      .then(async (docs) => {
-        const localDocs = await this.fallbackListDocuments(collectionId)
 
-        if (localDocs != null) {
-          return {
-            total: docs.total + localDocs.total,
-            documents: [...docs.documents, ...localDocs.documents],
-          }
+    try {
+      const docs = await this.databases.listDocuments(this.database, collectionId, queries)
+      const localDocs = await this.fallbackListDocuments(collectionId)
+
+      if (localDocs != null) {
+        return {
+          total: docs.total + localDocs.total,
+          documents: [...docs.documents, ...localDocs.documents],
+          hasLocal: true,
         }
+      }
 
-        return docs
-      })
-      .catch(() => ({
+      return docs
+    } catch {
+      return {
         total: 0,
         documents: [],
-      }))
+      }
+    }
   }
 
-  getDocument(collection: string, documentId: string): Promise<Models.Document> {
+  async getDocument(
+    collection: string,
+    documentId: string,
+  ): Promise<(Models.Document & { isLocal?: boolean }) | null> {
     const collectionId = this.collections[collection]
-    return this.databases.getDocument(this.database, collectionId, documentId).catch(() =>
-      this.fallback?.get<Models.Document>(documentId)?.then((doc) => ({
-        $id: doc.id,
-        $collectionId: collectionId,
-        $databaseId: this.database,
-        $createdAt: doc.createdAt ?? '',
-        $updatedAt: doc.updatedAt ?? '',
-        $permissions: doc.permissions,
-        ...doc.data,
-      })),
-    )
+
+    try {
+      return this.databases.getDocument(this.database, collectionId, documentId)
+    } catch {
+      const doc = await this.fallback?.get<Models.Document>(documentId)
+
+      if (doc) {
+        return {
+          isLocal: true,
+          $id: doc.id,
+          $collectionId: collectionId,
+          $databaseId: this.database,
+          $createdAt: doc.createdAt ?? '',
+          $updatedAt: doc.updatedAt ?? '',
+          $permissions: doc.permissions,
+          ...doc.data,
+        }
+      }
+      return null
+    }
   }
 
-  updateDocument(collection: string, documentId: string, data: object, permissions?: string[]) {
+  async updateDocument(
+    collection: string,
+    documentId: string,
+    data: object,
+    permissions?: string[],
+  ) {
     const collectionId = this.collections[collection]
-    return this.databases
-      .updateDocument(this.database, collectionId, documentId, data, permissions)
-      .catch(() =>
-        this.fallback
-          ?.put(
-            {
-              collectionId,
-              data,
-              permissions,
-              updatedAt: Date.now(),
-            },
-            documentId,
-          )
-          ?.then((docId) => ({ $id: docId?.toString() })),
+
+    try {
+      return this.databases.updateDocument(
+        this.database,
+        collectionId,
+        documentId,
+        data,
+        permissions,
       )
+    } catch {
+      const docId = await this.fallback?.put(
+        {
+          collectionId,
+          data,
+          permissions,
+          updatedAt: Date.now(),
+        },
+        documentId,
+      )
+      return { $id: docId?.toString() }
+    }
   }
 
-  createDocument(collection: string, data: object, permissions?: string[]) {
+  async createDocument(collection: string, data: object, permissions?: string[]) {
     const collectionId = this.collections[collection]
     const id = ID.unique()
 
-    return this.databases
-      .createDocument(this.database, collectionId, id, data, permissions)
-      .catch(() =>
-        this.fallback
-          ?.add(
-            {
-              collectionId,
-              data,
-              permissions,
-              createdAt: Date.now(),
-              updatedAt: Date.now(),
-            },
-            id === 'unique()' ? unique() : id,
-          )
-          ?.then((docId) => ({ $id: docId?.toString() })),
+    try {
+      return this.databases.createDocument(this.database, collectionId, id, data, permissions)
+    } catch {
+      const docId = await this.fallback?.add(
+        {
+          collectionId,
+          data,
+          permissions,
+          createdAt: Date.now(),
+          updatedAt: Date.now(),
+        },
+        id === 'unique()' ? unique() : id,
       )
+      return { $id: docId?.toString(), $updatedAt: null }
+    }
   }
 
-  deleteDocument(collection: string, documentId: string) {
+  async deleteDocument(collection: string, documentId: string) {
     const collectionId = this.collections[collection]
+    try {
+      return await this.databases.deleteDocument(this.database, collectionId, documentId)
+    } catch {
+      return this.fallback?.del(documentId)
+    }
+  }
+
+  async syncDocument(doc: Models.Document) {
+    const exists = await this.databases.getDocument(this.database, doc.$collectionId, doc.$id)
+
+    if (exists && exists.$updatedAt < doc.$updatedAt) {
+      return this.databases
+        .updateDocument(
+          this.database,
+          doc.$collectionId,
+          doc.$id,
+          doc.data as object,
+          doc.$permissions,
+        )
+        .then(() => this.fallback?.del(doc.$id))
+    }
+
     return this.databases
-      .deleteDocument(this.database, collectionId, documentId)
-      .catch(() => this.fallback?.del(documentId))
+      .createDocument(
+        this.database,
+        doc.$collectionId,
+        doc.$id,
+        doc.data as object,
+        doc.$permissions,
+      )
+      .then(() => this.fallback?.del(doc.$id))
+  }
+
+  async syncDocumentById(documentId: string) {
+    const doc = await this.fallback?.get<Models.Document>(documentId)
+
+    if (doc) {
+      await this.syncDocument(doc)
+    }
+  }
+
+  async syncAll(collection: string) {
+    const collectionId = this.collections[collection]
+    const localDocs = await this.fallbackListDocuments(collectionId)
+
+    if (localDocs) {
+      await Promise.allSettled(localDocs.documents.map(async (doc) => this.syncDocument(doc)))
+    }
   }
 }
 

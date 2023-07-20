@@ -1,8 +1,9 @@
 import { guid } from '@exothermic/core'
 import yaml from 'js-yaml'
 
+import { AccountButton } from '~/components/account/AccountButton'
 import { AppwriteWrapper } from '~/components/AppwriteWrapper'
-import { AppwriteApiAccount, AppwriteApiType } from '..'
+import { AppwriteApiAccount } from '..'
 
 export const AppwriteAccountButtonYamlType = (_yaml: unknown, explicitName?: string) =>
   new yaml.Type(`!${explicitName ?? 'appwrite-account-button'}`, {
@@ -12,13 +13,9 @@ export const AppwriteAccountButtonYamlType = (_yaml: unknown, explicitName?: str
     },
     construct(data: AppwriteApiAccount) {
       return (
-        <AppwriteWrapper
-          key={guid()}
-          api={AppwriteApiType.ACCOUNT}
-          action='button'
-          logout={data.logout}
-          login={data.login}
-        />
+        <AppwriteWrapper key={guid()}>
+          <AccountButton logout={data.logout} />
+        </AppwriteWrapper>
       )
     },
     instanceOf: AppwriteWrapper,

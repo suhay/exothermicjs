@@ -29,6 +29,7 @@ export type AppwriteApiDatabaseOptions = {
 
 export type AppwriteApiDatabase = DBPlugin & {
   api: AppwriteApiType.DATABASE
+  action: 'list' | 'get' | 'update' | 'create' | 'delete'
   collection: string
   control?: Control<FieldValues, any>
   setValue?: UseFormSetValue<FieldValues>
@@ -41,4 +42,9 @@ export type AppwriteApiAccount = {
   login?: string
 }
 
-export type AppwriteApiWrapper = AppwriteApiDatabase | AppwriteApiAccount
+export type AppwriteApiWrapper =
+  | AppwriteApiDatabase
+  | AppwriteApiAccount
+  | {
+      children: React.ReactElement
+    }

@@ -1,6 +1,6 @@
-import { Dispatch, SetStateAction, useContext, useCallback } from 'react'
+import { Dispatch, SetStateAction, useCallback } from 'react'
 
-import { UserContext } from '@exothermic/core'
+import { useState } from '@exothermic/core'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
@@ -14,7 +14,7 @@ type Inputs = {
 }
 
 export function SignUp({ setIsSigningUp }: { setIsSigningUp: Dispatch<SetStateAction<boolean>> }) {
-  const { dispatch } = useContext(UserContext)
+  const setState = useState((exoState) => exoState.setState)
 
   const { control, handleSubmit } = useForm<Inputs>()
   const appwrite = useAppwrite()
@@ -24,12 +24,10 @@ export function SignUp({ setIsSigningUp }: { setIsSigningUp: Dispatch<SetStateAc
       const newUser = await appwrite.createAccount(email, password, name)
       if (newUser) {
         const session = await appwrite.createSession(email, password)
-        if (dispatch && session) {
-          dispatch({ type: 'SET_USER', user: newUser })
-        }
+        setState('user', newUser)
       }
     },
-    [appwrite, dispatch],
+    [appwrite, setState],
   )
 
   return (

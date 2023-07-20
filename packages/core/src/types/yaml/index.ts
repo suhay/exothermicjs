@@ -12,6 +12,7 @@ import { MainYamlType } from './main'
 import { MarkdownYamlType } from './markdown'
 import { NavbarYamlType } from './navbar'
 import { SectionYamlType } from './section'
+import { StateYamlType } from './state'
 
 export const YamlTypes: Record<string, yaml.Type> = {
   ArticleYamlType,
@@ -26,4 +27,5 @@ export const YamlTypes: Record<string, yaml.Type> = {
   MarkdownYamlType,
   NavbarYamlType,
   SectionYamlType,
+  StateYamlType,
 }

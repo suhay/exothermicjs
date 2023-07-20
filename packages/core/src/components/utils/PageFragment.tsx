@@ -1,9 +1,10 @@
 import { ReactNode } from 'react'
+
 import ReactMarkdown from 'react-markdown'
 
 import { Content, ContentTransform } from '~/components/content/Content'
 import { usePageTemplate } from '~/hooks/usePageTemplate'
-import { PageFragmentType } from '../../types'
+import { PageFragmentType } from './PageFragment.types'
 
 interface PageFragmentProps {
   children?: ReactNode[]

@@ -1,6 +1,6 @@
-import { useCallback, useContext, useState } from 'react'
+import { useCallback, useState } from 'react'
 
-import { UserContext } from '@exothermic/core'
+import { useState as useExoState } from '@exothermic/core'
 import Button from '@mui/material/Button'
 import { Models, Permission, Role } from 'appwrite'
 import { Controller, useForm } from 'react-hook-form'
@@ -9,11 +9,18 @@ import { useAppwrite } from '~/hooks/useAppwrite'
 import { AppwriteApiDatabase } from '../../types'
 
 export function CreateDocument({ collection, items }: Omit<AppwriteApiDatabase, 'api' | 'action'>) {
-  const context = useContext(UserContext)
-  const user = context.user.data as Models.Account<Models.Preferences>
+  const context = useExoState((exoState) => exoState.state)
+  const user = context.user as Models.Account<Models.Preferences>
   const { handleSubmit, control, setValue } = useForm()
   const appwrite = useAppwrite()
   const [documentId, setDocumentId] = useState<string>()
+  const [isLocal, setIsLocal] = useState(false)
+
+  const sync = useCallback(async () => {
+    if (documentId) {
+      await appwrite.syncDocumentById(documentId)
+    }
+  }, [appwrite, documentId])
 
   const save = useCallback(
     async (data: Record<string, string>) => {
@@ -31,6 +38,7 @@ export function CreateDocument({ collection, items }: Omit<AppwriteApiDatabase, 
       ])
       if (doc?.$id) {
         setDocumentId(doc.$id)
+        setIsLocal(!doc.$updatedAt)
       }
     },
     [appwrite, collection, documentId, user.$id],
@@ -62,6 +70,7 @@ export function CreateDocument({ collection, items }: Omit<AppwriteApiDatabase, 
         )
       })}
       <Button onClick={handleSubmit(save)}>Save</Button>
+      {isLocal && <Button onClick={sync}>Sync</Button>}
     </form>
   )
 }

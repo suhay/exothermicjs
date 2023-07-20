@@ -1,7 +1,7 @@
 import { ReactElement } from 'react'
 
 import { ContentTransform } from '~/components/content/Content'
-import { PageFragmentType } from '../../types'
+import { PageFragmentType } from './PageFragment.types'
 
 export function Foreach({
   data = {},
