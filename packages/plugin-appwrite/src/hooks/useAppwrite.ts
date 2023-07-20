@@ -57,6 +57,45 @@ class AppwriteSDK {
     return this.account.updateEmail(email, password)
   }
 
+  updateName(name: string) {
+    return this.account.updateName(name)
+  }
+
+  updatePassword(password: string, oldPassword: string) {
+    return this.account.updatePassword(password, oldPassword)
+  }
+
+  updatePrefs(prefs: object) {
+    return this.account.updatePrefs(prefs)
+  }
+
+  updatePhone(phone: string, password: string) {
+    return this.account.updatePhone(phone, password)
+  }
+
+  async updateAccount(account: Models.Account<Models.Preferences>, data: any) {
+    const parts: Promise<Models.Account<Models.Preferences>>[] = []
+
+    if (data.email && data.password && account.email !== data.email) {
+      parts.push(this.updateEmail(data.email as string, data.password as string))
+    }
+    if (data.name && account.name !== data.name) {
+      parts.push(this.updateName(data.name as string))
+    }
+    if (data.newPassword && data.password) {
+      parts.push(this.updatePassword(data.newPassword as string, data.password as string))
+    }
+    if (data.phone && data.password && account.phone !== data.phone) {
+      parts.push(this.updatePhone(data.phone as string, data.password as string))
+    }
+
+    return Promise.all(parts)
+      .then((val) => val[0])
+      .catch(() => {
+        throw new Error('error updating account')
+      })
+  }
+
   createSession(email: string, password: string) {
     return this.account.createEmailSession(email, password)
   }

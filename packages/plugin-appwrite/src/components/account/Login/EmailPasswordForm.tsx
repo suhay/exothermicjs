@@ -52,22 +52,6 @@ export function EmailPasswordForm({
         required
         label='Password'
       />
-      {/* <Controller
-        name='email'
-        control={control}
-        defaultValue=''
-        render={({ field: { onChange, value } }) => (
-          <TextField label='Email' onChange={onChange} value={value} required type='email' />
-        )}
-      /> */}
-      {/* <Controller
-        name='password'
-        control={control}
-        defaultValue=''
-        render={({ field: { onChange, value } }) => (
-          <TextField label='Password' onChange={onChange} value={value} required type='password' />
-        )}
-      /> */}
       <Button onClick={handleSubmit(login)} variant='contained' disabled={formState.isSubmitting}>
         Login
       </Button>

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, lazy } from 'react'
+import { useEffect, useMemo, useState, lazy, ReactNode } from 'react'
 
 import { Loading } from '@exothermic/core'
 import Button from '@mui/material/Button'
@@ -16,8 +16,10 @@ const TextFieldController = lazy(
 
 export function Profile({
   fields,
+  items,
 }: {
   fields?: Record<string, Record<string, string | number | boolean>>
+  items?: ReactNode[]
 }) {
   const appwrite = useAppwrite()
   const [account, setAccount] = useState<Models.Account<Models.Preferences>>()
@@ -41,6 +43,10 @@ export function Profile({
       return null
     }
 
+    if (items) {
+      return <>{items}</>
+    }
+
     if (fields) {
       return Object.keys(fields)
         .filter((field) => !!account[field] || !!account.prefs[field])
@@ -57,12 +63,27 @@ export function Profile({
 
     return (
       <>
-        <TextFieldController name='name' label='Name' control={control} fullWidth />
+        <TextFieldController
+          name='name'
+          label='Name'
+          defaultValue={account.name}
+          control={control}
+          fullWidth
+        />
         <TextFieldController
           name='email'
           label='Email'
           control={control}
           type='email'
+          defaultValue={account.email}
+          required
+          fullWidth
+        />
+        <TextFieldController
+          name='password'
+          label='Current Password'
+          control={control}
+          type='password'
           required
           fullWidth
         />
@@ -70,8 +91,17 @@ export function Profile({
     )
   }, [account, control, fields])
 
-  const onSubmit = (data) => {
-    console.log(data)
+  const onSubmit = async (data: any) => {
+    if (account == null) {
+      return
+    }
+
+    try {
+      const newAccount = await appwrite.updateAccount(account, data)
+      setAccount(newAccount)
+    } catch {
+      //
+    }
   }
 
   const [open, setOpen] = useState(false)
